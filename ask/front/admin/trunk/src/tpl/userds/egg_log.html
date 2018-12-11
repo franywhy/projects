@@ -1,0 +1,30 @@
+<!--中奖记录-->				
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="longtime">时间</th>
+        <%if(!params._id){%>
+        <th class="auto">用户Id</th>            
+        <th class="auto">昵称</th>
+        <%}%>   
+        <th class="auto">所在房间</th>
+        <th class="auto">花费星币</th>
+		<th class="auto">获得奖励</th>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+		<td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+        <%if(!params._id){%>
+        <td class="auto"><a href="javascript:Izb.controller.user.show('<%=data[i].session._id%>');"><%=data[i].session._id%></a></td>
+        <td class="auto"><%=data[i].session.nick_name%></td>
+        <%}%>
+        <td class="short"><a href="/<%=data[i].room %>" target="_blank"><%=data[i].room %></a></td>
+		<td class="auto"><%=data[i].cost %></td>
+		<td class="auto"><%=data[i].session.got%></td>
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>

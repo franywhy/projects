@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.CourseClassplanDao">
+	<!-- 查询学习计划根据学习计划ID -->
+	<select id="queryObjectByClassplanId" resultType="io.renren.modules.job.entity.CourseClassplanEntity">
+		SELECT
+		course_classplan.*
+		FROM course_classplan AS course_classplan
+		WHERE
+		course_classplan.classplan_id = #{classplanId}
+		AND course_classplan.dr = 0
+	</select>
+	<select id="queryListMap" resultType="map">
+		select course_classplan.classplan_id as id
+		from course_classplan course_classplan
+	</select>
+	<select id="queryOtherById" resultType="map">
+		SELECT
+		course_classplan.classplan_name AS classplanName,
+		course_classplan.creation_time AS creationTime,
+		course_classplan.dr,
+		course_classplan.course_id AS courseCode,
+		course_classplan_lives.end_time AS endTime,
+		sys_user.mobile AS teacherCode,
+		course_classplan.ts
+		FROM
+		course_classplan course_classplan
+		JOIN course_classplan_lives course_classplan_lives ON course_classplan.classplan_id = course_classplan_lives.classplan_id
+		JOIN sys_user sys_user ON course_classplan.teacher_id = sys_user.user_id
+		where course_classplan_lives.classplan_id = #{id}
+		and course_classplan.ts >#{millisecond}
+		ORDER BY
+		course_classplan_lives.end_time DESC
+		LIMIT 0,1
+	</select>
+
+
+
+</mapper>

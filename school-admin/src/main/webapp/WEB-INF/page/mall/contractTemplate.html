@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>协议模板档案</title> #parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group"> 
+					#if($shiro.hasPermission("contractTemplateInfo:save"))
+						<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					#end 
+					#if($shiro.hasPermission("contractTemplateInfo:update"))
+						<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a> 
+					#end
+					#if($shiro.hasPermission("contractTemplateInfo:delete"))
+						<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+					#end
+				</div>
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-2 control-label">合同模板Id</div>
+					<div class="col-sm-10">
+						<input v-bind:disabled="!idBtn" type="text" id="templateId" class="form-control" v-model.trim="contractTemplateInfo.templateId" placeholder="合同模板Id" id="templateId" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">合同模板名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="contractTemplateInfo.templateName" placeholder="合同模板名称" id="templateName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">合同公司Id</div>
+					<div class="col-sm-10">
+						<input v-bind:disabled="!idBtn" type="text" id="companyId" class="form-control" v-model.trim="contractTemplateInfo.companyId" placeholder="公司Id" id="companyId" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">合同公司名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="contractTemplateInfo.companyName" placeholder="合同公司名称" id="companyName" />
+					</div>
+				</div>
+				
+				<!-- 按钮 -->
+				<div class="form-group" id="commitButton">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;
+					<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+ 
+			</form>
+		</div>
+		 
+		 
+		
+	</div>
+
+	<script src="${rc.contextPath}/js/mall/contractTemplate.js?_${date.systemTime}"></script>
+ 
+#parse("layer/templateLay.html") 
+</body>
+</html>

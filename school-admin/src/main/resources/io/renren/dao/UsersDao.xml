@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.UsersDao">
+	
+	
+	
+	<select id="checkMobile" resultType="int">
+		select count(1) from users where dr = 0 and mobile = #{mobile}
+		<if test="userId != null">and user_id != #{userId}</if>
+	</select>
+	
+	<select id="mobileExist" resultType="int">
+		select count(1) from users where  mobile = #{mobile}
+	</select>
+	
+	<select id="checkUser" resultType="int">
+		select count(1) from users where dr=0 and mobile = #{mobile}
+	</select>
+	
+	<select id="queryUserId" resultType="Integer">
+		  SELECT user_id FROM `users` WHERE mobile=#{mobile}
+	</select>
+	
+	<select id="queryObject" resultType="io.renren.entity.UsersEntity">
+		select user_id,dr,school_id,mobile,nick_name,pic,status,sex,email,creator,creation_time,
+		modifier,modified_time,last_login_time,last_login_ip,channel,remake from users where user_id = #{userId} and dr = 0 
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.UsersEntity">
+		select * from users users where dr = 0 
+		<if test="nickName != null and nickName.trim() != ''">
+			and users.nick_name like concat('%',#{nickName},'%') 
+		</if>
+		<if test="userId != null">
+			and users.user_id=#{userId}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile = #{mobile}
+		</if>
+		<if test="offset != null and limit != null ">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from users where dr = 0
+		<if test="nickName != null and nickName.trim() != ''">
+			and users.nick_name like concat('%',#{nickName},'%') 
+		</if>
+		<if test="userId != null">
+			and users.user_id=#{userId}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile = #{mobile}
+		</if>
+	</select>
+	 <select id="getUserIdByMobilePhoneNo" resultType="long">
+		select users.user_id from users users where users.dr = 0 and users.mobile = #{mobilePhoneNo}
+	</select>
+	<select id="getNickNameByMobilePhoneNo" resultType="java.lang.String">
+		select users.nick_name from users users where users.dr = 0 and users.mobile = #{mobilePhoneNo}
+	</select>
+	<select id="countUserIdByMobilePhoneNo" resultType="int">
+		select count(users.user_id) from users users where users.dr = 0 and users.mobile = #{mobilePhoneNo}
+	</select>
+	<insert id="save" parameterType="io.renren.entity.UsersEntity" useGeneratedKeys="true" keyProperty="userId">
+		insert into users
+		(
+			`user_id`, 
+			`dr`, 
+			`school_id`, 
+			`mobile`, 
+			`nick_name`, 
+			`pic`, 
+			`status`, 
+			`sex`, 
+			`email`,
+			`password`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`last_login_time`, 
+			`last_login_ip`, 
+			`channel`, 
+			`remake`,
+			`nc_id`,
+			`dept_id`
+		)
+		values
+		(
+			#{userId},
+			#{dr},
+			#{schoolId},
+			#{mobile}, 
+			#{nickName}, 
+			#{pic}, 
+			#{status}, 
+			#{sex}, 
+			#{email}, 
+			#{password}, 
+			#{creator},
+			#{creationTime}, 
+			#{modifier},
+			#{modifiedTime}, 
+			#{lastLoginTime}, 
+			#{lastLoginIp}, 
+			#{channel}, 
+			#{remake},
+			#{ncId},
+			#{deptId}
+		)
+	</insert>
+	 
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.UsersEntity">
+		update users 
+		<set>
+			<if test="mobile != null and mobile.trim() !='' ">`mobile` = #{mobile}, </if>
+			<if test="nickName != null and nickName.trim() !='' ">`nick_name` = #{nickName}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="email != null and email.trim() != ''">`email` = #{email}, </if>
+			<if test="password != null and password.trim() !='' ">`password` = #{password}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="lastLoginTime != null">`last_login_time` = #{lastLoginTime}, </if>
+			<if test="lastLoginIp != null">`last_login_ip` = #{lastLoginIp}, </if>
+			<if test="channel != null">`channel` = #{channel}, </if>
+			<if test="remake != null">`remake` = #{remake},</if>
+			<if test="ncId != null">`nc_id` = #{ncId},</if>
+			<if test="deptId != null">`dept_id` = #{deptId},</if>
+			<if test="realName != null">`real_name` = #{realName},</if>
+			`user_id` = `user_id`
+		</set>
+		where user_id = #{userId}
+	</update>
+	<update id="updateBatch">
+	   update users set status = #{status} where user_id in
+	   <foreach item="userId" collection="list" open="(" separator="," close=")">
+	   	#{userId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from users where user_id = #{value}
+	</delete>
+	
+	
+	<delete id="deleteBatch">
+		delete from users where user_id in 
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</delete>
+	<!-- <update id="deleteBatch">
+		update users set dr = 1 where user_id in 
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</update> -->
+	<update id="updateNameByPhone">
+		update users set nick_name = #{user_name} where mobile = #{phone}
+	</update>
+</mapper>

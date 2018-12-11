@@ -1,0 +1,137 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th rowspan="2" >日期</th>
+
+        <th colspan="2" >广州</th>
+
+        <th colspan="2" >长沙</th>
+
+        <th colspan="2" >邢台</th>
+
+        <th colspan="2" >蚌埠</th>
+
+        <th colspan="2" >韶关</th>
+
+        <th colspan="2" >桂林</th>
+
+        <th colspan="2" >德阳</th>
+    </tr>
+    <tr>
+        <!--广州-->
+        <th >新增用户数</th>
+        <th >老师答题数</th>
+        <!--长沙-->
+        <th >新增用户数</th>
+        <th >老师答题数</th>
+        <!--邢台-->
+        <th >新增用户数</th>
+        <th >老师答题数</th>
+        <!--蚌埠-->
+        <th >新增用户数</th>
+        <th >老师答题数</th>
+        <!--韶关-->
+        <th >新增用户数</th>
+        <th >老师答题数</th>
+        <!--桂林-->
+        <th >新增用户数</th>
+        <th >老师答题数</th>
+        <!--德阳-->
+        <th >新增用户数</th>
+        <th >老师答题数</th>
+    </tr>
+	</thead>
+    <tbody>
+    <% var gzData = data.gzData %>
+    <% var csData = data.csData %>
+    <% var xtData = data.xtData %>
+    <% var bbData = data.bbData %>
+    <% var sgData = data.sgData %>
+    <% var glData = data.glData %>
+    <% var dyData = data.dyData %>
+    <%for(var gzUserData = gzData.addUser.data ,i=0;i<gzUserData.length;i++){ var item0 = gzUserData[i]; %>
+    <tr>
+
+        <td  class="auto"><%=new Date(item0.gtime).toLocaleString()%></td>
+        <!--广州-->
+        <td class="short"><%=item0.num%></td>
+        <td class="short"><%=gzData.topicCount.data[i].num%></td>
+        <!--长沙-->
+        <td class="short"><%=csData.addUser.data[i].num%></td>
+        <td class="short"><%=csData.topicCount.data[i].num%></td>
+        <!--邢台-->
+        <td class="short"><%=xtData.addUser.data[i].num%></td>
+        <td class="short"><%=xtData.topicCount.data[i].num%></td>
+        <!--蚌埠-->
+        <td class="short"><%=bbData.addUser.data[i].num%></td>
+        <td class="short"><%=bbData.topicCount.data[i].num%></td>
+        <!--韶关-->
+        <td class="short"><%=sgData.addUser.data[i].num%></td>
+        <td class="short"><%=sgData.topicCount.data[i].num%></td>
+        <!--桂林-->
+        <td class="short"><%=glData.addUser.data[i].num%></td>
+        <td class="short"><%=glData.topicCount.data[i].num%></td>
+        <!--德阳-->
+        <td class="short"><%=dyData.addUser.data[i].num%></td>
+        <td class="short"><%=dyData.topicCount.data[i].num%></td>
+
+    </tr>
+    <%}%>
+    </tbody>
+
+
+    <tfoot >
+    <tr>
+        <td class="short"  style="color:red">当前页合计：</td>
+        <!--广州-->
+        <td style="color:red; font-weight:bold;" align="right"><%=gzData.addUser.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=gzData.topicCount.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--长沙-->
+        <td style="color:red; font-weight:bold;" align="right"><%=csData.addUser.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=csData.topicCount.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--邢台-->
+        <td style="color:red; font-weight:bold;" align="right"><%=xtData.addUser.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=xtData.topicCount.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--蚌埠-->
+        <td style="color:red; font-weight:bold;" align="right"><%=bbData.addUser.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=bbData.topicCount.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--韶关-->
+        <td style="color:red; font-weight:bold;" align="right"><%=sgData.addUser.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=sgData.topicCount.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--桂林-->
+        <td style="color:red; font-weight:bold;" align="right"><%=glData.addUser.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=glData.topicCount.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--德阳-->
+        <td style="color:red; font-weight:bold;" align="right"><%=dyData.addUser.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=dyData.topicCount.page_sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="short" style="color:red">合计：</td>
+        <!--广州-->
+        <td style="color:red; font-weight:bold;" align="right"><%=gzData.addUser.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=gzData.topicCount.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--长沙-->
+        <td style="color:red; font-weight:bold;" align="right"><%=csData.addUser.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=csData.topicCount.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--邢台-->
+        <td style="color:red; font-weight:bold;" align="right"><%=xtData.addUser.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=xtData.topicCount.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--蚌埠-->
+        <td style="color:red; font-weight:bold;" align="right"><%=bbData.addUser.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=bbData.topicCount.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--韶关-->
+        <td style="color:red; font-weight:bold;" align="right"><%=sgData.addUser.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=sgData.topicCount.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--桂林-->
+        <td style="color:red; font-weight:bold;" align="right"><%=glData.addUser.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=glData.topicCount.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <!--德阳-->
+        <td style="color:red; font-weight:bold;" align="right"><%=dyData.addUser.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=dyData.topicCount.sum%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    </tfoot>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

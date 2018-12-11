@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hqjy.pay.mapper.BorrowMoneyDao">
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		borrow_money.id AS id , borrow_money.code AS code , borrow_money.trade_no AS tradeNo
+		, borrow_money.order_status AS orderStatus ,
+		borrow_money.order_status_desc AS orderStatusDesc ,
+		borrow_money.remark AS remark , borrow_money.id_name AS idName ,
+		borrow_money.id_no AS idNo , borrow_money.phone_no AS phoneNo ,
+		borrow_money.capital_name AS capitalName , borrow_money.apply_amount
+		AS applyAmount , borrow_money.apply_time AS applyTime ,
+		borrow_money.commodity AS commodity , borrow_money.school_zone AS
+		schoolZone , borrow_money.lending_trade_no AS lendingTradeNo ,
+		borrow_money.lending_time AS lendingTime , borrow_money.lending_amount
+		AS lendingAmount , borrow_money.bm_json AS bmJson
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where 1=1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from borrow_money as borrow_money
+	</sql>
+
+	<!--根据trade_no查询 -->
+	<select id="queryObject" resultType="com.hqjy.pay.BorrowMoneyEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND trade_no = #{tradeNo}
+		<if test="orderStatus != null"> and `order_status` = #{orderStatus}</if>
+	</select>
+
+	<!--新增 -->
+	<insert id="save" parameterType="com.hqjy.pay.BorrowMoneyEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into borrow_money
+		(
+		`code`, `error`,`create_time`,`approve_time`, `trade_no`, `order_status`,
+		`order_status_desc`, `remark`, `id_name`, `id_no`, `phone_no`,
+		`capital_name`, `apply_amount`, `apply_time`, `commodity`,
+		`school_zone`, `lending_trade_no`, `lending_time`, `lending_amount`,
+		`bm_json` )
+		values
+		(
+		#{code}, #{error}, #{createTime}, #{approveTime},#{tradeNo}, #{orderStatus},
+		#{orderStatusDesc}, #{remark}, #{idName}, #{idNo}, #{phoneNo},
+		#{capitalName}, #{applyAmount}, #{applyTime}, #{commodity},
+		#{schoolZone}, #{lendingTradeNo}, #{lendingTime}, #{lendingAmount},
+		#{bmJson} )
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="com.hqjy.pay.BorrowMoneyEntity">
+		update borrow_money
+		<set>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="tradeNo != null">`trade_no` = #{tradeNo}, </if>
+			<if test="orderStatus != null">`order_status` = #{orderStatus}, </if>
+			<if test="orderStatusDesc != null">`order_status_desc` = #{orderStatusDesc}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="idName != null">`id_name` = #{idName}, </if>
+			<if test="idNo != null">`id_no` = #{idNo}, </if>
+			<if test="phoneNo != null">`phone_no` = #{phoneNo}, </if>
+			<if test="capitalName != null">`capital_name` = #{capitalName}, </if>
+			<if test="applyAmount != null">`apply_amount` = #{applyAmount}, </if>
+			<if test="applyTime != null">`apply_time` = #{applyTime}, </if>
+			<if test="commodity != null">`commodity` = #{commodity}, </if>
+			<if test="schoolZone != null">`school_zone` = #{schoolZone}, </if>
+			<if test="lendingTradeNo != null">`lending_trade_no` = #{lendingTradeNo}, </if>
+			<if test="lendingTime != null">`lending_time` = #{lendingTime}, </if>
+			<if test="lendingAmount != null">`lending_amount` = #{lendingAmount}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="bmJson != null">`bm_json` = #{bmJson}</if>
+		</set>
+		<include refid="base_where" />
+		AND trade_no = #{tradeNo}
+	</update>
+</mapper>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title> #parse("sys/header.html")
+<style>
+.form-horizontal{
+	width: 100% !important;
+}
+
+.s_select{
+	width: 90px; 
+	border: 1px solid #ccc; 
+    padding: 7px 0px;
+    border-radius: 3px; /*css3属性IE不支持*/
+    padding-left:5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.select_div{
+ 	float: left;
+}
+</style>
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+	 	
+	 <div style="    overflow: hidden;">
+	
+		<input type="text" class="form-control" v-model="courseName" readonly="readonly"  @click="coursesLayerShow" placeholder="选择课程" style="background-color: white;width: 400px;float: left;">
+ 		<input class="btn btn-default" style="float: left;margin-left: 10px" type="button" value="选择课程" @click="coursesLayerShow" />
+	 </div>	
+		<div v-show="showAll" style="margin-top: 20px;">
+
+			<div style="float: left; position: relative;width:300px">
+				<ul id="menuTree" class="ztree"></ul>
+			</div>
+			<div style="float: left; position: relative;width:800px ;" >
+				<div v-show="showList" style="width:100%;">
+ 					
+ 					<div style="margin: 0px;margin-bottom: 5px;">
+ 					<div class="form-group col-sm-2">
+				 		<input type="text" class="form-control" v-model="name" @keyup.enter="query" placeholder="名称">
+			 		</div>
+			 		
+			 		<div class="form-group col-sm-2" style="top: -5px;">
+			 		&nbsp;排序&nbsp;&nbsp;<select  v-model="sTime" class="s_select">
+				 		 	<option value=""></option>
+				 			<option value="createTime">创新时间</option>
+				 			<option value="updateTime">更新时间</option>
+			 				</select>
+			 		</div>
+			
+		
+			 		<a class="btn btn-default" @click="query">查询</a>
+			 		</div>
+			 		<div style="margin-bottom: 5px;">
+					 	<div style="margin-left: -380px;display:inline-block;"> </div>
+						#if($shiro.hasPermission("kpmanagement:save")) <a
+							class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+						#end #if($shiro.hasPermission("kpmanagement:update")) <a
+							class="btn btn-primary" @click="update"><i
+							class="fa fa-pencil-square-o"></i>&nbsp;修改</a> #end
+						#if($shiro.hasPermission("kpmanagement:delete")) <a
+							class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+						#end #if($shiro.hasPermission("kpmanagement:resume")) <a
+							class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+						#end #if($shiro.hasPermission("kpmanagement:pause")) <a
+							class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+						#end
+					
+					</div>
+					<table id="jqGrid"></table>
+					<div id="jqGridPager"></div>
+				</div>
+
+				<div v-show="!showList" class="panel panel-default" style="width:1111px;">
+					<div class="panel-heading">{{title}}</div>
+					<form class="form-horizontal">
+						<div class="form-group" style="display: none">
+							<div class="col-sm-2 control-label">知识点ID</div>
+							<div class="col-sm-10">
+								<input type="text" class="form-control"
+									v-model="knowledgePoint.id" placeholder="知识点ID" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">知识点名称</div>
+							<div class="col-sm-10">
+								<input type="text" class="form-control"
+									v-model="knowledgePoint.name" placeholder="知识点名称" />
+							</div>
+						</div>
+
+						<div class="form-group" style="display: none">
+							<div class="col-sm-2 control-label">所属课程</div>
+							<div class="col-sm-10">
+								<input type="text" class="form-control"
+									v-model="courseName"  placeholder="所属课程" readonly="true" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">所属章</div>
+							<div class="col-sm-10">
+							
+							 	<select id="chapterSelect" class="s_select" style="width:300px;">
+				 					
+			 					</select>
+							 	
+								<!-- <input type="text" class="form-control"
+									v-model="chapterName" placeholder="所属章 " readonly="true" /> -->
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">所属节</div>
+							<div class="col-sm-10">
+								<!-- <input type="text" class="form-control"
+									v-model="verseName" placeholder="所属节" readonly="true" />
+							 -->
+							 <select id="verseSelect" class="s_select" style="width:300px;">
+				 					
+			 					</select>
+							 </div>
+						</div>
+						
+						<div class="form-group" v-show="showEdit">
+							<div class="col-sm-2 control-label">创建时间</div>
+							<div class="col-sm-10">
+								<input type="text" class="form-control"
+									v-model="knowledgePoint.createTime" readonly="readonly" />
+							</div>
+						</div>
+						
+						<div class="form-group" v-show="showEdit">
+							<div class="col-sm-2 control-label">更新时间</div>
+							<div class="col-sm-10">
+								<input type="text" class="form-control"
+									v-model="knowledgePoint.updateTime" readonly="readonly" />
+							</div>
+						</div>
+
+						<!-- ---------------------------------ITEM 子表--------------------------------- -->
+						<div class="form-group" >
+							<div class="col-sm-2 control-label">关联资料</div>
+							<div class="tab-pane col-sm-10 fade in active">
+								<div id="itemButton">
+									<a class="btn btn-primary" @click="addItem"><i
+										class="fa fa-plus"></i>&nbsp;关联</a> <a class="btn btn-primary"
+										@click="delItem"><i class="fa fa-plus"></i>&nbsp;移除</a>
+
+								</div>
+								<div style="width:770px;overflow-x:auto;margin-top: 10px;">
+								<table id="detailGrid" ></table>
+								<div id="detailGridPager"></div>
+								
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-2 control-label"></div>
+							<input type="button" class="btn btn-primary"
+								@click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;<input
+								type="button" class="btn btn-warning" @click="returnBack" value="返回" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+	<script
+		src="${rc.contextPath}/js/kbm/kpmanagement.js?_${date.systemTime}"></script>
+	#parse("layer/kpmCourseSelectLay.html")
+	#parse("layer/kpmMaterialDetailSelectLay.html")	
+
+</body>
+</html>

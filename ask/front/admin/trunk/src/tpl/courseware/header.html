@@ -1,0 +1,45 @@
+<!--用户信息页头--> 
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <!--<input type="button" value="新增<%=pty.itemName%>" class="d-button d-state-highlight J_add" />-->
+    <input type="button" value="新增" class="d-button d-state-highlight"   onclick="Izb.controller.<%=pty.key%>.addBatch();"/>
+    <%}%>
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span>
+</h2>
+<div class="searchForm">
+<form name="searchForm">
+    <%=pty.itemName%>编号
+	<input size="10" name="courseware_code" />
+    <%=pty.itemName%>名称
+	<input size="10" name="courseware_name" />
+	讲师
+	<select name="teacher_id" id="teacher_id">
+		<option value="" selected>所有</option>
+	</select>
+	提交状态
+	<select name="review_upload_flag" id="review_upload_flag">
+		<option value="" selected>所有</option>
+		<option value="true" >已提交</option>
+		<option value="false" >未提交</option>
+	</select>
+	审核状态
+	<select name="review_audit_flag" id="review_audit_flag">
+		<option value="" selected>所有</option>
+        <option value="true" >审核通过</option>
+        <option value="false" >未通过</option>
+	</select>
+	<br />
+	<br />
+    上传用户
+    <select name="user_id" id="user_id">
+        <option value="" selected>所有</option>
+    </select>
+    修改用户
+    <select name="update_id" id="update_id">
+        <option value="">所有</option>
+    </select>
+	<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+</form>
+</div>
+<!--/用户信息页头--> 

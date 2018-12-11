@@ -1,0 +1,15 @@
+From 10.0.98.12:5000/jdk:8
+
+VOLUME /tmp
+
+VOLUME /logs
+
+WORKDIR /home/service/com.hq.learningcenter
+
+EXPOSE 8082
+
+CMD ["java","-jar","-XX:+PrintGCDetails","-Xloggc:gc.log","-Xms512m","-Xmx2048m","-Xss256K","-XX:MetaspaceSize=256m","-XX:MaxMetaspaceSize=512m","-XX:PretenureSizeThreshold=819200","-XX:+UseAdaptiveSizePolicy","uic.jar","--spring.config.location=application.yml"]
+
+ADD ./config/application-test.yml /home/service/com.hq.learningcenter/application.yml
+
+ADD ./target/com.hq.learningcenter-1.0-SNAPSHOT.jar /home/service/com.hq.learningcenter/uic.jar

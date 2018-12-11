@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>辉煌计划</title>
+  <link rel="stylesheet" href="http://www.hqjy.com/static/zhuanti/xdkj/v9kj_new/css/base.css">
+  <!--头部和尾部样式引入-->
+  <link rel="stylesheet" type="text/css" href="http://www.hqjy.com/static/css/common/headerAfooter.css">
+  <!--侧边栏样式-->
+  <link rel="stylesheet" type="text/css" href="http://www.hqjy.com/static/css/common/com.css">
+  <!--登录注册样式-->
+  <link rel="stylesheet" href="http://www.hqjy.com/static/css/loginNew.css" />
+  <!-- 主体样式 -->
+  <link rel="stylesheet" href="./css/hhjh.less">
+  <!-- jq -->
+  <script src="http://img.hengqijiaoyu.cn/html/common/js/jquery.js"></script>
+  <script src="http://www.hqjy.com/static/head/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+  <!--引入头部js-->
+  <script type="text/javascript" src="http://www.hqjy.com/static/head/js/hqjyhead.js"></script>
+  <!-- 主体 -->
+  <div class="hhjh" id="school-app">
+    <!--导航栏-->
+    <div class="c-top">
+      <div class="w1200">
+        <div class="c-l left">辉煌计划</div>
+        <div class="c-r btn right" onclick="NTKF_kf()">电话咨询</div>
+      </div>
+    </div>
+    <div class="banner bg mw1200 bg-lazy" data-original="/web/hhjh/images/banner.jpg">
+      <div class="w1200">
+        <div class="video-box">
+          <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="516" height="289" poster="./images/iMac.jpg"
+            data-setup="{}">
+            <source src="http://img.hengqijiaoyu.cn/video/hhjh/hhjh.mp4" type="video/mp4">
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+      </div>
+    </div>
+    <div class="p1 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p1.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p2 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p2.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p3 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p3.jpg">
+      <div class="w1200">
+        <div class="tab">
+          <dl class="tab-nav">
+            <dt class="d1">财务主管</dt>
+            <dt class="d2">财务经理</dt>
+            <dt class="d3 act">财务总监</dt>
+          </dl>
+          <dl class="tab-box">
+            <dt class="none">
+              <img src="./images/p3-tab1.png" alt="">
+            </dt>
+            <dt class="none">
+              <img src="./images/p3-tab2.png" alt="">
+            </dt>
+            <dt class="">
+              <img src="./images/p3-tab3.png" alt="">
+            </dt>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="p4 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p4.jpg">
+      <div class="w1200">
+        <div class="c-btn" onclick="NTKF_kf()">详情请点击查询</div>
+      </div>
+    </div> -->
+    <div class="p5 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p5.png">
+      <div class="w1200"></div>
+    </div>
+    <div class="p6 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p6.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p7 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p7.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p8 mw1200">
+      <div class="w1200">
+        <div class="box">
+          <img class="img" src="./images/p8-icon.png?__inline" alt="">
+          <dl class="text">
+            <dt>报名须知</dt>
+            <dd>1、参加辉煌计划学员必须要有大专以上学历，或已报大专在读中。</dd>
+            <dd>2、参加辉煌计划的财务总监项目学员需有在职工作经验。</dd>
+            <dd>3、学员需签订
+              <a href="javascript:;">《辉煌计划报名表》</a>。附件《初、中级、卓越级、CFO、CMA课表》。</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="p9 bg mw1200 bg-lazy" data-original="/web/hhjh/images/p9.jpg">
+      <div class="w1200">
+        <div class="shangji-box">
+          <div class="tit">获取辉煌计划课程资料</div>
+          <form class="sj">
+            <div class="xz-xq school none">
+              <select class="border-box s1" @change="queryCampuses" name="province" v-model="parentNcCode">
+                <option class="tc" v-for="option in provinceses" v-bind:value="option.code">{{ option.name }}</option>
+              </select>
+              <select class="ml5 campus s2" name="school_area">
+                <option v-for="option in campuses" v-bind:value="option.name">{{ option.name }}</option>
+              </select>
+            </div>
+            <div class="input-msg">
+              <input class="name" type="text" name="name" value="请输入您的姓名" onfocus="if(value=='请输入您的姓名'){value=''}" onblur="if(value==''){value='请输入您的姓名'}">
+              <input class="phone" class="ml5" type="text" name="mobil" value="请输入预约手机号" onfocus="if(value=='请输入预约手机号'){value=''}" onblur="if(value==''){value='请输入预约手机号'}">
+            </div>
+            <div class="c-btn" id="sqty-btn">申请体验名额</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--引入尾部js-->
+  <script type="text/javascript" src="http://www.hqjy.com/static/head/js/foot.js"></script>
+</body>
+
+</html>
+
+<script src="http://www.hqjy.com/static/head/js/createLoginBox.js"></script>
+<script src="http://www.hqjy.com/static/head/js/hqzx-login.js"></script>
+<script src="http://img.hengqijiaoyu.cn/html/common/js/jquery.lazyload.min.js"></script>
+<!-- <script src="http://img.hengqijiaoyu.cn/html/common/vue.min.js"></script> -->
+<!-- <script src="http://img.hengqijiaoyu.cn/html/common/vue_common.js"></script> -->
+<!--video兼容插件-->
+<link href="http://img.hengqijiaoyu.cn/video/css/video-js.css" rel="stylesheet">
+<script src="http://img.hengqijiaoyu.cn/video/js/video.min.js"></script>
+<style>
+  .vjs-paused .vjs-big-play-button,
+  .vjs-paused.vjs-has-started .vjs-big-play-button {
+    display: none;
+  }
+</style>
+<script>
+  videojs('my-video').ready(function () {
+    this.play();
+  });
+</script>
+<!--video兼容插件end-->
+<script src="../static/js/util.js"></script>
+<script src="./js/hhjh.js"></script>

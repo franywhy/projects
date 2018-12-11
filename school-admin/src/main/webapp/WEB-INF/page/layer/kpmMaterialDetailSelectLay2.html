@@ -1,0 +1,19 @@
+<div id="kpmMaterialDetailLayDiv" style="display: none">
+<!-- 资料查询条件 -->
+			<table  border="0">
+				<tr class="row" >
+					<td class=""><label for="name">资料名称</label></td>
+					<td >
+						<input type="text" class="form-control" id="kpmName" placeholder="课程名称">
+					</td>
+				</tr>
+			</table>
+			<!-- 按钮 -->
+			<div class="grid-btn">
+				<!-- <a class="btn btn-primary" @click="clearQueryOrderParams">清空</a>  -->
+				<a class="btn btn-default" onclick="kpmMaterialDetailLay.reload();">查询</a> 
+			</div>
+<table id="kpmMaterialDetail_jqGrid" ></table>
+<table id="kpmMaterialDetail_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/kpmMaterialDetailSelectLay.js?_${date.systemTime}"></script>

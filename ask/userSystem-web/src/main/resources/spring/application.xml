@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.izhubo.userSystem.web" />
+
+
+	<!-- the service we want to make cacheable -->
+
+	<context:property-placeholder location="classpath*:*.properties"
+		ignore-unresolvable="true" />
+	<util:properties id="application" location="classpath:application.properties" />
+	
+		
+    <!-- Kaptcha验证码生成器 -->
+	<bean name="producer" class="com.google.code.kaptcha.impl.DefaultKaptcha" scope="singleton">
+	    <property name="config">
+	        <bean class="com.google.code.kaptcha.util.Config">
+	            <constructor-arg>
+	                <props>
+	                    <prop key="kaptcha.border">no</prop>
+	                    <prop key="kaptcha.textproducer.font.color">black</prop>
+	                    <prop key="kaptcha.textproducer.char.space">5</prop>
+	                    <prop key="kaptcha.textproducer.char.length">4</prop>
+	                    <prop key="kaptcha.image.width">145</prop>
+	                    <prop key="kaptcha.image.height">50</prop>
+	                </props>
+	            </constructor-arg>
+	        </bean>
+	    </property>
+	</bean>
+	
+</beans>

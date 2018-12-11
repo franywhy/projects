@@ -1,0 +1,105 @@
+
+
+<form name="inputForm">
+    <div class="tagArea">
+        <ul class="tagList">
+            <li class="tab-nav"><a><span>商品档案</span></a></li>
+            <li class="tab-nav-action"><a><span>商品章节</span></a></li>
+            <li class="tab-nav"><a><span>商品价格</span></a></li>
+            <li class="tab-nav"><a><span>答疑老师</span></a></li>
+            <li class="tab-nav"><a><span>商品详情</span></a></li>
+            <!--<li class="tab-nav"><span><a>相关课程</a></span></li>-->
+        </ul>
+    </div>
+    <div id="tabs-body" class="tabs-body">
+        <div style="display:block">
+            <table width="100%" height="220px">
+                <tr>
+                    <td align="right">名称</td>
+                    <td>
+                        <input type="text" class="input" id="course_name" name="course_name" value="" required/>
+                    </td>
+                    <td align="right">课时</td>
+                    <td>
+                        <input type="number" class="input" id="class_hour" name="class_hour" value="" required/>
+                    </td>
+                   <td align="right">频道</td>
+                    <td>
+                        <select type="text" style="width: 182px" class="input" id="main_type_id" name="main_type_id" value="" /></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">公司</td>
+                    <td>
+                        <input type="text"  style="width: 182px" class="input" id="company_name" name="company_name" value="" disabled >
+                        <input type="hidden" readonly style="width: 182px" class="input" id="company_id" name="company_id" value="" >
+                    </td>
+                    <td align="right">课件</td>
+                    <td><select type="text"  style="width: 182px" class="input" id="courseware_id" name="courseware_id" value="" ></select></td>
+                    <td align="right">行业</td>
+                    <td>
+                        <select type="text" class="input" id="indusetry_id" name="indusetry_id"  style="width: 182px" required>
+                            <option value="1">课程</option>
+                            <option value="2">职业素养</option>
+                            <option value="3">后续教育</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">咨询直播间</td>
+                    <td><select type="text" style="width: 182px" class="input" id="rooms_id" name="rooms_id" value="" ></select></td>
+                    <td align="right">讲师</td>
+                    <td><select type="text" style="width: 182px" class="input" id="course_teacher_id" name="teacher_id" value="" ></select></td>
+                    <td align="right">专业</td>
+                    <td><select type="text" style="width: 182px"  class="input" id="professional_id" name="professional_id" value="" /></select></td>
+                </tr>
+                <tr>
+                    <td align="right">是否VIP</td>
+                    <td >
+                        <select type="text" class="input"  name="is_vip"  style="width: 182px" required>
+                            <option value="false">不是</option>
+                            <option value="true">是</option>
+                        </select>
+                    </td>
+                    <td align="right">图片</td>
+                    <td colspan="3">
+                        <input type="text"  class="input" id="course_url"  name="course_url" value="" readonly required/>
+                        <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('course_url', 'Posters');" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">商品简介</td>
+                    <td colspan="5"> <textarea id="introduction" name="introduction" class="input" rows="5" cols="93" style="resize: none; " ></textarea></td>
+                    <input type="hidden" class="input" id="_id" name="_id" value="" required/>
+                    <input type="hidden" class="input" id="course_code" name="course_code" value="" />
+                </tr>
+            </table>
+        </div>
+        <div style="display:none">
+            <div  ID="addChapter">
+
+            </div>
+            <!--章节-->
+            <input type="button" class="d-button" value="添加" onClick="Izb.controller.course.addCourseChapter();" />
+        </div>
+        <div style="display:none">
+            <table ID="addPrice">
+
+            </table>
+
+            <input type="button" class="d-button" value="添加" onClick="Izb.controller.course.addCoursePrice();" />
+        </div>
+        <div style="display:none">
+            <table ID="addCourseTeaceher">
+
+            </table>
+
+            <input type="button" class="d-button" value="添加" onClick="Izb.controller.course.addCourseTeacher();" />
+
+        </div>
+       <div style="display:none;width: 800px;height: 520px;" >
+            <iframe src="../../editor/index.html" width="100%" height="520"></iframe>
+     </div>
+    </div>
+</form>
+

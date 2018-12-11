@@ -1,0 +1,26 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span>
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+</h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        专题分类
+        <select id="annals_id" name="annals_id" ></select>
+        状态
+        <select name="status" >
+            <option value="">==所有==</option>
+            <option value="1">启用</option>
+            <option value="0">禁用</option>
+        </select>
+        封面标题
+        <input id="cover_title" type="text" name="cover_title" value="" size="20"  />
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头-->

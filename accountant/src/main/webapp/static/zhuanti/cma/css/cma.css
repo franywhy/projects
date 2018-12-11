@@ -1,0 +1,342 @@
+/*通用*/
+.ft34{
+    font-size: 34px;
+}
+.ft20{
+    font-size: 20px;
+}
+.ft14{
+    font-size: 14px;
+}
+.tc{
+    text-align: center;
+}
+.tr{
+    text-align: right;
+}
+.head-h1{
+    font-size: 42px;
+    text-align: center;
+}
+.head-h2{
+    font-size: 22px;
+    text-align: center;
+}
+.bold{
+    font-weight: bold;
+}
+.tit{
+    font-size: 15px;
+    text-align: center;
+}
+.padding-t-b{
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+.m0a{
+    margin: 0 auto;
+}
+.mt60{
+    margin-top: 60px;
+}
+.mt50{
+    margin-top: 50px;
+}
+.mt45{
+    margin-top: 45px;
+}
+.mt30{
+    margin-top: 30px;
+}
+.mt35{
+    margin-top: 35px;
+}
+.mt25{
+    margin-top: 25px;
+}
+.mt20{
+    margin-top: 20px;
+}
+.mt10{
+    margin-top: 10px;
+}
+.mb20{
+    margin-bottom: 20px;
+}
+.mb15{
+    margin-bottom: 15px;
+}
+.ml20{
+    margin-left: 20px;
+}
+.ml70{
+    margin-left: 70px;
+}
+.ml270{
+    margin-left: 270px;
+}
+.white{
+    color: #ffffff;
+}
+.gray{
+    color: #999999;
+}
+.gray-66{
+    color: #666666;
+}
+/*恒企教育CMA课程*/
+.cma{
+    height: 55px;
+    line-height: 55px;
+}
+.cma .btn{
+    width: 140px;
+    height: 35px;
+    line-height: 35px;
+    background: #ee613b;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    opacity: 0.8;
+    transition: 0.3s all;
+    -webkit-transition: 0.3s all;
+    -moz-transition: 0.3s all;
+    -ms-transition: 0.3s all;
+    font-size: 14px;
+    cursor: pointer;
+}
+.cma .btn:hover{
+    opacity: 1;
+}
+/*banner*/
+.banner{
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+}
+.banner .banner-son{
+    position: relative;
+    height: 100%;
+}
+.banner .banner-son .img-box{
+    width: 1920px;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 50%;
+    margin-left: -960px;
+}
+.banner .video-box{
+    width: 495px;
+    height: 280px;
+    position: absolute;
+    top: 107px;
+    left: 642px;
+    background: #000000;
+}
+.banner .banner .video-box video{
+    width: 495px;
+    height: 279px;
+    object-fit:cover;
+    -webkit-object-fit: cover;
+    -moz-object-fit: cover;
+}
+/*98.7%的财务人正在面临这样的窘态*/
+.main1 ul{
+    width: 1170px;
+    margin: 0 auto;
+}
+.main1 ul li{
+    width: 370px;
+}
+.main1 ul li dl dd{
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+/*CMA，新一代财务管理者的国际财务认证*/
+.main2{
+    height: 654px;
+    background: url("../images/bg01.jpg") no-repeat center;
+    padding-top: 100px;
+    box-sizing: border-box;
+}
+.main2 ul li{
+    width: 300px;
+    text-align: center;
+}
+.main2 ul li dl dt{
+    display: inline-block;
+}
+.main2 ul li dl dd{
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+/*IMA中国区薪资调查*/
+.main3{
+    background: #F1F5F9;
+}
+.main3 .ima img{
+    display: inline-block;
+}
+/*国家一致推荐 CMA，未来企业的核心人才！*/
+.main4 .cma-rc{
+    width: 1170px;
+    height: 270px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.main4 .cma-rc .tj-rc{
+    width: 900px;
+}
+.main4 .cma-rc .tj-rc .cma-lm{
+    width: 488px;
+}
+.main4 .cma-rc .tj-rc .cma-rz{
+    position: relative;
+}
+.main4 .cma-rc .tj-rc .cma-rz .bg-gray{
+    width: 325px;
+    height: 270px;
+    background-color: #F3F3F3;
+}
+.main4 .cma-rc .tj-rc .cma-rz .intro{
+    width: 385px;
+    line-height: 20px;
+    font-size: 14px;
+    position: absolute;
+    height: 300px;
+}
+.main4 .cma-rc .tj-rc .cma-rz .pos-lm{
+    top: 15px;
+    left: 28px;
+}
+.main4 .cma-rc .tj-rc .cma-rz .pos-ljm{
+    top: 15px;
+    right: 28px;
+}
+.main4 .cma-rc .tj-rc .cma-rz .intro .arrows-l,
+.main4 .cma-rc .tj-rc .cma-rz .intro .arrows-r{
+    width: 111px;
+    height: 27px;
+    line-height: 27px;
+    text-align: center;
+}
+.main4 .cma-rc .tj-rc .cma-rz .intro .arrows-l{
+    background: url("../images/arrows-l.png") no-repeat;
+}
+.main4 .cma-rc .tj-rc .cma-rz .intro .arrows-r{
+    background: url("../images/arrows-r.png") no-repeat;
+}
+.main4 .cma-rc .tj-rc .cma-rz .intro .line{
+    width: 88px;
+    height: 1px;
+    background: #000000;
+}
+.main4 .cma-rc .tj-rc .cma-rz .intro .name{
+    font-size: 26px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+/*无可比拟的证书优势 含金量高，考试比想象更容易！*/
+.main5{
+    padding-top: 100px;
+    background: #F1F5F9;
+    box-sizing: border-box;
+}
+.main5 .ys img,.main6 .cma-pxjg img{
+    display: inline-block;
+    vertical-align: bottom;
+}
+/*恒企教育，CMA官方授权培训机构*/
+/*优势1*/
+.main7 .ys1{
+    box-sizing: border-box;
+    height: 783px;
+    background: url("../images/ys1.jpg") ;
+}
+.main7 .ys1 .ys1-box{
+    width: 1000px;
+    margin: 100px auto 0 auto;
+}
+.main7 .ys1 .ys1-box .ys1-l{
+    width: 391px;
+    margin-top: 40px;
+}
+.ys-btn{
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    background: #333333;
+    text-align: center;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+.kb-mf-lq{
+    font-size: 36px;
+}
+.ys-line{
+    width: 40px;
+    height: 2px;
+    background: #52BD80;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+/*优势2*/
+.main7 .ys2 .ys2-box{
+    width: 1000px;
+    margin: 0 auto;
+}
+.ys2 .ys2-box .ys2-l{
+    margin-left: 78px;
+    margin-top: 115px;
+}
+/*优势3*/
+.ys3{
+    height: 970px;
+    background: url("../images/ys3.jpg") no-repeat center;
+    padding-top: 100px;
+    box-sizing: border-box;
+}
+.kb-line{
+    width: 70px;
+    height: 2px;
+    background: #52BD80;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.ys3 .kb-ms .luo-li{
+    width: 400px;
+    margin-top: 140px;
+}
+.CMA-P>div{
+    font-size: 14px;
+    line-height: 25px;
+}
+
+.ys3 .kb-ms .he-xw{
+    width: 400px;
+    margin-top: 140px;
+    box-sizing: border-box;
+}
+/*满载荣誉前行，只为你的CMA黄金梦*/
+.main8 .w1070{
+    width: 1080px;
+    margin: 0 auto;
+}
+.main8 .w1070 ul li{
+    width: 360px;
+    float: left;
+}
+.main8 .w1070 ul li div>img{
+    margin: 0 auto;
+}
+.main8 .w1070 .pos{
+    position: absolute;
+    bottom: 110px;
+    right: -6px;
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.dao.CourseUserplanClassDetailDao">
+    <select id="queryList" resultType="String">
+       select classplan_id
+       from course_userplan_class_detail
+       where
+       userplan_class_id in
+        <foreach item="userPlanClassId" collection="list" open="(" separator="," close=")">
+            #{userPlanClassId}
+        </foreach>
+       and dr = #{dr}
+    </select>
+
+    <select id="queryClassPlanId" resultType="String">
+        select SQL_CACHE 
+        detail.classplan_id
+        from course_userplan_class_detail detail
+        join course_userplan_class class ON class.userplan_class_id = detail.userplan_class_id
+        where
+        detail.userplan_detail_id =#{userPlanDetailId}
+        AND detail.dr = #{dr}
+        AND class.dr = #{dr}
+        AND class.status = #{status}
+        order by `timestamp` desc
+        limit 1
+    </select>
+
+    <select id="queryClassPlanId4Push" resultType="String">
+        select classplan_id
+        from course_userplan_class_detail
+        where userplan_class_id =#{userPlanClassId}
+        AND dr = #{dr}
+        order by `timestamp` desc
+        limit 1
+    </select>
+
+</mapper>

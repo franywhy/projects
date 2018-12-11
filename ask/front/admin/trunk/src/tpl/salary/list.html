@@ -1,0 +1,51 @@
+<!--直播统计列表-->
+<div class="autoTable">
+<table  class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="num">ID</th>
+			<th class="short">真实姓名</th>
+            <th class="short">昵称</th>
+           <th class="short">等级</th>
+			<th class="short">经纪人</th>
+            <th class="longtime">签约时间</th>
+			<th class="auto">播出天数</th>
+			<th class="auto">播出时长</th>
+			<th class="auto">赚得星豆</th>
+            <th class="auto">电话</th>
+            <th class="auto">身份证</th>
+
+			<th class="short">开户行</th>
+            <th class="short">支行名称</th>
+			<th class="short">开户地</th>
+            <th class="auto">开户号</th>
+            <th class="auto">卡号</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="num"><a href="javascript:Izb.controller.star.show('<%=data[i]._id%>');"><%=data[i]._id%></a></td>
+			<td class="short"><%=data[i].real_name || "-"%></td>
+            <td class="short"><a href="http://ttwww.app@appid@.twsapp.com/<%=data[i]._id%>" target="_blank"><%=data[i].nick_name%></a><% var starLVObj= Izb.common.getLevel(data[i].finance.bean_count_total,false)%><img title="<%=starLVObj.title%>" src="<%=starLVObj.icon%>"  /></td>
+			<td class="short"><%=starLVObj.level%></td>
+
+			<td class="short"><%=data[i].star && data[i].star.broker ? data[i].star.broker : "-" %></td>
+            <td class="longtime"><%=data[i].star && data[i].star.timestamp ? new Date(data[i].star.timestamp).toLocaleString() : ""%></td>
+			<td class="auto"><%=data[i].days%></td>
+            <td class="auto"><%=Math.round(data[i].second/(60*60)*100)/100%></td>
+			<td class="auto"><%=data[i].earned%></td>
+			<td class="auto"><%=data[i].tel%></td>
+            <td><%=data[i].sfz%></td>
+			<td class="short"><%=data[i].bank%></td>
+                <td><%=data[i].bank_name%></td>
+            <td class="auto"><%=data[i].bank_location%></td>
+            <td class="auto"><%=data[i].bank_user_name%></td>
+            <td class="auto"><%=data[i].bank_id%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+</div>
+<div class="appPager"></div>
+<!--/直播统计列表-->

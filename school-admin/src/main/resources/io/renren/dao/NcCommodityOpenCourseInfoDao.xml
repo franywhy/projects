@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.NcCommodityOpenCourseInfoDao">
+
+
+    <!-- 通用查询表头 -->
+    <sql id="base_column">
+        nc_commodity_open_course_info.id AS id , nc_commodity_open_course_info.creator AS creator ,
+        nc_commodity_open_course_info.create_time AS createTime , nc_commodity_open_course_info.modifier AS modifier ,
+        nc_commodity_open_course_info.modify_time AS modifyTime, nc_commodity_open_course_info.nc_commodity_id AS ncCommodityId ,
+        nc_commodity_open_course_info.nc_commodity_name AS ncCommodityName , nc_commodity_open_course_info.authority_id AS authorityId,
+        nc_commodity_open_course_info.dr AS dr ,  nc_commodity_open_course_info.remark AS remark
+    </sql>
+    <!-- 通用查询条件 -->
+    <sql id="base_where">
+        WHERE 1=1 	</sql>
+    <!-- 通用from -->
+    <sql id="base_from">
+        FROM nc_commodity_open_course_info AS nc_commodity_open_course_info
+    </sql>
+    <!-- 通用排序 -->
+    <sql id="base_order">
+        ORDER BY id DESC
+    </sql>
+
+    <!--根据ID查询-->
+    <select id="queryObject" resultType="io.renren.entity.NcCommodityOpenCourseInfoEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND id = #{id}
+    </select>
+
+    <!--根据ID查询-->
+    <select id="queryPOJOObject" resultType="io.renren.pojo.NcCommodityOpenCourseInfoPOJO">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND id = #{id}
+    </select>
+
+    <!--分页列表-->
+    <select id="queryList" resultType="io.renren.entity.NcCommodityOpenCourseInfoEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND nc_commodity_open_course_info.dr=0
+        <include refid="base_order"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+
+    </select>
+
+    <!--分页列表-->
+    <select id="queryPOJOList" resultType="io.renren.pojo.NcCommodityOpenCourseInfoPOJO">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND nc_commodity_open_course_info.dr=0
+        <if test="authorityId != null">
+            AND nc_commodity_open_course_info.authority_id = #{authorityId}
+        </if>
+        <if test="ncCommodityId != null">
+            AND nc_commodity_open_course_info.nc_commodity_id = #{ncCommodityId}
+        </if>
+        <include refid="base_order"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!--分页列表-->
+    <select id="queryTotal" resultType="int">
+        select COUNT(1)
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND nc_commodity_open_course_info.dr=0
+        <if test="authorityId != null">
+            AND nc_commodity_open_course_info.authority_id = #{authorityId}
+        </if>
+        <if test="ncCommodityId != null">
+            AND nc_commodity_open_course_info.nc_commodity_id = #{ncCommodityId}
+        </if>
+
+
+    </select>
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.NcCommodityOpenCourseInfoEntity" id="ncCommodityOpenCourseInfoMap">
+        <result property="id" column="id"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="ncCommodityId" column="nc_commodity_id"/>
+        <result property="ncCommodityName" column="nc_commodity_name"/>
+        <result property="authorityId" column="authority_id"/>
+        <result property="dr" column="dr"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!--新增-->
+    <insert id="insert" parameterType="io.renren.entity.NcCommodityOpenCourseInfoEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into nc_commodity_open_course_info
+        (
+        `creator`,
+        `modifier`,
+        `nc_commodity_id`,
+        `nc_commodity_name`,
+        `authority_id`,
+        `dr`,
+        `remark`
+        )
+        values
+        (
+        #{creator},
+        #{modifier},
+        #{ncCommodityId},
+        #{ncCommodityName},
+        #{authorityId},
+        0,
+        #{remark}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="update" parameterType="io.renren.entity.NcCommodityOpenCourseInfoEntity">
+        update nc_commodity_open_course_info
+        <set>
+            <if test="modifier != null">`modifier` = #{modifier}, </if>
+            <if test="ncCommodityId != null">`nc_commodity_id` = #{ncCommodityId}, </if>
+            <if test="ncCommodityName != null">`nc_commodity_name` = #{ncCommodityName}, </if>
+            <if test="authorityId != null">`authority_id` = #{authorityId}, </if>
+            <if test="remark != null">`remark` = #{remark}, </if>
+        </set>
+        <include refid="base_where"/>
+        AND id = #{id}
+    </update>
+
+    <!--删除-->
+    <update id="delete">
+        update nc_commodity_open_course_info
+        <set> dr = 1 </set>
+        <include refid="base_where"/>
+        AND id = #{id}
+    </update>
+
+    <!--批量删除-->
+    <update id="deleteBatch" parameterType="io.renren.entity.NcCommodityOpenCourseInfoEntity">
+        UPDATE nc_commodity_open_course_info set dr = 1 where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+</mapper>

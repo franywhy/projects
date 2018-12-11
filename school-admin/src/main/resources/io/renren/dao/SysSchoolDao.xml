@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysSchoolDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		id as id,
+		parent_id as parentId,
+		name as name,
+		pic as pic,
+		telephone as telephone,
+		address as address,
+		longitude as longitude,
+		latitude as latitude,
+		code as code,
+		nc_id as ncId,
+		type as type,
+		dr as dr,
+		business_id as businessId
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM sys_school
+    </sql>
+	<sql id="base_where">
+    	WHERE dr=0 and type = 2
+    	<if test="schoolName != null and schoolName.trim() != ''">
+	  	  and name like concat('%',#{schoolName},'%')
+	   </if>
+    </sql>
+	<select id="queryObject" resultType="io.renren.entity.SysSchoolEntity">
+		select 
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.SysSchoolEntity">
+		select 
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.SysSchoolEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_school
+		(
+			`parent_id`, 
+			`name`, 
+			`pic`, 
+			`telephone`, 
+			`address`, 
+			`longitude`, 
+			`latitude`, 
+			`code`, 
+			`nc_id`, 
+			`type`, 
+			`dr`, 
+			`business_id`
+		)
+		values
+		(
+			#{parentId}, 
+			#{name}, 
+			#{pic}, 
+			#{telephone}, 
+			#{address}, 
+			#{longitude}, 
+			#{latitude}, 
+			#{code}, 
+			#{ncId}, 
+			#{type}, 
+			0, 
+			#{businessId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.SysSchoolEntity">
+		update sys_school 
+		<set>
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="telephone != null">`telephone` = #{telephone}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="longitude != null">`longitude` = #{longitude}, </if>
+			<if test="latitude != null">`latitude` = #{latitude}, </if>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="ncId != null">`nc_id` = #{ncId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="businessId != null">`business_id` = #{businessId}</if>
+		</set>
+		where id = #{id} and dr = 0
+	</update>
+	
+	<delete id="delete">
+		delete from sys_school where id = #{value}
+	</delete>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.SysSchoolEntity">
+		UPDATE sys_school 
+		<set> dr = 1 </set>
+		WHERE dr = 0
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<select id="queryObjectByCity" resultType="io.renren.entity.SysSchoolEntity">
+		select * from sys_school where name = #{city} and dr = 0
+	</select>
+	<select id="queryObjectByNcId" resultType="io.renren.entity.SysSchoolEntity">
+		select * from sys_school where nc_id = #{nc_id} and dr = 0
+	</select>
+	<update id="deleteByNcId" parameterType="io.renren.entity.SysSchoolEntity">
+		update sys_school
+		<set> dr = 1 </set>
+		WHERE nc_id = #{nc_id}
+	</update>
+</mapper>

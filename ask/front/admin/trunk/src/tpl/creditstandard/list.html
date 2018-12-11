@@ -1,0 +1,73 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th width="200px">科目</th>
+			<th width="200px">科目编码</th>
+			<th class="auto">学分标准合计</th>
+			<th class="auto">出勤分数</th>
+			<th class="auto">作业分数</th>
+			<th class="auto">结课考核分数</th>
+			<th width="150px">科目类型</th>
+			<th width="150px">考试类型</th>
+			<th width="150px">备注</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        		<th class="action action100">操作</th>
+        	<%}%>
+			<!-- <th class="action action150">操作</th> -->
+		</tr>
+	</thead>
+	<tbody>
+		
+		<!--<tr>
+		<td  name="subject" class="auto_edit" rowspan="4">fdfgfd</td>	
+		</tr>-->
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr did="<%=data[i].id%>">
+			<td  align="center" class="auto"><%=i+1 %></td>
+			<td  align="center" name="subject_name"><%=data[i].subject_name%></td>
+			<td  align="center" name="course_code"><%=data[i].course_code%></td>
+			<td   align="center" class="auto_edit" name="total_credits"><%=data[i].total_credits%></td>
+			<td  align="center" class="auto_edit" name="attendance_score"><%=data[i].attendance_score%></td>
+			<td   align="center" class="auto_edit" name="activity_fraction"><%=data[i].activity_fraction%></td>
+			<td   align="center" class="auto_edit" name="graduation_examination_score"><%=data[i].graduation_examination_score%></td>
+			<%if(data[i].subject_type == null ){%>
+				<td   align="center" class="auto_edit"  id="auto_edit_type" name="subject_type"></td>
+			<%}else{%>
+				<td   align="center" class="auto_edit"  id="auto_edit_type" name="subject_type"><%=data[i].subject_type%></td>
+			<%}%>
+
+						<%if(data[i].exam_type == null ){%>
+				<td   align="center" class="auto_edit"  id="auto_exam_type" name="exam_type"></td>
+			<%}else{%>
+				
+				<%if(data[i].exam_type == 'cy' ){%>
+<td   align="center" class="auto_edit"  id="auto_exam_type" name="exam_type">从业考试</td>
+				<% }else if(data[i].exam_type == 'cj' ){%>
+<td   align="center" class="auto_edit"  id="auto_exam_type" name="exam_type">初级考试</td>
+				<% }else if(data[i].exam_type == 'zj_shiwu'){%>
+<td   align="center" class="auto_edit"  id="auto_exam_type" name="exam_type">中级会计实务</td>
+				<% }else if(data[i].exam_type == 'zj_jingjifa'){%>
+<td   align="center" class="auto_edit"  id="auto_exam_type" name="exam_type">中级经济法</td>
+				<% }else if(data[i].exam_type == 'zj_guangli' ){%>
+<td   align="center" class="auto_edit"  id="auto_exam_type" name="exam_type">中级财务管理</td>
+				<%}	%>
+ 
+
+			
+			<%}%>
+			<td  align="center" class="auto_edit" id="auto_edit_info" name="remarks"><%=data[i].remarks%></td>
+			<td>
+			<button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i].id%>')">删</button>
+			</td>
+			<!-- <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit(<%=data[i]._id%>)">更新</button>
+                <%}%>
+			</td> -->
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

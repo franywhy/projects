@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseClassplanChangeRecordDao">
+
+    <!-- 关联产品表字段 -->
+    <sql id="join_productName">
+        sys_product.product_name AS productName
+    </sql>
+    <!-- 关联产品表 -->
+    <sql id="join">
+        LEFT JOIN sys_product AS sys_product ON sys_product.product_id = c.product_id
+    </sql>
+
+	<insert id="save" parameterType="io.renren.entity.CourseClassplanChangeRecordEntity"  keyProperty="classplanId">
+		insert into course_classplan_change_record
+		(
+			`classplan_id`, 
+			`classplan_name`, 
+			`course_id`, 
+			`material_id`, 
+			`classplan_live_detail`, 
+			`remark`, 
+			`start_time`, 
+			`teacher_id`, 
+			`timetable_id`, 
+			`live_room_id`, 
+			`studio_id`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`school_id`, 
+			`dr`, 
+			`status`, 
+			`is_audited`, 
+			`is_open`,
+			`product_id`,
+			`version_no`,
+			`auditor`,
+			`audit_time`
+		)
+		values
+		(
+			#{classplanId}, 
+			#{classplanName}, 
+			#{courseId},
+			#{materialId},
+			#{classplanLiveDetail}, 
+			#{remark}, 
+			#{startTime}, 
+			#{teacherId}, 
+			#{timetableId}, 
+			#{liveRoomId}, 
+			#{studioId}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime}, 
+			#{schoolId}, 
+			#{dr}, 
+			#{status}, 
+			#{isAudited}, 
+			#{isOpen},
+			#{productId},
+			#{versionNo},
+			#{auditor},
+			#{auditTime}
+		)
+	</insert>
+	<select id="findCId" resultType="int">
+		select count(classplan_id) from course_classplan_change_record where classplan_id=#{classPlanId}
+	</select>
+	<select id="queryObjectByClassplanId" resultType="io.renren.entity.CourseClassplanEntity">
+		SELECT
+			course_classplan_change_record.*
+		FROM course_classplan_change_record AS course_classplan_change_record
+		WHERE
+		course_classplan_change_record.classplan_id = #{classplanId}
+		AND course_classplan_change_record.version_no =  #{versionNo}
+		AND course_classplan_change_record.dr = 0
+	</select>
+	<!-- 审核 -->
+	<update id="audited">
+	   update course_classplan_change_record set is_audited = #{isAudited},auditor=#{userId},audit_time=#{auditTime} where classplan_id =#{classplanId} and version_no = #{versionNo}
+	</update>
+
+    <select id="queryList" resultType="io.renren.entity.CourseClassplanChangeRecordEntity">
+        select
+        c.change_id as changeId,
+        c.audit_time as auditTime,
+        c.version_no as versionNo,
+        sys_user.username as auditorName,
+        c.classplan_id as classplanId,
+        c.classplan_name as classplanName,
+        c.course_id as courseId,
+        c.classplan_live_detail as classplanLiveDetail,
+        c.remark as remark,
+        c.start_time as startTime,
+        c.teacher_id as teacherId,
+        c.timetable_id as timetableId,
+        c.live_room_id as liveRoomId,
+        c.studio_id as studioId,
+        c.creator as creator,
+        c.creation_time as creationTime,
+        c.modifier as modifier,
+        c.modified_time as modifiedTime,
+        c.school_id as schoolId,
+        c.dr as dr,
+        c.status as status,
+        c.is_audited as isAudited,
+        c.is_open as isOpen,
+        c.material_id as materialId,
+        c.product_id as productId,
+        (select cu.username from sys_user cu where cu.user_id = c.creator) as creationName,
+        (select mu.username from sys_user mu where mu.user_id = c.modifier) as modifiedName,
+        courses.course_name as courseName,
+        timetable.name as timetableName,
+        (select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+        mall_live_room.live_room_name as liveRoomName,
+        (select su.nick_name from sys_user su where su.user_id = c.teacher_id) as teacherName,
+        (select co.material_name from course_material co where co.material_id = c.material_id) as materialName,
+        (SELECT
+        count(1)
+        FROM
+        course_userplan_class_detail as userplan_class_detail,<!-- 学习计划子表 -->
+        course_userplan_class as userplan_class,<!-- 学习计划表 -->
+        course_userplan as userplan,<!-- 学员规划表 -->
+        users as users
+        WHERE
+        users.user_id = userplan.user_id
+        AND c.classplan_id = userplan_class_detail.classplan_id
+        AND userplan_class_detail.userplan_class_id = userplan_class.userplan_class_id
+        AND userplan_class.userplan_id = userplan.user_plan_id
+        ) as studentNumber,
+        (SELECT
+        count(1)
+        FROM
+        course_classplan_lives_change_record as course_classplan_lives
+        WHERE
+        course_classplan_lives.classplan_id = c.classplan_id
+        AND course_classplan_lives.dr = 0
+        AND course_classplan_lives.version_no = c.version_no
+        ) as liveNumber,
+        <include refid="join_productName"/>
+        from course_classplan_change_record as c
+        <include refid="join"/>
+        LEFT JOIN courses AS courses ON courses.course_id = c.course_id
+        LEFT JOIN timetable AS timetable ON timetable.number = c.timetable_id
+        LEFT JOIN mall_live_room AS mall_live_room ON mall_live_room.live_room_id = c.live_room_id
+        LEFT JOIN sys_user as sys_user ON  c.auditor = sys_user.user_id
+        where c.dr = 0
+
+        <if test="classplanName != null and classplanName.trim() != ''">
+            and c.`classplan_name` like concat('%',#{classplanName},'%')
+        </if>
+        order by courseId, startTime desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(1) from course_classplan_change_record where dr = 0
+        <if test="classplanName != null and classplanName.trim() != ''">
+            and `classplan_name` like concat('%',#{classplanName},'%')
+        </if>
+    </select>
+
+    <select id="queryObject1" resultType="io.renren.entity.CourseClassplanChangeRecordEntity">
+        select
+        c.change_id as changeId,
+        c.audit_time as auditTime,
+        c.version_no as versionNo,
+        sys_user.username as auditorName,
+        c.classplan_id as classplanId,
+        c.classplan_name as classplanName,
+        c.course_id as courseId,
+        c.classplan_live_detail as classplanLiveDetail,
+        c.remark as remark,
+        c.start_time as startTime,
+        c.teacher_id as teacherId,
+        c.timetable_id as timetableId,
+        c.live_room_id as liveRoomId,
+        c.studio_id as studioId,
+        c.creator as creator,
+        c.creation_time as creationTime,
+        c.modifier as modifier,
+        c.modified_time as modifiedTime,
+        c.school_id as schoolId,
+        c.dr as dr,
+        c.status as status,
+        c.is_audited as isAudited,
+        c.is_open as isOpen,
+        c.material_id as materialId,
+        c.product_id as productId,
+        (select cu.username from sys_user cu where cu.user_id = c.creator) as creationName,
+        (select mu.username from sys_user mu where mu.user_id = c.modifier) as modifiedName,
+        courses.course_name as courseName,
+        timetable.name as timetableName,
+        (select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+        mall_live_room.live_room_name as liveRoomName,
+        (select su.username from sys_user su where su.user_id = c.teacher_id) as teacherName,
+        (select co.material_name from course_material co where co.material_id = c.material_id) as materialName,
+        <include refid="join_productName"/>
+        from course_classplan_change_record c
+        <include refid="join"/>
+        LEFT JOIN courses AS courses ON courses.course_id = c.course_id
+        LEFT JOIN timetable AS timetable ON timetable.number = c.timetable_id
+        LEFT JOIN mall_live_room AS mall_live_room ON mall_live_room.live_room_id = c.live_room_id
+        LEFT JOIN sys_user as sys_user ON  c.auditor = sys_user.user_id
+        where classplan_id = #{classplanId}
+        AND c.version_no = #{versionNo}
+    </select>
+    <delete id="deleteOldObject">
+        update  course_classplan_change_record set dr = 1 where classplan_id = #{classplanId} and is_audited = 2
+    </delete>
+</mapper>

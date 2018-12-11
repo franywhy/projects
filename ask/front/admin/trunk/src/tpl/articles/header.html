@@ -1,0 +1,34 @@
+<!--问答数据表-页头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <span class="text"><%=pty.name%></span>
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+</h2>
+<div class="searchForm">
+    <form name="searchForm">
+
+        标题
+        <input type="text" name="article_title" size="20" />&nbsp;&nbsp;
+        作者
+        <input type="text" name="article_author" size="20" />&nbsp;&nbsp;
+        类型
+        <select name="article_type" class="input" style="width:200px" data-options="required:true">
+            <option value="" selected>==所有==</option>
+            <option value="0" >企业动态</option>
+            <option value="1" >企业文化</option>
+            <option value="2" >总裁语录</option>
+            <option value="3" >2017年会</option>
+			 <option value="4" >其他</option>
+        </select>
+        <br/>
+        <br/>
+        选择日期
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate: '2015-09-20 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}' , maxDate: '%y-%M-%d'})"/>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/问答数据表-页头-->

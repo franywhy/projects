@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.RecordStudyDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column"> 
+ 
+	
+	
+	s.class_completion_rate as classCompletionRate,
+s.class_id as classId,
+s.classplan_id as classplanId,
+s.class_teacher_id as classTeacherId,
+s.commodity_id as commodityId,
+s.course_id as courseId,
+s.dr as dr,
+s.final_exam_score as finalExamScore,
+s.kaoba_one_score as kaobaOneScore,
+s.kaoba_two_score as kaobaTwoScore,
+s.midterm_exam_score as midtermExamScore,
+s.order_id as orderId,
+users.nick_name name,
+users.mobile mobile,
+s.order_no as orderNo,
+s.record_study_id as recordStudyId,
+s.score_type as scoreType,
+s.start_time as startTime,
+s.study_part as studyPart,
+s.teacher_id as teacherId,
+s.tiku_home_work_completion_rate as tikuHomeWorkCompletionRate,
+s.un_examination_score as unExaminationScore,
+s.user_id as userId,
+s.userplan_class_id as userplanClassId,
+s.userplan_detail_id as userplanDetailId,
+s.userplan_id as userplanId,
+s.zero_basis_practice_score as zeroBasisPracticeScore,
+	  su.nick_name teacherName,
+      bzr.nick_name classTeacherName,
+      g.name commodityName,
+	mclass.class_name className,
+	 courses.course_name courseName 
+	
+	
+	
+	
+	
+	
+	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 and s.dr=0 </sql>
+	<!-- 通用from -->
+	
+	<sql id="base_from">
+	  	from record_study s
+	
+	left join users	users on s.user_id=users.user_id
+	left join mall_goods_info g on s.commodity_id=g.id
+	left join mall_class mclass on s.class_id=mclass.class_id
+	left join sys_user bzr on mclass.user_id=bzr.user_id
+	left join sys_user su on s.teacher_id=su.user_id
+    LEFT JOIN courses AS courses ON courses.course_id = s.course_id	 
+    	 
+	</sql>
+	
+ 
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.pojo.RecordStudyPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="name != null and name.trim() != ''">
+			and users.nick_name =#{name}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile = #{mobile}
+		</if>
+		 
+		
+		 
+		 <if test="classTeacherName != null and classTeacherName.trim() != ''">
+			and bzr.nick_name =#{classTeacherName}
+		</if>
+		
+		<if test="classTeacherId != null ">
+			and  bzr.user_id =#{classTeacherId}
+		</if>
+
+	   <if test="userIds != null ">
+		AND s.user_id IN
+		<foreach item="userId" collection="userIds" open="("
+			separator="," close=")">
+			#{userId}
+		</foreach>
+	 </if>
+		
+		order by  s.user_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+			from record_study s
+	
+
+		<if test="condition != null">
+			left join users	users on s.user_id=users.user_id
+			left join mall_class mclass on s.class_id=mclass.class_id
+		</if>
+ 
+   
+		<include refid="base_where"/>
+		<if test="name != null and name.trim() != ''">
+			and users.nick_name = #{name}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile =#{mobile}
+		</if>
+		 
+		
+		<!--  
+		 <if test="classTeacherName != null and classTeacherName.trim() != ''">
+			and bzr.nick_name =#{classTeacherName}
+		</if> -->
+		
+		<if test="classTeacherId != null ">
+			and  mclass.user_id =#{classTeacherId}
+		</if>
+		 <if test="userIds != null ">
+		AND s.user_id IN 
+		<foreach item="userId" collection="userIds" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+		</if>
+	</select>
+
+	<!-- 按时间同步学员学习信息 -->
+	<select id="getSynchronizeRecordStudyList" resultType="io.renren.pojo.RecordStudyPOJO">
+	select
+	 GREATEST(	classplan.dr ,userplan.dr ,userplan_class_detail.dr ) dr ,classplan.start_time    startTime,
+	   max(  case when cl.dr=0 and  cl.live_class_type_ids  like  concat('%',userplan.class_type_id,',%') then 1 else 0 end  ) inClass,
+    classplan.classplan_id classplanId,classplan.course_id courseId,userplan_class_detail.userplan_class_id  userplanClassId,userplan.user_id userId,userplan.order_id orderId,userplan.order_no orderNo,userplan.commodity_id commodityId,
+		  userplan_class_detail.userplan_detail_id userplanDetailId,userplan.user_plan_id userplanId,
+		su.user_id teacherId,    bzr.user_id classTeacherId ,userplan.class_id  classId
+		from course_classplan classplan  
+ 			left join course_classplan_lives cl on classplan.classplan_id=cl.classplan_id
+   left join course_userplan_class_detail as userplan_class_detail  on classplan.classplan_id=userplan_class_detail.classplan_id  
+	 left join course_userplan_class userplan_class 
+	 on userplan_class_detail.userplan_class_id=userplan_class.userplan_class_id 
+        	
+		left join course_userplan userplan on userplan.user_plan_id=userplan_class.userplan_id
+	  left join mall_class mclass on userplan.class_id=mclass.class_id
+	  left join sys_user bzr on mclass.user_id=bzr.user_id
+	  left join sys_user su on classplan.teacher_id=su.user_id
+		where  1=1 
+		<if test="startTime != null ">
+			 and GREATEST(classplan.ts,userplan_class_detail.ts)  >=#{startTime}
+		</if>
+		<if test="endTime != null ">
+			 <![CDATA[	and GREATEST(classplan.ts,userplan_class_detail.ts)  <=#{endTime}]]>
+		</if>
+		<if test="initStartTime != null ">
+			 <![CDATA[	and classplan.start_time  >=#{initStartTime}]]>
+		</if>
+		<if test="initEndTime != null ">
+			 <![CDATA[	and classplan.start_time  <=#{initEndTime}]]>
+		</if>
+  
+			group by classplan.start_time   ,classplan.dr ,userplan.dr ,userplan_class_detail.dr,userplan.commodity_id,
+ 				userplan_class_detail.userplan_detail_id,userplan.order_no,userplan.user_plan_id,
+    classplan.classplan_id,classplan.course_id,userplan_class_detail.userplan_class_id ,userplan.user_id,userplan.order_id,
+			su.user_id ,    bzr.user_id  ,userplan.class_id  
+		order by  userplan.user_id,userplan.order_id,classplan.course_id
+	</select>	
+		
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.pojo.RecordStudyPOJO" useGeneratedKeys="true" keyProperty="recordStudyId">
+	insert into record_study
+	( 
+`class_id`,
+`classplan_id`,
+`class_teacher_id`,
+`commodity_id`,
+`course_id`,
+`dr`, 
+`order_id`,
+`order_no`,
+`record_study_id`, 
+`start_time`, 
+`teacher_id`, 
+`user_id`,
+`userplan_class_id`,
+`userplan_detail_id`,
+`userplan_id` 
+
+
+	)
+	values
+	( 
+#{classId},
+#{classplanId},
+#{classTeacherId},
+#{commodityId},
+#{courseId},
+#{dr}, 
+#{orderId},
+#{orderNo},
+#{recordStudyId}, 
+#{startTime}, 
+#{teacherId},  
+#{userId},
+#{userplanClassId},
+#{userplanDetailId},
+#{userplanId} 
+ 
+ 
+
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.pojo.RecordStudyPOJO">
+		update record_study s
+		<set> 
+
+<if test="recordStudyId != null">`record_study_id` = #{recordStudyId}, </if>
+<if test="classId != null">`class_id` = #{classId}, </if>
+<if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+<if test="classTeacherId != null">`class_teacher_id` = #{classTeacherId}, </if>
+<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+<if test="courseId != null">`course_id` = #{courseId}, </if>
+<if test="dr != null">`dr` = #{dr}, </if>
+
+<if test="orderId != null">`order_id` = #{orderId}, </if>
+<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+
+<!-- <if test="classCompletionRate != null">`class_completion_rate` = #{classCompletionRate}, </if>
+<if test="finalExamScore != null">`final_exam_score` = #{finalExamScore}, </if>
+<if test="kaobaOneScore != null">`kaoba_one_score` = #{kaobaOneScore}, </if>
+<if test="kaobaTwoScore != null">`kaoba_two_score` = #{kaobaTwoScore}, </if>
+<if test="midtermExamScore != null">`midterm_exam_score` = #{midtermExamScore}, </if>
+<if test="scoreType != null">`score_type` = #{scoreType}, </if>
+
+<if test="tikuHomeWorkCompletionRate != null">`tiku_home_work_completion_rate` = #{tikuHomeWorkCompletionRate}, </if>
+<if test="unExaminationScore != null">`un_examination_score` = #{unExaminationScore}, </if>
+
+<if test="zeroBasisPracticeScore != null">`zero_basis_practice_score` = #{zeroBasisPracticeScore},  </if>
+<if test="studyPart != null">`study_part` = #{studyPart}, </if> -->
+
+
+<if test="startTime != null">`start_time` = #{startTime}, </if>
+<if test="teacherId != null">`teacher_id` = #{teacherId}, </if>
+<if test="userId != null">`user_id` = #{userId}, </if>
+<if test="userplanClassId != null">`userplan_class_id` = #{userplanClassId}, </if>
+<if test="userplanDetailId != null">`userplan_detail_id` = #{userplanDetailId}, </if>
+<if test="userplanId != null">`userplan_id` = #{userplanId} </if>
+
+		</set>
+		<include refid="base_where"/>
+		AND s.record_study_id = #{recordStudyId}
+	</update>
+	
+ 
+	
+ 
+</mapper>

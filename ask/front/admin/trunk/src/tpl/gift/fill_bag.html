@@ -1,0 +1,38 @@
+<!--公告输入-->
+<div style="width:500px;">
+<form name="inputForm">
+    <table width="100%" border="0" cellpadding="5">
+    	<tr>
+            <td align="right">礼物名称:</td>
+            <td>
+                <input name="gift_id" type="hidden" value="" />
+                <input name="gift_name" type="text" readonly="readonly" class="input" value="" />
+            </td>
+        </tr>   		  
+        <tr>
+            <td align="right">发送数量:</td>
+            <td><input name="num" type="number" class="input" value="1" />个</td>
+        </tr>
+        <tr>
+            <td align="right">发送用户类别:</td>      
+            <td><select id="gift_priv" name="priv" class="input">
+                <option value="1_2_3_4_5">全部用户</option>
+                <option value="1">全部运营人员</option>
+                <option value="2">全部主播</option>
+                <option value="3">全部普通用户</option>
+                <option value="4">全部客服人员</option>
+                <option value="5">全部经纪人</option>
+                <option value="">指定用户ID</option>
+            </select></td>      
+        </tr>
+        <tr id="customUserId" style="display:none;">
+            <td align="right">用户ID:</td>      
+            <td><input id="txtUserId" name="_id" class="input" type="number" value="" size="10" />
+    <span id="txtUserIdTip" class="red"></span></td>      
+        </tr>  
+        
+          
+    </table>
+</form>
+</div>
+<!--/公告输入-->

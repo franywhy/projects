@@ -1,0 +1,38 @@
+<div class="tagArea">
+    <ul class="tagList">
+        <li class="<%=params.tab=='detail'? 'cur':''%>"><h4>详情</h4></li>
+    </ul>
+    <div class="tag_r">
+        <input type="button" value="返回" class="d-button J_back" />
+        <input type="button" value="导出表格" class="d-button J_export">
+    </div>
+</div>
+
+<form name="detailForm">
+ <table class="inputForm" cellpadding="10">
+ 	  <tr>
+ 	  		<td style="width:60px;">校区</td>
+            <td>
+                <input class="input" type="text" name="orgName"  id="school_code" value="<%=params.orgName%>"/>
+            </td>
+            <td style="width:60px;">学生姓名</td>
+            <td>
+                <input class="input" type="text" name="studentName"  id="user_name" value="<%=params.studentName%>" />
+            </td>
+            <td style="width:60px;">身份证号</td>
+            <td>
+                <input class="input" type="text" name="idCard"  id="id_card" value="<%=params.idCard%>" />
+            </td>
+            <td style="width:60px;">电话</td>
+            <td>
+                <input class="input" type="text" name="phone"  id="phone" value="<%=params.phone%>" />
+            </td>
+            
+              <td style="width:60px;">班型</td>
+            <td>
+                <input class="input" type="text" name="className"  id="className" value="<%=params.className%>" />
+            </td>
+           
+        </tr>
+ </table>
+</form>

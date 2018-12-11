@@ -1,0 +1,47 @@
+<!--座驾输入-->
+<form name="inputForm">
+    座驾Id <input class="input" name="_id" type="text" value="" />    
+    座驾名称
+    <input class="input" type="text" name="name" value="" />
+    分类
+    <select name="cat" class="input">
+        <option value="0" selected>非VIP座驾</option>
+        <option value="1">VIP座驾</option>
+    </select>
+
+    <br />
+    <br />
+    座驾价格
+    <input class="input" name="coin_price" type="text" value="" size="8" />
+    排序
+    <input class="input" name="order" type="text" id="order" size="5" />
+    状态
+    <select name="status" class="input">
+        <option value="1" selected>上线</option>
+        <option value="0">下线</option>
+    </select>
+    <br />
+    <br />
+     类型
+    <select name="type" class="input">
+        <option value="1" selected>可售</option>
+        <option value="2">不可售</option>
+    </select>
+    <br />
+    <br />
+    图片路径
+    <input class="input" name="pic_url" id="pic_url" type="text" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('pic_url', 'gifts');" />
+    <br />
+	<br />
+    动画预览
+    <input class="input" name="pic_pre_url" id="pic_pre_url" type="text" value="" size="36" />
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('pic_pre_url', 'gifts');" />
+    <br />
+	<br />
+    动画路径
+    <input class="input" name="swf_url" type="text" id="swf_url" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('swf_url', 'gifts');" />
+    <br />
+</form>
+<!--/座驾输入-->

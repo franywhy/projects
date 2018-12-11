@@ -1,0 +1,72 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+            <th >总金额</th>
+            <th >年月份</th>
+        <th>创建用户</th>
+        <th >创建时间</th>
+        <th >修改用户</th>
+        <th >修改时间</th>
+            <th >提交状态</th>
+            <th >审核状态</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action100">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+
+            <td class="short"><%=data[i].bonus%></td>
+            <td class="short"><%=data[i].yearMon%></td>
+            <td  class="auto"><%=data[i].createUserId %></td>
+            <td  class="auto"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+            <td  class="auto"><%=data[i].updateUserId  %></td>
+            <td  class="auto"><%=new Date(data[i].update_date).toLocaleString()%></td>
+            <td  class="short"><%=(data[i].uploadFlag==1) ? "已提交" : "未提交"%></td>
+            <td  class="short"><%=(data[i].auditFlag==1) ? "已审核" : "未审核"%></td>
+
+
+            <td class="short">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i].id%>')">查看</button>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <%if(Izb.user.audit(pty.menu,Izb.enumList.menuType.all)){%>
+                <%if(!data[i].uploadFlag){%>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.changestates( '<%=data[i].id %>' )">提交</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit( '<%=data[i].id %>' )">改
+                </button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i].id%>')">删
+                </button>
+                <%}%>
+                <%if((data[i].uploadFlag==1)&&(!data[i].auditFlag==1)){%>
+                <!--<div><h5>已提交</h5></div>-->
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.rollbackSubmit( '<%=data[i].id %>' )">收回</button>
+                <%}%>
+                <%}%>
+
+                <%if(Izb.user.audit(pty.menu,Izb.enumList.menuType.audit)){%>
+                <%if(data[i].uploadFlag==1&&(!data[i].auditFlag==1)){%>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.examine( '<%=data[i].id %>' )">审核</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.rollbackSubmit( '<%=data[i].id %>' )">收回</button>
+                <%}%>
+                <%if(data[i].auditFlag==1){%>
+                <!-- <div><h5>已审核</h5></div>-->
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.rollbackAudit( '<%=data[i].id %>' )">反审核</button>
+                <%}%>
+                <%if(!data[i].uploadFlag==1){%>
+                <!--<div><h5>没提交</h5></div>-->
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.changestates( '<%=data[i].id %>' )">提交</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit( '<%=data[i].id %>' )">改</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i].id%>')">删 </button>
+                <%}%>
+                <%}%>
+                <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

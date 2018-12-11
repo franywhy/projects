@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<!-- 扫描包 -->
+	<context:component-scan base-package="com.hqonline.schedule.mq.*" />
+
+	<context:annotation-config />
+
+	<!-- 连接本地rabbitmq -->
+	<bean id="connectionFactory"
+		class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+		<constructor-arg value="10.0.98.46" />
+		<property name="username" value="admin" />
+		<property name="password" value="mon4498" />
+		<property name="virtualHost" value="/" />
+		<property name="channelCacheSize" value="5" />
+
+	</bean>
+
+	<rabbit:admin connection-factory="connectionFactory" id="amqpAdmin" />
+
+	<!-- queue 队列声明 -->
+	<rabbit:queue id="receive_from_nc" durable="true" auto-delete="false"
+		exclusive="false" name="${queue.receivenc}" />
+	<rabbit:queue id="nc.queue.user" durable="true" auto-delete="false"
+		exclusive="false" name="${nc.queue.user}" />
+		
+		
+	<rabbit:queue id="queue_student_records_test" durable="true" auto-delete="false"
+		exclusive="false" name="queue_student_records_test" />
+		
+	<rabbit:queue id="send_to_nc_test" durable="true"
+		auto-delete="false" exclusive="false" name="send_to_nc_test" />
+		
+	<rabbit:queue id="rabbit_queue_hqonline_attendances" durable="true"
+		auto-delete="false" exclusive="false" name="rabbit_queue_hqonline_attendances" />
+
+	<rabbit:queue name="${teacher.plan.sync.kd}" durable="true" auto-delete="false" exclusive="false" />
+
+
+	<!-- exchange queue binging key 绑定 -->
+	<rabbit:direct-exchange name="mq-exchange"
+		durable="true" auto-delete="false" id="mq-exchange">
+		<rabbit:bindings>
+			<rabbit:binding queue="${queue.receivenc}" key="receive_from_nc" />
+			<rabbit:binding queue="${nc.queue.user}" key="nc.queue.user" />
+			<rabbit:binding queue="send_to_nc_test" key="send_to_nc_test" />
+			<rabbit:binding queue="queue_student_records_test" key="queue_student_records_test" />
+			<rabbit:binding queue="rabbit_queue_hqonline_attendances" key="rabbit_queue_hqonline_attendances" />
+			<rabbit:binding queue="${teacher.plan.sync.kd}" key="${teacher.plan.sync.kd}" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<!-- spring template声明 -->
+	<rabbit:template exchange="mq-exchange" id="amqpTemplate"
+		connection-factory="connectionFactory" />
+
+	<bean id="messageProductor" class="com.izhubo.web.mq.MessageProductor"></bean>
+	<bean id="UserMessageConsumer" class="com.izhubo.web.mq.UserMessageConsumer"></bean>
+	<bean id="teacherPlanConsumer" class="com.izhubo.web.mq.TeacherPlanConsumer"></bean>
+
+	<bean id="messageConsumer" class="com.izhubo.web.mq.MessageConsumer">
+		<constructor-arg ref="mainMongo" />
+	</bean>
+	
+	<bean id="bmessageConsumer" class="com.izhubo.web.mq.BMessageConsumer">
+		<constructor-arg ref="mainMongo" />
+		<constructor-arg ref="msgKGS" />
+	</bean>
+	
+	<rabbit:listener-container
+		connection-factory="connectionFactory" acknowledge="manual" prefetch="200">
+		<rabbit:listener queues="${queue.receivenc}" ref="messageConsumer" />
+		<rabbit:listener queues="${nc.queue.user}" ref="UserMessageConsumer" />
+		<rabbit:listener queues="queue_student_records_test" ref="bmessageConsumer" />
+		<rabbit:listener queues="${teacher.plan.sync.kd}" ref="teacherPlanConsumer" />
+	</rabbit:listener-container>
+
+</beans>
+    

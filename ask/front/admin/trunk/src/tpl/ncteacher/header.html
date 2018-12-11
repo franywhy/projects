@@ -1,0 +1,51 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        昵称
+        <input id="nick_name" type="text" name="nick_name" value="" size="20"  />
+        nc_id
+        <input id="nc_id" type="text" name="nc_id" value="" size="20"  />
+        性别
+        <select id="sex" name="sex" >
+            <option value =""></option>
+            <option value ="0">保密</option>
+            <option value ="1">男</option>
+            <option value ="2">女</option>
+        </select>
+        真实姓名
+        <input id="name" type="text" name="name" value="" size="20"  />
+        手机号码
+        <input id="telephone" type="text" name="telephone" value="" size="20"  />
+        邮箱
+        <input id="email" type="text" name="email" value="" size="20"  />
+        校区
+        <input id="school_code" type="text" name="school_code" value="" size="20"  />
+        状态
+        <select id="status" name="status">
+            <option value =""></option>
+            <option value ="0">正常</option>
+            <option value ="1">冻结</option>
+        </select>
+        同步时间
+        <input id="ssyn_time" type="text" name="ssyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'ssyn_time\')}'})"  />
+        到
+        <input id="esyn_time" type="text" name="esyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'esyn_time\')}'})" />
+        最近登录时间
+        <input id="slast_login" type="text" name="slast_login" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'slast_login\')}'})" />
+        到
+        <input id="elast_login" type="text" name="elast_login" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'elast_login\')}'})" />
+        <br>
+        创建时间
+        <input id="screate_time" type="text" name="screate_time" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'screate_time\')}'})" />
+        到
+        <input id="ecreate_time" type="text" name="ecreate_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate:'#F{$dp.$D(\'ecreate_time\')}'})"/>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头--> 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.SysProductDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		sys_product.product_id AS productId ,
+		sys_product.product_name AS productName , 
+		sys_product.remark AS remark , 
+		sys_product.ts AS ts ,
+		sys_product.status AS status ,
+		sys_product.polyvUserId AS polyvuserid ,
+		sys_product.polyvSecretKey AS polyvsecretkey,
+		sys_product.genseeLoginname AS genseeLoginname,
+		sys_product.genseePassword AS genseePassword,
+		sys_product.genseeWebcastVodLog AS genseeWebcastVodLog,
+		sys_product.genseeWebcastLogUrl AS genseeWebcastLogUrl,
+		sys_product.genseeWebcastTopicsUrl AS genseeWebcastTopicsUrl,
+		sys_product.genseeDomain AS genseeDomain
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM sys_product AS sys_product
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  product_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.modules.job.entity.SysProductEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		where sys_product.product_id = #{productId}
+	</select>
+	<select id="queryCoefficient" resultType="float">
+		select
+			sp.coefficient as coefficient
+		from
+			sys_product as sp
+		where
+			sp.product_id = #{productId}
+	</select>
+
+	<select id="queryRecordEfficient" resultType="float">
+		select
+			sp.record_efficient as recordEfficient
+		from
+			sys_product as sp
+		where
+			sp.product_id = #{productId}
+	</select>
+</mapper>

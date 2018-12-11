@@ -1,0 +1,37 @@
+<!--订单管理页头-->
+<!--<h2 class="appTitle">-->
+    <!--<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all) && !Izb.user.audit(pty.menu,Izb.enumList.menuType.audit)){%>-->
+    <!--<input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />-->
+    <!--<%}%>-->
+    <!--<span class="text"><%=pty.name%></span> </h2>-->
+<!--<div class="searchForm">-->
+    <!--<form name="searchForm">-->
+        <!--类型编号-->
+        <!--<input type="text" name="answer_type_code" size="20" />-->
+        <!--类型名称-->
+        <!--<input type="text" name="answer_type_name" size="20" />-->
+        <!--关联信息-->
+        <!--<select name="map_info">-->
+            <!--<option selected="selected" value="">请选择</option>-->
+            <!--<option value="0">课程相关</option>-->
+            <!--<option value="1">课程无关</option>-->
+        <!--</select>-->
+        <!--<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">-->
+    <!--</form>-->
+<!--</div>-->
+<div class="tagArea">
+    <ul class="tagList">
+        <!--<li class="<%=params.item_type=="0"? "cur":""%>"><a href="#a=payorder&menu=<%=params.menu%>&item_type=0"  ><i></i><span>不包就业课程</span></a></li> '不包就业课程类型订单',-->
+        <li class="<%=params.item_type=="1"? "cur":""%>"><a href="#a=payorder&menu=<%=params.menu%>&item_type=1" ><i></i><span>包就业课程</span></a></li>
+        <li class="<%=params.item_type=="2"? "cur":""%>"><a href="#a=payorder&menu=<%=params.menu%>&item_type=2" ><i></i><span>vip用户</span></a></li>
+        <li class="<%=params.item_type=="3"? "cur":""%>"><a href="#a=payorder&menu=<%=params.menu%>&item_type=3" ><i></i><span>公开课</span></a></li>
+    </ul>
+    <div class="tag_r"><%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        <input type="button" class="d-button d-state-highlight J_add" value="添加<%=['不包就业课程类型订单','包就业课程类型订单','vip类型订单','公开课类型订单'][(params.item_type||1)]%>" />
+        <%}%>
+    </div>
+</div>
+<!--/订单管理页头-->
+
+
+

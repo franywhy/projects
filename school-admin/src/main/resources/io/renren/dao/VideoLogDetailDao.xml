@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.VideoLogDetailDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	video_log_detail.video_log_detail_id AS videoLogDetailId , 	video_log_detail.video_id AS videoId , 	video_log_detail.user_id AS userId , 	video_log_detail.start_time AS startTime , 	video_log_detail.leave_time AS leaveTime , 	video_log_detail.duration AS duration , 	video_log_detail.device AS device , 	video_log_detail.platform_code AS platformCode , 	video_log_detail.create_time AS createTime 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	<where>
+			<if test="startTime != null">
+				video_log_detail.start_time = #{startTime}
+			</if>
+			<if test="leaveTime != null">
+				AND video_log_detail.leave_time = #{leaveTime}
+			</if>
+			<if test="videoId != null">
+				AND video_log_detail.video_id = #{videoId}
+			</if>
+			<if test="device != null">
+				AND video_log_detail.device = #{device}
+			</if>
+			<if test="userId != null">
+				AND video_log_detail.user_id = #{userId}
+			</if>
+		</where>
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM video_log_detail AS video_log_detail
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  video_log_detail_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.VideoLogDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND video_log_detail_id = #{videoLogDetailId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.VideoLogDetailEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--查询是否存在录播记录-->
+ 	<select id="selectDetailCount" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.VideoLogDetailEntity" useGeneratedKeys="true" keyProperty="videoLogDetailId">
+	insert into video_log_detail
+	(
+	`video_id`, 
+	`user_id`, 
+	`start_time`, 
+	`leave_time`, 
+	`duration`, 
+	`device`,
+	`platform_code`, 
+	`create_time` ,
+	`product_id`,
+	`coefficient`
+	)
+	values
+	(
+	#{videoId}, 
+	#{userId}, 
+	#{startTime}, 
+	#{leaveTime}, 
+	#{duration}, 
+	#{device},
+	#{platformCode}, 
+	#{createTime},
+	#{productId},
+	#{coefficient}
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.VideoLogDetailEntity">
+		update video_log_detail 
+		<set>
+			<if test="videoId != null">`video_id` = #{videoId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="leaveTime != null">`leave_time` = #{leaveTime}, </if>
+			<if test="duration != null">`duration` = #{duration}, </if>
+			<if test="device != null">`device` = #{device}, </if>
+			<if test="platformCode != null">`platform_code` = #{platformCode}, </if>
+			<if test="createTime != null">`create_time` = #{createTime},</if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND video_log_detail_id = #{videoLogDetailId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM video_log_detail 
+		<include refid="base_where"/>
+		AND video_log_detail_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM video_log_detail 
+		<include refid="base_where"/> 
+		AND video_log_detail_id IN 
+		<foreach item="videoLogDetailId" collection="ids" open="(" separator="," close=")">
+			#{videoLogDetailId}
+		</foreach>
+	</delete>
+</mapper>

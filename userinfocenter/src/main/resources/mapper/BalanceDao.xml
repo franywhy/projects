@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.elise.userinfocenter.dao.BalanceDao">
+
+	<select id="queryBalanceByUserId" resultType="java.util.Map">
+		select cash, points from balance where user_id = #{userId} limit 1
+	</select>
+
+	<select id="queryHqgByUserId" resultType="java.lang.Double">
+		select hqg from balance where user_id = #{userId} limit 1
+	</select>
+
+	<select id="queryObject" resultType="com.elise.userinfocenter.entity.BalanceEntity">
+		select * from balance where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.elise.userinfocenter.entity.BalanceEntity">
+		select * from balance 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from balance 
+	</select>
+	 
+	<insert id="save" parameterType="com.elise.userinfocenter.entity.BalanceEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into balance
+		(
+			`username`, 
+			`mobile`, 
+			`user_id`, 
+			`cash`, 
+			`points`, 
+			`dr`
+		)
+		values
+		(
+			#{username}, 
+			#{mobile}, 
+			#{userId}, 
+			#{cash}, 
+			#{points}, 
+			#{dr}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.elise.userinfocenter.entity.BalanceEntity">
+		update balance 
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="cash != null">`cash` = #{cash}, </if>
+			<if test="points != null">`points` = #{points}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from balance where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from balance where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

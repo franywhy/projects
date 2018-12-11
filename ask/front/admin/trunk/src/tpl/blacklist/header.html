@@ -1,0 +1,18 @@
+<!--通用应用头-->
+
+<!--/通用应用头-->
+
+<div class="tagArea">
+	<ul class="tagList">
+        <li class="<%=params.type=="1"? "cur":""%>"><a href="#a=blacklist&menu=<%=params.menu%>&type=1"><i></i><span>广播黑名单</span></a></li>
+        <li class="<%=params.type=="2"? "cur":""%>"><a href="#a=blacklist&menu=<%=params.menu%>&type=2"><i></i><span>paypal白名单</span></a></li>
+        <li class="<%=params.type=="3"? "cur":""%>"><a href="#a=blacklist&menu=<%=params.menu%>&type=3"><i></i><span>防踢人白名单</span></a></li>
+        <li class="<%=params.type=="4"? "cur":""%>"><a href="#a=blacklist&menu=<%=params.menu%>&type=4"><i></i><span>工作室经纪人名单</span></a></li>
+	</ul>
+	<div class="tag_r"><%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="添加<%=['','广播黑名单','paypal白名单','防踢人白名单','工作室经纪人名单'][(params.type||0)]%>"   />
+	<%}%>
+	</div>
+</div>
+
+ 

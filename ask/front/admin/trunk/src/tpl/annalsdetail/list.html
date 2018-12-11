@@ -1,0 +1,53 @@
+<!--banner管理-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+
+        <th class="auto">期数</th>
+
+        <th class="auto">标题</th>
+        <th class="auto">栏目</th>
+        <th class="auto">封面作者</th>
+        <th class="auto">封面图片</th>
+        <th class="auto">导语</th>
+
+        <th class="auto">阅读人数</th>
+        <th class="auto">状态</th>
+
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+
+            <td class="auto"><%=data[i].annals_title %></td>
+
+            <td class="auto"><%=data[i].cover_title %></td>
+            <td class="auto"><%=data[i].cover_type %></td>
+            <td class="auto"><%=data[i].cover_author %></td>
+            <td class="pic"><img src="<%=data[i].cover_pic %>" onclick="javascript:window.open('<%=data[i].cover_pic %>')" style="height:50px;"></td>
+            <td class="auto"><%=data[i].cover_content %></td>
+
+            <td class="auto"><%=data[i].read_count %></td>
+            <td class="auto"><%=data[i].status==1?"正常" : "禁用" %></td>
+
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                    <%if(data[i].status==1){%>
+                        <button class="d-button" onclick="Izb.controller.<%=pty.key%>.to_unable('<%=data[i]._id%>')">禁用</button>
+                    <%}else{%>
+                        <button class="d-button" onclick="Izb.controller.<%=pty.key%>.to_able('<%=data[i]._id%>')">启用</button>
+                    <%}%>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/banner管理-->

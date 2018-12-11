@@ -1,0 +1,151 @@
+<form name="productForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+        <tr>
+            <td style="width:60px;">名称</td>
+            <td>
+                <input class="input" type="hidden" name="_id"  id="_id" value="<%=data[0]._id%>"/>
+                <input class="input" type="text" name="name" id="name" value="<%=data[0].name%>"  data-options="required:true" />
+            </td>
+            <td style="width:60px;">商品简称</td>
+            <td>
+                <input class="input" type="text" name="short_name" id="short_name" value="<%=data[0].short_name%>" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">适用对象</td>
+            <td>
+                <input class="input" type="text" name="reader" id="reader" value="<%=data[0].reader%>" />
+            </td>
+            <td style="width:60px;">标签</td>
+            <td>
+                <input class="input" type="text" name="labels" id="labels" value="<%=data[0].labels%>" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">学习周期</td>
+            <td>
+                <input class="input" type="text" name="learntime" id="learntime" value="<%=data[0].learntime%>" />
+            </td>
+            <td style="width:60px;">上课方式</td>
+            <td>
+                <input class="input" type="text" name="classmode" id="classmode" value="<%=data[0].classmode%>" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;" title="PC排序,作用到[商品列表].（数值越小,越靠前。）">PC排序</td>
+            <td>
+                <input class="input" type="number" name="order" id="order" value="<%=data[0].order %>" />
+            </td>
+            <td style="width:60px;" title="APP排序作用到[APP首页商品列表]和[APP商品列表]。（数值越小，越靠前。）">APP排序</td>
+            <td>
+                <input class="input" type="number" name="order_app" id="order_app" value="<%=data[0].order_app %>" />
+
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;" title="套餐排序,只在[PC和APP的套餐商品详情页排序]（数值越小，越靠前。）">套餐排序</td>
+            <td>
+                <input class="input" type="number" name="order_page" id="order_page" value="<%=data[0].order_page %>" />
+            </td>
+
+            <td style="width:60px;" title="推荐属性暂时只在PC的商品列表体现,推荐的商品会有一个logo标志。（推荐不影响排序）">推荐</td>
+            <td>
+                <label ><input type="radio" id="is_hot_0" class="first" name="is_hot" value="0" checked />否</label>&nbsp;&nbsp;
+                <label ><input type="radio" id="is_hot_1"  name="is_hot" value="1" <%=data[0].is_hot == 1 ? 'checked' : ''%>/>推荐</label>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">可使用积分</td>
+            <td>
+                <input class="input" type="number" name="paypoints" id="paypoints" value="<%=data[0].paypoints%>" />
+            </td>
+            <td style="width:60px;">赠送积分</td>
+            <td>
+                <input class="input" type="number" name="points" id="points" value="<%=data[0].points%>" />
+            </td>
+        </tr>
+       <!-- <tr>
+            <td style="width:60px;">月供</td>
+            <td>
+                <input class="input" type="text" name="monthprice" id="monthprice" value="<%=data[0].monthprice%>" />
+            </td>
+        </tr>-->
+        <tr>
+            <!--<td style="width:60px;">价钱</td>
+            <td>
+                <input class="input" type="text" name="price" id="price" value="<%=data[0].price%>" />
+            </td>-->
+            <td style="width:60px;">显示价格</td>
+            <td>
+                <input class="input" type="text" name="titles" id="titles" value="<%=data[0].titles%>"  data-options="required:true"/>
+            </td>
+            <td style="width:60px;">原价</td>
+            <td>
+                <input class="input" type="text" name="original_price" id="original_price" value="<%=data[0].original_price%>" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">上架时间</td>
+            <td>
+                <input class="input" type="text" name="up_shelves_time" id="up_shelves_time" value="<%=new Date(data[0].up_shelves_time).toLocaleString()%>" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'up_shelves_time\')}'})"/>
+            </td>
+            <td style="width:60px;">下架时间</td>
+            <td>
+                <input class="input" type="text" name="down_shelves_time" id="down_shelves_time" value="<%=new Date(data[0].down_shelves_time).toLocaleString()%>" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'down_shelves_time\')}'})"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">图片</td>
+            <td colspan="3">
+                <input class="input" type="text" name="photo" id="photo" value="<%=data[0].photo%>" />
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('photo', 'Posters');" />
+            </td>
+
+        </tr>
+        <tr>
+            <td style="width:60px;">小图图片</td>
+            <td colspan="3">
+                <input class="input" type="text" name="thumbnail" id="thumbnail" value="<%=data[0].thumbnail%>" />
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('thumbnail', 'Posters');" />
+            </td>
+
+        </tr>
+        <tr>
+            <td style="width:60px;">app商品大图片</td>
+            <td colspan="3">
+                <input class="input" type="text" name="app_photo" id="app_photo" value="<%=data[0].app_photo%>" />
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('app_photo', 'Posters');" />
+            </td>
+
+        </tr>
+        <tr>
+            <td style="width:60px;">app商品小图</td>
+            <td colspan="3">
+                <input class="input" type="text" name="app_thumbnail" id="app_thumbnail" value="<%=data[0].app_thumbnail%>" />
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('app_thumbnail', 'Posters');" />
+            </td>
+
+        </tr>
+
+        <tr>
+            <td style="width:60px;">试听地址web</td>
+            <td>
+                <input class="input" type="text" name="try_video" id="try_video" value="<%=data[0].try_video%>" />
+            </td>
+            <td style="width:60px;">试听地址app</td>
+            <td>
+                <input class="input" type="text" name="try_video_app" id="try_video_app" value="<%=data[0].try_video_app%>" />
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:60px;">简介</td>
+            <td colspan="3">
+                <!--<input class="input" type="text" name="summary" id="summary" value="<%=data[0].summary%>" />-->
+                <textarea rows="3" cols="50" name="summary" id="summary"><%=data[0].summary%></textarea>
+            </td>
+        </tr>
+
+    </table>
+</form>

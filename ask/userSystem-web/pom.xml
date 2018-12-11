@@ -1,0 +1,541 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.izhubo</groupId>
+	<artifactId>iuserSystem-web</artifactId>
+	<version>1.0</version>
+	<packaging>war</packaging>
+	<name>izhubo User System Web</name>
+	<!-- <url>http://maven.apache.org</url> -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.3.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.5.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty.orbit</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<version>3.0.0.v201112011016</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.izhubo</groupId>
+			<artifactId>iuserSystem-lib</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.izhubo</groupId>
+			<artifactId>rest</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.rpc</groupId>
+			<artifactId>javax.xml.rpc-api</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>3.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+			<version>1.3.5.RELEASE</version>
+		</dependency>
+		<!-- 图形验证码 -->
+		<dependency>
+			<groupId>com.google.code.kaptcha</groupId>
+			<artifactId>kaptcha</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.40</version>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<contextPath />
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<targetJdk>1.7</targetJdk>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+
+		<jettyVersion>9.2.1.v20140609</jettyVersion>
+		<log.target>stdout</log.target>
+		<log.web.level>DEBUG</log.web.level>
+		<pic.domain>http://ttimgshowd.app1101168695.twsapp.com/</pic.domain>
+		<api.domain>http://ttapi.app1101168695.twsapp.com/</api.domain>
+		<site.domain>http://ttwww.app1101168695.twsapp.com/</site.domain>
+
+		<redis.port>6379</redis.port>
+		<redis.timeout>15000</redis.timeout>
+		<redis.mem.db>0</redis.mem.db>
+		<redis.host>10.207.153.22</redis.host>
+		<redis.mem.host>${redis.host}</redis.mem.host>
+		<redis.mem.port>${redis.port}</redis.mem.port>
+		<redis.chat.host>${redis.host}</redis.chat.host>
+		<redis.chat.port>6381</redis.chat.port>
+		<mongo.uri>10.207.136.82,10.207.140.24,10.207.151.71</mongo.uri>
+		<pic.folder>/data/nginx-web/img</pic.folder>
+
+		<msg.thread.minSize>100</msg.thread.minSize>
+		<msg.thread.maxSize>200</msg.thread.maxSize>
+
+		<buss.thread.minSize>300</buss.thread.minSize>
+		<buss.thread.maxSize>400</buss.thread.maxSize>
+
+		<redis.pool.maxTotal>1000</redis.pool.maxTotal>
+		<redis.pool.maxIdle>500</redis.pool.maxIdle>
+		<redis.pool.maxWait>-1</redis.pool.maxWait>
+		<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+		<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+		<chat.pool.maxTotal>600</chat.pool.maxTotal>
+		<chat.pool.maxIdle>300</chat.pool.maxIdle>
+		<chat.pool.maxWait>1500</chat.pool.maxWait>
+
+		<aspectj-scope>compile</aspectj-scope>
+		<mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+	</properties>
+	<profiles>
+		<profile>
+			<id>testRemote</id>
+			<properties>
+				<redis.host>177.77.77.86</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>177.77.77.70</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/data/nginx-web/img/</pic.folder>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+				<huanxin.appname>comkjcityanswer</huanxin.appname>
+				<huanxin.client_id>YXA6uaPHMBrWEeWhbSn2ECulxQ</huanxin.client_id>
+				<huanxin.client_secret>YXA6wke6bRhsi_oLgGweY8ht-UCWors</huanxin.client_secret>
+				
+				<pic.domain>http://ttimgshowd.app1101815070.twsapp.com/</pic.domain>
+				<api.domain>http://ttestapi.app1101815070.twsapp.com/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+				  <us.domain>http://passport1.kjcity.com</us.domain>
+				   <kjcityh5.domain>http://api1.kjcity.com</kjcityh5.domain>
+				<webservice.domain>http://177.77.77.158:8019/</webservice.domain>
+				<kjcityapi.domain>http://177.77.77.118:12001/</kjcityapi.domain>
+			     <webservice.domainssotest>http://177.77.77.158:8019/</webservice.domainssotest>
+				<!-- 题库 -->
+				<tiku.domain>https://w.kjcity.com/</tiku.domain>
+                <queue.nc_userpk>rabbit_queue_hqonline_nc_userpk</queue.nc_userpk>
+                <!-- 题库历史记录接口 -->
+                <tk.url.trainingcourse>http://w.kjcity.com/ajax/TrainingCourse.ashx?openid=</tk.url.trainingcourse>
+                <!-- SSO接口 -会计APP测试线 -->
+                <sso_login_post>http://177.77.77.183:28087/inner/login</sso_login_post>
+                <sso_userInfo_get>http://177.77.77.183:28087/inner/userInfo</sso_userInfo_get>
+				<sso_userMobileNo_get>http://177.77.77.183:28087/inner/userMobileNo</sso_userMobileNo_get>
+				<sso_logout_post>http://177.77.77.183:28087/inner/logout</sso_logout_post>
+				<sso_sendSMS_get>http://177.77.77.183:28087/inner/otpSMS</sso_sendSMS_get>
+				<sso_register_post>http://177.77.77.183:28087/inner/register</sso_register_post>
+				<sso_userTokenDetail_get>http://177.77.77.183:28087/inner/userTokenDetail</sso_userTokenDetail_get>
+				<sso_passWord_post>http://177.77.77.183:28087/inner/passWord</sso_passWord_post>
+			     <sso_checkMobileNo_get>http://177.77.77.183:28087/inner/checkMobileNo</sso_checkMobileNo_get>
+			</properties>
+
+		</profile>
+		
+		<profile>
+			<id>dockerTest</id>
+			<properties>
+				<redis.host>10.0.98.9</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>10.0.98.10:27017</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/data/nginx-web/img/</pic.folder>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+				<huanxin.appname>comkjcityanswer</huanxin.appname>
+				<huanxin.client_id>YXA6uaPHMBrWEeWhbSn2ECulxQ</huanxin.client_id>
+				<huanxin.client_secret>YXA6wke6bRhsi_oLgGweY8ht-UCWors</huanxin.client_secret>
+				
+				<pic.domain>http://ttimgshowd.app1101815070.twsapp.com/</pic.domain>
+				<api.domain>http://ttestapi.app1101815070.twsapp.com/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+				<us.domain>http://passport1.kjcity.com</us.domain>
+				<kjcityh5.domain>http://api1.kjcity.com</kjcityh5.domain>
+				<!-- <webservice.domain>http://177.77.77.158:8019/</webservice.domain> -->
+				<webservice.domain>http://my.kjcity.com/</webservice.domain>
+				<kjcityapi.domain>http://177.77.77.118:12001/</kjcityapi.domain>
+			    <!-- <webservice.domainssotest>http://177.77.77.158:8019/</webservice.domainssotest> -->
+			    <webservice.domainssotest>http://my.kjcity.com/</webservice.domainssotest>
+				<!-- 题库 -->
+				<tiku.domain>https://w.kjcity.com/</tiku.domain>
+				<tiku.domain.new>http://tikuapp.ljtest.hqjy.com/page/home.html</tiku.domain.new><!-- 会计题库APP首页 -->
+                <queue.nc_userpk>rabbit_queue_hqonline_nc_userpk</queue.nc_userpk>
+                <!-- 题库历史记录接口 -->
+                <tk.url.trainingcourse>http://w.kjcity.com/ajax/TrainingCourse.ashx?openid=</tk.url.trainingcourse>
+                <!-- SSO接口 -会计APP测试线 -->
+                <sso.domain><![CDATA[http://10.0.98.21:28087]]></sso.domain>
+                <sso_login_post>${sso.domain}<![CDATA[/inner/login]]></sso_login_post>
+                <sso_userInfo_get>${sso.domain}<![CDATA[/inner/userInfo]]></sso_userInfo_get>
+				<sso_userMobileNo_get>${sso.domain}<![CDATA[/inner/userMobileNo]]></sso_userMobileNo_get>
+				<sso_logout_post>${sso.domain}<![CDATA[/inner/logout]]></sso_logout_post>
+				<sso_sendSMS_get>${sso.domain}<![CDATA[/inner/otpSMS]]></sso_sendSMS_get>
+				<sso_register_post>${sso.domain}<![CDATA[/inner/register]]></sso_register_post>
+				<sso_userTokenDetail_get>${sso.domain}<![CDATA[/inner/userTokenDetail]]></sso_userTokenDetail_get>
+				<sso_passWord_post>${sso.domain}<![CDATA[/inner/passWord]]></sso_passWord_post>
+			    <sso_checkMobileNo_get>${sso.domain}<![CDATA[/inner/checkMobileNo]]></sso_checkMobileNo_get>
+				<sso_tokenExpired_get>${sso.domain}<![CDATA[/inner/tokenExpired]]></sso_tokenExpired_get>
+
+				<!-- 活动url -->
+				<promotion.domain>http://10.0.98.27:8080</promotion.domain>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>dockerDev</id>
+			<properties>
+				<redis.host>177.77.77.158</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>${redis.host}</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/data/nginx-web/img/</pic.folder>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+				<huanxin.appname>comkjcityanswer</huanxin.appname>
+				<huanxin.client_id>YXA6uaPHMBrWEeWhbSn2ECulxQ</huanxin.client_id>
+				<huanxin.client_secret>YXA6wke6bRhsi_oLgGweY8ht-UCWors</huanxin.client_secret>
+				
+				<pic.domain>http://ttimgshowd.app1101815070.twsapp.com/</pic.domain>
+				<api.domain>http://ttestapi.app1101815070.twsapp.com/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+				<us.domain>http://passport1.kjcity.com</us.domain>
+				<kjcityh5.domain>http://api1.kjcity.com</kjcityh5.domain>
+				<webservice.domain>http://177.77.77.158:8019/</webservice.domain>
+				<kjcityapi.domain>http://177.77.77.118:12001/</kjcityapi.domain>
+			     <webservice.domainssotest>http://177.77.77.158:8019/</webservice.domainssotest>
+				<!-- 题库 -->
+				<tiku.domain>https://w.kjcity.com/</tiku.domain>
+                <queue.nc_userpk>rabbit_queue_hqonline_nc_userpk</queue.nc_userpk>
+                <!-- 题库历史记录接口 -->
+                <tk.url.trainingcourse>http://w.kjcity.com/ajax/TrainingCourse.ashx?openid=</tk.url.trainingcourse>
+                <!-- SSO接口 -->
+				<sso.domain><![CDATA[http://177.77.77.232:28087]]></sso.domain>
+                <sso_login_post>${sso.domain}<![CDATA[/inner/login]]></sso_login_post>
+                <sso_userInfo_get>${sso.domain}<![CDATA[/inner/userInfo]]></sso_userInfo_get>
+				<sso_userMobileNo_get>${sso.domain}<![CDATA[/inner/userMobileNo]]></sso_userMobileNo_get>
+				<sso_logout_post>${sso.domain}<![CDATA[/inner/logout]]></sso_logout_post>
+				<sso_sendSMS_get>${sso.domain}<![CDATA[/inner/otpSMS]]></sso_sendSMS_get>
+				<sso_register_post>${sso.domain}<![CDATA[/inner/register]]></sso_register_post>
+				<sso_userTokenDetail_get>${sso.domain}<![CDATA[/inner/userTokenDetail]]></sso_userTokenDetail_get>
+				<sso_passWord_post>${sso.domain}<![CDATA[/inner/passWord]]></sso_passWord_post>
+			    <sso_checkMobileNo_get>${sso.domain}<![CDATA[/inner/checkMobileNo]]></sso_checkMobileNo_get>
+				<sso_tokenExpired_get>${sso.domain}<![CDATA[/inner/tokenExpired]]></sso_tokenExpired_get>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>betaTest</id>
+			<properties>
+				<redis.host>177.77.77.158</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>177.77.77.158</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/data/nginx-web/img/</pic.folder>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+				<huanxin.appname>comkjcityanswer</huanxin.appname>
+				<huanxin.client_id>YXA6uaPHMBrWEeWhbSn2ECulxQ</huanxin.client_id>
+				<huanxin.client_secret>YXA6wke6bRhsi_oLgGweY8ht-UCWors</huanxin.client_secret>
+				
+				<pic.domain>http://ttimgshowd.app1101815070.twsapp.com/</pic.domain>
+				<api.domain>http://ttestapi.app1101815070.twsapp.com/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+				  <us.domain>http://passport1.kjcity.com</us.domain>
+				   <kjcityh5.domain>http://api1.kjcity.com</kjcityh5.domain>
+				<webservice.domain>http://177.77.77.158:8019/</webservice.domain>
+				<kjcityapi.domain>http://177.77.77.118:12001/</kjcityapi.domain>
+			     <webservice.domainssotest>http://177.77.77.158:8019/</webservice.domainssotest>
+				<!-- 题库 -->
+				<tiku.domain>https://w.kjcity.com/</tiku.domain>
+                <queue.nc_userpk>rabbit_queue_hqonline_nc_userpk</queue.nc_userpk>
+                <!-- 题库历史记录接口 -->
+                <tk.url.trainingcourse>http://w.kjcity.com/ajax/TrainingCourse.ashx?openid=</tk.url.trainingcourse>
+                
+				<!-- SSO接口 -->
+                <sso.domain><![CDATA[http://177.77.77.186:8084]]></sso.domain>
+                <sso_login_post>${sso.domain}<![CDATA[/inner/login]]></sso_login_post>
+                <sso_userInfo_get>${sso.domain}<![CDATA[/inner/userInfo]]></sso_userInfo_get>
+				<sso_userMobileNo_get>${sso.domain}<![CDATA[/inner/userMobileNo]]></sso_userMobileNo_get>
+				<sso_logout_post>${sso.domain}<![CDATA[/inner/logout]]></sso_logout_post>
+				<sso_sendSMS_get>${sso.domain}<![CDATA[/inner/otpSMS]]></sso_sendSMS_get>
+				<sso_register_post>${sso.domain}<![CDATA[/inner/register]]></sso_register_post>
+				<sso_userTokenDetail_get>${sso.domain}<![CDATA[/inner/userTokenDetail]]></sso_userTokenDetail_get>
+				<sso_passWord_post>${sso.domain}<![CDATA[/inner/passWord]]></sso_passWord_post>
+			    <sso_checkMobileNo_get>${sso.domain}<![CDATA[/inner/checkMobileNo]]></sso_checkMobileNo_get>
+				<sso_tokenExpired_get>${sso.domain}<![CDATA[/inner/tokenExpired]]></sso_tokenExpired_get>
+			</properties>
+
+		</profile>
+
+		<profile>
+			<id>product</id>
+			<properties>
+
+				<redis.host>172.16.2.244</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+
+				<redis.chat.host>172.16.2.244</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<redis.pool.maxTotal>1000</redis.pool.maxTotal>
+				<redis.pool.maxIdle>500</redis.pool.maxIdle>
+				<redis.pool.maxWait>-1</redis.pool.maxWait>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+				<chat.pool.maxTotal>600</chat.pool.maxTotal>
+				<chat.pool.maxIdle>300</chat.pool.maxIdle>
+				<chat.pool.maxWait>1500</chat.pool.maxWait>
+
+				<msg.thread.minSize>100</msg.thread.minSize>
+				<msg.thread.maxSize>200</msg.thread.maxSize>
+
+				<buss.thread.minSize>300</buss.thread.minSize>
+				<buss.thread.maxSize>400</buss.thread.maxSize>
+
+				<log.target>logfile</log.target>
+				<log.web.level>INFO</log.web.level>
+				<pic.folder>/www/nginx-web/img</pic.folder>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+				<huanxin.appname>comkjcityanswer</huanxin.appname>
+				<huanxin.client_id>YXA6uaPHMBrWEeWhbSn2ECulxQ</huanxin.client_id>
+				<huanxin.client_secret>YXA6wke6bRhsi_oLgGweY8ht-UCWors</huanxin.client_secret>
+				
+                
+				<!-- replset  -->
+				<mongo.uri>172.16.2.246:27018</mongo.uri>
+				<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
+				<webservice.domain>http://my.kjcity.com/</webservice.domain>
+			    <webservice.domainssotest>http://my.kjcity.com/</webservice.domainssotest>
+			     <us.domain>http://passport.kjcity.com</us.domain>
+			      <kjcityh5.domain>https://wap.hqjy.com</kjcityh5.domain>
+			      <kjcityapi.domain>http://webapi.hqjy.com/</kjcityapi.domain>
+				<!-- 题库 -->
+				<tiku.domain>https://exam.kjcity.com/</tiku.domain>
+				<tiku.domain.new>https://mtiku.hqjy.com/page/home.html</tiku.domain.new><!-- 会计题库APP首页 -->
+                <queue.nc_userpk>rabbit_queue_hqonline_nc_userpk_pro</queue.nc_userpk>
+                 <!-- 题库历史记录接口 -->
+                <tk.url.trainingcourse>http://exam.kjcity.com/ajax/TrainingCourse.ashx?openid=</tk.url.trainingcourse>
+                
+                <!-- SSO接口 -->
+                <sso.domain><![CDATA[http://kuaijiappsso.sso.hqjy.com]]></sso.domain>
+                <sso_login_post>${sso.domain}<![CDATA[/inner/login]]></sso_login_post>
+                <sso_userInfo_get>${sso.domain}<![CDATA[/inner/userInfo]]></sso_userInfo_get>
+				<sso_userMobileNo_get>${sso.domain}<![CDATA[/inner/userMobileNo]]></sso_userMobileNo_get>
+				<sso_logout_post>${sso.domain}<![CDATA[/inner/logout]]></sso_logout_post>
+				<sso_sendSMS_get>${sso.domain}<![CDATA[/inner/otpSMS]]></sso_sendSMS_get>
+				<sso_register_post>${sso.domain}<![CDATA[/inner/register]]></sso_register_post>
+				<sso_userTokenDetail_get>${sso.domain}<![CDATA[/inner/userTokenDetail]]></sso_userTokenDetail_get>
+				<sso_passWord_post>${sso.domain}<![CDATA[/inner/passWord]]></sso_passWord_post>
+				<sso_checkMobileNo_get>${sso.domain}<![CDATA[/inner/checkMobileNo]]></sso_checkMobileNo_get>
+				<sso_tokenExpired_get>${sso.domain}<![CDATA[/inner/tokenExpired]]></sso_tokenExpired_get>
+
+				<!-- 活动url -->
+				<promotion.domain>http://www.hengqijiaoyu.cn</promotion.domain>
+			</properties>
+		</profile>
+	</profiles>
+	<build>
+		<finalName>userSystem</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>*.properties</include>
+					<include>logback.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>apple/*</include>
+					<include>unionpay/*</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jettyVersion}</version>
+				<configuration>
+					<httpConnector>
+						<port>18080</port>
+						<host>ttus.app1101168695.twsapp.com</host>
+					</httpConnector>
+					<scanIntervalSeconds>3</scanIntervalSeconds>
+					<stopPort>18081</stopPort>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

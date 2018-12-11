@@ -1,0 +1,71 @@
+
+<!--礼物输入-->
+<form name="inputForm">
+   <input name="_id" type="hidden" class="input" value="" />   
+    类别名称
+    <select name="category_id" class="input">
+		<%
+		var allCatList = Izb.controller.giftcat.getAllCatList();
+		for(var key in allCatList){
+		%>		
+		<option value="<%=key%>"><%=allCatList[key]%></option>
+		<%}%>
+    </select>	
+	&nbsp;抢星礼物
+    <select name="star" class="input">
+		<option value="0">否</option>
+		<option value="1">是</option>
+    </select>
+	&nbsp;抢星基数
+    <input class="input" name="star_limit" type="number" size="8" />
+    <br />
+    <br />
+
+    是否可售
+    <select name="sale" class="input">
+		<option value="0">否</option>
+		<option value="1">是</option>
+    </select>
+    最新礼物
+    <select name="isNew" class="input">
+		<option value="0">否</option>
+		<option value="1">是</option>
+    </select>
+    热门礼物
+    <select name="isHot" class="input">
+		<option value="0">否</option>
+		<option value="1">是</option>
+    </select>
+    <br />
+    <br />
+	分成比例
+    <input class="input" name="ratio" type="text"  />（小数）为空则根据分类分成比例计算
+    <br />
+    <br />
+    礼物名称
+    <input class="input" type="text" name="name" value="" />
+    礼物价格
+    <input class="input" name="coin_price" type="number" value="" size="8" />
+    排序
+    <input class="input" name="order" type="text" id="order" size="5" />
+    <br />
+    <br />
+    图片路径
+    <input class="input" name="pic_url" id="pic_url" type="text" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('pic_url', 'gifts');" />
+    <br />
+	<br />
+    动画预览
+    <input class="input" name="pic_pre_url" id="pic_pre_url" type="text" value="" size="36" />
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('pic_pre_url', 'gifts');" />
+    <br />
+	<br />
+    动画路径
+    <input class="input" name="swf_url" type="text" id="swf_url" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('swf_url', 'gifts');" />
+    <br />
+    <br />
+    描述
+    <input class="input" name="desc" type="text" value="" size="36"/>
+</form>
+<!--/礼物输入-->

@@ -1,0 +1,41 @@
+<!--通用列表--> 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="num">序号</th>
+        <th class="num">ID</th>
+        <th class="short">姓名</th>
+        <th class="short">联系方式</th>
+
+        <th class="num">提问数量</th>
+        <th class="num">聊天中数量</th>
+        <th class="num">满意数量</th>
+        <th class="num">非常满意数量</th>
+        <th class="num">不满意数量</th>
+        <th class="num">未评价数量</th>
+
+        <th class="num">满意度</th>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+        <td class="num"><%=i+1 %></td>
+        <td class="num"><%=data[i]._id %></td>
+        <td class="short"><%=data[i].nick_name %></td>
+        <td class="short"><%=data[i].username %></td>
+
+        <td class="num"><%=data[i].topic_num %></td>
+        <td class="num"><%=data[i].topic_exchang_num %></td>
+        <td class="num"><%=data[i].good_num %></td>
+        <td class="num"><%=data[i].ggood_num %></td>
+        <td class="num"><%=data[i].bad_num %></td>
+        <td class="num"><%=data[i].uneval_num %></td>
+
+        <td class="num"><%=data[i].gp %></td>
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>
+<!--/通用列表-->

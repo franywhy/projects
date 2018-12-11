@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.RelatedCommodityDao">
+
+	<select id="queryObject" resultType="io.renren.entity.RelatedCommodityEntity">
+		select * from related_commodity where dr = 0 and related_commodity_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.RelatedCommodityEntity">
+		select 
+		r.* ,
+		(select cu.username from sys_user cu where cu.user_id = r.creator) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = r.modifier) as modifiedName
+		from related_commodity r where dr = 0
+		<if test="relatedName != null and relatedName != ''">
+			and `related_name` like concat('%',#{relatedName},'%') 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from related_commodity where dr = 0
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.RelatedCommodityEntity" useGeneratedKeys="true" keyProperty="relatedCommodityId">
+		insert into related_commodity
+		(
+			`school_id`, 
+			`dr`, 
+			`related_name`, 
+			`remake`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`status`
+		)
+		values
+		(
+			#{schoolId}, 
+			#{dr}, 
+			#{relatedName}, 
+			#{remake}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime}, 
+			#{status}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.RelatedCommodityEntity">
+		update related_commodity 
+		<set>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="relatedName != null">`related_name` = #{relatedName}, </if>
+			<if test="remake != null">`remake` = #{remake}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="status != null">`status` = #{status}</if>
+		</set>
+		where related_commodity_id = #{relatedCommodityId}
+	</update>
+	<update id="updateBatch">
+	   update related_commodity set status = #{status} where related_commodity_id in
+	   <foreach item="relatedCommodityId" collection="list" open="(" separator="," close=")">
+	   	#{relatedCommodityId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from related_commodity where related_commodity_id = #{value}
+	</delete>
+	
+	
+	<update id="deleteBatch">
+		update related_commodity
+		<set>
+			dr = 1
+		</set>
+		where related_commodity_id in 
+		<foreach item="relatedCommodityId" collection="array" open="(" separator="," close=")">
+			#{relatedCommodityId}
+		</foreach>
+	</update>
+
+</mapper>

@@ -1,0 +1,35 @@
+<!--签约申请页头-->
+<h2 class="appTitle"><input type="button" value="导出表格" class="d-button J_export" />
+<input type="button" value="返回" class="d-button J_back" /><span class="text"><%=pty.name%></span></h2>
+<div class="searchForm">
+<form name="searchForm">
+ID
+<input type="number" name="xy_user_id" size="10" />
+QQ
+<input type="number" name="qq" size="16" />
+状态
+<select name="status">
+    <option selected="selected" value="">请选择</option>
+    <option value="3">未处理</option>
+    <option value="1">未通过</option>
+    <option value="2">已通过</option>
+</select>
+所属公司
+<input type="text" name="broker" size="10" />
+<br>
+<br>
+申请日期
+<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+到
+<input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+    <br>
+<br>
+签约日期
+<input id="lstime" type="text" name="lstime" value="" size="20"  readonly onClick="WdatePicker({ dateFmt: 'yyyy-MM-dd 00:00:00', maxDate: '#F{$dp.$D(\'letime\')}' })" />
+到
+<input id="letime" type="text" name="letime" value="" size="20" readonly onClick="WdatePicker({ dateFmt: 'yyyy-MM-dd 23:59:59', minDate: '#F{$dp.$D(\'lstime\')}' })"/>
+
+<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+</form>
+</div>
+<!--/签约申请页头-->

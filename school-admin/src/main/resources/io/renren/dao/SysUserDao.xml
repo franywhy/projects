@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysUserDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		sys_user.user_id AS userId,
+		sys_user.username AS username,
+		sys_user.email AS email,
+		sys_user.mobile AS mobile,
+		sys_user.wx_code AS wxCode,
+		sys_user.status AS status,
+		sys_user.create_time AS createTime,
+		sys_user.class_teacher AS classTeacher,
+		sys_user.teacher AS teacher,
+		sys_user.school_id AS school_id,
+		sys_user.nick_name AS nickName,
+		sys_user.id_code AS idCode,
+		sys_user.m_id AS mId,
+		sys_user.dept_id AS deptId,
+		sys_user.owner_id AS ownerId
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	FROM sys_user AS sys_user
+	</sql>
+	<!-- 不定条件查询 -->
+	<sql id="base_where">
+    	<if test="username != null and username.trim() != ''">
+			and sys_user.username like concat('%',#{username},'%') 
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and sys_user.mobile = #{mobile}
+		</if>
+		<if test="nickName != null and nickName.trim() != ''">
+			and sys_user.nick_name like concat('%',#{nickName},'%') 
+		</if>
+		<if test="classTeacher != null">
+			and sys_user.class_teacher like concat('%',#{classTeacher},'%') 
+		</if>
+		<if test="teacher != null">
+			and sys_user.teacher like concat('%',#{teacher},'%') 
+		</if>	
+    </sql>
+    <!-- 部门 关联-->
+    <sql id="dept_from">
+    	LEFT JOIN sys_dept AS sys_dept ON (sys_dept.dept_id = sys_user.dept_id)
+	</sql>
+    <!-- 部门 列-->
+	<sql id="dept_column">
+		sys_dept.name AS deptName
+	</sql>
+    
+    
+	<select id="findClassTeacherList" resultType="io.renren.entity.SysUserEntity">
+		select 
+		<include refid="base_column"/>
+		from sys_user where status = 1 and class_teacher = 1
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="findTeacherList" resultType="io.renren.entity.SysUserEntity">
+		select 
+		<include refid="base_column"/>
+		from sys_user where status = 1 
+		<if test="nickName != null and nickName.trim() != ''">
+			AND `nick_name` like concat('%',#{nickName},'%') 
+		</if>
+		<if test="teacher != null and teacher > 0">
+			and teacher = 1
+		</if>
+		<if test="classTeacher != null and classTeacher > 0">
+			and class_teacher = 1
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="findTeacherCount" resultType="int">
+		select count(1) from sys_user where status = 1 
+		<if test="nickName != null and nickName.trim() != ''">
+			AND `nick_name` like concat('%',#{nickName},'%') 
+		</if>
+		<if test="teacher != null and teacher > 0">
+			and teacher = 1
+		</if>
+		<if test="classTeacher != null and classTeacher > 0">
+			and class_teacher = 1
+		</if>
+	</select>
+
+	<select id="queryObject" resultType="io.renren.entity.SysUserEntity">
+		select 
+			<include refid="base_column"/>
+			,
+			<include refid="dept_column"/>
+		<include refid="base_from"/> 
+		<include refid="dept_from"/> 
+		where user_id = #{value}
+	</select>
+	
+	<select id="queryMobile" resultType="io.renren.entity.SysUserEntity">
+		select <include refid="base_column"/> from sys_user where mobile = #{mobile}
+	</select>
+	
+	<select id="queryTeacherById" resultType="io.renren.entity.SysUserEntity">
+		select <include refid="base_column"/> from sys_user where user_id = #{teacherId}
+	</select>
+	
+	<select id="queryList" resultType="io.renren.entity.SysUserEntity">
+		select 
+			<include refid="base_column"/>
+			,
+			<include refid="dept_column"/>
+		<include refid="base_from"/>
+		<include refid="dept_from"/> 
+		<where>
+			1=1
+			<include refid="base_where"/>
+		</where>
+		order by user_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from"/>
+		<where>
+			1=1
+			<include refid="base_where"/>
+		</where>
+	</select>
+	
+	<select id="queryTotalTeacher" resultType="int">
+		select count(*) from sys_user where status = 1 and teacher = 1
+		<if test="nickName != null and nickName.trim() != ''">
+			and `nick_name` like concat('%',#{nickName},'%') 
+		</if>
+	</select>
+	
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="String">
+		select m.perms from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="Long">
+		select m.menu_id from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<select id="queryByUserName" resultType="io.renren.entity.SysUserEntity">
+		select * from sys_user where username = #{username}
+	</select>
+	
+	<select id="queryMid" resultType="io.renren.entity.SysUserEntity">
+		SELECT * FROM `sys_user` WHERE m_id =#{mId}
+	</select>
+	
+	<select id="queryMobileByUserId" resultType="java.lang.String">
+		SELECT mobile FROM sys_user WHERE user_id = #{userId}
+	</select>
+	
+	<insert id="save" parameterType="io.renren.entity.SysUserEntity" useGeneratedKeys="true" keyProperty="userId">
+		insert into sys_user
+		(
+			`user_id`, 
+			`username`, 
+			`password`, 
+			`email`, 
+			`wx_code`, 
+			`mobile`, 
+			`status`, 
+			`class_teacher`, 
+			`teacher`, 
+			`school_id`, 
+			`create_time`,
+			`nick_name`,
+			`id_code`,
+			`m_id` ,
+			`dept_id`,
+			`ts`,
+			`owner_id`
+		)
+		values
+		(
+			#{userId}, 
+			#{username}, 
+			#{password}, 
+			#{email}, 
+			#{wxCode},
+			#{mobile}, 
+			#{status}, 
+			#{classTeacher}, 
+			#{teacher}, 
+			#{schoolId}, 
+			#{createTime},
+			#{nickName},
+			#{idCode},
+			#{mId},
+			#{deptId},
+			#{ts},
+			#{ownerId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.SysUserEntity">
+		update sys_user 
+		<set> 
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="email != null">`email` = #{email}, </if>
+			<if test="wxCode != null">`wx_code` = #{wxCode}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="classTeacher != null">`class_teacher` = #{classTeacher}, </if>
+			<if test="teacher != null">`teacher` = #{teacher}, </if>
+			<if test="nickName != null">`nick_name` = #{nickName}, </if>
+			<if test="idCode != null">`id_code` = #{idCode}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="ts != null">`ts` = #{ts}, </if>
+			<if test="ownerId != null">`owner_id` = #{ownerId} </if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	
+	<update id="updatePassword" parameterType="map">
+		update sys_user set `password` = #{newPassword} 
+			where user_id = #{userId} and password = #{password}
+	</update>
+	
+	<delete id="deleteBatch">
+		delete from sys_user where user_id in 
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+		;
+		delete from sys_user_role where user_id in 
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</delete>
+	
+	<select id="syncQueryTotal" resultType="int">
+		select count(1) from sys_user
+		<where>
+			<if test="username != null and username.trim() != ''">
+				and `username` = #{username}
+			</if>
+			<if test="mId != null and mId.trim() != ''">
+				and `m_id` = #{mId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 批量更新状态 -->
+	<update id="updateBatch">
+	   update sys_user set status = #{status} where user_id in
+	   <foreach item="userId" collection="list" open="(" separator="," close=")">
+	   	#{userId}
+		</foreach>
+	</update>
+	<select id="queryObjectByClassId" resultType="map">
+		select 
+			sys_user.nick_name as nickName,
+			sys_user.owner_id as ownerId,
+			mall_class.class_name as className
+		from
+			sys_user as sys_user
+			left join mall_class as mall_class on sys_user.user_id = mall_class.user_id
+		where
+			mall_class.class_id = #{classId}
+			and mall_class.dr = 0
+	</select>
+	<select id="queryAllAgentTeacher" resultType="io.renren.entity.SysUserEntity">
+		select 
+			user_id as userId,
+			username as username,
+			mobile as mobile,
+			nick_name as nickName,
+			owner_id as ownerId
+		from 
+			sys_user 
+		where 
+			status = 1 
+			and class_teacher = 1 
+			and owner_id is null 
+	</select>
+	
+	<select id="queryUserIdByName" resultType="Long">
+		SELECT
+			user_id
+		FROM
+			sys_user
+		WHERE
+			nick_name LIKE concat('%',#{name},'%') 
+	</select>
+</mapper>

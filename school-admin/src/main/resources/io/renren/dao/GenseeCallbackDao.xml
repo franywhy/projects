@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.GenseeCallbackDao">
+	<!--新增liveCallback-->
+	<insert id="saveLiveCallbackDetail" parameterType="io.renren.entity.LiveCallbackDetailEntity" useGeneratedKeys="true" keyProperty="liveCallbackDetailId">
+		insert into live_callback_detail
+		(
+		`live_id`,
+		<if test=" userId != null">`user_id`,</if>
+		<if test="joinTime != null">`join_time`,</if>
+		<if test="leaveTime != null">`leave_time`,</if>
+		`create_time`
+		)
+		values
+		(
+		#{liveId}, 
+		<if test=" userId != null">#{userId}, </if>
+		<if test="joinTime != null">#{joinTime},</if>
+		<if test="leaveTime != null">#{leaveTime},</if>
+		#{createTime}
+		)
+	</insert>
+	
+	<!--查询liveCallback记录-->
+	<select id="queryLiveCallbackDetail" resultType="io.renren.entity.LiveCallbackDetailEntity">
+		select * 
+		from live_callback_detail
+		where live_id = #{liveId}
+		and user_id = #{userId}
+		order by create_time desc
+	</select>
+	
+	<!--查询只有进入时间的记录-->
+	<select id="queryLiveJoinDetail" resultType="io.renren.entity.LiveCallbackDetailEntity">
+		select * 
+		from live_callback_detail
+		where live_id = #{liveId}
+		and user_id = #{userId}
+		and leave_time IS NULL
+		and join_time &gt; #{startTime}
+		and join_time &lt; #{endTime}
+		order by create_time desc
+	</select>
+	
+	<!--更新liveCallback-->
+	<update id="updateLiveCallbackDetail" parameterType="io.renren.entity.LiveCallbackDetailEntity">
+		update live_callback_detail 
+		<set>
+			<if test="liveId != null">`live_id` = #{liveId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="joinTime != null">`join_time` = #{joinTime}, </if>
+			<if test="leaveTime != null">`leave_time` = #{leaveTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where live_callback_detail_id = #{liveCallbackDetailId}
+	</update>
+	
+	<!--新增videoCallback-->
+	<insert id="saveVideoCallbackDetail" parameterType="io.renren.entity.VideoCallbackDetailEntity" useGeneratedKeys="true" keyProperty="videoCallbackDetailId">
+		insert into video_callback_detail
+		(
+		`live_id`,  
+		`user_id`, 
+		`start_time`,
+		`create_time` , 
+		)
+		values
+		(
+		#{liveId}, 
+		#{userId}, 
+		#{startTime},
+		#{createTime}
+		)
+	</insert>
+	
+	<!--更新liveCallback-->
+	<update id="updateVideoCallbackDetail" parameterType="io.renren.entity.VideoCallbackDetailEntity">
+		update video_callback_detail 
+		<set>
+			<if test="liveId != null">`live_id` = #{liveId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="leaveTime != null">`leave_time` = #{leaveTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where video_callback_detail_id = #{videoCallbackDetailId}
+	</update>
+	
+	<!--查询videoCallback记录-->
+	<select id="queryVideoCallbackDetail" resultType="io.renren.entity.VideoCallbackDetailEntity">
+		select * 
+		from video_callback_detail
+		where video_id = #{videoId}
+		and user_id = #{userId}
+		order by create_time
+		limit 1
+	</select>
+	
+	<!-- 更新离开时间 -->
+	<update id="updateLiveCallbackLeaveTime" parameterType="map">
+		UPDATE live_callback_detail 
+		SET leave_time = #{endTime}
+		WHERE live_id = #{liveId}
+		AND join_time &gt; (#{startTime}-3600000)
+		AND join_time &lt; #{endTime}
+		AND leave_time IS NULL
+	</update>
+	
+	<!-- 查询明细 -->
+	<select id="queryByLiveId" parameterType="map" resultType="io.renren.entity.LiveCallbackDetailEntity">
+		SELECT * 
+		FROM live_callback_detail
+		WHERE live_id = #{liveId}
+		AND join_time &gt; (#{startTime}-3600000)
+		AND join_time &lt; #{endTime}
+	</select>
+	
+	<!-- 查询直播结束操作 -->
+	<select id="queryClassLivesEndTime" parameterType="map" resultType="io.renren.entity.LiveCallbackDetailEntity">
+		SELECT * 
+		FROM live_callback_detail
+		WHERE live_id = #{liveId}
+		AND user_id IS NULL
+		AND join_time IS NULL
+		AND leave_time &gt; #{startTime}
+		AND leave_time &lt; #{endTime}
+		ORDER BY leave_time DESC
+		LIMIT 1
+	</select>
+
+    <!--新增videoCallback-->
+    <insert id="saveReplayCallbackDetail" parameterType="io.renren.entity.ReplayCallbackDetailEntity" useGeneratedKeys="true" keyProperty="replayCallbackDetailId">
+        insert into replay_callback_detail
+        (
+        `video_id`,
+        `user_id`,
+        `join_time`,
+        `leave_time`,
+        `create_time`,
+        `video_start_time`,
+        `video_end_time`,
+        `video_total_time`,
+        `is_offlive`,
+        `product_id`,
+        `coefficient`
+        )
+        values
+        (
+        #{videoId},
+        #{userId},
+        #{joinTime},
+        #{leaveTime},
+        #{createTime},
+        #{videoStartTime},
+        #{videoEndTime},
+        #{videoTotalTime},
+        #{isOfflive},
+        #{productId},
+        #{coefficient}
+        )
+    </insert>
+
+    <select id="queryReplayJoinDetail" resultType="io.renren.entity.ReplayCallbackDetailEntity">
+        select *
+		from replay_callback_detail
+		where video_id = #{videoId}
+		and user_id = #{userId}
+		and leave_time IS NULL
+		and join_time &gt; #{startTime}
+		and join_time &lt; #{endTime}
+		order by create_time desc
+    </select>
+
+    <select id="queryReplayLeaveDetail" resultType="io.renren.entity.ReplayCallbackDetailEntity">
+        select *
+        from replay_callback_detail
+        where video_id = #{videoId}
+        and user_id = #{userId}
+        and join_time IS NOT NULL
+        and leave_time IS NOT NULL
+        and join_time &gt; #{startTime}
+        and join_time &lt; #{endTime}
+        order by create_time desc
+    </select>
+
+    <update id="updateReplayCallbackDetail">
+        update replay_callback_detail
+        <set>
+            <if test="videoId != null">`video_id` = #{videoId}, </if>
+            <if test="userId != null">`user_id` = #{userId}, </if>
+            <if test="joinTime != null">`join_time` = #{joinTime}, </if>
+            <if test="leaveTime != null">`leave_time` = #{leaveTime}, </if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="videoStartTime != null">`video_start_time` = #{videoStartTime},</if>
+            <if test="videoEndTime != null">`video_end_time` = #{videoEndTime}, </if>
+            <if test="videoTotalTime != null">`video_total_time` = #{videoTotalTime},</if>
+            <if test="isOfflive != null">`is_offlive` = #{isOfflive},</if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="coefficient != null">`coefficient` = #{coefficient}</if>
+        </set>
+        where replay_callback_detail_id = #{replayCallbackDetailId}
+    </update>
+
+    <select id="queryLiveLeaveDetail" resultType="io.renren.entity.LiveCallbackDetailEntity">
+        select *
+		from live_callback_detail
+		where live_id = #{liveId}
+		and user_id = #{userId}
+		and join_time IS NOT NULL
+		and leave_time IS NOT NULL
+		and join_time &gt; #{startTime}
+		and join_time &lt; #{endTime}
+		order by create_time desc
+    </select>
+
+    <select id="queryReplayCallback" resultType="io.renren.pojo.log.ReplayCallbackForLogGenseeWatchPOJO">
+        SELECT
+            replay_callback_detail.*, course_classplan_lives.classplan_live_id,course_classplan_lives.start_time,course_classplan_lives.end_time
+        FROM
+            `replay_callback_detail` replay_callback_detail
+       JOIN
+              course_classplan_lives course_classplan_lives ON replay_callback_detail.video_id = course_classplan_lives.back_id
+		WHERE
+        replay_callback_detail.join_time &gt; #{startTime}
+        AND replay_callback_detail.join_time &lt; #{endTime}
+        AND replay_callback_detail.product_id = #{productId}
+        <if test="isOfflive != null">AND replay_callback_detail.`is_offlive` = #{isOfflive}</if>
+    </select>
+
+    <select id="queryReplayCallbackIsOfflive">
+        SELECT
+            replay_callback_detail.*, course_classplan_lives.classplan_live_id,course_classplan_lives.start_time,course_classplan_lives.end_time
+        FROM
+            `replay_callback_detail` replay_callback_detail
+        LEFT JOIN
+              course_classplan_lives course_classplan_lives ON replay_callback_detail.video_id = course_classplan_lives.back_id
+		WHERE
+		 replay_callback_detail.`is_offlive` = #{isOfflive}
+		 AND replay_callback_detail.product_id = #{productId}
+    </select>
+
+    <select id="queryProductIdByVideoId" resultType="long">
+        SELECT
+            cc.product_id
+        FROM
+            `course_classplan_lives` ccl
+        LEFT JOIN course_classplan cc ON ccl.classplan_id = cc.classplan_id
+        WHERE
+            ccl.back_id = #{videoId}
+        limit 1
+    </select>
+
+    <select id="checkUserIdByJoinTime" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            replay_callback_detail
+        WHERE
+            user_id = #{userId}
+        AND join_time = #{joinTime}
+    </select>
+</mapper>

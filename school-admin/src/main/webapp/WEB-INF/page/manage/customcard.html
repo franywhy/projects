@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>自定义卡片</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("customcard:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.title" @keyup.enter="query" placeholder="标题">
+			</div>
+			<a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("customcard:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("customcard:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("customcard:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("customcard:push"))
+			<a class="btn btn-primary" @click="pushRulesLayerShow"><i class="fa fa-tag"></i>&nbsp;推送/更新</a>
+			<a class="btn btn-primary" @click="delMessage"><i class="fa fa-trash-o"></i>&nbsp;取消推送</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">标题</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="customCard.title" placeholder="标题" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">副标题</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="customCard.subtitle" placeholder="副标题" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">卡片地址</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="customCard.cardUrl" placeholder="卡片地址" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">封面</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="customCard.cardBannerUrl" placeholder="选择封面" readonly="readonly" onclick="hq.core.upload(null,'vm.customCard.cardBannerUrl');"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">产品线</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="customCard.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">是否可分享</div>
+				<label class="radio-inline">
+					<input type="radio" name="canShare" value="0" v-model="customCard.canShare"/> 否
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="canShare" value="1" v-model="customCard.canShare"/> 是
+				</label>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;
+				<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+			</div>
+		</form>
+	</div>
+	
+</div>
+
+<script src="${rc.contextPath}/js/manage/customcard.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/productLay.html")
+#parse("layer/pushRulesLay.html")
+</body>
+</html>

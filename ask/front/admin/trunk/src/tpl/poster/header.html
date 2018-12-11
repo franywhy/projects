@@ -1,0 +1,14 @@
+<div class="tagArea">
+	<ul class="tagList">
+		<li class="<%=params.type=="0"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=0"><i></i><span>海报</span></a></li>
+        <li class="<%=params.type=="1"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=1"><i></i><span>预设功能1</span></a></li>
+        <li class="<%=params.type=="2"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=2"><i></i><span>预设功能2</span></a></li>
+        <li class="<%=params.type=="3"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=3"><i></i><span>预设功能3</span></a></li>
+        <li class="<%=params.type=="4"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=4"><i></i><span>预设功能4</span></a></li>
+        <li class="<%=params.type=="5"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=5"><i></i><span>预设功能5</span></a></li>
+	</ul>
+	<div class="tag_r"><%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="添加<%=['海报','预设功能1','预设功能2','预设功能3','预设功能4','预设功能5'][(params.type||0)]%>"   />
+	<%}%>
+	</div>
+</div>

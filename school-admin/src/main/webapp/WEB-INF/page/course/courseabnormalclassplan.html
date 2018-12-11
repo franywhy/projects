@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>弃考免考单</title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            #if($shiro.hasPermission("course:courseabnormalclassplan:list"))
+                <a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+                <a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+            #end
+            #if($shiro.hasPermission("course:courseabnormalclassplan:save"))
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            #end
+            #if($shiro.hasPermission("course:courseabnormalclassplan:edit"))
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            #end
+            #if($shiro.hasPermission("course:courseabnormalclassplan:updateCancel"))
+                <a class="btn btn-primary" @click="updateCancel"><i class="fa fa-pencil-square-o"></i>&nbsp;取消</a>
+            #end
+            #if($shiro.hasPermission("course:courseabnormalclassplan:updateAdopt"))
+                <a class="btn btn-primary" @click="updateAdopt"><i class="fa fa-pencil-square-o"></i>&nbsp;审核通过</a>
+            #end
+            #if($shiro.hasPermission("course:courseabnormalclassplan:importExcelTemplateCourse"))
+                <a class="btn btn-primary" @click="importExcelTemplateCourse"><i class="fa fa-pencil-square-o"></i>&nbsp;excel批量上传</a>
+            #end
+            <a class="btn btn-primary" @click="downExcelTemplateCourse"><i class="fa fa-pencil-square-o"></i>&nbsp;下载excel模板</a>
+
+            <a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+
+            <!--查询条件-->
+            <form class="form-inline" style="margin-top: 5px;">
+                <div class="form-group">
+                    <label>编号:</label>
+                    <input type="text" class="form-control" v-model="q.abnormalClassplanNo" placeholder="请输入编号" @keyup.enter="query">
+                </div>
+                <div class="form-group">
+                    <label >用户ID:</label>
+                    <input type="text" class="form-control" v-model="q.studentId" placeholder="请输入用户ID" @keyup.enter="query">
+                </div>
+                <div class="form-group">
+                    <label >手机号码:</label>
+                    <input type="text" class="form-control" v-model="q.studentMobile" placeholder="请输入手机号码" @keyup.enter="query">
+                </div>
+                <div class="form-group">
+                    <label >类型:</label>
+                    <select  class="form-control" v-model="q.abnormalType">
+                        <option value="" selected>==全部==</option>
+                        <option value="3">弃考</option>
+                        <option value="4">免考</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >审核状态:</label>
+                    <select  class="form-control" v-model="q.auditStatus">
+                        <option value="" selected>==全部==</option>
+                        <!--<option value="0">待审核</option>-->
+                        <option value="2">通过</option>
+                        <option value="1">取消</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>排课计划:</label>
+                    <div class="input-group m-b">
+                        <input type="text" class="form-control" v-model="q.classplanName" @click="showQueryClassplanLay" placeholder="点击选择排课计划" readonly="readonly"/>
+                        <a class="btn btn-primary input-group-addon" @click="showQueryClassplanLay" title="排课计划"><i class="fa fa-search"></i>&nbsp;</a>
+                        <a class="btn btn-primary input-group-addon" @click="clearQueryClassplanLay" title="清空"><i class="fa fa-trash-o"></i>&nbsp;</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="showedit" class="panel panel-default">
+        <!--标题-->
+        <div class="panel-heading">{{title}}</div>
+        <!--按钮-->
+        <div class="grid-btn">
+            <a  class="btn btn-primary" @click="saveOrUpdate" >确定</a>
+            &nbsp;&nbsp;<a   class="btn btn-warning" @click="reload" >返回</a>
+        </div>
+        <!--输入框-->
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">异常类型</div>
+                <div class="col-sm-10">
+                    <select  class="form-control" v-model="courseAbnormalClassplan.abnormalType">
+                        <option value="3">弃考</option>
+                        <option value="4">免考</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">排课计划</div>
+                <div class="col-sm-10">
+                    <div class="input-group m-b">
+                        <input value="text" class="form-control" readonly="readonly" @click="showEditClassplanLay" v-model="courseAbnormalClassplan.classplanName" placeholder="点击选择排课计划"/>
+                        <a class="btn btn-primary input-group-addon" @click="showEditClassplanLay" title="排课计划"><i class="fa fa-search"></i>&nbsp;</a>
+                        <a class="btn btn-primary input-group-addon" @click="clearEditClassplanLay" title="清空"><i class="fa fa-trash-o"></i>&nbsp;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">学员</div>
+                <div class="col-sm-10">
+                    <div class="input-group m-b">
+                        <input value="text" class="form-control" v-model="courseAbnormalClassplan.studentName" @click="showEditUserLay" placeholder="点击选择学员" readonly="readonly"/>
+                        <a class="btn btn-primary input-group-addon" @click="showEditUserLay" title="学员"><i class="fa fa-search"></i>&nbsp;</a>
+                        <a class="btn btn-primary input-group-addon" @click="clearEditUser" title="清空"><i class="fa fa-trash-o"></i>&nbsp;</a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <div class="col-sm-2 control-label">审核状态</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline"><input type="radio" v-model="courseAbnormalClassplan.auditStatus" value="0" >正常</label>&nbsp;&nbsp;
+                    <label class="radio-inline"><input type="radio" v-model="courseAbnormalClassplan.auditStatus" value="1" >取消</label>&nbsp;&nbsp;
+                    <label class="radio-inline"><input type="radio" v-model="courseAbnormalClassplan.auditStatus" value="2" >通过</label>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <div class="col-sm-2 control-label">异常原因</div>
+                <div class="col-sm-10">
+                    <input value="text" class="form-control" v-model="courseAbnormalClassplan.abnormalReason" placeholder="异常原因"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">备注</div>
+                <div class="col-sm-10">
+                    <input value="text" class="form-control" v-model="courseAbnormalClassplan.remark" placeholder="备注"/>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="fileUploadLayer" style="display: none;">
+        <div class="panel-heading">批量上传</div>
+        <input type="file" id="file_data" name="file_data" accept=".xls"/>
+    </div>
+
+</div>
+
+<script src="${rc.contextPath}/js/course/courseabnormalclassplan.js?_${date.systemTime}"></script>
+#parse("layer/classplanLay.html")
+#parse("layer/usersByclassplanLay.html")
+</body>
+</html>

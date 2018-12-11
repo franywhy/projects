@@ -1,0 +1,91 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:100px;">排序</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="order" id="order" value="" data-options="required:true"/>
+            </td>
+            <td style="width:100px;">活动名称</td>
+            <td>
+                <input class="input" type="text" name="name" id="name" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100px;">PC端大图地址</td>
+            <td>
+                <input class="input" type="text" name="pc_pic"  id="pc_pic"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('pc_pic', 'Posters');" />
+            </td>
+            <td style="width:100px;">PC端小图地址</td>
+            <td>
+                <input class="input" type="text" name="pc_icon" id="pc_icon"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('pc_icon', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100px;">PC端跳转地址</td>
+            <td>
+                <input class="input" type="text" name="pc_url"  id="pc_url"/>
+            </td>
+            <td style="width:100px;">恒企在线显示标志</td>
+            <td>
+                <select style="width:80px" type="text" class="input" id="pc_is_show" name="pc_is_show">
+                    <option value="1" selected>显示</option>
+                    <option value="0">不显示</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100px;">App图片地址</td>
+            <td>
+                <input class="input" type="text" name="app_pic" id="app_pic"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('app_pic', 'Posters');" />
+            </td>
+            <td style="width:100px;">App跳转地址</td>
+            <td>
+                <input class="input" type="text" name="app_url"  id="app_url"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100px;">App显示标志</td>
+            <td>
+                <select style="width:80px" type="text" class="input" id="app_is_show" name="app_is_show">
+                    <option value="1" selected>显示</option>
+                    <option value="0">不显示</option>
+                </select>
+            </td>
+            <td style="width:100px;">活动备注</td>
+            <td>
+                <input class="input" type="text" name="remark" id="remark"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100px;">创建用户id</td>
+            <td>
+                <input class="input" type="text" name="create_user_id"  id="create_user_id"/>
+            </td>
+            <td style="width:100px;">创建时间</td>
+            <td>
+                <input class="input" type="text" name="create_time" id="create_time"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100px;">最后更新用户id</td>
+            <td>
+                <input class="input" type="text" name="update_user_id"  id="update_user_id"/>
+            </td>
+            <td style="width:100px;">最后更新时间</td>
+            <td>
+                <input class="input" type="text" name="update_time" id="update_time"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">是否默认显示</td>
+            <td>
+                <label ><input type="radio" id="is_default_0" class="first" name="is_default" value="0"/>否</label>&nbsp;&nbsp;
+                <label ><input type="radio" id="is_default_1"  name="is_default" value="1" />是</label>
+            </td>
+        </tr>
+    </table>
+</form>

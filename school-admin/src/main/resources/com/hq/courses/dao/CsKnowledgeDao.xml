@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.courses.dao.CsKnowledgeDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		cs_knowledge.knowledge_id AS knowledgeId,
+		cs_knowledge.knowledge_name AS knowledgeName,
+		cs_knowledge.knowledge_no AS knowledgeNo,
+		cs_knowledge.key_point AS keyPoint,
+		cs_knowledge.level_id AS levelId,
+		cs_knowledge.status AS status,
+		cs_knowledge.section_id AS sectionId,
+		cs_knowledge.course_id AS courseId,
+		cs_knowledge.update_time AS updateTime,
+		cs_knowledge.create_time AS createTime,
+		cs_knowledge.dr AS dr
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE cs_knowledge.dr = 0
+		<if test="courseId != null and courseId > 0">
+			AND cs_knowledge.course_id = #{courseId}
+		</if>
+		<if test="sectionId != null and sectionId > 0">
+			AND cs_knowledge.section_id = #{sectionId}
+		</if>
+		<if test="chapterId != null and chapterId > 0">
+			AND cs_knowledge.section_id in (
+											SELECT cs_section.section_id FROM cs_section AS cs_section 
+											WHERE cs_section.chapter_id = #{chapterId} 
+											)
+		</if>
+		<if test="knowledgeId != null  and knowledgeId > 0">
+			AND cs_knowledge.knowledge_id  != #{knowledgeId}
+		</if>
+		<if test="knowledgeName != null and knowledgeName.trim() != ''">
+			AND cs_knowledge.knowledge_name like concat('%',#{knowledgeName},'%') 
+		</if>
+		<if test="knowledgeNo != null and knowledgeNo.trim() != ''">
+			AND cs_knowledge.knowledge_no like concat('%',#{knowledgeNo},'%') 
+		</if>
+		<if test="keyPoint != null">
+			AND cs_knowledge.key_point  = #{keyPoint}
+		</if>
+		<if test="levelId != null">
+			AND cs_knowledge.level_id  = #{levelId}
+		</if>
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM cs_knowledge AS cs_knowledge
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by knowledge_id desc
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="queryObject" resultType="com.hq.courses.entity.CsKnowledgeEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		WHERE cs_knowledge.knowledge_id = #{knowledgeId}
+	</select>
+	<select id="queryObjectByName" resultType="com.hq.courses.entity.CsKnowledgeEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		WHERE cs_knowledge.knowledge_name = #{knowledgeName}
+		AND cs_knowledge.course_id = #{courseId}
+		AND cs_knowledge.dr = 0
+	</select>
+
+	<select id="queryList" parameterType="com.hq.courses.pojo.query.CsKnowledgeQuery" resultType="com.hq.courses.entity.CsKnowledgeEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="com.hq.courses.pojo.query.CsKnowledgeQuery"  resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	
+ 	<select id="queryCountByName" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		WHERE cs_knowledge.dr = 0
+		<if test="knowledgeId != null">
+			AND cs_knowledge.knowledge_id &lt;&gt; #{knowledgeId}
+		</if>
+		AND cs_knowledge.knowledge_name = #{knowledgeName}
+		AND cs_knowledge.course_id = #{courseId}
+	</select>
+	<select id="queryObjectKnowledgeNo" resultType="com.hq.courses.entity.CsKnowledgeEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		where 1 = 1
+		<if test="knowledgeId != null and courseId > 0">
+				AND cs_knowledge.knowledge_id != #{knowledgeId}
+		</if>
+		<if test="knowledgeNo != null and knowledgeNo.trim() != ''">
+				AND cs_knowledge.knowledge_no = #{knowledgeNo}
+		</if>
+	</select> 
+	<insert id="save" parameterType="com.hq.courses.entity.CsKnowledgeEntity" useGeneratedKeys="true" keyProperty="knowledgeId">
+		INSERT INTO cs_knowledge
+		(
+			`knowledge_name`, 
+			`knowledge_no`, 
+			`key_point`, 
+			`level_id`, 
+			`status`, 
+			`section_id`, 
+			`course_id`, 
+			`dr`
+		)
+		values
+		(
+			#{knowledgeName}, 
+			#{knowledgeNo}, 
+			#{keyPoint}, 
+			#{levelId}, 
+			#{status}, 
+			#{sectionId}, 
+			<!-- #{chapterId},  -->
+			#{courseId}, 
+			#{dr}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.courses.entity.CsKnowledgeEntity">
+		UPDATE cs_knowledge 
+		<set>
+			<if test="knowledgeName != null">`knowledge_name` = #{knowledgeName}, </if>
+			<if test="knowledgeNo != null">`knowledge_no` = #{knowledgeNo}, </if>
+			<if test="keyPoint != null">`key_point` = #{keyPoint}, </if>
+			<if test="levelId != null">`level_id` = #{levelId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="sectionId != null">`section_id` = #{sectionId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+			update_time = #{updateTime}
+		</set>
+		WHERE knowledge_id = #{knowledgeId}
+	</update>
+	
+	<update id="updateStatus">
+		UPDATE cs_knowledge 
+		   SET cs_knowledge.`status` = #{status}
+		 WHERE cs_knowledge.knowledge_id = #{knowledgeId}
+	</update>
+	
+	<update id="updateDr">
+		UPDATE cs_knowledge 
+		   SET cs_knowledge.`dr` = 1
+		 WHERE cs_knowledge.knowledge_id = #{knowledgeId}
+	</update>
+
+</mapper>

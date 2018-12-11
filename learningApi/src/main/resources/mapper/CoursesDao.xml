@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.CoursesDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.hq.learningapi.entity.CoursesEntity" id="coursesMap">
+        <result property="courseId" column="course_id"/>
+        <result property="courseNo" column="course_no"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseLb" column="course_lb"/>
+        <result property="courseType" column="course_type"/>
+        <result property="examType" column="exam_type"/>
+        <result property="courseCredit" column="course_credit"/>
+        <result property="courseEq" column="course_eq"/>
+        <result property="listenUrl" column="listen_url"/>
+        <result property="creator" column="creator"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="modifiedTime" column="modified_time"/>
+        <result property="dr" column="dr"/>
+        <result property="schoolId" column="school_id"/>
+        <result property="mId" column="m_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="valid" column="valid"/>
+        <result property="courseFk" column="course_fk"/>
+        <result property="pushTimestamp" column="push_timestamp"/>
+        <result property="courseStatus" column="course_status"/>
+    </resultMap>
+
+	<select id="queryCourseByOrder" resultType="java.lang.String">
+		SELECT course_no
+		FROM courses
+		JOIN mall_goods_details
+		ON courses.course_id = mall_goods_details.course_id
+		WHERE mall_goods_details.mall_goods_id = #{commodityId}
+		AND mall_goods_details.mall_area_id = #{areaId}
+		AND mall_goods_details.dr = #{dr}
+		<if test="valid != null">
+			AND courses.valid = #{valid}
+		</if>
+	</select>
+
+	<select id="queryObject" resultType="com.hq.learningapi.entity.CoursesEntity">
+		select * from courses where course_id = #{value}
+	</select>
+	
+	<select id="queryObjectByCourseFk" resultType="com.hq.learningapi.entity.CoursesEntity">
+		select * from courses where dr = 0 AND course_fk = #{value} LIMIT 1
+	</select>
+
+	<select id="queryList" resultType="com.hq.learningapi.entity.CoursesEntity">
+		select * from courses
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by course_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from courses 
+	</select>
+	 
+	<insert id="save" parameterType="com.hq.learningapi.entity.CoursesEntity" useGeneratedKeys="true" keyProperty="courseId">
+		insert into courses
+		(
+			`course_no`, 
+			`course_name`, 
+			`course_lb`, 
+			`course_type`, 
+			`exam_type`, 
+			`course_credit`, 
+			`course_eq`, 
+			`listen_url`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`dr`, 
+			`school_id`, 
+			`m_id`, 
+			`product_id`, 
+			`valid`, 
+			`course_fk`, 
+			`push_timestamp`, 
+			`course_status`
+		)
+		values
+		(
+			#{courseNo}, 
+			#{courseName}, 
+			#{courseLb}, 
+			#{courseType}, 
+			#{examType}, 
+			#{courseCredit}, 
+			#{courseEq}, 
+			#{listenUrl}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime}, 
+			0, 
+			#{schoolId}, 
+			#{mId}, 
+			#{productId}, 
+			#{valid}, 
+			#{courseFk}, 
+			#{pushTimestamp}, 
+			#{courseStatus}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.learningapi.entity.CoursesEntity">
+		update courses 
+		<set>
+			<if test="courseNo != null">`course_no` = #{courseNo}, </if>
+			<if test="courseName != null">`course_name` = #{courseName}, </if>
+			<if test="courseLb != null">`course_lb` = #{courseLb}, </if>
+			<if test="courseType != null">`course_type` = #{courseType}, </if>
+			<if test="examType != null">`exam_type` = #{examType}, </if>
+			<if test="courseCredit != null">`course_credit` = #{courseCredit}, </if>
+			<if test="courseEq != null">`course_eq` = #{courseEq}, </if>
+			<if test="listenUrl != null">`listen_url` = #{listenUrl}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="mId != null">`m_id` = #{mId}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="valid != null">`valid` = #{valid}, </if>
+			<if test="courseFk != null">`course_fk` = #{courseFk}, </if>
+			<if test="pushTimestamp != null">`push_timestamp` = #{pushTimestamp}, </if>
+			<if test="courseStatus != null">`course_status` = #{courseStatus}</if>
+		</set>
+		where course_id = #{courseId}
+	</update>
+	
+
+</mapper>

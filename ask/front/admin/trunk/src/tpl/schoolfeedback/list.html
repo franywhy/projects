@@ -1,0 +1,36 @@
+
+    <!--校区反馈列表-->
+    <table width="100%" class="listTable tablesorter">
+        <thead>
+        <tr>
+            <th class="short">反馈日期</th>
+            <th class="short">问题类型</th>
+            <th class="short">手机号</th>
+            <th class="short">反馈内容</th>
+            <th class="short">反馈图片</th>
+            <!--<th class="short">反馈图片1</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <% for(var i=0; i< data.length; i++){ %>
+        <tr>
+            <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+            <td class="auto"><%=data[i].type_name%></td>
+            <td class="auto"><%=data[i].mobile%></td>
+            <td class="auto"><%=data[i].content%></td>
+            <!--<td class="auto">
+                <% for(var j=0; j< data[i].topics_pic.length; j++){ %>
+                    <%=data[i].topics_pic[j].pic_url%><br><br>
+                <%}%>
+            </td>-->
+            <td class="pic">
+                <% for(var j=0; j< data[i].topics_pic.length; j++){ %>
+                <img id="img" src="http://answerimg.kjcity.com/<%=data[i].topics_pic[j].pic_url%>" onclick="javascript:window.open('http://answerimg.kjcity.com/<%=data[i].topics_pic[j].pic_url%>')" style="height:50px;"><br><br>
+                <%}%>
+            </td>
+        </tr>
+        <%}%>
+        </tbody>
+    </table>
+
+    <div class="appPager"></div>

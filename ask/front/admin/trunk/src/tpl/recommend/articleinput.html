@@ -1,0 +1,50 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:120px;">文章标题</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="recommend_title" id="recommend_title" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章作者</td>
+            <td>
+                <input class="input" type="text" name="recommend_author" id="recommend_author" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章标题图片</td>
+            <td>
+                <input class="input" type="text" name="recommend_picurl" id="recommend_picurl"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('recommend_picurl', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章内容URL</td>
+            <td>
+                <input class="input" type="text" name="recommend_infourl" id="recommend_infourl" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">定时推送</td>
+            <td>
+                <input id="push_time" class="input" type="text" name="push_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">简介</td>
+            <td>
+                <input class="input" type="textarea" name="summary" id="summary" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章详情</td>
+            <td>
+                <textarea name="recommend_info"  id="recommend_info" style="width:1000px;height:400px" value=""></textarea>
+            </td>
+        </tr>
+
+
+    </table>
+</form>

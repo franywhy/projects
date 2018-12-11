@@ -1,0 +1,600 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>模拟税务软件实训</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/common/bace.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/common/com.css" />
+    <link rel="stylesheet" type="text/css" href="/static/zhuanti/fzsw/css/common/base.css">
+	<link rel="stylesheet" type="text/css" href="/static/zhuanti/fzsw/css/kj-fduan.css">
+	<script type="text/javascript" src="/static/head/js/baidu_statistics.js"></script>
+    <script src="/static/js/jquery.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+    <uc1:Head ID="Head1" runat="server" />
+    </div>
+    <!--内容开始-->
+	<div class="voide-box">
+		<video src="" controls="controls" width="100%" height="100%">
+		您的浏览器不支持 video 标签。
+		</video>
+	</div>
+	<div class="fixed-bg" title="点击关闭"></div>
+	<div class="mainCon">
+		<div class="mainCon-fasw-01">
+        <div class="w1000 w-auto-Center">	
+		
+		        <div style=" width:1000px;height:280px;"></div>
+				<div class="title_style_03"><a href="{$arraylink[0]}" onclick='NTKF_kf()' target="_blank">立即预定免费学习机会 ></a></div>
+				<div style="height:600px" class='voide-btn-pop' vsrc="http://video.hengqijy.com/video/fzsw/2015080501.mp4"></div>
+				<div class="ico_date">
+                    <ul>
+                       <li style="margin-left:70px"><span class="icon-overall icon-overall-01"></span>9大模拟软件系统</li> <li><span class="icon-overall icon-overall-02"></span>税务全真模拟实操</li> <li class="border_r_none"><span class="icon-overall icon-overall-03"></span>新手上岗应有技能</li>
+                    </ul>
+                </div>
+               	<div class="clear"></div>
+			</div>
+			
+		</div>
+		
+        <div class="mainCon-fasw-sc" id="study" style="display: none">
+			<div class="w1000 w-auto-Center">	
+				
+			 <div style=" float:left">
+       <div class="title_s_02">9大模拟税务系统</div>
+       <div class="title_s_03">高模拟报税，手把手教学</div>
+       <div class="title_s_04">在线专业报税设备，国税地税轻松学</div>
+     <div class="fzsw_sc_buttom"> <a  onclick="NTKF_kf()" href="javascript:void(0);"> 课程新上市，马上免费学 ></a></div>
+       <div style=" height:90px"></div>
+       <div class="zhibiao_int">现报读财务会计精英级，给您课程免费大惊喜！              </div>
+        </div>
+       <div style="float:right; ">
+         <div style="  width:340px; padding:100px 100px 0 0; height:170px ">
+			
+		 
+			<div class="shoucai" style="width:500px;background:url( http://img.hengqijy.com/pc/statics/images/20150622/images/xiaz_011.jpg)left 50px no-repeat #fff;border:1px solid #ccc">
+				<div class="sc_top" style="height:15px;"></div>
+				<div class="sc_con" >
+					<div class="h_1">
+						<div class="td floatLeft">校区选择：</div>
+						<div class="td1 floatLeft">
+							<select name="province{$changType}" >
+								<option>省份</option>
+								{loop $area $k $r}
+								<option value="{$r['linkageid']}"   >{$r['name']}</option>
+								{/loop}
+						   </select>
+							<select name="school_area{$changType}" >
+								<option selected value="">校区</option>
+							</select>
+							 
+						   
+							<select name="school_area2{$changType}" style="display:none">
+								<option selected="selected" value="">校区</option>
+								{loop $school $k $r}
+								{php $site_model_1 = pc_base::load_model('site_model');}
+								{php $site_name = $site_model_1->get_one(array('siteid'=>$r['siteid']))}
+									{php $cs = explode("\n",$r['description']); }
+									{str_cut($v["description"],230)}
+									{php $cs[0] = explode('/',$cs[0]); }
+									{php $cs[0] = $cs[0][0]; }
+									<option areaid="{$r['linkageid']}" value="{$r['siteid']}"  class="opt_{$r['siteid']}" ty="{$r['typeid']}" t="{str_cut($cs[0],29,'')}" d='{str_cut($cs[1],62)}'>
+									 {$site_name['name']}{php echo (str_replace($site_name['name'],'',$r['name']))}
+									 </option>
+								{/loop}
+							</select>
+							<input type="hidden" name="true_name{$changType}" value='' />
+							<input type="hidden" name="type{$changType}" value='' />
+						</div>
+					</div>
+					<div class="h_1">
+						<div class="td floatLeft">你的姓名：</div>
+						<div class="td1 floatLeft"><input type="text" value="" name="name{$changType}"  /></div>
+					</div>
+					<div class="h_1">
+						<div class="td floatLeft">你的手机号码：</div>
+						<div class="td1 floatLeft"><input type="text" value="" name="phone{$changType}" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" /></div>
+					</div>
+					<div class="sc_tj" onclick="return qtj('试听确认提交2');"><input type="submit" value="确定提交 >"      class="input csw_post_new_fj"   val="{$changType}" style="cursor:pointer;background:#00a150" >   </div>
+				</div>
+				
+			</div>
+		 
+		 
+         </div>
+         
+       </div>
+			
+		     	<div class="clear"></div>		
+               	
+			</div>
+		</div>
+        
+        
+        
+		<div class="mainCon-sw-worth">
+			
+			<div class="w1000 w-auto-Center">
+				<div class="title_style_01"><span class="font_color_hui">Worth</span>新手会计：<span>会报税</span>，才够合格</div>
+				<div class="title_style_02">为什么要学报税？三大理由，怎能say NO！</div>
+			
+				<div style="height:60px"></div>
+<div class="ico_how">
+                    <ul>
+                       <li><span class="title_style_04">工作必备能力<br/></span>没有企业不报税，也没有员工面对<br/>老板的报税要求敢说："我不会！"</li> <li><span class="title_style_04">接触报税工作难<br/></span>会计新人都想学报税，但一般企业新<br/>人根本没有教，或没机会参与报税！</li> <li class="border_r_none"><span class="title_style_04">学习渠道少<br/></span>少有培训机构教报税，即使有也<br/>很浅显，没有全面性和实战性！</li>
+                    </ul>
+                </div>
+               	<div class="clear"></div>
+				
+
+					
+				
+			</div>
+		</div>
+
+		
+		<div class="mainCon-sw-content">
+			
+			<div class="w1000 w-auto-Center">
+            <div style="height:350px"></div>
+			<div class="title_style_01"><span class="font_color_hui">Content</span> -9大模拟税务系统，真账实操学报税</div>
+				<div class="title_style_02">税务模拟学习，老师手把手教，助你征服报税</div>
+                <div style="height:100px"></div>
+				
+               	<div class="clear"></div>
+				
+		  </div>
+		</div>
+        <div class="mainCon-sw-content_01">
+        <div class="w1000 w-auto-Center">
+            <div class="font_s_01">01增值税防伪开票系统</div>
+            <div class="font_s_02">Get技能：<br />多方位学习如何在防伪税控开票系统中开票<br />（正常发票的填开、折扣发票、清单发票、<br />发票作废、红字发票），操作性强、<br />实用性高、便于理解、方便掌握。
+			<br />
+			<a href="#study"> 马上学习 ></a>
+			<br >
+				<br >
+			<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/01.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a>
+</div>
+            <div style="height:250px"></div>
+</div>
+        </div>
+         <div class="mainCon-sw-content_02">
+              <div class="w1000 w-auto-Center">
+              <div class="w1000">
+              <div style="width:420px; float:left; height:100px"></div>
+               <div style="width:580px; float:left"> <div class="font_s_01">02增值税发票网上认证系统</div>
+            <div class="font_s_02">Get技能：学会如何通过网上认证增值税进项发票、<br />
+如何获取税局端发票认证结果
+	<br />	
+			<a href="#study"> 马上学习 ></a>	&nbsp;&nbsp;&nbsp;&nbsp;<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/02.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a>
+			
+</div></div>
+           </div>
+            <div style=" height:450px"></div>
+</div>
+        </div>
+         <div class="mainCon-sw-content_03">
+                <div class="w1000 w-auto-Center">
+            <div class="font_s_01">03增值税发票网上抄报税系统</div>
+            <div class="font_s_02">Get技能：学员可以学会通过网上远程抄税清卡、<br>
+              与网上远程报盘及通过网上获取抄报税认定结果	<br />
+			<a href="#study"> 马上学习 ></a></div>
+			<br><br>
+			<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/03.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a>
+            <div style="height:250px"></div>
+</div>
+        </div>
+         <div class="mainCon-sw-content_04">
+                <div class="w1000 w-auto-Center">
+              <div class="w1000" style="margin-top:40px">
+              <div style="width:600px; float:left; height:100px"></div>
+               <div style="width:400px; float:left"> <div class="font_s_01">04增值税一般纳税人<br/>
+申报实训系统</div>
+            <div class="font_s_02">Get技能：学会在网上填写增值税纳税申报系列报表，实现网上增值税纳税申报与银行扣款处理，<br />学会增值税系统申报原理。<br />	
+			<a href="#study"> 马上学习 ></a>	<br><br>
+			<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/04.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a></div></div>
+		
+           </div>
+            <div style=" height:400px"></div>
+</div>
+        </div>
+         <div class="mainCon-sw-content_05">
+              <div class="w1000 w-auto-Center">
+              <div class="w1000">
+             <div class="font_s_03">05增值税小规模纳税人申报实训系统</div>
+            <div class="font_s_04">Get技能：学会小规模纳税人增值税计算、申报与扣款处理<br />	
+			<a href="#study"> 马上学习 ></a> 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/05.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a></div>
+           </div>
+            <div style=" height:480px"></div>
+</div>
+        </div>
+         <div class="mainCon-sw-content_06">
+               <div class="w1000 w-auto-Center">
+              <div class="w1000">
+             <div class="font_s_03">06查账征收月（季）企业所得税申报实训系统</div>
+            <div class="font_s_04">Get技能：学会如何做季度企业所得税的预缴管理<br />
+			<a href="#study"> 马上学习 ></a>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/06.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a></div>
+           </div>
+            <div style=" height:480px"></div>
+</div>
+        </div>
+         <div class="mainCon-sw-content_07">
+               <div class="w1000 w-auto-Center">
+            <div class="font_s_01">07查账征收企业所得税年度汇算清缴申报实训系统</div>
+            <div class="font_s_02">Get技能：学会通过网上填写企业所得税<br />12大报表，灵活处理企业所得税的调增与<br />调减问题，并最终实现企业所得税的网上<br />申报与扣款。<br />	
+			<a href="#study"> 马上学习 ></a><br> <br><a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/07.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a></div>
+            <div style="height:250px"></div>
+               </div>
+        </div>
+         <div class="mainCon-sw-content_08">
+               <div class="w1000 w-auto-Center">
+              <div class="w1000">
+             <div class="font_s_03">08个人所得税网上申报系统</div>
+            <div class="font_s_04">Get技能：学员可以学会通过网上填写个人所得税纳税申报表，<br>
+              学会按月征收与年度一次性征收个人所得税的网上申报与扣款处理<br />
+			<a href="#study"> 马上学习 ></a>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/08.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a></div>
+           </div>
+            <div style=" height:480px"></div>
+</div>
+        </div>
+         <div class="mainCon-sw-content_09">
+              <div class="w1000 w-auto-Center">
+              <div class="w1000">
+             <div class="font_s_03">09地税综合申报实训系统</div>
+            <div class="font_s_04">Get技能：学会通过网络实现城建税、教育附加、地方教育附加等各项地税税种的申报与缴纳<br />
+			<a href="#study"> 马上学习 ></a>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="voide-btn-pop voide-btn-pop-a" href="javascript:void(0);"   vsrc="http://video.hengqijy.com/video/fzsw/09.mp4"> <img src="/static/zhuanti/fzsw/images/video.png"> 视频体验 ></a></div>
+           </div>
+            <div style=" height:520px"></div>
+</div>
+        </div>
+        
+        
+        <div class="mainCon-sw-Advantage">
+             <div class="w1000 w-auto-Center">
+               <div class="title_style_05"><div class="font_color_hui">Advantage</div>
+专业教学设备，税务模拟实操</div>
+			   <div class="title_style_08">七大优势，值得拥有。<br />每台电脑都装有软件、读卡器及税控IC卡，人手一机，学会为止</div>
+                <div style="height:120px"></div>
+                <div class="ico_advantage">
+                    <ul>
+                       <li style="#"><span class="title_style_04">产品全<br/></span>本套实训课程包括九大常见涉税软件，受众群体众多，已基本满足企业报税所需！</li>
+                       <li><span class="title_style_04">高模拟<br/></span>本税务课程除因教学所需，部分系统操作界面及所用介质稍有不同，核心内容与操作流程操作原理几乎完全一样！</li>
+                       <li class="border_r_none"><span class="title_style_04">升级快<br/></span>本套税务实训系统是目前刚刚升级完成的教学系统，与新政策相吻合，可助学员更好地融入工作岗位！</li>
+<!-- 
+                       <li><span class="title_style_04">解疑惑<br/></span>系统设有"藏经阁"，收录历届学员在学习中遇到的常见问题与重点难点问题，学员在学习中有疑问，可在"藏经阁"中查找答案。</li>  -->
+					   
+					   
+                       <li><span class="title_style_04">自评分<br/></span>学习过程中，系统可自动考核学员实际案例操作的情况，并对学员操作作出评分，学员在操作完案例之后能够即时知道自己学习的成果。</li> 
+                       <li><span class="title_style_04">有报告<br/></span>每位学员将有自己的账号，学习结束后，系统会记录学员全部学习记录，形成整体的实训报告给学员，证明学员学习的成效。将成为学员找工作时有力证据。</li> 
+                       <li><span class="title_style_04">懂原理<br/></span>本套系统有税局端后台数据处理原理，让您可以掌握报税企业的数据操作。</li> 
+                       <li ><span class="title_style_04">容易学<br/></span>本套系统案例及操作并不困难，容易理解，零基础学员也能很快上手操作。</li> 
+					    
+						 <li  class="border_r_none" style="line-height:120px;font-size:16px;color:#f4752d"><a style="color:#f4752d;"  onclick="NTKF_kf()" href="javascript:void(0);">了解更多优势 > </a></li> 
+                    </ul>
+                </div>
+                  	<div class="clear"></div>
+             </div>
+        </div>
+		
+		
+<div class="mainCon-sw-Condition">
+             <div class="w1000 w-auto-Center">
+             <div style="width:370px"></div>
+             <div style="width:630px; float:right">
+              <div class="title_style_05"><span class="font_color_hui">Condition</span>
+符合条件，立刻下单</div>
+			   <div class="title_style_08">不只是报税，更是掌握会计工作的重要关键！</div>因课程具备一定专业性，符合以下条件方可报读。
+                <div style="height:70px"></div>
+                <div class="tiaojian">
+                   <ul>
+                     <li><span>新人报读</span><br/>经过学校测试，已具备相关会计基础才可报读</li>
+                     <li style="float: right"><span>恒企学员</span><br/>已报读实务级以上课程或学习过手工账和电脑账实操课程</li>
+                   </ul>
+                </div><div class="clear"></div>
+                <div class="button"><a href="{$arraylink[0]}" target="_blank" onclick="NTKF_kf()">在线报名 ></a></div>
+              
+                	<div class="clear"></div>
+             </div>
+              
+                  	<div class="clear"></div>
+             </div>
+        </div>
+
+		<div class="mainCon-Ff-newClass">
+			<div class="w1000 w-auto-Center">
+				
+				<div class="tit">本周新班开课</div>
+				<h2>学习和旅行，必须有一个在路上</h2>
+				<div class="btn-a">
+					<a href="{$arraylink[1]}" onclick="NTKF_kf()" style="margin-right: 60px;">免费试听 ></a>
+					<a  onclick="NTKF_kf()" href="javascript:void(0);">咨询开班时间 ></a>
+				</div>
+				
+				<div class="class-con">
+					<dd>
+						<h3>全国255所校区<br />
+周末开班授课</h3>
+						
+						<p>上班族、非上班族都适用</p>
+
+						
+					</dd>
+					<dd>
+						
+						<p><br /><br />除上课的标准课时之外，<br />
+每个校区每台电脑都安装了软件和读卡器<br />以及税控IC卡，
+参训学员人手一机，<br />下午时间均向学员开放练习。
+</p>
+					</dd>
+					<div class="clear"></div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+		
+	<%--<div class="foot-glory" style="background:url(http://img.hengqijy.com/pc/statics/images/20160926/new_01.jpg) center center no-repeat;width:100%;height:1085px ">
+	</div>--%>
+    <style type="text/css">
+        .course-j.main-pad {
+            padding-top: 64px;
+            padding-bottom: 68px;
+            color: #333;
+        }
+        .course-j .course-title {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .course-j .course-title .t-h1 {
+            margin-bottom: 4px;
+        }
+        .course-title .t-h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+        .course-j .course-title .t-h3 {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .course-j .cont .text {
+            text-align: center;
+            height: 20px;
+            line-height: 20px;
+            font-size: 14px;
+            color: #999;
+            background: url(/static/images/icon/index-ssn-bar.jpg) no-repeat center center;
+            margin-bottom: 38px;
+        }
+        .course-j .cont ul {
+            width: 1100px;
+            margin: 0 auto;
+        }
+        .course-j .cont ul li {
+            width: 33.3%;
+            text-align: center;
+            margin-bottom: 26px;
+        }
+        .course-j .left {
+            float: left;
+        }
+        .course-j .cont ul li .t-h1 {
+            margin-bottom: 6px;
+            height: 85px;
+        }
+        .course-j .cont ul li .t-h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .course-j .cont ul li .t-h3 {
+            font-size: 14px;
+        }
+        .course-j .cont ul li .last-text {
+            margin-top: 70px;
+        }
+    </style>
+    <div class="course-j main-pad">
+				<div class="w1200">
+					<div class="course-title">
+						<div class="t-h1">学会计必选上市公司，百万学子共同见证</div>
+						<div class="t-h3">我们始终坚持用专业的力量，成就每一个平凡的梦想</div>
+					</div>
+					<div class="cont">
+						<div class="text">以下仅为部分荣誉，成长从未止步 </div>
+						<ul class="clearfix">
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-1.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">中国企业战略联盟</div>
+								<div class="t-h3">竞争力行业品牌</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-2.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">中国企业战略联盟</div>
+								<div class="t-h3">中国著名品牌</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-3.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">中国企业质量信用备案公示网</div>
+								<div class="t-h3">AAA级信用企业</div>
+							</li>
+							<div class="clear"></div>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-4.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">中国企业质量信用备案公示网</div>
+								<div class="t-h3">全国315质量服务客户满意诚信企业</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-5.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">十年价值职业教育品牌</div>
+								<div class="t-h3"></div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-6.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">中华人民共和国国家版权局著作权登记证书</div>
+								<div class="t-h3">2012年-2013年，恒企研发的7大课程教材</div>
+							</li>
+							<div class="clear"></div>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-7.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">百度金融</div>
+								<div class="t-h3">“教育信贷合作伙伴”</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-8.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">上海市合同信用促进会</div>
+								<div class="t-h3">2014-2015年度合同信用等级为AA级</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-8.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">上海市合同信用促进会</div>
+								<div class="t-h3">2014-2015年度上海市守合同重信用企业</div>
+							</li>
+							<div class="clear"></div>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-9.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">中国培训发展研究中心</div>
+								<div class="t-h3">重视人才发展企业奖</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-6.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">中华人民共和国国家版权局著作权登记证书</div>
+								<div class="t-h3">2016年，恒企研发2大课程教材</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-10.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">2016年新浪教育盛典</div>
+								<div class="t-h3">2016中国品牌知名度职业培训机构</div>
+							</li>
+							<div class="clear"></div>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-11.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">2016年腾讯教育年度盛典</div>
+								<div class="t-h3">“2016年度特色职业教育品牌”</div>
+							</li>
+							<li class="left">
+								<div class="t-h1"><img class="v-mid" src="/static/images/temp/index-ssn-img-12.png"/><i class="v-mid-a"></i></div>
+								<div class="t-h2">2016年网易教育年度大选</div>
+								<div class="t-h3">“2016年度最受信赖职业教育品牌”</div>
+							</li>
+							<li class="left">
+								<div class="last-text">以上仅为部分荣誉，成长从未止步</div>
+							</li>
+						</ul>
+						
+					</div>
+				</div>
+			</div>
+
+	<div class="foot-glory" style="background:url(http://img.hengqijy.com/pc/statics/images/20160926/new_02.jpg) center center no-repeat;width:100%;height:753px;display:none;">
+	</div>	
+
+    <div>
+    <uc2:Foot ID="Foot1" runat="server" />
+    </div>
+    </form>
+</body>
+</html>
+<script type="text/javascript" src="/static/zhuanti/fzsw/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="/static/zhuanti/fzsw/js/kj-fduan.js"></script>
+<script>
+
+    var tu = "{getThisUrl()}";
+    var pu = "{getPrevUrl()}";
+    var ymxx = "{$catname}";
+
+
+    $(".csw_post_new_fj").live('click', function () {
+
+
+        var s = $(this).attr('val');
+        var true_name = $('select[name=school_area' + s + '] option:selected').text();
+        var school_area = $('select[name=school_area' + s + '] option:selected').attr("ty");
+        if (true_name == '' || true_name == '校区') {
+            alert("请选择校区");
+            return false;
+        }
+        if ($('input[name="name' + s + '"]').val() == '') {
+            alert("请填写你的姓名");
+            return false;
+        }
+
+        if ($('input[name="phone' + s + '"]').val() == '') {
+            alert("请填写您的手机号码");
+            return false;
+        }
+        var re = /^1[3,5,8,9,4,6,7]\d{9}$/;
+        if (!re.test($('input[name="phone' + s + '"]').val())) {
+            alert("请输入正确的手机号(11位)");
+            return false;
+        }
+        var name = $('input[name="name' + s + '"]').val();
+        var phone = $('input[name="phone' + s + '"]').val();
+
+        /*$("#fs input:[name='mobil']").val(  phone );
+        $("#fs input:[name='name']").val(  name );
+        $("#fs input:[name='school_area']").val(  school_area );
+        $("#fs").submit();*/
+
+        $.post('/?m=guestbook&c=xuyuanshu&a=ban', { 'true_name': true_name, 'name': name, 'phone': phone, 'csw_type': s, 'tu': tu, 'pu': pu, 'ymxx': ymxx }, function (d) {
+            if (d == 1) {
+                alert("提交成功");
+            } else if (d == -1) {
+                alert("您已经成功提交过,无需再次提交！")
+            } else {
+                alert(d);
+            }
+        });
+
+    });
+
+    function qtj() {
+        return true;
+    }
+</script>
+
+<script>
+    $(function () {
+        $(".voide-btn-pop").click(function () {
+            var vsrc = $(this).attr('vsrc');
+
+            if (vsrc != '') {
+                $(".voide-box").children('video').attr("src", vsrc);
+            }
+        })
+    })
+</script>	
+<script>
+
+
+    $(function () {
+        $('select[name=province{$changType}]').change(function () {
+            var areaid = $('select[name=province{$changType}] option:selected').val();
+            $('select[name=school_area{$changType}] option').remove();
+            var tmp = $('select[name=school_area2{$changType}] option[areaid=' + areaid + ']');
+            $('select[name=school_area{$changType}]').append(tmp.clone(true));
+            $('input[name=true_name{$changType}]').val($('select[name=school_area{$changType}] option:selected').text());
+        });
+    });
+    $(function () {
+        $('select[name=school_area{$changType}]').change(function () {
+            $('input[name=true_name{$changType}]').val($('select[name=school_area{$changType}] option:selected').text());
+        })
+
+
+    })	 
+
+	 
+</script>
+
+<script type="text/javascript" src="/static/js/common/ly-zixun-course.js"></script>
+<!--<script type="text/javascript" charset="utf-8" src="http://lead.soperson.com/20001784/10068734.js"></script>-->
+
+<!--<script type="text/javascript" charset="utf-8" src="http://lead.soperson.com/20001784/10062930.js"></script> 
+<script>
+    //乐语客服
+    function NTKF_kf() {
+        doyoo.util.openChat(); doyoo.util.accept(); return false;
+    }
+</script>-->

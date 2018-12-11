@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>统考成绩</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+ 		
+			<table class="table table-condensed" border="0">
+				<tr border="0"> 
+					<td><label for="name">姓名:</label></td>
+					<td><input type="text" class="form-control"  v-model.trim="q.name" id="name"></td>
+ 					
+                    <td><label for="name">手机号:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.mobile" id="mobile"></td>
+					 
+					 <td><label for="name">班主任</label></td>
+                    <td>
+                        <input type="text" class="form-control" id="query-classTeacherName" v-model.trim="q.classTeacherName" readonly="readonly" placeholder="选择班主任" @click="classTeacherLayerShow">
+                    </td>
+					
+					<td><a class="btn btn-primary" @click="query">查询</a></td>
+					<td><a class="btn btn-primary" @click="queryClear">清空条件</a></td> 
+					<td><a class="btn btn-danger" @click="exportData" style="float: right"><i class="fa fa-plus"></i>&nbsp;导出</a></td>
+						</tr>
+			</table>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+     		<!-- 上传文件弹窗 -->
+		<div id="uploadExcel" style="display: none;">
+			<form name="form_uploadImg" action="" enctype="multipart/form-data">
+				<input id="file_data"  type="file"  name="file_data" style="height: 35px; width: 200px;" /> 
+			</form>
+		</div>
+</div>
+
+<script src="${rc.contextPath}/js/student/recordstudy.js?_${date.systemTime}"></script> 
+
+#parse("layer/teacherLay.html")
+</body>
+</html>

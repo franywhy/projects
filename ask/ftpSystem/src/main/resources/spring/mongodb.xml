@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+				http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+        default-lazy-init="true">
+
+
+
+    <mongo:mongo replica-set="${mongo.uri}" id="mongo">
+        <mongo:options connections-per-host="80"
+                       threads-allowed-to-block-for-connection-multiplier="6"
+                       connect-timeout="3000"
+                        max-wait-time="15000"
+                        auto-connect-retry="true"
+                        socket-keep-alive="true"
+                        socket-timeout="18000"
+                        slave-ok="#{'${mongo.cost.write}' == 'REPLICA_ACKNOWLEDGED' ? true : false }"
+                        write-number="1"
+                        write-timeout="3000"
+                        write-fsync="false"/>
+    </mongo:mongo>
+
+    <util:constant static-field="com.mongodb.WriteConcern.${mongo.cost.write}" id="writeConcern"/>
+
+    <mongo:db-factory dbname="xy" id="mainFactory" mongo-ref="mongo" />
+    <mongo:db-factory dbname="xylog" id="logFactory" mongo-ref="mongo"/>
+    <mongo:db-factory dbname="xyrank" id="rankFactory" mongo-ref="mongo"/>
+    <mongo:db-factory dbname="xytopic" id="topicFactory" mongo-ref="mongo"/>
+    <mongo:db-factory dbname="xy_admin" id="adminFactory" mongo-ref="mongo"/>
+    <mongo:db-factory dbname="xyactive" id="activeFactory" mongo-ref="mongo"/>
+    <mongo:db-factory dbname="xy_union" id="unionFactory" mongo-ref="mongo"/>
+    <mongo:db-factory dbname="xy_sing" id="singFactory" mongo-ref="mongo"/>
+    <mongo:db-factory dbname="xy_qquser" id="qquserFactory" mongo-ref="mongo"/>
+
+    <!--<mongo:db-factory dbname="xy" id="userFactory" mongo-ref="mongo" write-concern="REPLICA_ACKNOWLEDGED" />-->
+
+
+    <bean id="mainMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mainFactory"/>
+    </bean>
+
+    <bean id="userMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mainFactory"/>
+    </bean>
+
+    <bean id="topicMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="topicFactory"/>
+    </bean>
+
+    <bean id="activeMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="activeFactory"/>
+    </bean>
+
+    <bean id="unionMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="unionFactory"/>
+    </bean>
+
+    <bean id="singMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="singFactory"/>
+    </bean>
+
+    <bean id="rankMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="rankFactory"/>
+    </bean>
+
+    <bean id="logMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="logFactory"/>
+    </bean>
+
+    <bean id="adminMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="adminFactory"/>
+    </bean>
+    <bean id="adminDb" factory-bean="adminMongo" factory-method="getDb"/>
+
+
+	<bean id="qquserMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="qquserFactory"/>
+    </bean>
+
+    <!--<bean id="gMongo" class="com.gmongo.GMongo">-->
+        <!--<constructor-arg ref="mongo"/>-->
+    <!--</bean>-->
+
+
+	<mongo:repositories base-package="com.izhubo.userSystem.mongo.qquser" mongo-template-ref="qquserMongo">
+	</mongo:repositories>
+	
+
+</beans>

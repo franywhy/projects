@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.LiveLogDetailDao">
+	<!-- 通用from -->
+	<sql id="base_from">
+		FROM live_log_detail AS live_log_detail
+	</sql>
+	<!--查询直播记录明细数量-->
+ 	<select id="selectDetailCount" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<where>
+			<if test="liveId != null">
+				live_log_detail.live_id = #{liveId}
+			</if>
+			<if test="liveNum != null">
+				AND live_log_detail.live_num = #{liveNum}
+			</if>
+			<if test="userId != null">
+				AND live_log_detail.user_id = #{userId}
+			</if>
+			<if test="joinTime != null">
+				AND live_log_detail.join_time = #{joinTime}
+			</if>
+			<if test="leaveTime != null">
+				AND live_log_detail.leave_time = #{leaveTime}
+			</if>
+			<if test="classplanLiveId != null">
+				AND live_log_detail.classplan_live_id = #{classplanLiveId}
+			</if>
+		</where>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.modules.job.entity.LiveLogDetailEntity" useGeneratedKeys="true" keyProperty="liveLogDetailId">
+	insert into live_log_detail
+	(
+	`live_id`, 
+	`live_num`, 
+	`user_id`, 
+	`join_time`, 
+	`leave_time`, 
+	`join_type`,
+	`platform_code`, 
+	`create_time` ,
+	`product_id`,
+	`classplan_live_id`
+	)
+	values
+	(
+	#{liveId}, 
+	#{liveNum}, 
+	#{userId}, 
+	#{joinTime}, 
+	#{leaveTime}, 
+	#{joinType},
+	#{platformCode}, 
+	#{createTime},
+	#{productId},
+	#{classplanLiveId}
+	)
+	</insert>
+</mapper>

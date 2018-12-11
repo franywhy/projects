@@ -1,0 +1,20 @@
+<!--课程档案页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+
+    <input type="button" value="新增商品档案" class="d-button d-state-highlight J_add" />
+
+    <%}%>
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span>
+</h2>
+<div class="searchForm">
+<form name="searchForm">
+商品档案编号
+<input type="text" name="course_code" size="20" />&nbsp;&nbsp;
+商品档案名称
+<input type="text" name="course_name" size="20" />
+<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+</form>
+</div>
+<!--/课程档案页头-->

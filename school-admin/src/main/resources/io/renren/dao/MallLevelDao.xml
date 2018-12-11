@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallLevelDao">
+	
+	<select id="findLevelList" resultType="io.renren.entity.MallLevelEntity">
+		select * from mall_level where 1=1
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="querySelectionList" resultType="io.renren.pojo.SelectionItem">
+	    select level_id value, level_name name from mall_level where 1=1
+	</select>
+	<select id="queryObject" resultType="io.renren.entity.MallLevelEntity">
+		select * from mall_level where level_id = #{value}
+	</select>
+    
+	<select id="queryList" resultType="io.renren.entity.MallLevelEntity">
+		select 
+			level_id as levelId,
+			level_name as levelName
+		from mall_level where 1=1
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		from mall_level
+		where 1=1
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MallLevelEntity" useGeneratedKeys="true" keyProperty="levelId">
+		insert into mall_level
+		(
+			`level_name`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`school_id`
+		)
+		values
+		(
+			#{levelName}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime}, 
+			#{schoolId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.MallLevelEntity">
+		update mall_level 
+		<set>
+			<if test="levelName != null">`level_name` = #{levelName}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}</if>
+		</set>
+		where level_id = #{levelId}
+	</update>
+	<update id="updateBatch">
+	   update mall_level set status = #{status} where level_id in
+	   <foreach item="levelId" collection="list" open="(" separator="," close=")">
+	   	#{levelId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from mall_level where level_id = #{value}
+	</delete>
+	
+	
+	<delete id="deleteBatch">
+		delete from mall_level where level_id in 
+		<foreach item="levelId" collection="array" open="(" separator="," close=")">
+			#{levelId}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.RecordCourseFileDao">
+
+    <select id="getRecordFileList" parameterType="String" resultType="map">
+        select c.file_url as fileUrl,c.file_name as fileName
+        from course_record_detail as c
+        <if test="recordId != null and recordId != '' ">WHERE `record_id`=#{recordId}</if>
+    </select>
+</mapper>

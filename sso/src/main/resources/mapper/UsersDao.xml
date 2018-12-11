@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elise.singlesignoncenter.dao.UsersDao">
+
+    <select id = "checkMobileNo" resultType="Integer">
+        select COUNT(1)
+        from `users`
+        where mobile = #{mobileNo}
+        limit 1
+    </select>
+
+    <select id="queryPassWord" resultType="String">
+      select password
+      from users
+      where user_id = #{userId}
+      and  dr = #{dr}
+      limit #{limit}
+    </select>
+
+    <select id="queryUserInfo" resultType="com.elise.singlesignoncenter.entity.UserInfoEntity">
+
+     select user_id,
+            mobile,
+            nick_name,
+            pic as avatar,
+            status,
+            sex,
+            email,
+            password as passWord
+     from users
+     where mobile = #{mobileNo}
+     and dr = #{dr}
+     limit #{limit}
+
+    </select>
+
+
+    <select id="queryUserInfoById" resultType="com.elise.singlesignoncenter.entity.UserInfoEntity">
+
+        select user_id,
+        mobile,
+        nick_name,
+        pic as avatar,
+        status,
+        sex,
+        email,
+        password as passWord
+        from users
+        where user_id = #{userId}
+        and dr = #{dr}
+        limit #{limit}
+
+    </select>
+
+    <select id="queryNcId" resultType="String">
+
+        select nc_id
+        from users
+        where user_id = #{userId}
+        and dr = #{dr}
+        limit #{limit}
+
+    </select>
+
+
+    <update id="modifyPassWord" parameterType="com.elise.singlesignoncenter.entity.UserInfoEntity">
+        update users
+        set password = #{passWord}
+        where user_id = #{userId}
+        and dr = #{dr}
+    </update>
+
+    <insert id="insertUserInfo" parameterType="com.elise.singlesignoncenter.entity.UserInfoEntity">
+       insert into users
+       (
+        user_id,
+        dr,
+        school_id,
+        mobile,
+        nick_name,
+        pic,
+        status,
+        sex,
+        email,
+        password,
+        channel
+       )
+        values
+        (
+         #{userId},
+         #{dr},
+         #{schoolId},
+         #{mobile},
+         #{nickName},
+         #{avatar},
+         #{status},
+         #{sex},
+         #{email},
+         #{passWord},
+         #{channel}
+        )
+    </insert>
+
+    <update id="updateUserInfo" parameterType="com.elise.singlesignoncenter.entity.UserInfoEntity">
+
+        update users
+        <set>
+            <if test="nickName != null">`nick_name` = #{nickName},</if>
+            <if test="email != null">`email` = #{email},</if>
+            <if test="avatar != null">`pic` = #{avatar},</if>
+            <if test="sex != -1">`sex` = #{sex} </if>
+        </set>
+        where  user_id = #{userId}
+        and    dr = #{dr}
+
+    </update>
+
+</mapper>

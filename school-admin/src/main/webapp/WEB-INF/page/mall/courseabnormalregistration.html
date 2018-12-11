@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>报考档案表</title>
+#parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+		<!-- 报考档案表查询条件 -->
+			<div class="grid-btn">
+			<table  class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">班型名称:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.classtypeName" readonly="readonly" placeholder="点击选择班型" @click="classTypeLayerShow"></td>
+					<td><label for="name">班主任:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.sysUserName" readonly="readonly" placeholder="班主任" @click="selectTeacher"></td>
+					<td><label for="name">班级:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.className" readonly="readonly" placeholder="点击选择班级" @click="classLayerShow"></td>
+					<td><label for="name">课程科目:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.courseName" readonly="readonly" placeholder="点击选择课程" @click="selectCourse"></td>
+					<td><label for="name">专业:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.professionName" readonly="readonly" placeholder="点击选择专业" @click="professionLayerShow"></td>
+					<td><label for="name">省份:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.bdAreaName" id="query-bdAreaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerBdShow"></td>
+				</tr>
+				<tr border="0">
+					<td><label for="name">报考时间:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.scheduleDate" id="query-scheduleDate" readonly="readonly" placeholder="点击选择报考时间" @click="selectExamScheduleQ"></td>
+					<td><label for="name">姓名:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.nickName" placeholder="姓名"></td>
+					<td><label for="name">手机号:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.mobile" placeholder="手机号码"></td>
+					<td><label for="name">状态:</label></td>
+					<td>
+						<select name="status" form="query" class="form-control" v-model.trim="q.status">
+							<option v-for="option in statusOptions" v-bind:value="option.value" > 
+								{{ option.text }}  
+						 	</option>
+						</select>
+					</td>
+					<td><label for="name">层次:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.levelName" readonly="readonly" placeholder="点击选择层次" @click="selectLevel"></td>
+					<td><label for="name">报考省份:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.bkAreaName" id="query-bkAreaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerBkShowQ"></td>
+				</tr>
+			</table>
+					<a class="btn btn-default" @click="clearQuery">
+					<i class="fa fa-search"></i>&nbsp;重置</a>
+					<a class="btn btn-primary" @click="query">
+					<i class="fa fa-search"></i>&nbsp;查询</a>
+					<a class="btn btn-primary" @click="add">
+					<i class="fa fa-plus"></i>&nbsp;新增</a>
+					<!-- <a class="btn btn-primary" @click="update">
+					<i class="fa fa-pencil-square-o"></i>&nbsp;修改</a> -->
+					<a class="btn btn-primary" @click="cancellation">
+					<i class="fa fa-plus"></i>&nbsp;作废</a>
+					<a class="btn btn-primary" @click="audit">
+					<i class="fa fa-plus"></i>&nbsp;审核</a>
+					<a class="btn btn-primary" @click="opposeAudit">
+					<i class="fa fa-plus"></i>&nbsp;反审核</a>
+					<!-- <a class="btn btn-primary" @click="selectRegistration">
+					<i class="fa fa-plus"></i>&nbsp;自己弹窗</a> -->
+					<a class="btn btn-primary" @click="importExcel">
+					<i class="fa fa-recycle"></i>&nbsp;批量导入</a>
+					<a class="btn btn-primary" @click="downExcelTemplate">
+					<i class="fa fa-pencil-square-o"></i>&nbsp;模板下载</a>
+					
+					<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-2 control-label">订单编号：</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"	v-model.trim="a.orderNo" id="add-orderName" readonly="readonly" placeholder="点击选择订单号" @click="orderInfoLayerShow" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">课程：</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"	v-model.trim="a.courseName" id="add-courseName" readonly="readonly" placeholder="点击选择课程" @click="courseInfoLayerShow" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报考省份：</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="a.bkAreaName" id="add-bkAreaName" readonly="readonly" placeholder="点击选择报考省份" @click="areaLayerBkShowA" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报考时间：</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="a.scheduleDate" id="add-scheduleDate" readonly="readonly" placeholder="点击选择报考时间" @click="selectExamScheduleA" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报考登记号：</div>
+					<div class="col-sm-10">
+						<input class="form-control" onkeyup="value=value.replace(/[\W]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+							   v-model.trim="a.registrationNumber" id="add-registrationNumber" placeholder="请输入报考登记号" />
+						
+						<!-- <input type="text" class="form-control"	v-model.trim="a.registrationNumber" id="add-registrationNumber" placeholder="请输入报考登记号" /> -->
+					</div>
+				</div>
+				<!-- <div class="form-group">
+					<div class="col-sm-2 control-label">提交时间</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="q.registrationTime"
+							placeholder="提交时间" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">产品线</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="q.productId" placeholder="产品线" />
+					</div>
+				</div> -->
+				<!-- <div class="form-group">
+					<div class="col-sm-2 control-label">状态</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"	v-model.trim="q.status" placeholder="状态" />
+					</div>
+				</div> -->
+				<!-- <div class="form-group">
+					<div class="col-sm-2 control-label">备注</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="q.remark" placeholder="备注" />
+					</div>
+				</div> -->
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate"
+						value="确定" /> &nbsp;&nbsp;<input type="button"
+						class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="fileUploadLayer" style="display: none;">
+    	<div class="panel-heading">批量上传</div>
+    	<input type="file" id="file_data" name="file_data" accept=".xls"/>
+	</div>
+	<script src="${rc.contextPath}/js/mall/courseabnormalregistration.js?_${date.systemTime}"></script>
+#parse("layer/classplanLay.html")
+#parse("layer/areaLay.html")
+#parse("layer/professionLay.html")
+#parse("layer/classTypeLay.html")
+#parse("layer/classLay.html")
+#parse("layer/attendanceDetailsLay.html")
+#parse("layer/classTeacherLay.html")
+#parse("layer/levelLay.html")
+#parse("layer/examScheduleLay.html")
+#parse("layer/teacherLay.html")
+#parse("layer/courseLay.html")
+#parse("layer/registrationLay.html")
+#parse("layer/mallorderLay.html")
+#parse("layer/freeAssessmentCoursesLay.html")
+#parse("layer/deptQueryLay.html")
+</body>
+</html>

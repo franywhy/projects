@@ -1,0 +1,32 @@
+<!--价格管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">校区编号</th>
+        <th class="auto">名称</th>
+        <th class="auto">收支项目名称</th>
+        <th class="auto">标准价</th>
+        <th class="auto">老学员价格</th>
+        <th class="auto">标准折扣额</th>
+        <th class="longtime">同步时间</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr>
+        <td class="auto"><%=i+1 %></td>
+        <!--<td class="auto"><%=data[i]._id %></td>-->
+        <td class="auto"><%=data[i].school_code %></td>
+        <td class="auto"><%=data[i].school_name %></td>
+        <td class="auto"><%=data[i].name %></td>
+        <td class="auto"><%=data[i].normalPrice %></td>
+        <td class="auto"><%=data[i].oldStudentPrice %></td>
+        <td class="auto"><%=data[i].normalDiscount %></td>
+        <td class="longtime"><%=new Date(data[i].syn_time).toLocaleString()%></td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
+<!--/价格管理列表-->

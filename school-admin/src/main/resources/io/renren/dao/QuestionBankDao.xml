@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.QuestionBankDao">
+
+ 	<resultMap type="io.renren.entity.QuestionBankEntity" id="questionBankResultMap">
+		<id property="courseCode" column="course_code" />
+		<id property="courseName" column="course_name" />
+		<id property="charpterCode" column="charpter_code" />
+		<id property="charpterName" column="charpter_name" />
+		<id property="sectionCode" column="section_code" />
+		<id property="sectionName" column="section_name" />
+		<id property="IsDelete" column="is_delete" />
+		<id property="IsUse" column="is_use" />
+		
+		
+	</resultMap>
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		question_bank.id AS id , 
+		question_bank.course_code AS courseCode ,
+		question_bank.course_name AS  courseName , 
+		question_bank.charpter_code AS charpterCode ,
+		question_bank.charpter_name AS charpterName , 
+		question_bank.section_code AS sectionCode , 
+		question_bank.section_name AS sectionName , 
+		question_bank.is_delete AS isDelete ,
+		question_bank.is_use AS isUse
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where question_bank.id = #{id}
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from question_bank as question_bank
+	</sql>
+	<!-- <sql id="other_where">
+		<if test=" null != chapter and chapter.trim() != ''">
+			and knowledge_point.chapter = #{chapter}
+		</if>
+		<if test=" null != verse and verse.trim() != ''">
+			and knowledge_point.verse = #{verse}
+		</if>
+
+		<if test=" null != name and name.trim() != ''">
+			and knowledge_point.name  like concat('%',#{name},'%')
+		</if>
+
+
+	</sql> -->
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.QuestionBankEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		
+	</select>
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="io.renren.entity.QuestionBankEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<!-- <include refid="base_where" /> -->
+		<!-- <include refid="other_where" /> -->
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数 -->
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from" />
+		<!-- <include refid="base_where" /> -->
+		<!-- <include refid="other_where" /> -->
+	</select>
+	
+	
+	
+	<!--新增 -->
+	<insert id="save" parameterType="io.renren.entity.QuestionBankEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into question_bank
+		(
+		`course_code`, `course_name`,
+		`charpter_code`, `charpter_name`, `section_code`, `section_name`, `is_delete`,
+		`is_use` )
+		values
+		(
+		#{courseCode} , #{courseName},
+		#{charpterCode}, #{charpterName}, #{sectionCode}, #{sectionName}, #{isDelete},
+		#{isUse} )
+	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true" >
+	 	<selectKey resultType="long" keyProperty="id" order="AFTER">
+	 	SELECT LAST_INSERT_ID() 
+ 	</selectKey>
+		insert into question_bank
+		(
+		`course_code`, `course_name`,
+		`charpter_code`, `charpter_name`, `section_code`, `section_name`, `is_delete`,
+		`is_use` )
+		values
+		<foreach collection="list" item="item" index="index" separator="," > 
+ 			(
+		#{item.courseCode} , #{item.courseName},
+		#{item.charpterCode}, #{item.charpterName}, #{item.sectionCode}, #{item.sectionName}, #{item.isDelete},
+		#{item.isUse} )
+ 		</foreach> 
+		
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.QuestionBankEntity">
+		update question_bank
+		<set>
+			<if test="name != null">`course_code` = #{courseCode}, </if>
+			
+			<if test="createBy != null">`course_name` = #{courseName}, </if>
+			<if test="createTime != null">`charpter_code` = #{charpterCode}, </if>
+			<if test="updateBy != null">`charpter_name` = #{charpterName}, </if>
+			<if test="updateTime != null">`section_code` = #{sectionCode}, </if>
+			<if test="course != null">`section_name` = #{sectionName}, </if>
+			<if test="chapter != null">`is_delete` = #{isDelete}, </if>
+			<if test="verse != null">`is_use` = #{isUse},</if>
+			
+		</set>
+		<!-- <include refid="base_where" /> -->
+		where id = #{id}
+	</update>
+
+	<!--删除 -->
+	<delete id="delete">
+		DELETE FROM question_bank
+		
+		where  id = #{id}
+	</delete>
+	
+	<delete id="deleteAll">
+		DELETE FROM question_bank
+		
+		
+	</delete>
+
+	<select id="queryCourse" resultType="map">
+		select DISTINCT course_code as code,course_name as name from question_bank ORDER BY  course_code
+		
+	</select>
+	
+	<select id="queryChapter" resultType="map">
+		select DISTINCT charpter_code as code,charpter_name as name from question_bank where course_code = #{course_code}
+	</select>
+	
+	<select id="queryVerse" resultType="map">
+		select DISTINCT section_code as code,section_name as name from question_bank where course_code = #{course_code} and charpter_code = #{chapter_code}
+	</select>
+
+</mapper>

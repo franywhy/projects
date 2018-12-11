@@ -1,0 +1,29 @@
+<!--提现申请设置页头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export">
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        学生id
+        <input type="text" name="user_id" size="10" />
+        公司名称
+        <input type="text" name="company_name" size="10" />
+        联系人姓名
+        <input type="text" name="contacts_name" size="10" />
+        联系电话
+        <input type="text" name="contacts_phone" size="10" />
+        <br/>
+        <br/>
+
+        创建时间
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+
+        <br/>
+        <br/>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/提现申请设置页头-->

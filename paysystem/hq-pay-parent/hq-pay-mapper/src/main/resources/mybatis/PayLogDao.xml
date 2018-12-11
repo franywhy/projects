@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hqjy.pay.mapper.PayLogDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		pay_log.id AS id , pay_log.order_no AS orderNo ,
+		 pay_log.terrace AS terrace , pay_log.pay_mode AS payMode
+		, pay_log.create_order_ip AS createOrderIp , pay_log.pay_callback_ip AS
+		payCallbackIp , pay_log.pay_order_no AS payOrderNo ,
+		pay_log.pay_callback_info AS payCallbackInfo , pay_log.pay_log AS
+		payLog , pay_log.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		FROM pay_log AS pay_log
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		ORDER BY id DESC
+	</sql>
+
+	<!--判断是否已存在这条日志记录 -->
+	<select id="queryObject" resultType="com.hqjy.pay.PayLogEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND trade_no = #{tradeNo} AND pay_order_no=#{payOrderNo}
+	</select>
+	<select id="queryTotal" resultType="int">
+	    select count(id) from pay_log where trade_no =#{tradeNo}
+	</select>
+	<!--新增 -->
+	<insert id="save" parameterType="com.hqjy.pay.PayLogEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into pay_log
+		(
+		`order_no`, `trade_no`, `terrace`, `pay_mode`, `create_order_ip`,
+		`pay_callback_ip`, `pay_order_no`, `pay_callback_info`, `pay_log`,`create_time` )
+		values
+		(
+		#{orderNo}, #{tradeNo}, #{terrace}, #{payMode}, #{createOrderIp},
+		#{payCallbackIp}, #{payOrderNo}, #{payCallbackInfo}, #{payLog},#{createTime})
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="com.hqjy.pay.PayLogEntity">
+		update pay_log
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="terrace != null">`terrace` = #{terrace}, </if>
+			<if test="payMode != null">`pay_mode` = #{payMode}, </if>
+			<if test="createOrderIp != null">`create_order_ip` = #{createOrderIp}, </if>
+			<if test="alipayIp != null">`pay_callback_ip` = #{payCallbackIp}, </if>
+			<if test="payOrderNo != null">`pay_order_no` = #{payOrderNo}, </if>
+			<if test="alipayReturnCode != null">`pay_callback_info` = #{payCallbackInfo}, </if>
+			<if test="errorLog != null">`pay_log` = #{payLog}, </if>
+			<if test="trade_no != null">`trade_no` = #{tradeNo}</if>
+		</set>
+		<include refid="base_where" />
+		AND pay_order_no = #{payOrderNo}
+	</update>
+
+</mapper>

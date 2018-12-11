@@ -1,0 +1,24 @@
+<form name="inputForm" style="width:1200px;height:800px ">
+<table class="inputForm" cellpadding="10" id="teaher-detail-query-table">
+<% var userInfo = Izb.user.getUserInfo();%>
+          <tr>
+            <td>帐号:
+            	<input class="input" id="name" type="text" name="name" value="" />
+            	昵称:
+            	<input class="input" id="nick_name" type="text" name="nick_name" value=""  />
+            	<input id="_id" name="_id" type="hidden" value="" />
+            </td>
+        </tr>
+        <tr>
+            <td >
+             	老师名称
+                <input name="q_teacher_name"  class="input" id="q_teacher_name" type="text" />
+          	           老师手机号
+             	<input name="q_teacher_phone"  class="input" id="q_teacher_phone" type="text" />
+            	
+                <input type="button"  value="查询" onclick="Izb.controller.creditpermission.queryTeacherDetail()">
+            </td>
+        </tr>
+</table>
+ <table id="q-teacher-permission-detail"></table>
+</form>

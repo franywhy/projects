@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysVersionDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	sys_version.id AS id , 	sys_version.client_type AS clientType , 	
+	sys_version.version_code AS versionCode , 	
+	sys_version.version_name AS versionName , 	
+	sys_version.update_strategy AS updateStrategy , 	
+	sys_version.download_url AS downloadUrl , 	
+	sys_version.update_detail AS updateDetail , 	
+	sys_version.md5 AS md5 , 	
+	sys_version.is_active AS isActive , 	
+	sys_version.is_grey_update AS isGreyUpdate , 	
+	sys_version.update_user_list AS updateUserList , 	
+	sys_version.status AS status , 	
+	sys_version.school_id AS schoolId , 	
+	sys_version.create_person AS createPerson , 	
+	sys_version.modify_person AS modifyPerson , 	
+	sys_version.create_time AS createTime , 	
+	sys_version.modify_time AS modifyTime ,
+	sys_version.min_version_code AS minVersionCode
+    </sql>
+	<!-- 其他表头 -->
+	<sql id="other_column">
+	,
+	(select user.username from sys_user  user where user.user_id = sys_version.create_person) AS createPersonName,
+	(select user.username from sys_user  user where user.user_id = sys_version.modify_person) AS modifyPersonName
+	   
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from sys_version as sys_version
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.SysVersionEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.SysVersionEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="other_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="clientType != null">and `client_type` = #{clientType} </if>
+		<if test="appType != null">and `school_id` = #{appType} </if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--检查某版本是否存在性-->
+ 	<select id="checkSysVersion" resultType="int">
+		SELECT
+	count(1)
+FROM
+	sys_version sys_version
+WHERE
+	sys_version.client_type = #{client_type}
+AND sys_version.is_active = #{isActive}
+AND sys_version.is_grey_update = #{isGreyUpdate}
+<if test="id != null">and sys_version.id != #{id} </if>
+;
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.SysVersionEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_version
+		(
+				`client_type`, 				
+				`version_code`, 				
+				`version_name`, 				
+				`update_strategy`, 				
+				`download_url`, 				
+				`update_detail`, 				
+				`md5`, 				
+				`is_active`, 				
+				`is_grey_update`, 				
+				`update_user_list`,
+				`status`,
+				`school_id`, 				
+				`create_person`, 				
+				`modify_person`, 				
+				`create_time`, 				
+				`modify_time`,
+				`min_version_code`
+						)
+		values
+		(
+				#{clientType}, 																			
+				#{versionCode}, 																			
+				#{versionName}, 																			
+				#{updateStrategy}, 																			
+				#{downloadUrl}, 																			
+				#{updateDetail}, 																			
+				#{md5}, 																			
+				#{isActive}, 																			
+				#{isGreyUpdate}, 																			
+				#{updateUserList}, 																		
+				#{status}, 																		
+				#{schoolId}, 																			
+				#{createPerson}, 																		
+				#{modifyPerson}, 																			
+				#{createTime}, 																			
+				#{modifyTime},
+				#{minVersionCode}
+				)
+	</insert>
+	
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.SysVersionEntity">
+		update sys_version 
+		<set>
+			<if test="clientType != null">`client_type` = #{clientType}, </if>
+			<if test="versionCode != null">`version_code` = #{versionCode}, </if>
+			<if test="versionName != null">`version_name` = #{versionName}, </if>
+			<if test="updateStrategy != null">`update_strategy` = #{updateStrategy}, </if>
+			<if test="downloadUrl != null">`download_url` = #{downloadUrl}, </if>
+			<if test="updateDetail != null">`update_detail` = #{updateDetail}, </if>
+			<if test="md5 != null">`md5` = #{md5}, </if>
+			<if test="isActive != null">`is_active` = #{isActive}, </if>
+			<if test="isGreyUpdate != null">`is_grey_update` = #{isGreyUpdate}, </if>
+			<if test="updateUserList != null">`update_user_list` = #{updateUserList}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+            <!-- <if test="createPerson != null">`create_person` = #{createPerson}, </if> -->
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<!-- <if test="createTime != null">`create_time` = #{createTime}, </if> -->
+			<if test="modifyTime != null">`modify_time` = #{modifyTime},</if>
+			<if test="minVersionCode != null">`min_version_code` = #{minVersionCode}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM sys_version 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM sys_version 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

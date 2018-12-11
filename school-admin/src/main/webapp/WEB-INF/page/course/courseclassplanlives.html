@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>排课计划直播明细子表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("courseclassplanlives:list"))
+			<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+			<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("courseclassplanlives:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;查看</a>
+			#end
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+			<table  class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">时间起始:</label></td>
+					<td nowrap="nowrap" colspan=2>
+						<input type="text" class="datetimepicker_start" id="StartTime" readonly="readonly" v-model="q.startTime" @keyup.enter="query" placeholder="开始时间">
+						-
+						<input type="text" class="datetimepicker_end" id="EndTime" readonly="readonly" v-model="q.endTime" @keyup.enter="query" placeholder="结束时间">
+					</td>
+				</tr>
+				<tr border="0">
+					<td><label for="name">直播课次名称:</label></td>
+					<td><input type="text" class="form-control" v-model="q.classplanLiveName" @keyup.enter="query" placeholder="直播课次名称"></td>
+					<td><label for="name">排课计划名称:</label></td>
+					<td><input type="text" class="form-control" v-model="q.classplanName" @keyup.enter="query" placeholder="排课计划名称"></td>
+					<td><label for="name">上课时段:</label></td>
+					<td>
+						<select class="form-control" v-model="q.timeBucket" @keyup.enter="query">
+					       <option value="">全部</option>
+					       <option v-for="option in options" v-bind:value="option.value">  
+	    						{{ option.text }}  
+	  					   </option>
+				        </select>
+					</td>
+				</tr>
+			</table>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="close_1" class="form-control" v-model="courseClassplanLives.classplanLiveId" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">回放地址</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="close_2" class="form-control" v-model="courseClassplanLives.backUrl" placeholder="回放地址"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">文件上传</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="close_3" class="form-control" v-model="courseClassplanLives.fileUrl" placeholder="点击上传文件" readonly="readonly" onclick="hq.core.upload(null,'vm.courseClassplanLives.fileUrl','上传文件');"/>
+			    </div>
+			</div>
+			
+			<!-- ==================================================== -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播课名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="close_4" class="form-control" v-model="courseClassplanLives.classplanLiveName" placeholder="直播课名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">即将开始时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="readyTime" readonly="readonly" placeholder="即将开始时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">开始时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text"  class="form-control datetimepicker" id="startTime" readonly="readonly" placeholder="开始时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">结束时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text"  class="form-control datetimepicker" id="endTime" readonly="readonly" placeholder="结束时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">进入直播间结束时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="closeTime" readonly="readonly" placeholder="进入直播间结束时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">上课时段</div>
+			   	<div class="col-sm-10">
+			      <select id="close_9" class="form-control" v-model="courseClassplanLives.timeBucket">
+				       <option v-for="option in options" v-bind:value="option.value">  
+    						{{ option.text }}  
+  						</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播室</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="close_10" class="form-control" v-model="courseClassplanLives.studioName" readonly="readonly" placeholder="点击选择直播室" @click="selectStudio"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="close_11" class="form-control" v-model="courseClassplanLives.liveRoomName" readonly="readonly" placeholder="点击选择直播间" @click="selectLiveroom"/>
+			      <!-- <input type="text" class="form-control" v-model="courseClassplanLives.liveRoomName" readonly="readonly" placeholder="直播间"/> -->
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">展示互动直播ID</div>
+				<div class="col-sm-10">
+					<input type="text" id="genseeLiveId" class="form-control" v-model="courseClassplanLives.genseeLiveId" />
+					<!-- <input type="text" class="form-control" v-model="courseClassplanLives.liveRoomName" readonly="readonly" placeholder="直播间"/> -->
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">展示互动直播房间号</div>
+				<div class="col-sm-10">
+					<input type="text" id="genseeLiveNum" class="form-control" v-model="courseClassplanLives.genseeLiveNum" />
+					<!-- <input type="text" class="form-control" v-model="courseClassplanLives.liveRoomName" readonly="readonly" placeholder="直播间"/> -->
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">授课老师</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="close_12"  class="form-control" v-model="courseClassplanLives.teacherName" readonly="readonly" placeholder="选择授课老师" @click="selectTeacher"/>
+			      <!-- <input type="text" class="form-control" v-model="courseClassplanLives.teacherName" readonly="readonly" placeholder="授课老师"/> -->
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">班型权限</div>
+			   	<div class="col-sm-10">
+			      <select  id="close_13" class="form-control" multiple="multiple" placeholder="班型权限" v-model="courseClassplanLives.classtypeIdArray">
+					<option v-for="option in classTypeList" v-bind:value="option.value">{{ option.name }}</option>
+				  </select>
+			    </div>
+			</div>
+			<!-- ====================================== -->								    			
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<!--<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>-->
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/course/courseclassplanlives.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/studioLay.html")
+#parse("layer/liveroomLay.html")
+#parse("layer/teacherLay.html")
+</body>
+</html>

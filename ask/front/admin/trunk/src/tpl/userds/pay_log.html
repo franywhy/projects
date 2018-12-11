@@ -1,0 +1,28 @@
+<!--充值记录-->
+<table width="100%" class="listTable tablesorter">
+<thead>
+    <tr>
+    		<th class="longtime">交易时间</th>   
+            <th class="auto">交易号</th>                     
+            <th class="auto">充值金额（元）</th>
+			<th class="auto">充值星币</th>
+			<th class="auto">支付渠道</th>
+			<th class="auto">充值方式</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+			<td class="auto"><%=data[i]._id%></td>
+            <td class="auto"><%=data[i].cny || 0%></td>
+			<td class="auto"><%=data[i].coin || 0%></td>
+			<td class="auto"><%=data[i].via%></td>
+            <td class="auto"><%=Izb.config.payment_type[data[i].via]?Izb.config.payment_type[data[i].via][data[i].payment_type||0]:"-"%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+
+

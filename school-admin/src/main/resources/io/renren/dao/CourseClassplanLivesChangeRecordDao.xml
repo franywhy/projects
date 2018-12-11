@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseClassplanLivesChangeRecordDao">
+    <insert id="save" parameterType="io.renren.entity.CourseClassplanChangeRecordEntity" useGeneratedKeys="true" keyProperty="classplanLiveId">
+		insert into course_classplan_lives_change_record
+		(
+			`classplan_live_id`,
+			`classplan_id`, 
+			`classplan_live_name`,
+			`classplan_live_time_detail`, 
+			`day_time`, 
+			`start_time`, 
+			`end_time`, 
+			`time_bucket`, 
+			`liveroom_id`, 
+			`studio_id`, 
+			`back_url`, 
+			`back_id`,
+			`back_type`,
+			`teacher_id`, 
+			`live_class_type_ids`, 
+			`order_num`, 
+			`course_live_detail_id`, 
+			`create_person`, 
+			`creation_time`, 
+			`modify_person`, 
+			`modified_time`, 
+			`school_id`,
+			`course_id`,
+			`dr`,
+			`file_url`,
+			`ready_time`,
+			`close_time`,
+			`review_url`,
+			`prepare_url`,
+			`courseware_url`,
+			`practice_stage_id`,
+			`exam_stage_id`,
+			`phase_name`,
+			`ban_speaking`,
+			`ban_asking`,
+			`hide_discussion`,
+			`hide_asking`,
+			`attendance`,
+			`version_no`
+		)
+		values
+		(
+			#{classplanLiveId},
+			#{classplanId}, 
+			#{classplanLiveName},
+			#{classplanLiveTimeDetail}, 
+			#{dayTime}, 
+			#{startTime}, 
+			#{endTime}, 
+			#{timeBucket}, 
+			#{liveroomId}, 
+			#{studioId}, 
+			#{backUrl}, 
+			#{backId},
+			#{backType},
+			#{teacherId}, 
+			#{liveClassTypeIds}, 
+			#{orderNum}, 
+			#{courseLiveDetailId}, 
+			#{createPerson}, 
+			#{creationTime}, 
+			#{modifyPerson}, 
+			#{modifiedTime}, 
+			#{schoolId},
+			#{courseId},
+			#{dr},
+			#{fileUrl},
+			#{readyTime},
+			#{closeTime},
+			#{review},
+			#{prepare},
+			#{courseware},
+			#{practiceStageId},
+			#{examStageId},
+			#{phaseName},
+			#{banSpeaking},
+			#{banAsking},
+			#{hideDiscussion},
+			#{hideAsking},
+			#{attendance},
+			#{versionNo}
+		)
+	</insert>
+
+
+    <select id="queryPojoList" resultType="io.renren.entity.CourseClassplanLivesChangeRecordEntity">
+        select
+        c.change_id as changeId,
+        c.version_no as versionNo,
+        c.classplan_live_id as classplanLiveId,
+        c.classplan_id as classplanId,
+        c.classplan_live_name as classplanLiveName,
+        c.classplan_live_time_detail as classplanLiveTimeDetail,
+        c.day_time as dayTime,
+        c.start_time as startTime,
+        c.end_time as endTime,
+        c.time_bucket as timeBucket,
+        c.liveroom_id as liveroomId,
+        c.studio_id as studioId,
+        c.back_url as backUrl,
+        c.back_id as backId,
+        c.back_type as backType,
+        c.teacher_id as teacherId,
+        c.live_class_type_ids as liveClassTypeIds,
+        c.order_num as orderNum,
+        c.course_live_detail_id as courseLiveDetailId,
+        c.create_person as createPerson,
+        c.creation_time as creationTime,
+        c.modify_person as modifyPerson,
+        c.modified_time as modifiedTime,
+        c.school_id as schoolId,
+        c.course_id as courseId,
+        c.dr as dr,
+        c.file_url as fileUrl,
+        c.ready_time as readyTime,
+        c.close_time as closeTime,
+        c.review_url as review,
+        c.prepare_url as prepare,
+        c.courseware_url as courseware,
+        c.practice_stage_id as practiceStageId,
+        c.exam_stage_id as examStageId,
+        c.phase_name as phaseName,
+        c.ban_speaking as banSpeaking,
+        c.ban_asking as banAsking,
+        c.hide_discussion as hideDiscussion,
+        c.hide_asking as hideAsking,
+        c.attendance as attendance,
+        (select cl.live_name from course_live_details cl where cl.live_id = c.course_live_detail_id) as classplanLiveName,
+        (select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+        live_room.live_room_name as liveRoomName,
+        live_room.live_room_channel_id as liveRoomChannelId,
+        live_room.live_room_channel_password as liveRoomChannelPassword,
+        live_room.gensee_live_id as genseeLiveId,
+        live_room.gensee_live_num as genseeLiveNum,
+        (select su.nick_name from sys_user su where su.user_id = c.teacher_id) as teacherName
+        from course_classplan_lives_change_record as c
+        JOIN mall_live_room as live_room ON live_room.live_room_id = c.liveroom_id
+        where
+        c.classplan_id = #{classplanId}
+        and c.dr = 0
+        AND c.version_no = #{versionNo}
+        order by c.start_time asc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <!-- 根据排课计划id查询排课子表List集合 -->
+    <select id="queryEntityList"  resultType="io.renren.entity.CourseClassplanLivesEntity">
+		select c.*,c.review_url as review,c.prepare_url as  `prepare`,c.courseware_url as courseware
+		from course_classplan_lives_change_record as c
+		where
+		c.classplan_id = #{classplanId}
+		and c.version_no = #{versionNo}
+		and c.dr = 0
+		order by c.start_time asc
+	</select>
+</mapper>

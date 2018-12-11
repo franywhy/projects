@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>移动端版本控制</title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <table class="table table-condensed" border="0">
+                <tr border="0">
+                    <!-- <td><label for="name">版本类型:</label></td> -->
+                    <td>
+                        <select class="form-control" v-model="q.appType" @keyup.enter="query" style="">
+                            <option value="">APP类型</option>
+                            <option v-for="option in appTypeOptions" v-bind:value="option.value" >{{option.text}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" v-model="q.clientType" @keyup.enter="query" style="">
+                            <option value="">版本类型</option>
+                            <option v-for="option in qClientTypeOptions" v-bind:value="option.text" >{{option.text}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            #if($shiro.hasPermission("sysversion:list"))
+            <a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+            <a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+            #end
+            #if($shiro.hasPermission("sysversion:save"))
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            #end
+            #if($shiro.hasPermission("sysversion:update"))
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            #end
+            #if($shiro.hasPermission("sysversion:delete"))
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            #end
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group" style="display:none">
+                <div class="col-sm-2 control-label">自增主键</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="sysVersion.id" placeholder="自增主键"/>
+                </div>
+            </div>
+            <!-- <div class="form-group">
+<div class="col-sm-2 control-label">版本类型</div>
+<div class="col-sm-10">
+<input type="text" class="form-control" v-model="sysVersion.clientType" placeholder="版本类型"/>
+</div>
+</div> -->
+            <div class="form-group">
+                <div class="col-sm-2 control-label">APP类型</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="sysVersion.schoolId" style="width:150px">
+                        <option v-for="option in appTypeOptions" v-bind:value="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>						    			<div class="form-group">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">版本类型</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="sysVersion.clientType" style="width:150px">
+                        <option v-for="option in clientTypeOptions" v-bind:value="option.text">
+                            {{ option.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+            <div class="col-sm-2 control-label">最小版本编码</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sysVersion.minVersionCode"/>
+            </div>
+            </div>
+            <div class="form-group">
+            <div class="col-sm-2 control-label">版本编码</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sysVersion.versionCode" placeholder="版本编码"/>
+            </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">版本名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="sysVersion.versionName" placeholder="版本名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">更新意愿</div>
+                <div class="col-sm-10">
+                    <!-- <input type="text" class="form-control" v-model="sysVersion.updateStrategy" placeholder="更新意愿"/> -->
+                    <select class="form-control" v-model="sysVersion.updateStrategy" style="width:150px">
+                        <option v-for="option in updateStrategyOptions" v-bind:value="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">下载地址</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="sysVersion.downloadUrl" placeholder="下载地址"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">更新内容细节</div>
+                <div class="col-sm-10">
+                    <!-- <input type="text" class="form-control" v-model="sysVersion.updateDetail" placeholder="更新内容细节"/> -->
+                    <textarea class="form-control"  v-model="sysVersion.updateDetail" placeholder="更新内容细节"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">MD5值</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="sysVersion.md5" placeholder="MD5值"/>
+                </div>
+            </div>
+            <!-- <div class="form-group">
+<div class="col-sm-2 control-label">1代表当前版本，0代表过期版本</div>
+<div class="col-sm-10">
+<input type="text" class="form-control" v-model="sysVersion.isActive" placeholder="1代表当前版本，0代表过期版本"/>
+</div>
+</div> -->
+            <!-- <div class="form-group">
+           <div class="col-sm-2 control-label">是否过期</div>
+           <div class="col-sm-10">
+          <select class="form-control" v-model="sysVersion.isActive" style="width:150px">
+               <option v-for="option in isActiveOptions" v-bind:value="option.text">
+                    {{ option.text }}
+                  </option>
+          </select>
+        </div>
+    </div> -->
+            <!-- <div class="form-group">
+<div class="col-sm-2 control-label">1代表需要灰度升级，0代表不需要灰度升级</div>
+<div class="col-sm-10">
+<input type="text" class="form-control" v-model="sysVersion.isGreyUpdate" placeholder="1代表需要灰度升级，0代表不需要灰度升级"/>
+</div>
+</div> -->
+            <!-- <div class="form-group">
+                   <div class="col-sm-2 control-label">是否灰度升级</div>
+                   <div class="col-sm-10">
+                  <select class="form-control" v-model="sysVersion.isGreyUpdate" style="width:150px">
+                       <option v-for="option in isGreyUpdateOptions" v-bind:value="option.value">
+                            {{ option.text }}
+                          </option>
+                  </select>
+                </div>
+            </div> -->
+            <!-- <div class="form-group">
+<div class="col-sm-2 control-label">灰度用户列表</div>
+<div class="col-sm-10">
+<input type="text" class="form-control" v-model="sysVersion.updateUserList" placeholder="灰度用户列表"/>
+</div>
+</div> -->
+            <div class="form-group">
+                <div class="col-sm-2 control-label">状态</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="sysVersion.status" style="width:150px">
+                        <option v-for="option in statusOptions" v-bind:value="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">灰度用户列表</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="sysVersion.updateUserList" placeholder="灰度用户列表"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="query" value="返回"/>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+<script src="${rc.contextPath}/js/sys/sysversion.js?_${date.systemTime}"></script>
+</body>
+</html>

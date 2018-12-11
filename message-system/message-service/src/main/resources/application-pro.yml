@@ -1,0 +1,67 @@
+  # 开发环境配置
+  #spring:
+  #  profiles: dev
+service-name: service-msg-api
+spring:
+  application:
+    name: service-msg-api     #服务ID
+    ip: 10.0.98.89
+    #port: 8666
+eureka:
+  instance:
+    ipAddress: 10.0.98.89
+    preferIpAddress: true
+druid:
+  type: com.alibaba.druid.pool.DruidDataSource
+  master-count: 2
+  slave-count: 2
+  mapperMXLLoc: classpath:mybatis/mapper/*.xml
+  configLocations: classpath:mybatis/mybatis-config.xml
+  master-01:
+    url: jdbc:mysql://10.0.98.89:3306/msg?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=true&&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    initial-size: 3
+    min-idle: 1
+    max-active: 20
+    test-on-borrow: true
+
+ip:
+  urls: localhost,10.0.98.89
+  filterSwitch: false
+
+redis:
+  hostName: 10.0.98.89
+  port: 6379
+  maxIdle: 10000
+  password:
+  maxTotal: 10000
+  maxWaitMillis: 3000
+  testOnBorrow: false
+  index: 0
+  indexMsg: 1
+  indexWait: 2
+  indexChannel: 3
+  topic:
+    wait: __keyevent@2__:expired
+    msg: __keyevent@1__:expired
+mq:
+  hostName: 10.0.98.89
+  port: 5672
+  userName: admin
+  pwd: mon4498
+  virtualHost: /
+  confirms: true
+xinge:
+  android:
+    accessid: 2100299331
+    secretkey: 9b7df65dffaa7b9dd409c1e8a0f84d0c
+  ios:
+    accessid: 2200275759
+    secretkey: 076df362039d2bbfd655b73a37eb6f15
+  iosenv: 2
+  enable: true
+common:
+  group: common
+is-sync: true

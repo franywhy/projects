@@ -1,0 +1,126 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+    	   <tr>
+            <td style="width:130px;">报名表日期：</td>
+              <td style="width:60px;">开始日期</td>
+            <td>
+              <input id="begin_reg_time" type="text" name="begin_reg_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_att_time\')}'})" />
+            </td>
+            <td style="width:60px;">结束日期</td>
+            <td>
+            	<input id="end_reg_time" type="text" name="end_reg_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_att_time\')}'})" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">出勤取数日期：</td>
+              <td style="width:60px;">开始日期</td>
+            <td>
+              <input id="begin_att_time" type="text" name="begin_att_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_att_time\')}'})" />
+            </td>
+            <td style="width:60px;">结束日期</td>
+            <td>
+            	<input id="end_att_time" type="text" name="end_att_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_att_time\')}'})" />
+            </td>
+        </tr>
+         <tr>
+            <td style="width:130px;">作业实操日期：</td>
+              <td style="width:60px;">开始日期</td>
+            <td>
+              <input id="begin_p_work_time" type="text" name="begin_p_work_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_p_work_time\')}'})" />
+            </td>
+            <td style="width:60px;">结束日期</td>
+            <td>
+            	<input id="end_p_work_time" type="text" name="end_p_work_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_p_work_time\')}'})" />
+            </td>
+        </tr>
+         <tr>
+            <td style="width:130px;">作业理论日期：</td>
+              <td style="width:60px;">开始日期</td>
+            <td>
+              <input id="begin_t_work_time" type="text" name="begin_t_work_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_t_work_time\')}'})" />
+            </td>
+            <td style="width:60px;">结束日期</td>
+            <td>
+            	<input id="end_t_work_time" type="text" name="end_t_work_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_t_work_time\')}'})" />
+            </td>
+        </tr>
+         <tr>
+            <td style="width:130px;">考试取数日期：</td>
+              <td style="width:60px;">开始日期</td>
+            <td>
+              <input id="begin_exam_time" type="text" name="begin_exam_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_exam_time\')}'})" />
+            </td>
+            <td style="width:60px;">结束日期</td>
+            <td>
+            	<input id="end_exam_time" type="text" name="end_exam_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_exam_time\')}'})" />
+            </td>
+        </tr>
+         <tr>
+	         <td>是否计算重考  </td>
+	         	<td>
+	             <select style="width:50px" type="text" class="input" id="retake" name="retake">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+	         </td>
+	         <td>
+	         </td>
+	     </tr>
+	     <tr>
+	          <td>是否计算初级职称</td>
+	          <td>
+	             <select style="width:50px" type="text" class="input" id="junior" name="junior">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+	         </td>
+         </tr>
+          <tr>
+	         <td>是否计算中级职称 </td>
+	         	<td>
+	             <select style="width:50px" type="text" class="input" id="medium" name="medium">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+	         </td>
+	         <td>
+	         </td>
+	     </tr>
+	      <tr>
+	         <td>是否计算会计证  </td>
+	         	<td>
+	             <select style="width:50px" type="text" class="input" id="accounting" name="accounting">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+	         </td>
+	         <td>
+	         </td>
+	     </tr>
+	       <tr>
+	         <td>是否同步老师信息 </td>
+	         	<td>
+	             <select style="width:50px" type="text" class="input" id="teacher" name="teacher">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+	         </td>
+	         <td>
+	         </td>
+	     </tr>
+    </table>
+    <hr/>
+    <table width="100%" id="standard-detail-query-table">
+        <tr>
+            <td >
+            	 科目编码
+             	<input name="q_subject_code"  class="input" id="q_subject_code" type="text" />
+            	科目名称
+                <input name="q_subject_name"  class="input" id="q_subject_name" type="text" />
+             	
+                <input type="button"  value="查询" onclick="Izb.controller.creditoperation.query_subject()">
+            </td>
+        </tr>
+    </table>
+    <table id="q-standard-creditoperation-detail"></table>
+</form>

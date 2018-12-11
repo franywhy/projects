@@ -1,0 +1,33 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+            <th >ID</th>
+            <th >用户ID</th>
+            <th >昵称</th>
+            <th >富豪等级</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action100">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){
+        var richLVObj = Izb.common.getLevel(data[i].finance && data[i].finance.coin_spend_total ? data[i].finance.coin_spend_total:0,true);
+		%>
+        <tr>
+            <td ><%=data[i]._id%></td>
+            <td ><%=data[i].user_id%></td>
+            <td ><%=data[i].nick_name%></td>
+            <td><img title="<%=richLVObj.title %>" alt="LV<%=richLVObj.level %>" src="<%=richLVObj.icon %>" /></td>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td >
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+			</td>
+			<%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

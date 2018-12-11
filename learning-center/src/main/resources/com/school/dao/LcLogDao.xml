@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.dao.LcLogDao">
+	<!--新增-->
+	<insert id="save" parameterType="com.school.entity.LcLogEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into lc_log
+	(
+		`user_id`, 
+		`operation`, 
+		`method`,
+		`data`,
+		`type`,
+		`business_id`,
+		`ip`, 
+		`create_time`
+	)
+	values
+	(
+		#{userId}, 
+		#{operation},
+		#{method},
+		#{data},
+		#{type},
+		#{businessId},
+		#{ip},
+		#{createTime} 
+	)
+	</insert>
+</mapper>

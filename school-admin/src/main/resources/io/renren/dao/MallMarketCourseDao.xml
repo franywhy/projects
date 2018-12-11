@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallMarketCourseDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		mall_market_course.id AS id , 
+		mall_market_course.parent_id AS parentId , 
+		mall_market_course.level AS level ,
+		mall_market_course.name AS name , 
+		mall_market_course.pic AS pic ,
+		mall_market_course.pc_url AS pcUrl , 
+		mall_market_course.app_url AS appUrl , 
+		mall_market_course.dr AS dr , 
+		mall_market_course.status AS status , 
+		mall_market_course.order_num AS orderNum ,
+		mall_market_course.create_time AS createTime ,
+		mall_market_course.create_person AS createPerson ,
+		mall_market_course.modify_time AS modifyTime ,
+		mall_market_course.modify_person AS modifyPerson ,
+		mall_market_course.product_id AS productId ,
+		mall_market_course.is_share AS isShare ,
+		mall_market_course.class_way AS classWay ,
+		mall_market_course.suitable_object AS suitableObject ,
+		uc.nick_name AS createName ,
+		um.nick_name AS modifyName ,
+		sp.product_name AS productName ,
+		mmc.name AS parentName 	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE mall_market_course.dr=0 	
+    	<if test="titleName != null and titleName.trim() != ''">
+	  	  and mall_market_course.name like concat('%',#{titleName},'%')
+	   </if>	
+    	<if test="productName != null and productName.trim() != ''">
+	  	  and sp.product_name like concat('%',#{productName},'%')
+	   </if>
+    	<if test="classifyName != null and classifyName.trim() != ''">
+	  	  and mall_market_course.name like concat('%',#{classifyName},'%')
+	   </if>
+    	<if test="parentName != null and parentName.trim() != ''">
+	  	  and mmc.name like concat('%',#{parentName},'%')
+	   </if>
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	FROM mall_market_course AS mall_market_course
+    	LEFT JOIN sys_user AS uc ON uc.user_id = mall_market_course.create_person
+    	LEFT JOIN sys_user AS um ON um.user_id = mall_market_course.modify_person
+    	LEFT JOIN sys_product AS sp ON sp.product_id = mall_market_course.product_id
+    	LEFT JOIN mall_market_course AS mmc ON mmc.id = mall_market_course.parent_id
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.MallMarketCourseEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/> 
+		AND mall_market_course.id = #{id}
+	</select>
+	<!--根据ID查询-->
+	<select id="queryObjectPOJO" resultType="io.renren.pojo.MallMarketCoursePOJO">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/> 
+		AND mall_market_course.id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.MallMarketCourseEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--课程分类分页列表-->
+	<select id="queryListClassifyPOJO" resultType="io.renren.pojo.MallMarketCoursePOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+			and mall_market_course.level = 1
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--课程分页列表-->
+	<select id="queryListPOJO" resultType="io.renren.pojo.MallMarketCoursePOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+			and mall_market_course.level = 2
+		ORDER BY mall_market_course.order_num ASC,mall_market_course.create_time DESC
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+			and mall_market_course.level = 2
+	</select>
+	<!--课程分类分页总数-->
+ 	<select id="queryTotalClassify" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+			and mall_market_course.level = 1
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MallMarketCourseEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_market_course
+		(
+			`parent_id`, 
+			`level`, 
+			`name`, 
+			`pic`,
+			`pc_url`, 
+			`app_url`, 
+			`dr`, 
+			`status`,
+			`order_num`, 
+			`create_time`,
+			`create_person`, 
+			`modify_time`,
+			`modify_person`, 
+			`product_id`,
+			`is_share`, 
+			`class_way`, 
+			`suitable_object`
+		)
+		values
+		(
+			#{parentId}, 
+			#{level}, 
+			#{name}, 
+			#{pic}, 
+			#{pcUrl},
+			#{appUrl}, 
+			0, 
+			#{status},
+			#{orderNum}, 
+			#{createTime}, 
+			#{createPerson},
+			#{modifyTime},
+			#{modifyPerson}, 
+			#{productId}, 
+			#{isShare}, 
+			#{classWay}, 
+			#{suitableObject} 
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.MallMarketCourseEntity">
+		update mall_market_course 
+		<set>
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="level != null">`level` = #{level}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="pcUrl != null">`pc_url` = #{pcUrl}, </if>
+			<if test="appUrl != null">`app_url` = #{appUrl}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="isShare != null">`is_share` = #{isShare}, </if>
+			<if test="classWay != null">`class_way` = #{classWay}, </if>
+			<if test="suitableObject != null">`suitable_object` = #{suitableObject}</if>
+		</set>
+		where
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.MallMarketCourseEntity">
+		UPDATE mall_market_course 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.MallMarketCourseEntity">
+		UPDATE mall_market_course 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	<select id="queryClassifyDownList" resultType="map">
+		select 
+			id as parentId,name as parentName
+		from 
+			mall_market_course
+		where
+			dr = 0 and level = 1 and status = 1
+	</select>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+	   update mall_market_course set status = #{status} where id in
+	   <foreach item="id" collection="list" open="(" separator="," close=")">
+	   	#{id}
+		</foreach>
+	</update>
+</mapper>

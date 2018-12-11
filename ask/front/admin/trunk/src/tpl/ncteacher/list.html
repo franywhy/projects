@@ -1,0 +1,70 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">昵称</th>
+        <th class="auto">真实姓名</th>
+        <th class="auto">头像</th>
+        <th class="num">NC_ID</th>
+        <th class="auto">性别</th>
+        <th class="auto">手机号码</th>
+        <th class="auto">邮箱</th>
+        <th class="auto">校区</th>
+        <th class="auto">状态</th>
+        <th class="longtime">注册时间</th>
+        <th class="longtime">最近登录时间</th>
+        <th class="longtime">同步时间</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto"><%=data[i].nick_name %></td>
+            <td class="auto"><%=data[i].name %></td>
+            <td class="auto"><%=data[i].pic %></td>
+            <td class="auto"><%=data[i].nc_id %></td>
+            <%if(data[i].sex){%>
+            <%if(data[i].sex==0){%>
+            <td class="auto">保密</td>
+            <%}%>
+            <%if(data[i].sex==1){%>
+            <td class="auto">男</td>
+            <%}%>
+            <%if(data[i].sex==2){%>
+            <td class="auto">女</td>
+            <%}}else{%>
+            <td class="auto">保密</td>
+            <%}%>
+            <td class="auto"><%=data[i].telephone %></td>
+            <td class="auto"><%=data[i].email %></td>
+            <td class="auto"><%=data[i].school_code %></td>
+            <%if(data[i].status){%>
+            <%if(data[i].status==0){%>
+            <td class="auto">正常</td>
+            <%}%>
+            <%if(data[i].status==1){%>
+            <td class="auto">冻结</td>
+            <%}}else{%>
+            <td class="auto">正常</td>
+            <%}%>
+            <td class="longtime"><%=new Date(data[i].create_time).toLocaleString() %></td>
+            <td class="longtime"><%=new Date(data[i].last_login).toLocaleString()%></td>
+            <td class="longtime"><%=new Date(data[i].syn_time).toLocaleString()%></td>
+            <td  class="action action150">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详情</button>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">编辑</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.freeze('<%=data[i]._id%>','<%=data[i].status%>')">冻结/解冻</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

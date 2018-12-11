@@ -1,0 +1,188 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">学员</th>
+        <th class="auto">订单编号</th>
+        <th class="auto">订单名称</th>
+        <th class="auto">订单金额</th>
+        <th class="auto">订单状态</th>
+        <th class="auto">线上付款方式</th>
+        <th class="auto">支付宝交易号</th>
+        <th class="auto">支付方式</th>
+        <th class="auto">实际支付金额</th>
+        <th class="auto">支付状态</th>
+        <th class="auto">支付时间</th>
+        <th class="auto">优惠方案</th>
+        <th class="auto">优惠金额</th>
+        <th class="auto">赠送积分</th>
+        <th class="auto">使用积分</th>
+        <th class="auto">校区NCID</th>
+        <th class="auto">学生期望上课时间</th>
+        <th class="auto">是否取消用户操作</th>
+        <th class="auto">创建时间</th>
+        <th class="auto">是否删除</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto">
+                <%if(data[i].userId){%>
+                <%=data[i].userId %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].orderno){%>
+                <%=data[i].orderno %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].orderName){%>
+                <%=data[i].orderName %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].totalMoney){%>
+                <%=data[i].totalMoney %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].status==0){%>
+                有效
+                <%}else if(data[i].status==1){%>
+                取消
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].payOnLineType==0){%>
+                无
+                <%}else if(data[i].payOnLineType==1){%>
+                支付宝PC
+                <%}else if(data[i].payOnLineType==2){%>
+                微信PC
+                <%}else if(data[i].payOnLineType==3){%>
+                快钱PC
+                <%}else if(data[i].payOnLineType==4){%>
+                支付宝网银PC
+                <%}else if(data[i].payOnLineType==11){%>
+                支付宝H5
+                <%}else if(data[i].payOnLineType==12){%>
+                微信H5
+                <%}else if(data[i].payOnLineType==13){%>
+                快钱H5
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].alipayTradeNo){%>
+                <%=data[i].alipayTradeNo %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].payType==0){%>
+                在线支付
+                <%}else if(data[i].payType==1){%>
+                分期付款
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].payMoney){%>
+                <%=data[i].payMoney %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].payStatus==0){%>
+                未支付
+                <%}else if(data[i].payStatus==1){%>
+                待支付
+                <%}else if(data[i].payStatus==2){%>
+                支付成功
+                <%}%>
+            </td>
+            <td class="longtime">
+                <%if(data[i].payTime){%>
+                <%=new Date(data[i].payTime).toLocaleString() %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].preferenceScheme==0){%>
+                不使用优惠
+                <%}else if(data[i].preferenceScheme==1){%>
+                积分
+                <%}else if(data[i].preferenceScheme==2){%>
+                优惠券
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].favorableMoney){%>
+                <%=data[i].favorableMoney %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].addScore){%>
+                <%=data[i].addScore %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].useIntegral){%>
+                <%=data[i].useIntegral %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].ncSchoolId){%>
+                <%=data[i].ncSchoolId %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].hopeClassTimeType){%>
+                <%=data[i].hopeClassTimeType %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].isCancel==0){%>
+                否
+                <%}else if(data[i].isCancel==1){%>
+                是
+                <%}%>
+            </td>
+            <td class="longtime">
+                <%if(data[i].createTime){%>
+                <%=new Date(data[i].createTime).toLocaleString() %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].dr==0){%>
+                否
+                <%}else if(data[i].dr==1){%>
+                是
+                <%}%>
+            </td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i].id%>')">详细</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

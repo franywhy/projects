@@ -1,0 +1,263 @@
+
+/*-------------------------------------电子协议书------------------------------------------------------*/
+.agreement { width: 1080px; height: auto; margin: 30px auto 60px;}
+.agreement_top { width:1080px; height:60px; text-align: center; border-bottom: 2px solid #E5E5E5; float: left}
+.agreement_top h3 { font-size:23px; font-family:'Arial'}
+
+.agreement_name { width: 848px; height: auto; float: left; background-color:#fff}
+.agreement_name_nr { width:370px; height:185px; margin-left: 50px;background:url(/images/agreement.jpg)no-repeat center center; float: left}
+.agreement_name_nr p { width: 385px; margin:50px 0 0 28px;font-size:14px; color:#666; float: left;}
+.agreement_name_nr p input {width: 250px; border:0; border-bottom:1px solid #ABADB3}
+.agreement_name_nr span { width:410px; margin-top: 5px; font-size:14px; color:#666;display:inline-block; }
+.agreement_name_nr span input {width: 250px; border:0; border-bottom:1px solid #ABADB3}
+.agreement_bg { width: 793px; height:auto; margin-top:10px; float: left; overflow-x:hide;}
+.agreement_cont { width: 778px; height: auto; padding: 20px 0px 20px 15px; float: left}
+.agreement_cont_nr { width: 778px; margin-top: 35px;  float: left}
+.agreement_cont_nr p {font-size:14px; line-height:30px; display: inline-block;}
+.agreement_cont_nr p span { margin-left:20px;font-size:13px; font-family:'Arial';}
+.agreement_bottom { width: 310px; height: auto; margin-top: 75px; float: left}
+.agreement_bottom p { width: 500px;font-size:13px; color:#333;font-family:'Arial'; float: left;}
+.agreement_bottom p input { border:0; border-bottom:1px solid #ABADB3; background-color:#F9F9F9;}
+.agreement_bottom font { margin-top:15px;font-size:12px; font-family:'Arial'; float: left; }
+.agreement_bottom font span { border-bottom: 1px solid #333}
+.agreement_cont_nr .nav_table { width:580px;}
+.agreement_cont_nr .nav_table table {width:580px;}
+.agreement_cont_nr .nav_table td { text-align: center}
+.agreement_cont_nr .nav_table th { text-align: center }
+
+/*---------------------------------------新手指南-------------------------------*/
+.help_center { margin-top: 30px; margin-bottom:30px; background:url(../images/content_L_bg.png) repeat-y; float: left}
+.help_L { width: 262px; height:auto;float: left}
+.help_R { width: 916px; height: auto; margin: 0 0 100px 20px; float: left}
+
+.help { width: 262px; height: auto; float: left}
+.help p { width: 261px; height:40px; line-height: 40px; background-color:#E3DDD2; float: left}
+.help p a { font-size:21px; color:#333 }
+.help p a:hover { color:#F99A1B}
+.help dl {width: 262px; height: auto; border-bottom: 1px solid #FFF; margin-top:1px;float: left}
+.help dl dt { width:242px; height:38px; line-height:38px; padding-left: 20px; font-size: 17px; border-bottom:1px solid #EEEEEE; float: left}
+.help dl dd { width: 202px; height:38px; line-height: 38px; border-bottom:1px solid #FFF; margin-bottom:1px; padding-left:60px;float: left}
+.help dl dd a { font-size:15px;}
+.help dl dd a.cur { color:#F99A1B}
+.help dl dd a:hover { color:#f08200}
+.guide { width: 916px; height: auto; float: left}
+.guide_top { width: 916px; height:38px; background-color:#F8F8F8; float: left}
+.guide_top p { width: auto; height: 38px; line-height: 38px; font-size: 20px; color:#343434; margin-left: 20px; }
+.guide_bottom { width: 916px; height: auto; float: left}
+.guide_bottom h3 { width: 916px; float: left; margin: 20px 0 0 20px;font-weight:normal; font-size:15px;}
+.guide_Af { width: 916px; height: auto; margin-top: 30px;float: left}
+.guide_Af p { float: left;width: 880px; margin-left: 20px; font-size:15px; color:#343434}
+.guide_Af span {width: 880px;margin: 10px 0 0 20px; font-size:15px; color:#343434; float: left}
+.guide_Af img {  margin: 30px 0 0 20px;float: left; }
+.guide_Bf { width: 916px; height: auto; margin-top: 30px;float: left}
+.guide_Bf p { float: left; margin-left: 20px; font-size:15px; color:#343434}
+.guide_Bf img { margin-left: 20px; float: left; }
+
+/*--------------------------------------------------售后服务-------------------------------------*/
+.guide_bottom ul { width: 720px; height: auto; float: left;}
+.guide_bottom ul li { width: 700px; height: auto; border-bottom:2px solid #F8F8F8; border-right:2px solid #F8F8F8; margin: 35px 0 0 20px; padding-bottom:40px;float: left; }
+.guide_bottom ul li p {width: 555px; font-size:15px; font-weight: bold; font-family:'微软雅黑'; color:#666; margin-bottom: 25px; float: left; }
+.guide_bottom ul li span { margin-left:45px; width: 555px;line-height:25px;  font-size:15px; color:#343434; font-family:'微软雅黑'; float: left}
+.guide_bottom ul li font { width: 555px; font-size:15px; font-family:'微软雅黑';  margin-bottom: 25px; float: left; }
+.guide_bottom ul li a { margin-left:20px; width: 555px;line-height:25px;  font-size:15px; color:#343434; font-family:'微软雅黑'; float: left}
+
+/*-------------------------------------------------------关于我们---------------------------------*/
+.about { width: 720px; height: auto;margin-top: 30px;  float: left}
+.about_nr { width: 720px; float: left; margin:0 0 50px 20px; border-bottom:2px solid #F8F8F8; border-right:2px solid #F8F8F8;padding-bottom:50px;}
+.about_nr p {  width:555px;margin-left:10px;  font-size:15px; font-weight: bold; color:#666; font-family:'yahei';float: left;}
+.about_nr p b { margin-right: 20px;}
+.about_nr span {  width: 580px;line-height:25px;  margin: 20px 0 0 42px;font-size:15px; color:#343434; float: left }
+.about_nr ul { width: auto; height: 70px; margin: 35px 0 0 42px; float: left;}
+.about_nr ul li { width: auto; height: 70px; background-color: #F1F1F1; margin-right: 2px; padding: 0 20px 0 15px; float: left}
+.about_nr ul li .sl { font-size: 14px; margin-top: 10px;  text-align: center; color:#858E93;}
+.about_nr ul li .name{ font-size: 12px; margin-top: 10px;text-align: center;   color:#858E93;}
+.about_nr .weibo { float: left}
+.about_nr .weibo p { float: left; width: auto;font-size: 15px; font-weight: normal; margin:25px 0 0 35px}
+.about_nr .weibo a { margin:24px 0 0 15px; font-size: 15px; color:#0372fc; float: left; }
+.about_nr .weibo a:hover {color:#f08200 }
+.about_nr .letter { width: 560px; height: 222px;margin: 30px 0 0 40px; float: left}
+
+/*------------------------------------------常见问题--------------------------*/
+.problems {  width: 896px; float: left; margin: 30px 0 0 20px; font-size:15px;}
+.problems p { float: left; width: 100px; font-weight: bold;font-family: '微软雅黑';color: #666;; margin-top:2px;}
+.problems span { width: 780px; margin-left:5px; float: left;}
+.problems font { float: left; margin-left:105px;}
+
+/*----------------------------------------考试自测--------------------------------------*/
+.self { width: 720px; height: auto; float: left; }
+.self  li { width: 700px; height: auto; border-bottom:2px solid #F8F8F8; border-right:2px solid #F8F8F8; margin: 35px 0 0 20px; padding: 0 30px 40px 0;  font-size:15px; color:#343434;float: left; }
+
+/*----------------------------------------------忘记密码--------------------------------------------------*/
+.guide_bottom .forgot { width: 720px; height: auto; float: left; }
+.guide_bottom .forgot li { width: 700px; height: auto; margin: 25px 0 0 20px; padding:0px;  border-bottom:none; border-right:none; font-size:15px; color:#343434;float: left; }
+.guide_bottom .back { float: left; margin: 30px 0 0 20px;}
+.guide_bottom .back p { float: left;font-size:15px; color:#343434;}
+.guide_bottom .back span { float: left;font-size:15px; color:#343434;}
+
+/*-------------------------------------------其他问题------------------------------------*/
+.blems { width: 898px; height: auto;  margin: 30px 0 0 20px; float: left;  }
+.blems h4 { width: 555px;font-size: 15px;font-weight: bold;font-family: '微软雅黑';color: #666;float: left;}
+.blems p { margin-top: 20px; float: left; }
+.blems span { float: left}
+
+/*----------------------------------优惠政策--------------------------------------*/
+.guide_bottom .rential { width: 896px; height: auto; margin: 25px 0 0 20px;float: left; }
+.guide_bottom .rential p {width: 896px; font-size:15px; font-weight: bold; font-family:'微软雅黑'; color:#666; margin-bottom: 25px; float: left; }
+.guide_bottom .rential span { margin-left:45px; width: 555px;line-height:25px;  font-size:15px; color:#343434; font-family:'微软雅黑'; float: left}
+.guide_bottom .rential img { margin-left: 20px; float: left; }
+
+/*-----------------------------------------使用协议------------------------------*/
+.guide_bottom .agreem { width: 896px; height: auto; margin: 25px 0 0 20px;float: left; }
+.guide_bottom .agreem p {width: 896px; font-size:15px;font-family:'微软雅黑'; color:#000;float: left; }
+.guide_bottom .agreem span { width: 896px;line-height:25px;  font-size:15px; color:#000; font-family:'微软雅黑'; float: left}
+
+/*-------------------------------------积分计划----------------------------------------*/
+.gral { width: 890px; height: auto; margin-left:20px; float: left}
+.gral_nr { width: 890px; height: auto; margin-top: 30px; float: left;}
+.gral_nr h3 { font-size:19px; font-family:'Arial'; margin-bottom:10px;}
+.gral_nr a { display: inline-block; font-size:15px; color:#333; margin-bottom: 15px;}
+.gral_nr .title { width: 890px; font-size:15px;  font-weight: bold; color:#343434; font-family:'Arial'; float: left }
+.gral_nr .privilege { width: 890px; height: auto; float: left}
+.gral_nr .privilege p { width: 85px;font-size:15px;  font-weight: bold; color:#343434; font-family:'Arial'; float: left}
+.gral_nr .privilege span { width: 800px; font-size:15px; margin-bottom: 20px; float: left }
+.gral_nr .privilege .pes {width: 890px;font-size:15px;  font-weight: bold; color:#343434; font-family:'Arial'; float: left }
+.gral_nr .privilege .tity { width: 890px; text-align: center; margin-bottom: 15px; float: left}
+
+.guiding { width: 890px; height: auto;text-align: center; float: left;}
+.guiding .hange { width: 890px;  font-size: 15px; color:#343434; float: left} 
+.guiding  img { margin-top: 10px;}
+
+.tablees { width: auto; min-height:30px; margin: 10px 0 30px 0; border:1px solid #CCC; float: left}
+.tablees tr { border:1px solid #CCC; height:30px; }
+.tablees td { width: 135px; height:45px; text-align: center; color: #343434; font-size: 14px;border:1px solid #CCC;}
+.tablees td.td1 { width: 150px; padding-top: 15px;text-align: center;}
+.tablees td.td1 .level { width: 180px;text-align: center;font-size:15px;  font-weight: bold; color:#343434; font-family:'Arial';}
+.tablees td .level {font-size:15px;  font-weight: bold; color:#343434; font-family:'Arial'; }
+.tablees td.td2 .level {width: 180px; font-weight:normal}
+.tablees td .sign { width: 180px; text-align: center;float: left; border-bottom: 1px solid #CCC}
+.tablees td .sign1{ border-bottom:none }
+.tablees td.td3 { width: 400px}
+.tablees td.td4 { width: 270px}
+.tablees td a:hover { color:#f02800}
+/*------------------------------------------------学习地图-----------------------------------------*/
+.map { width:916px; height: auto; float: left}
+.map p { width: 890px;font-size: 15px;font-weight: bold;color: #343434;font-family: 'Arial';float: left;}
+.map span {float: left; margin-top: -20px;}
+/*-----------------------------------------视频播放----------------------------------------*/
+.playback { width: 600px; height: 450px; border:1px solid #CCC; float: left; position: relative }
+.playback_img { width: 100%; height: 100%; }
+.playback_img .loading { position: absolute; left:45%; top:45%;}
+.playback_top { width: 600px; height: 30px;position:absolute; filter:Alpha(opacity=50); background:#6F736C;top:0px;left:0px; z-index:9999}
+.playback_top .truc { position:absolute; left:0px; top:0px;}
+.playback_top .truc img {width:30px; height: 30px; margin:0px}
+.playback_top img { margin: 5px 10px 0 0;float: right}
+.playback_bottom { position: absolute; left:45%; top:38%;}
+.play_tm_L {width: auto; height: 30px; line-height: 30px; margin: 0px 0 0 35px; float: left;table-layout: fixed;word-break: keep-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+.play_tm_L p { width:280px; float: left;  font-size:16px;font-family:'微软雅黑'; font-weight: bold; color:#FFF;table-layout: fixed;word-break: keep-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+.play_tm_L p span { color:#F99A1B;font-family:'微软雅黑'; margin-left: 10px;;}
+.play_tm_R {width: auto; height: 30px; line-height:30px; margin-right:10px; float: right }
+.play_tm_R p { float: left; font-size:14px; background:url(../images/reading_07.png) no-repeat left 10px; padding-left:18px;color:red}
+.play_tm_R del { float: left; font-size:12px; margin:2px 0 0 10px;}
+.play_tm_R span { width:90px; height: 30px; line-height:30px; text-align:center; float: left; background-color:#F99A1B; margin: 0px 0 0 10px;}
+.play_tm_R span a { font-size:18px; color:#FFF;font-family:'Arial';}
+.play_tm_R span:hover { background-color:#F08200}
+/*-------------------------------------------------问卷调查-----------------------------------------------*/
+.ques { width: 950px; height: auto; margin: 0 auto 90px;}
+.ques_top { width: 950px; height: 30px; margin-top:40px; border-bottom: 2px solid #E6E6E6; float: left}
+.ques_top p { float: left; font-size: 24px; font-family: "simhei",Arial,Helvetica,sans-serif;  font-weight: bold; color:#2F3B49}
+.ques_top span { float: right; font-size:12px; margin-top: 10px; color:#888;}
+.ques_bottom { width: 950px; height: auto; margin-top: 30px; background-color:#F2F2F2; border:1px solid #CCC; float: left; position: relative}
+.ques_bottom .bd { padding: 10px 10px 30px;}
+.question-wrap { padding: 0 10px;}
+.question_intro { width: 900px; height: auto; margin-bottom: 20px;display: inline-block}
+.question_intro span { color:red}
+.question-item { width: 100%; padding: 10px 0;margin-top: -2px;overflow: visible; background: url(../images/line.png)repeat-x left bottom; float: left}
+.ques_bottom .bd sup { color: red;}
+.ques_bottom .bd font { font-size:16px; font-family:'yahei'; font-weight: bold; color:#343434}
+.question-content { padding: 10px 20px 0;}
+.question-content div { min-width: 36px;zoom: 1;}
+.question-content label { display: block;padding: 8px 0;float: left; font-size:13px; color:#333;font-family:'yahei'; width: 100%;cursor: default;position: relative;}
+.question-content label input { margin-right: 5px;}
+.question-content label input.testes { width:200px; height: auto; border:none; border-bottom:1px solid #CCC; background-color:#F2F2F2;}
+.question-content label input.test { width:400px; border:1px solid #ABADB3; background-color:#EBEBE4; position: absolute; left: 185px;}
+.question-content label textarea { width: 400px; height: 110px; background-color:#FFF; color:#888; font-size: 14px;}
+.confirmimg { width:100%; height: auto; padding-bottom: 20px; float: left}
+.confirmimg p {width:100%; display: inline-block; margin-top:20px;}
+.confirmimg span {width:100%;display: inline-block; margin-top:15px; }
+.confirmimg input { width:250px; height: auto; border:none; border-bottom:1px solid #CCC; background-color:#F2F2F2;padding-left:10px; }
+.question-wrap .sub { width: 950px; text-align: center;position: absolute; left: 0px; bottom: -50px; }
+.question-wrap .sub img {cursor:pointer; }
+
+/*---------------------------------------------反馈-----------------------------------------------------*/
+.feed { width: 1000px; height: auto; margin: 20px auto 70px;}
+.feed_top { width: 1000px; height: 50px; background-color: #F8F8F8; margin-bottom: 20px; float: left}
+.feed_top p { float: left; width: auto; height: 50px; line-height: 50px; font-size: 20px; color: #4FA3FF; margin-left:20px;}
+.feed_bottom { width: 1000px; height: auto; background-color: #F8F8F8; padding-bottom: 20px; float: left}
+.feed_bottom h4 { font-weight: normal; margin-left:20px; font-size: 16px; margin-bottom: -10px; padding-top: 20px;color:#333;}
+.feed_nr { float: left; width: 1000px; margin-top: 30px;}
+.feed_nr p {float: left; margin: 20px 0px 0px 20px; font-size:15px; color:#333}
+.feed_nr p b { color: #ffad51;}
+.feed_nr textarea {width: 390px;height: 180px;float: left;margin:22px 0px 0 25px;border: 1px solid #EEEEEE;FONT-SIZE: 15PX;color: #999;padding: 10px 0 0 10px;}
+.feed_bottom .feed_bt label {display: inline-block;width: 98px;height: auto; margin-left: 20px; font: 16px/2.2 Arial,"Microsoft Yahei","Hiragino Sans GB",sans-serif;color: #333; }
+.feed_bottom .feed_bt { width: 1000px; float: left; margin-top: 30px;}
+.feed_bottom .feed_bt b { color: #ffad51;}
+.feed_bottom .feed_bt input { width: 390px;height: 40px;background-color: #FFF;border: 1px solid #EEEEEE;font-size: 16px;color: #999;padding-left: 10px;}
+.feed_bottom .feed_bt span { font-size:14px; color:#333}
+.feed_bottom .sub { width: 79px; height: 24px; line-height: 24px; text-align: center;background: url(../images/sets_task.png) no-repeat left center; margin: 25px 0 0 120px; float: left;}
+.feed_bottom .sub a {color:#f99a1b}
+.feed_bottom .sub a:hover { color:#F08200}
+/*-------------------------------------邀请好友---------------------------*/
+.invitation textarea { width: 500px; height: 80px; margin: 55px 0 0 50px; border: 1px solid #E1E4E6; font-size:16px; color:#999; float: left;}
+.invitation  p { width: 138px; height: 45px; line-height: 45px; text-align: center; margin: 35px 0 0 256px; background-color:#2563CA; float: left}
+.invitation  p a { display: inline-block;width: 138px;height: 45px;color: #FFF; font-size:21px;}
+.invitation  p:hover { background-color: #F08200}
+/*-------------------------------------------------------------课程卡--------------------------------------------*/
+.class_card { width: 916px; height: auto; margin:20px 0 150px 0; float:left}
+.class_card .tiva { width:160px; height: 43px; line-height:43px; text-align: center; background: url(../images/class_card_02.png) no-repeat left center; margin-bottom:20px; float: left}
+.class_card .tiva a { color:#FFF}
+.card_nrs { width:916px;height: auto;  border:1px solid #CCC; background-color:#FCFCFC; margin-bottom:10px; padding-bottom:10px;float: left}
+.card_nrs_L { width: 250px; height:auto; float: left}
+.card_nrs_L ul { float: left; margin:15px 0 0 30px; padding-bottom: 10px}
+.card_nrs_L ul li { width:415px; line-height:20px;}
+.card_nrs_L ul li a { font-size:13px;color:#333;font-family:'Arial';}
+.card_nrs_R { width: 666px; height:auto; float:left}
+.card_nrs_R_deta { width: 666px; height:auto; float: left;}
+.card_nrs_R_deta span { width: 165px;float: left; margin:15px 0 0 20px; font-size:12px; color:#4FACF3}
+.card_nrs_R_deta p {  width:158px;line-height:20px; float: left; margin-top:12px; margin-left:-9px; font-size:16px;font-family:'Arial'; font-weight: bold; color:#F99A1B}
+.card_nrs_R_deta font { float: left; width: 90px; margin:10px 70px 0 0; line-height:20px; font-size:12px;}
+.card_nrs_R_deta .xue { float: left; width: 60px; height: 30px; text-align: center; line-height:30px; margin-top:10px; border: 1px solid #4FACF3; font-size:12px;}
+.card_nrs_R_deta .xue a { display: inline-block;width: 60px; height: 30px; color:#4FACF3}
+.card_nrs_R_deta .xue:hover { border:1px solid #F08200}
+.card_nrs_R_deta .xue a:hover { color:#F08200}
+
+/*-----------------------------------------------------错误404--------------------------------------------------------*/
+.error { width:600px; height: 300px; border: 2px solid #E0E0E0;position: absolute; top: 20%; left: 25%}
+.error_top { width: 570px; float: left; margin: 25px 0 0 30px;}
+.error_top .logo{ float: left; margin:-10px 20px 0 0;}
+.error_bottom { width: 345px; height: auto; float: left; margin:0px 0 0 272px;}
+.error_bottom p {width: 345px; float: left; font-size:30px; color:red }
+.error_bottom  span {width: 345px; float: left; font-size:15px; color:#999; margin-top:2px;}
+.error_bottom input {width: 240px;height: 37px;line-height: 37px; PADDING-LEFT:10PX;border: solid 1px #65aade;color: #999;font-size: 13px;font-family: Microsoft Yahei,"arial","verdana","Hiragino Sans GB",sans-serif; margin-top:20px; float: left}
+.error_bottom .search_btn {float: left;width: 50px;height: 42px; margin-top:18px;background: url(../images/search_btnbg.jpg) 0 center no-repeat;}
+.error_bottom font { float: left; margin-top:10px; background: url(../images/header_01.png) no-repeat left center; padding-left: 20px;}
+.error_bottom font a { font-size:14px; color:#888}
+.error_bottom font a:hover { color:#F08200}
+
+.ability { width:600px; height:auto; margin: 0 auto}
+
+/*------------------------------------------------网站地图-------------------------------------------------*/
+.sitemap { width:1200px; height:auto; border:2px solid #FFC513; margin:10px 0px 50px 0px; float: left}
+.research { width:1200px; height: auto; background: #eff6fc url(../images/research.png)repeat-y;float: left}
+.research .title { width:20px; height: auto; padding:10px 15px; font-size:20px; color:#FFF; float: left}
+.research_nr { width: 1133px; margin:10px 0 0 15px; float: left}
+.research_nr .name {width:1133px; padding-bottom:8px; border-bottom:1px solid #666; float: left }
+.research_nr .cent {width:1133px; margin-bottom:10px; float: left }
+.research_nr .cent p {width:1133px; float: left}
+.research_nr .cent p a { color:#666; font-weight: bold; font-size:14px; }
+.research_nr .cent p a:hover { color:#f08200}
+.research_nr .cent ul {width:1133px; float: left;}
+.research_nr .cent ul li { float: left;margin: 0 15px 0 0;height: 24px;line-height: 24px;padding: 5px 30px 5px 0px;}
+.research_nr .cent ul li a { color:#666; font-size:14px;}
+.research_nr .cent ul li a:hover { color:#f08200}
+.mt5 { margin-top:5px;}
+

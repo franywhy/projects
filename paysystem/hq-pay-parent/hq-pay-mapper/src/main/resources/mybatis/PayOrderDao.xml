@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hqjy.pay.mapper.PayOrderDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		pay_order.id AS id , pay_order.order_no AS orderNo
+		,pay_order.terrace AS terrace,
+		pay_order.order_name AS orderName ,
+		pay_order.state AS state ,
+		pay_order.create_time AS createTime ,
+		pay_order.trade_no AS tradeNo ,
+		pay_order.trade_money AS tradeMoney ,
+		pay_order.create_order_ip AS createOrderIp ,
+		pay_order.order_timestamp
+		AS orderTimestamp,
+		pay_order.order_pay_succeed_time AS
+		orderPaySucceedTime ,
+		pay_order.pay_order_no AS payOrderNo,
+		course_major AS courseMajor,
+		edu_level AS eduLevel,
+		class_type_name AS classTypeName,
+		course_price AS coursePrice,
+		discount AS discount,
+		current_pay_money AS currentPayMoney,
+		over_pay_money AS overPayMoney
+	</sql>
+	<sql id="base_update">
+		<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+		<if test="orderName != null">`order_name` = #{orderName}, </if>
+		<if test="state != null">`state` = #{state}, </if>
+		<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+		<if test="createTime != null">`create_time` = #{createTime}, </if>
+		<if test="tradeNo != null">`trade_no` = #{tradeNo}, </if>
+		<if test="tradeMoney != null">`trade_money` = #{tradeMoney}, </if>
+		<if test="createOrderIp != null">`create_order_ip` = #{createOrderIp}, </if>
+		<if test="orderTimestamp != null">`order_timestamp` = #{orderTimestamp}, </if>
+		<if test="orderPaySucceedTime != null">`order_pay_succeed_time` = #{orderPaySucceedTime}, </if>
+		<if test="payOrderNo != null">`pay_order_no` = #{payOrderNo},</if>
+		<if test="terrace != null">`terrace` = #{terrace},</if>
+		<if test="courseMajor != null ">`course_major` = #{courseMajor},</if>
+		<if test="eduLevel != null">`edu_level` = #{eduLevel},</if>
+		<if test="classTypeName != null">`class_type_name` = #{classTypeName},</if>
+		<if test="coursePrice != null">`course_price` = #{coursePrice},</if>
+		<if test="discount != null">`discount` = #{discount},</if>
+		<if test="currentPayMoney !=null">`current_pay_money` = #{currentPayMoney},</if>
+		<if test="overPayMoney != null">`over_pay_money` = #{overPayMoney},</if>
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		FROM pay_order AS pay_order
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		ORDER BY id DESC
+	</sql>
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="com.hqjy.pay.PayOrderEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND pay_order_no = #{payOrderNo}
+	</select>
+	<!-- 判断订单是否支付成功 -->
+	<select id="judgeOrderPaySucceed" parameterType="com.hqjy.pay.PayOrderEntity"
+		resultType="com.hqjy.pay.PayOrderEntity">
+		SELECT
+		<include refid="base_column" />
+		FROM `pay_order` WHERE order_no=#{orderNo} AND
+		state=0 AND
+		terrace=#{terrace} and pay_order_no=#{payOrderNo}
+	</select>
+	<!--判断下订单订单号是否存在 -->
+	<select id="queryOrderNo"
+		resultType="com.hqjy.pay.PayOrderEntity">
+		SELECT
+		<include refid="base_column" />
+		FROM `pay_order` WHERE order_no=#{orderNo} and state=#{state}
+	</select>
+
+	<!--新增 -->
+	<insert id="save" parameterType="com.hqjy.pay.PayOrderEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into pay_order
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="orderNo != null">`order_no`,</if>
+			<if test="terrace != null">`terrace`, </if>
+			<if test="orderName != null">`order_name`,</if>
+			<if test="state != null">`state`,</if>
+			<if test="createTime != null">`create_time`,</if>
+			<if test="tradeNo != null">`trade_no`,</if>
+			<if test="tradeMoney != null">`trade_money`,</if>
+			<if test="createOrderIp != null">`create_order_ip`,</if>
+			<if test="orderTimestamp != null">`order_timestamp`,</if>
+			<if test="orderPaySucceedTime != null">`order_pay_succeed_time`,</if>
+			<if test="payOrderNo != null">`pay_order_no`,</if>
+			<if test="courseMajor != null ">`course_major`,</if>
+			<if test="eduLevel != null">`edu_level`,</if>
+			<if test="classTypeName != null">`class_type_name`,</if>
+			<if test="coursePrice != null">`course_price`,</if>
+			<if test="discount != null">`discount`,</if>
+			<if test="currentPayMoney !=null">`current_pay_money`,</if>
+			<if test="overPayMoney != null">`over_pay_money`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="orderNo != null">#{orderNo},</if>
+			<if test="terrace != null">#{terrace}, </if>
+			<if test="orderName != null">#{orderName},</if>
+			<if test="state != null">#{state},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="tradeNo != null">#{tradeNo},</if>
+			<if test="tradeMoney != null">#{tradeMoney},</if>
+			<if test="createOrderIp != null">#{createOrderIp},</if>
+			<if test="orderTimestamp != null">#{orderTimestamp},</if>
+			<if test="orderPaySucceedTime != null">#{orderPaySucceedTime},</if>
+			<if test="payOrderNo != null">#{payOrderNo},</if>
+			<if test="courseMajor != null ">#{courseMajor},</if>
+			<if test="eduLevel != null">#{eduLevel},</if>
+			<if test="classTypeName != null">#{classTypeName},</if>
+			<if test="coursePrice != null">#{coursePrice},</if>
+			<if test="discount != null">#{discount},</if>
+			<if test="currentPayMoney !=null">#{currentPayMoney},</if>
+			<if test="overPayMoney != null">#{overPayMoney},</if>
+		</trim>
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="com.hqjy.pay.PayOrderEntity">
+		update pay_order
+		<set>
+			<include refid="base_update"></include>
+		</set>
+		<include refid="base_where" />
+		AND pay_order_no = #{payOrderNo}
+	</update>
+	<update id="updatePayOrderNo" parameterType="com.hqjy.pay.PayOrderEntity">
+		update pay_order
+		<set>
+			<include refid="base_update"></include>
+		</set>
+		<include refid="base_where" />
+		AND order_no = #{orderNo}
+	</update>
+</mapper>

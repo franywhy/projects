@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningcenter.school.dao.SysProductDao">
+	<select id="queryByclassplanLiveId" resultType="com.hq.learningcenter.school.entity.SysProductEntity">
+		SELECT sys_product.*
+		FROM sys_product 
+		JOIN course_classplan ON course_classplan.product_id = sys_product.product_id
+		JOIN course_classplan_lives ON course_classplan_lives.classplan_id = course_classplan.classplan_id
+		WHERE course_classplan_lives.classplan_live_id = #{classplanLiveId}
+	</select>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysLogDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		sys_log.id AS id , 
+		sys_log.username AS username ,
+		sys_log.operation AS operation , 
+		sys_log.method AS method ,
+		sys_log.params AS params ,
+		sys_log.execution_time AS executionTime ,
+		sys_log.ip AS ip ,
+		sys_log.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM sys_log AS sys_log
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.SysLogEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.SysLogEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		where 1 = 1
+		<if test="username != null and username.trim() != ''">
+			and sys_log.username like concat('%',#{username},'%')
+		</if>
+		<if test="operation != null and operation.trim() != ''">
+			and sys_log.operation like concat('%',#{operation},'%')
+		</if>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		where 1 = 1
+		<if test="username != null and username.trim() != ''">
+			and sys_log.username like concat('%',#{username},'%')
+		</if>
+		<if test="operation != null and operation.trim() != ''">
+			and sys_log.operation like concat('%',#{operation},'%')
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.SysLogEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into sys_log
+	(
+		`username`, 
+		`operation`, 
+		`method`, 
+		`params`,
+		`execution_time`, 
+		`ip`, 
+		`create_time`
+	)
+	values
+	(
+		#{username}, 
+		#{operation},
+		#{method}, 
+		#{params}, 
+		#{executionTime}, 
+		#{ip},
+		#{createTime} 
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.SysLogEntity">
+		update sys_log 
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="operation != null">`operation` = #{operation}, </if>
+			<if test="method != null">`method` = #{method}, </if>
+			<if test="params != null">`params` = #{params}, </if>
+			<if test="executionTime != null">`execution_time` = #{executionTime}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM sys_log 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM sys_log 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

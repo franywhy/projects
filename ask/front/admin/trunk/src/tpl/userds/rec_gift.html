@@ -1,0 +1,35 @@
+<!--消费记录|礼物记录-->				
+<table width="100%" class="listTable tablesorter">
+    <thead>
+        <tr>
+            <th class="longtime">时间</th>
+            <%if(!params._id){%>
+            <th class="auto">用户Id</th>
+            <th class="auto">昵称</th>
+            <%}%>
+
+            <th class="auto">房间ID</th>
+            <th class="auto">赠送人</th>
+            <th class="auto">礼物名称</th>
+            <th class="auto">数量</th>
+            <th class="auto">支付星币</th>
+        </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+		<td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+        <%if(!params._id){%>
+        <td class="auto"><a href="javascript:Izb.controller.user.show('<%=data[i].session._id%>');"><%=data[i].session.data.xy_star_id%></a></td>
+        <td class="auto"><%=data[i].session.data.xy_nick%></td>
+        <%}%>
+        <td class="auto"><%=data[i].room %></td>
+        <td class="auto"><%=data[i].session.nick_name %></td>
+		<td class="auto"><%=data[i].session.data.name %></td>
+        <td class="auto"><%=data[i].session.data.count%></td> 
+		<td class="auto"><%=data[i].session.data.count * data[i].session.data.coin_price %></td>      
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>

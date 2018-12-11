@@ -1,0 +1,29 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="auto">ID</th>
+            <th class="auto">昵称</th>
+            <th class="longtime">时间</th>
+            <th class="action action150">操作</th>
+       </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=data[i].id %></td>
+            <td class="auto"><%=data[i].userName %></td>
+            <td class="longtime"><%=data[i].utimestamp%></td>
+            <td  class="action action150">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail(<%=data[i].id%>)">查看</button>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit(<%=data[i].id%>)">改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del(<%=data[i].id%>)">删</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

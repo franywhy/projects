@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.CourseUserplanClassDetailDao">
+	<!--推送学习计划队列-->
+	<select id="queryUserplanClassDetailForQueue" resultType="map">
+		SELECT
+	course_userplan_class_detail.userplan_class_detail_id,
+	course_userplan_class_detail.classplan_id,
+	course_userplan_class_detail.`timestamp` AS createdTime,
+	course_userplan_class_detail.dr,
+	course_userplan_class_detail.ts,
+	users.mobile AS studentCode,
+	sys_user.username AS teacherCode
+
+FROM
+	course_userplan_class_detail course_userplan_class_detail
+JOIN course_userplan_detail course_userplan_detail ON course_userplan_class_detail.userplan_detail_id = course_userplan_detail.userplan_detail_id
+JOIN course_userplan course_userplan ON course_userplan_detail.userplan_id = course_userplan.user_plan_id
+JOIN users users ON course_userplan.user_id = users.user_id
+JOIN mall_class mall_class ON course_userplan.class_id = mall_class.class_id
+JOIN sys_user sys_user ON sys_user.user_id = mall_class.user_id
+WHERE
+	course_userplan_class_detail.ts > #{millisecond}
+ORDER BY
+	course_userplan_class_detail.ts DESC;
+	</select>
+</mapper>

@@ -1,0 +1,20 @@
+<!-- 班主任 -->
+<div id="classTeacherLayDiv" style="display: none">
+<!-- 班主任查询条件 -->
+<table  border="0">
+	<tr class="row" >
+		<td class=""><label for="name">班主任名称</label></td>
+		<td >
+			<input type="text" class="form-control" id="qclassTeacherName" placeholder="班主任名称">
+		</td>
+		<!-- 按钮 -->
+		<td class="grid-btn">
+			<!-- <a class="btn btn-primary" @click="clearQueryOrderParams">清空</a>  -->
+			<a class="btn btn-default" onclick="classTeacherLay.reload();">查询</a> 
+		</td>
+	</tr>
+</table>
+<table id="classTeacherLay_jqGrid" ></table>
+<table id="classTeacherLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/classTeacherLay.js?_${date.systemTime}"></script>

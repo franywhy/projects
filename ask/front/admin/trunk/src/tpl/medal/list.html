@@ -1,0 +1,53 @@
+<!--礼物列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="num">徽章ID</th>
+			<th>用户类型</th>
+            <th>徽章类型</th>
+            <th>名称</th>
+            <th>图片</th>
+            <th>礼物ID</th>
+            <th>有效天数</th> 
+			<th>累计（统计）天数</th>       
+            <th>排序</th>      
+            <th>累计礼物价值</th>
+            <th>状态</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action150">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%
+		for(var i=0;i<data.length;i++){%>
+                       <tr>
+                           <td><%=data[i]._id%></td>
+                           <td><%=["","用户","主播"][data[i].type||0]%></td>
+                           <td><%=["","礼物","活动","系统"][data[i].medal_type||0]%></td>
+                           <td><%=data[i].name%></td>
+                           <td><img width="50" height="50" src="<%=data[i].pic_url%>" alt="<%=data[i].name%>" /></td>
+                           <td><%=data[i].gift_ids%></td>
+                           <td><%=data[i].expiry_days%></td>
+                           <td><%=data[i].sum_days%></td>
+                           <td><%=data[i].order%></td>
+                           <td><%=data[i].coins%></td>
+                           <td><%=data[i].status?"上线":"下线"%></td>
+                           <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                           <%
+                           var model = $.extend({},data[i]);
+                           model.status = model.status ? 0  : 1 ;
+                           %>
+                           <td class="action">
+                               <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit(<%=data[i]._id%>)">改</button>
+                               <button class="d-button" onclick="Izb.controller.<%=pty.key%>.update({_id:<%=data[i]._id%>,status:<%=model.status%>})"><%=data[i].status ? '下'  : '上'%>线</button>
+                               <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del(<%=data[i]._id%>)">删</button>
+
+                           </td>
+                           <%}%>
+                       </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/礼物列表-->

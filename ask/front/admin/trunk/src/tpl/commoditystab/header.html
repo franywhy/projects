@@ -1,0 +1,63 @@
+
+
+<!--通用应用头-->
+
+<div class="tagArea">
+    <ul class="tagList">
+        <li class="<%=params.tab=='detail'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=detail"><i></i><span>详情</span></a></li>
+        <li class="<%=params.tab=='productedit'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=productedit"><i></i><span>商品编辑</span></a></li>
+        <li class="<%=params.tab=='classify'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=classify"><i></i><span>课程分类</span></a></li>
+        <li class="<%=params.tab=='courselist'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=courselist"><i></i><span>课程编辑</span></a></li>
+        <li class="<%=params.tab=='pricelist'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=pricelist"><i></i><span>价格</span></a></li>
+        <li class="<%=params.tab=='hmedit'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=hmedit"><i></i><span>PC课程介绍</span></a></li>
+        <li class="<%=params.tab=='apphmedit'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=apphmedit"><i></i><span>H5课程介绍</span></a></li>
+        <li class="<%=params.tab=='school'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&is_shelves=<%=params.is_shelves%>&upload_flag=<%=params.upload_flag%>&tab=school"><i></i><span>商品所属校区</span></a></li>
+    </ul>
+    <div class="tag_r">
+        <input type="button" value="返回" class="d-button J_back" />
+    </div>
+</div>
+
+<!--<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span>
+</h2>-->
+
+<div class="searchForm">
+    <form name="searchForm">
+        <%if(params.tab=='list'){%>
+        用户ID
+        <input type="number" name="_id" size="10">
+        <%}%>
+
+        <%if(params.tab=="productedit" && params.upload_flag!="1"){%>
+        <input class="d-button" type="button" value="保存" onclick="Izb.controller.commoditystab.saveproduct('<%=params._id%>')"/>
+        <%}%>
+        <%if(params.tab=="pricelist"){%>
+        校区
+        <select id="school_code" name="school_code" >
+
+        </select>
+        <input class="d-button J_search" type="button" value="查询" />
+        <input class="d-button J_reset" type="reset" name="" value="重置">
+        <%}%>
+        <%if(params.tab=="classify"  && params.upload_flag!="1"){%>
+        <input class="d-button J_newclass" type="button" value="新增分类" />
+        <input class="d-button" type="button" value="保存" onclick="Izb.controller.commoditystab.saveclassify('<%=params._id%>')"/>
+        <%}%>
+        <%if(params.tab=="hmedit"  && params.upload_flag!="1"){%>
+        <input class="d-button" type="button" value="保存" onclick="Izb.controller.commoditystab.savehtml('<%=params._id%>')"/>
+        <%}%>
+        <%if(params.tab=="apphmedit"  && params.upload_flag!="1"){%>
+        <input class="d-button" type="button" value="保存" onclick="Izb.controller.commoditystab.saveapphtml('<%=params._id%>')"/>
+        <%}%>
+        <%if(params.tab=="school"  && params.upload_flag!="1"){%>
+        <input class="d-button" type="button" value="保存" onclick="Izb.controller.commoditystab.saveschool('<%=params._id%>')"/>
+        <%}%>
+    </form>
+</div>
+<!--/通用应用头-->

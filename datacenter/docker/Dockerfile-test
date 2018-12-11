@@ -1,0 +1,15 @@
+From 10.0.98.12:5000/jdk:8
+
+VOLUME /tmp
+
+VOLUME /logs
+
+WORKDIR /home/service/datacenter
+
+EXPOSE 8081
+
+CMD ["java","-jar","-XX:+PrintGCDetails","-Xloggc:gc.log","-Xms256m","-Xmx512m","-Xss512K","-XX:MetaspaceSize=32m","-XX:MaxMetaspaceSize=64m","-XX:PretenureSizeThreshold=819200","-XX:+UseAdaptiveSizePolicy","dtc.jar","--spring.config.location=application.yml"]
+
+ADD ./config/application-test.yml /home/service/datacenter/application.yml
+
+ADD ./target/datacenter-1.0-SNAPSHOT.jar /home/service/datacenter/dtc.jar

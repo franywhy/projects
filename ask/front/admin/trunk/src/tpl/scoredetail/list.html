@@ -1,0 +1,106 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">学员ID</th>
+        <th class="auto">学员昵称</th>
+        <th class="auto">积分分值</th>
+        <th class="auto">积分类型</th>
+        <th class="auto">积分行为</th>
+        <th class="auto">积分说明</th>
+        <th class="auto">创建时间</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto">
+                <%if(data[i].userId){%>
+                <%=data[i].userId %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].userNickname){%>
+                <%=data[i].userNickname %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].score){%>
+                <%=data[i].score %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].scoreGainType==0){%>
+                默认
+                <%}else if(data[i].scoreGainType==1){%>
+                首次赠送
+                <%}else if(data[i].scoreGainType==2){%>
+                每天一次
+                <%}else if(data[i].scoreGainType==3){%>
+                消耗积分
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].scoreType==0){%>
+                上传头像
+                <%}else if(data[i].scoreType==1){%>
+                绑定邮箱
+                <%}else if(data[i].scoreType==2){%>
+                完成职业测试
+                <%}else if(data[i].scoreType==3){%>
+                完善所有信息
+                <%}else if(data[i].scoreType==4){%>
+                每日签到登录
+                <%}else if(data[i].scoreType==5){%>
+                分享链接
+                <%}else if(data[i].scoreType==6){%>
+                邀请朋友注册
+                <%}else if(data[i].scoreType==7){%>
+                购买商品消耗积分
+                <%}else if(data[i].scoreType==8){%>
+                在兑吧消费
+                <%}else if(data[i].scoreType==9){%>
+                兑吧消费失败积分退还
+                <%}else if(data[i].scoreType==10){%>
+                购买商品赠送积分
+                <%}else if(data[i].scoreType==11){%>
+                订单取消积分返还
+                <%}else if(data[i].scoreType==12){%>
+                会答提问
+                <%}else if(data[i].scoreType==13){%>
+                打卡考勤
+                <%}else if(data[i].scoreType==14){%>
+                课程试听
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].scoreDetail){%>
+                <%=data[i].scoreDetail %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="longtime">
+                <%if(data[i].createTime){%>
+                <%=new Date(data[i].createTime).toLocaleString() %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i].id%>')">详细</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

@@ -1,0 +1,18 @@
+<!--频道档案页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" value="新增频道档案" class="d-button d-state-highlight J_add" />
+    <%}%>
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span>
+</h2>
+<div class="searchForm">
+<form name="searchForm">
+ 频道编号
+<input type="text" name="main_type_code" size="20" />
+ 频道名称
+<input type="text" name="main_type_name" size="20" />
+<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+</form>
+</div>
+<!--/频道档案页头-->

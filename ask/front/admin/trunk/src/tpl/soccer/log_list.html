@@ -1,0 +1,35 @@
+<!--礼物列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+			<th>ID</th>
+			<th>时间</th>
+			<th>竞猜类型</th>
+			<th>用户ID</th>
+            <th>竞猜的队</th>
+            <th>星币数</th>
+            <th>倍数</th>  
+            <th>是否开奖</th>
+            <th>获得星币</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%
+		for(var i=0;i<data.length;i++){%>
+                       <tr>
+                           <td><%=data[i]._id%></td>
+                           <td><%=new Date(data[i].timestamp).toLocaleString()%></td>
+                           <td><%=["","前三","四强","八强","每日"][data[i].type]%></td>
+                           <td><%=data[i].userId%></td>
+                           <td><%=data[i].match?'【'+data[i].match+"】":""%><%=data[i].teams||data[i].guess_result%></td>
+                           <td><%=data[i].coins%></td>
+                           <td><%=data[i].count%></td>
+                           <td><%=data[i].status?"已开奖":"未开奖"%></td>
+                           <td><%=data[i].status?(data[i].award):"--"%></td>
+
+                       </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/礼物列表-->

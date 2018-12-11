@@ -1,0 +1,31 @@
+<!--问卷调查类型档案输入-->
+<form name="inputForm">
+    <input name="_id" hidden="hidden"/>
+    <table style="height:110px;">
+    <tr><td>
+            类型名称<span class="red">*</span>:
+        </td>
+        <td>
+             <input class="input" type="text" name="type_name" value="" size="30" required/>
+         </td>
+        <td>
+            种类<span class="red">*</span>:
+        </td>
+            <td>
+                <select id="map_info" name="class" class="input" style="width:150px" data-options="required:true">
+                    <option value="0" selected>课程</option>
+                    <option value="1" >老师</option>
+                </select>
+           </td>
+     </tr>
+        <tr>
+            <td>
+               描述：
+            </td>
+            <td colspan="3">
+                <textarea id="memo" name="memo" class="input" rows="3" cols="60" style="resize: none; " required></textarea>
+            </td>
+       </tr>
+    </table>
+</form>
+<!--/问卷调查类型档案输入-->

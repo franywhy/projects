@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.dao.CourseAbnormalAbandonExamDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_abnormal_abandon_exam.id AS id ,
+	course_abnormal_abandon_exam.status AS status ,
+	course_abnormal_abandon_exam.reason AS reason , 	
+	course_abnormal_abandon_exam.remark AS remark
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE  course_abnormal_abandon_exam.dr=0 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM course_abnormal_abandon_exam AS course_abnormal_abandon_exam
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+			
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="com.school.pojo.CourseAbnormalAbandonExamPOJO">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND registration_id = #{registrationId}
+		AND status != 1
+		AND dr = 0
+		limit 0,1
+	</select>
+	<!-- 分页查询 -->
+	<select id="queryPOJOList" resultType="com.school.pojo.CourseAbnormalAbandonExamPOJO">
+		
+		SELECT
+			course_abnormal_abandon_exam.id as id,
+			mall_order.order_name as orderName,
+			courses.course_name as courseName,
+			mall_area.area_name as registerProinve,
+			mall_exam_schedule.schedule_date as scheduleDate,
+			course_abnormal_abandon_exam.reason as reason,
+			course_abnormal_abandon_exam.remark as remark,
+			course_abnormal_abandon_exam.`status`
+		FROM
+			course_abnormal_abandon_exam AS course_abnormal_abandon_exam
+		LEFT JOIN course_abnormal_registration AS course_abnormal_registration ON course_abnormal_registration.id = course_abnormal_abandon_exam.registration_id
+		LEFT JOIN mall_order AS mall_order ON  mall_order.order_no = course_abnormal_registration.order_no
+		LEFT JOIN mall_area AS mall_area ON mall_area.area_id = course_abnormal_registration.bk_area_id
+		LEFT JOIN mall_exam_schedule as mall_exam_schedule on mall_exam_schedule.id = course_abnormal_registration.exam_schedule_id
+		LEFT JOIN courses AS courses ON course_abnormal_registration.course_id = courses.course_id
+		where 1 = 1
+		<if test="userId != null">and mall_order.user_id = #{userId} </if>
+		and course_abnormal_abandon_exam.product_id IN
+		(
+		select
+		product_id
+		from sys_business_product
+		where business_id = #{businessId}
+		)
+		<include refid="base_order"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="com.school.entity.CourseAbnormalAbandonExamEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into course_abnormal_abandon_exam
+		(
+				`creater`, 				
+				`create_time`, 				
+				`update_person`, 				
+				`update_time`, 				
+				`invoices_number`, 												
+				`product_id`, 				
+				`status`, 				
+				`dr`, 				
+				`reason`,
+				`registration_id`		
+				)
+		values
+		(
+				#{creater}, 																			
+				#{createTime}, 																			
+				#{creater},
+				#{createTime},
+				#{invoicesNumber}, 																																										
+				#{productId}, 																			
+				#{status}, 																			
+				0, 																			
+				#{reason},
+				#{registrationId}									
+				)
+	</insert>
+	<!--作废-->
+	<update id="updateCancel">
+		update course_abnormal_abandon_exam
+		<set>
+			status = #{auditStatus},update_person = #{updatePerson},update_time = #{updateTime}
+		</set>
+		where  id =#{id}
+	</update>
+	<select id="queryScheduleDateList" resultType="com.school.pojo.MallExamSchedulePOJO">
+		select id,schedule_date AS scheduleDate from mall_exam_schedule
+		where 1 = 1
+		and mall_exam_schedule.product_id IN
+		(
+		select
+		product_id
+		from sys_business_product
+		where business_id = #{businessId}
+		)
+	</select>
+</mapper>

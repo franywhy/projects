@@ -1,0 +1,29 @@
+<div class="tagArea">
+    <ul class="tagList">
+		<li class="<%=params.tab=='vip_log'? 'cur':''%>"><a href="#a=propsstat&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=vip_log"><i></i><span>买VIP</span></a></li>        
+        <li class="<%=params.tab=='car_log'? 'cur':''%>"><a href="#a=propsstat&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=car_log"><i></i><span>买座驾</span></a></li>        
+        <li class="<%=params.tab=='sofa_log'? 'cur':''%>"><a href="#a=propsstat&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=sofa_log"><i></i><span>抢沙发</span></a></li>
+        <li class="<%=params.tab=='egg_log'? 'cur':''%>"><a href="#a=propsstat&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=egg_log"><i></i><span>砸蛋</span></a></li>
+        <li class="<%=params.tab=='label_log'? 'cur':''%>"><a href="#a=propsstat&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=label_log"><i></i><span>求爱签</span></a></li>
+        
+    </ul>
+    <div class="tag_r">
+        <input type="button" value="返回" class="d-button J_back" />
+    </div>
+</div>
+<%if(params.tab!='show'){%>
+<div class="searchForm">
+    <form name="searchForm">
+    	<%if(params.tab=='car_log'){%>
+    	用户ID
+    	<input type="number" name="_id" size="10">
+        <%}%>
+        选择日期
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+        <input class="d-button J_search" type="button" value="查询"/>
+        <input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<%}%>

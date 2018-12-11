@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.dao.manage.ChannelMessageDao" >
+  <resultMap id="BaseResultMap" type="io.renren.entity.manage.ChannelMessage" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="message_id" property="messageId" jdbcType="BIGINT" />
+    <result column="message_type" property="messageType" jdbcType="TINYINT" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, msg_id, channel_id, message_id, message_type
+  </sql>
+
+  <delete id="deleteByMessage">
+    delete from channel_message
+    where message_id = #{messageId} AND message_type = #{messageType}
+  </delete>
+
+  <!-- 批量插入 -->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into channel_message (id, channel_id, message_id,
+    message_type)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.id,jdbcType=BIGINT}, #{item.channelId,jdbcType=VARCHAR},
+      #{item.messageId,jdbcType=BIGINT}, #{item.messageType,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+
+</mapper>

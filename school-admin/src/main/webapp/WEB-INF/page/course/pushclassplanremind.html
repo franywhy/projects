@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课次通知提醒表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("pushclassplanremind:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="排课计划名称">
+			</div>
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.templateName" @keyup.enter="query" placeholder="模板名称">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("pushclassplanremind:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			<!-- <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a> -->
+			#if($shiro.hasPermission("pushclassplanremind:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			<a class="btn btn-primary" @click="showTemplate"><i class="fa fa-search"></i>&nbsp;查看模板</a>
+			<a class="btn btn-primary" @click="showDetail"><i class="fa fa-search"></i>&nbsp;查看推送课次详情</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    <!-- 推送课次详情列表 -->
+    <div v-show="showDetailList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("pushclassplandetailremind:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="qd.liveName" @keyup.enter="queryDetail" placeholder="直播课次名称">
+			</div>
+			<a class="btn btn-primary" @click="queryDetail"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("pushclassplandetailremind:update"))
+			<a class="btn btn-primary" @click="detailUpdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("pushclassplandetailremind:delete"))
+			<a class="btn btn-primary" @click="delDetail"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("pushclassplandetailremind:theAudit"))
+			<a class="btn btn-primary" @click="theAudit"><i class="fa fa-pencil-square-o"></i>&nbsp;反审核</a>
+			#end
+			#if($shiro.hasPermission("pushclassplandetailremind:audit"))
+			<a class="btn btn-primary" @click="audit"><i class="fa fa-pencil-square-o"></i>&nbsp;审核</a>
+			#end
+			#if($shiro.hasPermission("pushclassplandetailremind:refresh"))
+			<a class="btn btn-warning" @click="refresh">刷新</a>
+			#end
+			<a class="btn btn-warning" @click="goList">返回</a>
+		</div>
+	    <table id="jqGrid1"></table>
+	    <div id="jqGridPager1"></div>
+    </div>
+    
+    <div v-show="showSaveOrUpdate" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="pushClassplanRemind.id" placeholder="主键"/>
+			    </div>
+		    </div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">排课计划名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="pushClassplanRemind.courseClassplanName" readonly="readonly" @click="selectClassplan" placeholder="点击选择排课计划"/>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">推送模板名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="pushClassplanRemind.pushTimeTemplateName" readonly="readonly" @click="selectPushTemplate"  placeholder="点击选择推送模板"/>
+			    </div>
+			</div>
+											    			
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+	
+	<!-- 推送课次详情编辑弹窗 -->
+	<div id="detailLayer" style="display: none;">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="form-group" style="display: none;">
+					<div class="col-sm-2 control-label">detailId</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="pushClassplanDetailRemind.detailId"  />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">推送时间</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control datetimepicker_detailTime" id="detailPushTime" readonly="readonly" placeholder="推送时间"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">推送内容</div>
+					<div class="col-sm-10">
+						<textarea class="form-control" v-model="pushClassplanDetailRemind.pushContent" style="width:371px;height:250px;" placeholder="推送内容">
+               			</textarea>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/course/pushclassplanremind.js?_${date.systemTime}"></script>
+#parse("layer/classplanLay.html")
+#parse("layer/pushTimeTemplateLay.html")
+</body>
+</html>

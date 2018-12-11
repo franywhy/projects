@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysDeptDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		sys_dept.dept_id AS deptId , 
+		sys_dept.parent_id AS parentId,
+		sys_dept.name AS name , 
+		sys_dept.order_num AS orderNum ,
+		sys_dept.nc_id AS ncId , 
+		sys_dept.nc_parent_id AS ncParentId ,
+		sys_dept.dr AS dr
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE sys_dept.dr=0 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	FROM sys_dept AS sys_dept
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	ORDER BY  dept_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.SysDeptEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND dept_id = #{deptId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="map">
+		select
+		<include refid="base_column"/>
+		,
+		(select p.name from sys_dept p where p.dept_id = sys_dept.parent_id) as parentName ,
+		(select nc_dept.name from sys_dept nc_dept where nc_dept.dept_id = sys_dept.nc_id) as ncName ,
+		(select p_nc.name from sys_dept p_nc where p_nc.dept_id = sys_dept.nc_parent_id) as ncParentName
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		order by sys_dept.order_num asc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.SysDeptEntity" useGeneratedKeys="true" keyProperty="deptId">
+		insert into sys_dept
+		(
+			`parent_id`,
+			`name`, 
+			`order_num`, 
+			`nc_id`, 
+			`nc_code`, 
+			`nc_parent_id`, 
+			`dr` 
+		)
+		values
+		(
+			#{parentId}, 
+			#{name}, 
+			#{orderNum}, 
+			#{ncId}, 
+			#{ncCode}, 
+			#{ncParentId}, 
+			0 
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.SysDeptEntity">
+		update sys_dept 
+		<set>
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="ncId != null">`nc_id` = #{ncId}, </if>
+			<if test="ncParentId != null">`nc_parent_id` = #{ncParentId}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		<include refid="base_where"/>
+		AND dept_id = #{deptId}
+	</update>
+	
+	<!--删除-->
+	<update id="delete">
+		UPDATE sys_dept 
+		<set> dr = 1 </set>
+		where dept_id = #{value}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.SysDeptEntity">
+		UPDATE sys_dept 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND dept_id IN 
+		<foreach item="deptId" collection="ids" open="(" separator="," close=")">
+			#{deptId}
+		</foreach>
+	</update>
+	<!-- 根据parentId查询子部门id -->
+	<select id="queryDetpIdList" resultType="long">
+		select dept_id from sys_dept where parent_id = #{value} and dr = 0
+	</select>
+	
+	<select id="queryObjectByNcId" resultType="io.renren.entity.SysDeptEntity">
+		select * from sys_dept where nc_id = #{ncId} and dr = 0
+	</select>
+	
+	<select id="queryTotalByNcCode" resultType="io.renren.entity.SysDeptEntity">
+		select *  from sys_dept 
+		where dr = 0
+	 	<if test="null!=nc_code">
+	 	 	and nc_code = #{ncCode}
+	 	</if>
+	 	
+	 	<if test="null!=name">
+	 	 	and name = #{name}
+	 	</if>
+	</select>
+	
+	<!--通过ncId删除-->
+	<update id="deleteByNcId" parameterType="io.renren.entity.SysDeptEntity">
+		UPDATE sys_dept 
+		<set> dr = 1 </set>
+		where nc_id = #{nc_id}
+	</update>
+</mapper>

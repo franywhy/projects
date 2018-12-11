@@ -1,0 +1,77 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th >序号</th>
+        <th>提交用户ID</th>
+        <th>提交用户昵称</th>
+
+        <th >企业名称</th>
+        <th >企业地址</th>
+        <th >企业性质</th>
+        <th >所属行业</th>
+        <th >企业人数</th>
+        <th >是否有分公司</th>
+
+        <th >财务人数</th>
+        <th>财务最高岗位</th>
+        <th>是否使用财务软件</th>
+        <th>是否有财务基本制度</th>
+        <th>是否完整有财务</th>
+        <th>是否有财务报表</th>
+        <th>财务需求</th>
+
+        <th>姓名</th>
+        <th>性别</th>
+        <th>身份</th>
+        <th>手机号码</th>
+        <th>邮箱</th>
+
+        <th>提交时间</th>
+
+
+        <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        <th class="action action100">操作</th>
+        <%}%>
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){ var d = data[i];%>
+    <tr>
+        <td class="short"><%=i+1%></td>
+        <td class="short"><%=d.user_id%></td>
+        <td class="short"><%=d.nick_name%></td>
+
+        <td class="short"><%=d.company_name%></td>
+        <td class="short"><%=d.company_addres%></td>
+        <td class="short"><%=d.company_type%></td>
+        <td  class="short"><%=d.company_industry%></td>
+        <td  class="short"><%=d.company_peoples%></td>
+        <td  class="short"><%=!d.company_filiale?"否" : "是" %></td>
+
+        <td  class="short"><%=d.finance_peoples %></td>
+        <td  class="short"><%=d.finance_job_max%></td>
+        <td  class="short"><%=!d.finance_use_sofe?"否" : "是"   %></td>
+        <td  class="short"><%=!d.finance_basic_system?"否" : "是" %></td>
+        <td  class="short"><%=!d.finance_full?"否" : "是" %></td>
+        <td  class="short"><%=!d.finance_report?"否" : "是" %></td>
+        <td  class="short"><%=d.finance_demand %></td>
+
+        <td  class="short"><%=d.contacts_name%></td>
+        <td  class="short"><%=!d.contacts_sex ?"女" : "男"%></td>
+        <td  class="short"><%=d.contacts_identity%></td>
+        <td  class="short"><%=d.contacts_phone%></td>
+        <td  class="short"><%=d.contacts_email%></td>
+
+        <td  class="longtime"><%=new Date(d.timestamp).toLocaleString()%></td>
+
+        <td class="action">
+            <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详细</button>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

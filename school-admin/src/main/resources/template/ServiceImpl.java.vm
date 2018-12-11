@@ -1,0 +1,73 @@
+package ${package}.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import ${package}.dao.${className}Dao;
+import ${package}.entity.${className}Entity;
+import ${package}.service.${className}Service;
+import ${package}.utils.Constant;
+
+
+
+@Service("${classname}Service")
+public class ${className}ServiceImpl implements ${className}Service {
+	@Autowired
+	private ${className}Dao ${classname}Dao;
+	
+	@Override
+	public ${className}Entity queryObject(Map<String, Object> map){
+		return ${classname}Dao.queryObject(map);
+	}
+	
+	@Override
+	public List<${className}Entity> queryList(Map<String, Object> map){
+		return ${classname}Dao.queryList(map);
+	}
+	
+	@Override
+	public int queryTotal(Map<String, Object> map){
+		return ${classname}Dao.queryTotal(map);
+	}
+	
+	@Override
+	public void save(${className}Entity ${classname}){
+		${classname}Dao.save(${classname});
+	}
+	
+	@Override
+	public void update(${className}Entity ${classname}){
+		${classname}Dao.update(${classname});
+	}
+	
+	@Override
+	public void delete(Map<String, Object> map){
+		${classname}Dao.delete(map);
+	}
+	
+	@Override
+	public void deleteBatch(Map<String, Object> map){
+		${classname}Dao.deleteBatch(map);
+	}
+	#*
+	@Override
+	public void pause(${pk.attrType}[] ${pk.attrname}s){
+		Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("list", ${pk.attrname}s);
+    	map.put("status", Constant.Status.PAUSE.getValue());
+		${classname}Dao.updateBatch(map);
+	}
+	*#
+	#*
+	@Override
+	public void resume(${pk.attrType}[] ${pk.attrname}s){
+	    Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("list", ${pk.attrname}s);
+    	map.put("status", Constant.Status.RESUME.getValue());
+		${classname}Dao.updateBatch(map);
+	}
+	*#
+}

@@ -1,0 +1,44 @@
+<!--提现申请列表-->
+
+<div id="listSummary" class="listSummary"><br>从<%=params.stime || '上线' %>到<%=params.etime || '今天'%>，提现人数为<strong><%=count%></strong>人，提现总额为<strong><%=exchange_total%></strong>元。</div>
+<div class="autoTable">
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>       
+            <th class="longtime">申请时间</th>
+			<th class="num">主播ID</th>
+			<th class="short">昵称</th>
+            <th class="short">提现金额(元)</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action">操作</th>
+			<%}%>
+       </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>         	
+        <tr>            
+            <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+			<td class="num"><%=data[i].user_id%></td>
+			<td class="short"><%=data[i].nick_name%></td>
+			<td class="short"><%=data[i].exchange%></td>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+			<td class="action">
+			<%if(data[i].status == 0){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.update({_id:'<%=data[i]._id%>',status:1});">通过</button>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.update({_id:'<%=data[i]._id%>',status:2});">不通过</button>
+			<%}%>
+			<%if(data[i].status == 1){%>
+				已处理
+			<%}%>
+			<%if(data[i].status == 2){%>
+				未通过
+			<%}%>
+            </td>
+			<%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+    </div>
+<div class="appPager"></div>
+<!--/提现申请列表-->

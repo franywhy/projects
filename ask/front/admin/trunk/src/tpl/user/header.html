@@ -1,0 +1,55 @@
+<!--用户信息页头--> 
+<h2 class="appTitle"><input type="button" value="导出表格" class="d-button J_export" />
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" value="档案维护" class="d-button d-state-highlight J_add" />
+    <%}%>
+<input type="button" value="返回" class="d-button J_back" /><span class="text"><%=pty.name%></span></h2>
+<form name="searchForm">
+	手机号码
+	<input type="number" name="phone" size="10" />
+	ID
+	<input type="number" name="_id" size="10" />
+	昵称
+	<input type="text" name="nick_name" size="10" />
+	账号状态
+	<select name="status">
+		<option value="">帐号状态</option>
+		<option value="1">正常</option>
+		<option value="0">冻结</option>
+	</select>
+	用户类型
+	<select name="priv">
+		<option value="">用户类型</option>
+		<option value="3">学员</option>
+		<option value="2">老师</option>
+		<option value="5">经纪人</option>
+		<option value="4">客服</option>
+		<option value="1">运营</option>
+	</select>
+	抢答权限
+	<select name="priv1">
+		<option value="">==所有==</option>
+		<option value="1">开通</option>
+		<option value="0">关闭</option>
+	</select>
+	招生权限
+	<select name="priv2">
+		<option value="">==所有==</option>
+		<option value="1">开通</option>
+		<option value="0">关闭</option>
+	</select>
+   <!-- 用户渠道
+    <input type="text" name="qd" size="10" />
+        渠道用户ID
+    <input type="text" name="tuid" size="10" />-->
+	<br />
+	<br />
+	注册日期
+	<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+    到
+    <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+
+	<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+</form> 
+
+<!--/用户信息页头--> 

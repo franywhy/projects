@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningcenter.school.dao.CourseClassplanLivesDao">
+
+    <select id="queryList" resultType="com.hq.learningcenter.school.entity.CourseClassplanLivesEntity">
+        select live.classplan_live_id,live.classplan_live_name,live.classplan_live_time_detail,
+               live.start_time,live.end_time,live.liveroom_id,live.back_url
+        from course_classplan_lives live
+        join course_classplan plan ON plan.classplan_id = live.classplan_id
+        where live.classplan_id = #{classPlanId}
+        and plan.dr = #{dr}
+        and plan.is_audited = #{isAudited}
+        and plan.is_open = #{isOpen}
+        and plan.`status` = #{status}
+        and live.dr = #{dr}
+        and live.live_class_type_ids LIKE #{typeIds}
+        <![CDATA[ and live.start_time < #{startTime}]]>
+        order by live.start_time desc
+    </select>
+
+    <select id="queryClassPlanLiveIdList" resultType="String">
+        select SQL_CACHE live.classplan_live_id
+        from course_classplan_lives live
+        join course_classplan plan ON plan.classplan_id = live.classplan_id
+        where live.classplan_id = #{classPlanId}
+        and plan.dr = #{dr}
+        and plan.is_audited = #{isAudited}
+        and plan.is_open = #{isOpen}
+        and plan.`status` = #{status}
+        and live.dr = #{dr}
+        and live.live_class_type_ids LIKE #{typeIds}
+        <![CDATA[ and live.start_time < #{startTime}]]>
+        order by live.start_time desc
+    </select>
+
+    <select id="queryTotalScheduledCourse" resultType="Integer">
+        select SQL_CACHE COUNT(*)
+        from course_classplan_lives live
+        join course_classplan plan ON plan.classplan_id = live.classplan_id
+        where live.classplan_id = #{classPlanId}
+        and plan.dr = #{dr}
+        and plan.is_audited = #{isAudited}
+        and plan.is_open = #{isOpen}
+        and plan.`status` = #{status}
+        and live.dr = #{dr}
+        and live.live_class_type_ids LIKE #{typeIds}
+    </select>
+
+    <select id="queryLatestScheduledCourse" resultType="Integer">
+        select SQL_CACHE COUNT(*)
+        from course_classplan_lives live
+        join course_classplan plan ON plan.classplan_id = live.classplan_id
+        where live.classplan_id in
+        <foreach item="classPlanId" collection="list" open="(" separator="," close=")">
+            #{classPlanId}
+        </foreach>
+        and plan.dr = #{dr}
+        and plan.is_audited = #{isAudited}
+        and plan.is_open = #{isOpen}
+        and plan.`status` = #{status}
+        and live.dr = #{dr}
+        and live.live_class_type_ids LIKE #{typeIds}
+        <![CDATA[ and live.close_time < #{endTime}]]>
+    </select>
+
+    <select id="queryByClassPlanLiveId" resultType="com.hq.learningcenter.school.entity.CourseClassplanLivesEntity">
+        SELECT classplan_live_id,classplan_live_name,classplan_live_time_detail,
+               start_time,end_time,liveroom_id,back_url,back_id
+        FROM course_classplan_lives
+        WHERE classplan_live_id = #{classPlanLiveId}
+        AND dr = #{dr}
+    </select>
+    
+    <select id="queryByClassplanId" resultType="map">
+        select course_classplan_lives.classplan_live_id as classplanLiveId, course_classplan_lives.classplan_live_name as classplanLiveName,course_classplan_lives.day_time as dayTime,
+        sys_user.nick_name as teacherName, course_classplan_lives.start_time as startTime, course_classplan_lives.end_time as endTime, course_classplan_lives.classplan_live_time_detail as classLiveTimeDetail,
+        course_classplan_lives.ready_time as readyTime,course_classplan_lives.close_time as closeTime, course_classplan_lives.back_url as backUrl,course_classplan_lives.file_url as fileUrl,
+        course_classplan.course_id AS courseId,course_classplan_lives.review_url as reviewUrl,course_classplan_lives.prepare_url as prepareUrl,
+        course_classplan_lives.courseware_url AS coursewareUrl,course_classplan_lives.exam_stage_id AS examStageId, course_classplan_lives.file_name AS fileName,
+        course_classplan_lives.courseware_name AS coursewareName, course_classplan_lives.prepare_name AS prepareName, course_classplan_lives.review_name AS reviewName
+		from  course_classplan_lives
+		join course_classplan on course_classplan_lives.classplan_id = course_classplan.classplan_id
+		join sys_user on course_classplan_lives.teacher_id = sys_user.user_id
+		where course_classplan_lives.dr = #{dr}
+		<if test="dateStart!=null and dateEnd!=null">
+		and course_classplan_lives.start_time between #{dateStart} and #{dateEnd}
+		</if>
+		and course_classplan_lives.live_class_type_ids LIKE #{typeIds}
+		and course_classplan.classplan_id = #{classplanId}
+		and course_classplan.is_audited = #{isAudited}
+        and course_classplan.is_open = #{isOpen}
+		and course_classplan.dr = #{dr}
+		and course_classplan.`status` = #{status}
+		order by course_classplan_lives.start_time
+    </select>
+    
+    <select id="queryEntityByClassplanId" resultType="com.hq.learningcenter.school.entity.CourseClassplanLivesEntity">
+        select course_classplan_lives.*
+		from  course_classplan_lives
+		join course_classplan on course_classplan_lives.classplan_id = course_classplan.classplan_id
+		where course_classplan_lives.dr = #{dr}
+		and course_classplan_lives.live_class_type_ids LIKE #{typeIds}
+		<if test="dateStart!=null and dateEnd!=null">
+		and course_classplan_lives.start_time between #{dateStart} and #{dateEnd}
+		</if>
+		and course_classplan.classplan_id = #{classplanId}
+		and course_classplan.is_audited = #{isAudited}
+        and course_classplan.is_open = #{isOpen}
+		and course_classplan.dr = #{dr}
+		and course_classplan.`status` = #{status}
+		order by course_classplan_lives.order_num
+    </select>
+    
+    <select id="queryByLiveId" resultType="com.hq.learningcenter.school.entity.CourseClassplanLivesEntity">
+    	SELECT course_classplan_lives.*
+		FROM course_classplan_lives
+		JOIN mall_live_room ON mall_live_room.live_room_id = course_classplan_lives.liveroom_id
+		WHERE course_classplan_lives.dr = 0
+		AND mall_live_room.gensee_live_id = #{liveId}
+		AND course_classplan_lives.start_time &gt; #{startTime}
+		AND course_classplan_lives.end_time &lt; #{endTime}
+    </select>
+    
+    <update id="update" parameterType="com.hq.learningcenter.school.entity.CourseClassplanLivesEntity">
+		update course_classplan_lives 
+		<set>
+			<if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+			<if test="classplanLiveName != null">`classplan_live_name` = #{classplanLiveName}, </if>
+			<if test="classplanLiveTimeDetail != null">`classplan_live_time_detail` = #{classplanLiveTimeDetail}, </if>
+			<if test="dayTime != null">`day_time` = #{dayTime}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="timeBucket != null">`time_bucket` = #{timeBucket}, </if>
+			<if test="liveroomId != null">`liveroom_id` = #{liveroomId}, </if>
+			<if test="studioId != null">`studio_id` = #{studioId}, </if>
+			<if test="backUrl != null">`back_url` = #{backUrl}, </if>
+			<if test="backId != null">`back_id` = #{backId}, </if>
+			<if test="backType != null">`back_type` = #{backType}, </if>
+			<if test="teacherId != null">`teacher_id` = #{teacherId}, </if>
+			<if test="liveClassTypeIds != null">`live_class_type_ids` = #{liveClassTypeIds}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="courseLiveDetailId != null">`course_live_detail_id` = #{courseLiveDetailId}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="fileUrl != null">`file_url` = #{fileUrl}, </if>
+			<if test="readyTime != null">`ready_time` = #{readyTime}, </if>
+			<if test="closeTime != null">`close_time` = #{closeTime}</if>
+		</set>
+		where classplan_live_id = #{classplanLiveId}
+	</update>
+</mapper>

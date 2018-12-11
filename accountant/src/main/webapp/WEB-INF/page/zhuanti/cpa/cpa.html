@@ -1,0 +1,713 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>2017CPA注册会计师 </title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="注册会计师" />
+    <link rel="stylesheet" type="text/css" href="/static/css/common/bace.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/common/com.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/common/headerAfooter.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/loginNew.css" />
+    <link rel="stylesheet" type="text/css" href="/static/zhuanti/cpa/listcpa/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="/static/zhuanti/cpa/listcpa/css/cpa.css" />
+    <script src="/static/zhuanti/cpa/listcpa/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/head/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/head/js/baidu_statistics.js"></script>
+</head>
+<style>
+.main_item22{
+    padding: 10px 0 20px 0px;
+    width: 100%;
+}
+.t-cpa-h1{
+    font-size: 42px;
+    text-align: center;
+}
+.t-cpa-h2{
+    font-size: 18px;
+    margin-top: 5px;
+    text-align: center;
+}
+.cpa5-h1, .cpa5-h2 {
+    text-align: left;
+    margin-left: 143px;
+}
+.cpa4-h1{
+    text-align: right;
+}
+.cpa2-tp{
+    cursor: pointer;
+}
+.slide-banner-v2 .slide-ul-v2 li{
+    cursor: pointer;
+}
+.w-auto-Center{
+    margin: 0 auto;
+}
+.w1000{
+    width: 1000px;
+}
+.main_item22 .item{
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #666;
+}
+.tel_link{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+}
+.slide-banner-v2{
+    /*margin-top: 46px;*/
+}
+.main-page{
+    position: relative;
+}
+.header-kjyx{
+    background-color: #333;
+    position: fixed;
+    width:100%;
+    top:0;
+    z-index: 100;
+    display: none;
+}
+.header-kjyx .logo,.header-kjyx .nav{
+    height: 46px;
+}
+.header-kjyx .logo{
+    width:200px;
+    background: url(http://s1.bd.hengqiedu.cn/images/logo.png) no-repeat left center;
+}
+.header-kjyx .nav{
+    text-align: center;
+}
+.header-kjyx .nav p{
+    float: left;
+    width:128px;
+    color:#fff;
+    line-height: 46px;
+}
+.header-kjyx .nav p.act,.header-kjyx .nav p:hover{
+    color:#fff;
+    background-color: #e64a20;
+}
+#foor_floatBox{
+    width:100%;
+    height:68px;
+    line-height:68px;
+    position:fixed;
+    z-index:99999;
+    _position:absolute; 
+    /* _top:expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight); */
+}
+#foor_floatBox .f_box_opacity{
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    background-color:#000000;
+    filter:alpha(opacity=80);  
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=80);
+    -moz-opacity:0.8;  
+    -khtml-opacity: 0.8;  
+    opacity: 0.8; 
+    zoom: 1;
+    z-index:99990;
+}
+#foor_floatBox .ff_font{
+    width:1000px;
+    position:relative;
+    height:100%;
+    margin:0 auto;
+    z-index:99999;
+    overflow:hidden;
+    padding-left:70px;
+
+}
+#foor_floatBox .ff_font .font{
+    font-size:44px;
+    font-family:"微软雅黑";
+    font-weight:700;
+    color:#FFFFFF;
+    
+    width:690px;
+}
+#foor_floatBox .ff_font .font.new{
+      width: 290px;
+      margin-top: -2px;
+      font-size: 40px;
+}
+#foor_floatBox .ff_font span{
+    display:block;
+    float:left;
+    
+}
+#foor_floatBox .ff_font .this-sc{
+    display: block;
+  float: left;
+}
+#foor_floatBox .ff_font .this-sc input{
+    width: 140px;
+    margin-right: 10px;
+    height: 35px;
+    margin-top: 10px;
+    line-height: 35px;
+    padding-left: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px
+}
+#foor_floatBox .ff_font .font font{
+    color:#007c3e;
+    font-size:44px;
+}
+#foor_floatBox .ff_font .input{
+    font-size:25px;
+    font-family:"微软雅黑";
+    font-weight:700;
+    color:#FFFFFF;
+    width:230px;
+    height:50px;
+    line-height:50px;
+    margin-top:9px;
+    background-color:#007c3e;
+    text-align: center;
+    cursor:pointer;
+}
+#foor_floatBox .ff_font .input a{
+    font-size:25px;
+    font-family:"微软雅黑";
+    font-weight:700;
+    color:#FFFFFF;
+    text-decoration:none;
+    display:block;
+    width:100%;
+    height:100%;
+    text-align:center;
+}
+#foor_floatBox .thisoff{
+    position:absolute;
+    left:50%;
+    margin-left:500px;
+    top:9px;
+    font-size:30px;
+    font-family:Arial;
+    font-weight:700;
+    color:#FFFFFF;
+    z-index:99999;
+    cursor:pointer;
+    width:50px;
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    border-radius:25px;
+    background:url(/static/zhuanti/cpa/listcpa/image/airle.png) no-repeat;
+}
+#foor_floatBox .thisoff:hover{
+    box-shadow: 0 2px 2px 333 inset;
+}
+</style>
+<body>
+    <script type="text/javascript" src="/static/head/js/hqjyhead.js"></script>
+    <!-- banner -->
+    <div class="slide-banner-v2 register-main01">
+        <ul class="slide-ul-v2 clearfix">
+            <li class="slide-li-v2 slide-li-1" onclick="NTKF_kf()">
+            </li>
+            <li class="slide-li-v2 slide-li-2" onclick="NTKF_kf()">
+            </li>
+            <li class="slide-li-v2 slide-li-3" onclick="NTKF_kf()">
+            </li>
+        </ul>
+        <dl class="slide-dl-v2 clearfix">
+            <dd class="slide-dd-v2 act"></dd>
+            <dd class="slide-dd-v2"></dd>
+            <dd class="slide-dd-v2"></dd>
+        </dl>
+    </div>
+    <!-- cpa2 -->
+    <div class="cpa2">
+        <div class="t-pad w1200 clearfix">
+            <div class="t-cpa-h1">
+                决战CPA，没方法很致命！
+            </div>
+            <div class="t-cpa-h2">
+                想考CPA？99.9%考生被这六座大山彻底拦住！
+            </div>
+            <div class="cpa2-tp" onclick="NTKF_kf()">
+                <div class="cpa2-pic cpa2-pic1">
+                    <div class="cpa2-tex1">基础差</div>
+                    <div class="cpa2-tex2">知识该怎么记？</div>
+                </div>
+                <div class="cpa2-t">索要学习秘籍 ></div>
+            </div>
+            <div class="cpa2-tp" onclick="NTKF_kf()">
+                <div class="cpa2-pic cpa2-pic2">
+                    <div class="cpa2-tex1">科目多</div>
+                    <div class="cpa2-tex2">哪些才是重点？</div>
+                </div>
+                <div class="cpa2-t">索要考试精华 ></div>
+            </div>
+            <div class="cpa2-tp" onclick="NTKF_kf()">
+                <div class="cpa2-pic cpa2-pic3">
+                    <div class="cpa2-tex1">难度大</div>
+                    <div class="cpa2-tex2">考点在哪里？</div>
+                </div>
+                <div class="cpa2-t">索要CPA考点 ></div>
+            </div>
+            <div class="cpa2-tp" onclick="NTKF_kf()">
+                <div class="cpa2-pic cpa2-pic4">
+                    <div class="cpa2-tex1">周期长</div>
+                    <div class="cpa2-tex2">要上班怎么学？</div>
+                </div>
+                <div class="cpa2-t">索要时间宝典 ></div>
+            </div>
+            <div class="cpa2-tp" onclick="NTKF_kf()">
+                <div class="cpa2-pic cpa2-pic5">
+                    <div class="cpa2-tex1">没方法</div>
+                    <div class="cpa2-tex2">怎么学都不会？</div>
+                </div>
+                <div class="cpa2-t">索要考霸秘诀 ></div>
+            </div>
+            <div class="cpa2-tp" onclick="NTKF_kf()">
+                <div class="cpa2-pic cpa2-pic6">
+                    <div class="cpa2-tex1">通过难</div>
+                    <div class="cpa2-tex2">怎样一次考过？</div>
+                </div>
+                <div class="cpa2-t">索要通关诀窍 ></div>
+            </div>
+            <div class="t-btn clear cpa2-btn" onclick="NTKF_kf()">领取考试秘籍</div>
+        </div>
+    </div>
+    <!-- cpa3 -->
+    <div class="cpa3">
+        <div class="w1200 t-pad">
+            <div class="t-cpa-h1 cpa3-h1">
+                十六级进阶提分，考霸魔方一斩CPA！
+            </div>
+            <div class="t-cpa-h2 cpa3-h2">
+                针对全国考生面临的6座大山，恒企教育推出终极考试利器——考霸魔方系统。采用16级进阶的方式，
+                <br>层层提分，全方位解决考生痛点难点，让您从报读之日起披荆带剑，破风前行，一斩CPA！
+            </div>
+            <img src="/static/zhuanti/cpa/listcpa/image/cpa3-1.jpg" class="cpa3-img" alt="">
+            <div class="t-btn" onclick="NTKF_kf()">在线测试CPA能力</div>
+        </div>
+    </div>
+    <!-- cpa4 -->
+    <div class="cpa4">
+        <div class="w1200 t-pad clearfix relative">
+            <div class="t-cpa-h1 cpa4-h1">
+                考霸灵魂之师，十五年亲测魔方实力！
+            </div>
+            <div class="t-cpa-h2 cpa4-h2">
+                考霸魔方系统、考霸训练营是恒企教育耗时15年，在灵魂之师孙波先生带领的专家团队下，
+                <br>经过对30+万学员模拟测验研发而出的，现已申请国家专利。
+            </div>
+            <div class="cpa4-tab-t right">
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa4-2.png" alt=""> 孙波先生15年考霸之路
+            </div>
+            <ul class="cpa4-ul1">
+                <li class="cpa4-ul3-t">考试之路</li>
+                <li>自考</li>
+                <li>MBA</li>
+                <li>注册会计师</li>
+                <li>一级建造师</li>
+                <li>高级工程师</li>
+                <li>高级企业培训师</li>
+                <li class="cpa4-ul3-b">高级信息系统工程师</li>
+            </ul>
+            <ul class="cpa4-ul2">
+                <li class="cpa4-ul3-t">通关时长</li>
+                <li>2年专本通关</li>
+                <li>12天通关</li>
+                <li class="cpa4-ul-c">8月通关</li>
+                <li>4月通关</li>
+                <li>顺利评审</li>
+                <li class="cpa4-ul-c">裸考通关</li>
+                <li class="cpa4-ul3-b cpa4-ul-c">裸考通关</li>
+            </ul>
+            <ul class="cpa4-ul3">
+                <li class="cpa4-ul3-t">当年考试通过率</li>
+                <li>3%</li>
+                <li>17%</li>
+                <li>1‰</li>
+                <li>5%</li>
+                <li>2%</li>
+                <li>18%</li>
+                <li class="cpa4-ul3-b">11%</li>
+            </ul>
+            <div class="cpa4-img">
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa4-3.png" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- cpa5 -->
+    <div class="cpa5">
+        <div class="w1200 t-pad">
+            <div class="t-cpa-h2 cpa5-h1">
+                考霸魔方系统震撼开放，上万人抢先体验
+            </div>
+            <div class="t-cpa-h1 cpa5-h2">
+                免费课程体验券
+            </div>
+            <div class="cpa5-tp">
+                <div class="cpa5-tex-t">
+                    每天限量<span>20</span>份，抢完即止！
+                </div>
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa5-2.png" alt="">
+                <div class="clear"></div>
+                <!-- <div class="cpa5-area left">请选择省份 <img src="/static/zhuanti/cpa/listcpa/image/cpa5-3.png" alt=""></div>
+                <div class="cpa5-area left no-mar-left">请选择市区 <img src="/static/zhuanti/cpa/listcpa/image/cpa5-3.png" alt=""></div> -->
+                <script type="text/javascript" src="/static/zhuanti/cpa/listcpa/js/yourphp.js"></script>
+                <script>area_change(3460, 0,'city-mobile','area-mobile','0','0');</script>
+                
+                <table width="304px" border="0" cellspacing="0" cellpadding="0" style="text-align: center;display: inline-block;">
+                    <tr style="float:left">
+                        <td>
+                            <label class="cpa5-se clearfix relative">
+                            <select name="请选择省份"  class="cpa5-area left" onChange="area_change(this.value, 1,'city-mobile','area-mobile');" id="city-mobile">
+                                <option value="">请选择省份</option>
+                            </select>
+                            <img src="/static/zhuanti/cpa/listcpa/image/cpa5-3.png" alt="" class="cpa5-se-img1">
+                            </label>
+                        </td>
+                    </tr>
+                    <!-- <div class="dispear"></div> -->
+                    <tr style="float:left">
+                        <td>
+                            <label class="cpa5-se clearfix relative">
+                            <select name="请选择省份" id="area-mobile" class="cpa5-area left no-mar-left school_areacpa">
+                                <option value="">请选择市区</option>
+                            </select>
+                              <img src="/static/zhuanti/cpa/listcpa/image/cpa5-3.png" alt="" class="cpa5-se-img2">
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+                    <!-- <div class="dispear"></div> -->
+  
+                <input type="text" placeholder="姓名" name="namecpa">
+                <input type="text" placeholder="电话" name="phonecpa">
+                <div class="t-btn cpa5-btn sumbitSt" val="cpa" >马上免费领取</div>
+            </div>
+        </div>
+    </div>
+    <!-- cpa6 -->
+    <div class="cpa6">
+        <div class="w1200 t-pad clearfix">
+            <div class="t-cpa-h1">
+                三大热门班型，快准狠拿下CPA！
+            </div>
+            <ul class="cpa6-ul1 left">
+                <li class="cpa6-li-1 no-pad-top">零基础精讲班</li>
+                <li class="cpa6-li-2 no-pad-top"><span>2</span>年学习期</li>
+                <li class="cpa6-li-3"><span>3</span>大精讲课程<br> / 启航课程  /<br>/开学典礼 
+                    /<br>通关宝典</li>
+                <li class="cpa6-li-4"><span>3</span>大精讲服务 <br>/听课操作培训/<br>/ 直播回放 /<br>真题题库(章节练习)</li>
+                <li class="cpa6-li-5"><span>5</span>份绝密资料 / 学习流程图 / 学习方法 /
+                    <br>思维导图 / 通关宝典 / 阶段PK试卷</li>
+                <li class="cpa6-li-6">
+                    <div class="t-btn cpa6-btn" onclick="NTKF_kf()">立即购买</div>
+                </li>
+            </ul>
+            <ul class="cpa6-ul2 left">
+                <li class="cpa6-li-1 no-pad-top">签约通关班</li>
+                <li class="cpa6-li-2 no-pad-top"><span>2</span>年助考，<span>3</span>年免费补考</li>
+                <li class="cpa6-li-3"><span>13</span>大通关课程 <span class="cpa6-fz">精讲课程+</span> / 课后作业 / 阶段PK /
+                    <br> 高频错题 / 魔法专项 / 押题宝 / 万能模板 /
+                    <br>考场战术/真题实战/实战解析</li>
+                <li class="cpa6-li-4"><span>27</span>大通关服务 / 精讲服务+ / 
+                    实时沟通 / 实时答疑 /
+                    <br> 机考系统 / 经验沙龙 / 报考指导 /
+                    学习报告 / 成绩查询/ <br>邮寄纸质教材/分享电子资料/全程学习监控/<br>PK万元状元奖/考试动员会、交流会与庆功会......</li>
+                <li class="cpa6-li-5"><span>12</span>份绝密资料 / 精讲绝密资料+ / 高频错题 /
+                    <br> 魔法专项 / 万能模板 / 考场战术 / 实战试卷 /
+                    <br> 模拟试卷 / 押题宝</li>
+                <li class="cpa6-li-6">
+                    <div class="t-btn cpa6-btn" onclick="NTKF_kf()">立即购买</div>
+                </li>
+            </ul>
+            <ul class="cpa6-ul3 left">
+                <li class="cpa6-li-1 no-pad-top">VIP考霸训练班</li>
+                <li class="cpa6-li-2 no-pad-top"><span>2</span>年助考，<span>3</span>年免费补考</li>
+                <li class="cpa6-li-3"><span>15</span>大VIP课程 / 通关课程+ /考前心态训练/<br>魔鬼训练+天天实战/一对一诊断式急速提分/<br>完善的竞技状态训练（仅面授）
+                   </li>
+                <li class="cpa6-li-4"><span>33</span>大VIP通关服务 / 通关服务+ /
+                     专家实时答疑 / <br>自习辅导与监管/全程专家阅卷（仅面授）/<br>身体状态检测（仅面授）/班主任全程跟进（仅面授）/<br>国家级膳食营养计划（仅面授）</li>
+                <li class="cpa6-li-5"><span>15</span>份绝密资料 / 通关绝密资料+ / 超高水准的试卷 /<br> 阅卷专家建议总编 / 个人急速提分方案 </li>
+                <li class="cpa6-li-6">
+                    <div class="t-btn cpa6-btn" onclick="NTKF_kf()">立即购买</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- cpa7 -->
+    <div class="cpa7">
+        <div class="w1200 t-pad">
+            <div class="t-cpa-h1">
+                5大服务保障，免除学习后顾之忧！
+            </div>
+            <ul class="cpa7-ul clearfix">
+                <li class="cpa7-li-1">
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa7-1.png" alt="">
+                    <div class="cpa7-tex1">一对一服务保障</div>
+                    <div class="cpa7-tex2">专属班主任全程跟进，
+                        <br>有问即答</div>
+                    <div class="t-btn cpa7-btn" onclick="NTKF_kf()">索要班主任资料</div>
+                </li>
+                <li>
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa7-2.png" alt="">
+                    <div class="cpa7-tex1">超长服务期保障</div>
+                    <div class="cpa7-tex2">2年助考服务+
+                        <br> 3年免费补考服务
+                    </div>
+                    <div class="t-btn cpa7-btn" onclick="NTKF_kf()">索要服务细则</div>
+                </li>
+                <li>
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa7-3.png" alt="">
+                    <div class="cpa7-tex1">智能题库保障</div>
+                    <div class="cpa7-tex2">100%真题练习及解析
+                        <br> 提前适应考试环境
+                    </div>
+                    <div class="t-btn cpa7-btn" onclick="NTKF_kf()">免费在线做题</div>
+                </li>
+                <li>
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa7-4.png" alt="">
+                    <div class="cpa7-tex1">24h答疑保障</div>
+                    <div class="cpa7-tex2">24h*6服务响应
+                        <br> 答疑解惑不用愁
+                    </div>
+                    <div class="t-btn cpa7-btn" onclick="NTKF_kf()">免费体验答疑</div>
+                </li>
+                <li>
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa7-5.png" alt="">
+                    <div class="cpa7-tex1">不过退费保障</div>
+                    <div class="cpa7-tex2">5年未毕业
+                        <br> 根据协议退费
+                    </div>
+                    <div class="t-btn cpa7-btn" onclick="NTKF_kf()">下载退费协议</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- cpa8 -->
+    <div class="cpa8">
+        <div class="w1200 t-pad clearfix">
+            <div class="t-cpa-h1">
+                90%单科通过率，百万学子鼎力推荐！
+            </div>
+            <div class="cpa8-img left">
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa8-1.jpg" alt="">
+            </div>
+            <div class="cpa8-wolrd right">
+                <div class="cpa8-wolrd-t">
+                    恒企十五年注会学员心声
+                </div>
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa8-2.jpg" alt="">
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa8-3.jpg" alt="">
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa8-4.jpg" alt="">
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa8-5.jpg" alt="">
+                <img src="/static/zhuanti/cpa/listcpa/image/cpa8-6.jpg" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- cpa9 -->
+    <div class="cpa7 cpa9">
+        <div class="w1200 t-pad">
+            <div class="t-cpa-h1">
+                我们的承诺
+            </div>
+            <ul class="cpa7-ul clearfix">
+                <li class="cpa9-li-1">
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa9-1.jpg" alt="">
+                    <div class="cpa7-tex1">退款承诺</div>
+                    <div class="cpa7-tex2">对课程或服务不满意，可在交费后48小时内，<br>向我们提出“无条件全额退款”申请。</div>
+                    
+                </li>
+                <li>
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa9-2.jpg" alt="">
+                    <div class="cpa7-tex1">服务承诺</div>
+                    <div class="cpa7-tex2">付费后，每位学员都会与恒企教育签订一份购买协议，<br>我们向学员保障服务水平。
+                    </div>
+                    
+                </li>
+                <li class="cpa9-li-3">
+                    <img src="/static/zhuanti/cpa/listcpa/image/cpa9-3.jpg" alt="">
+                    <div class="cpa7-tex1">师资承诺</div>
+                    <div class="cpa7-tex2">恒企教育坚持独家签约八年以上CPA经验博士、<br>考霸授课，我们保证CPA的优质教学水平。
+                    </div>
+                    
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="foor_floatBox" style="bottom:0px; _margin-top:0px;display:none">
+        <div class="f_box_opacity"></div>
+        <div class="ff_font">
+            <span class="font">免费领取<b style="color:#feec0c">200元</b>冲刺学习卡</span>
+            <span class="input"><a href="javascript:;" target="_blank" onclick="NTKF_kf()">点击免费领取</a></span>
+        </div>
+        <div class="thisoff">X</div>
+    </div> 
+    <script type="text/javascript" src="/static/head/js/foot.js"></script>
+    <script type="text/javascript" src="/static/head/js/createLoginBox.js"></script>
+    <script type="text/javascript" src="/static/head/js/hqzx-login.js"></script>
+</body>
+
+
+<script src="/static/zhuanti/cpa/listcpa/js/register-pc.js"></script>
+<!-- <script type="text/javascript" charset="utf-8" src="http://lead.soperson.com/20001784/10074020.js"></script> -->
+<script>
+$(function() {
+    $('.big-mask').animate({
+        'display': 'none'
+    }, 5000, function() {
+        $('.big-mask').fadeIn()
+    })
+    $('.mask-close').click(
+        function(event) {
+            $('.big-mask').fadeOut(function() {
+                $('.big-mask').animate({
+                    'display': 'none'
+                }, 1000 * 20, function() {
+                    $('.big-mask').fadeIn()
+                })
+            })
+        });
+
+    backTop($("#back-to-top"));
+
+
+})
+
+
+
+/*function leyu_kf() {
+        doyoo.util.openChat('g=10069981');
+        doyoo.util.accept('g=10069981');
+        return false;
+    }*/
+function backTop(obj) {
+    obj.click(function() {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 500);
+    });
+};
+</script>
+<script>
+
+    $(".sumbitSt").on('click',function(){
+        
+        var tu =window.location.href;    
+        var pu =document.referrer;
+        var ymxx = "cpa免费课程";
+        var s = $(this).attr('val');
+        var true_name = $('.school_area'+s+ ' option:selected').text();;
+        if(true_name == '' || true_name == '校区' || true_name == '请选择校区'  ) {
+            alert("请选择校区");
+            return false;
+        }
+        if($('input[name="name'+s+'"]').val() == '' ) {
+            alert("请填写你的姓名");
+            return false;
+        }
+        
+        if($('input[name="phone'+s+'"]').val() == '' ) {
+            alert("请填写您的手机号码");
+            return false;
+        }
+        var re = /^1[3,5,8,9,4,6,7]\d{9}$/;
+        if(!re.test($('input[name="phone'+s+'"]').val())){
+                alert("请输入正确的手机号(11位)");
+                return false;
+        }
+        var name = $('input[name="name'+s+'"]').val();
+        var phone = $('input[name="phone'+s+'"]').val();
+        $.post('http://www.hengqijiaoyu.cn/?m=guestbook&c=xuyuanshu&a=ban',{'true_name':true_name,'name':name,'phone':phone,'csw_type':s,'tu':tu,'pu':pu,'ymxx':ymxx},function(d){
+            if(d == 1 ||  d ==  -1 ){
+                alert('领取成功！');
+            }else{
+                alert("网络延迟，重新领取！");
+            }
+        });
+            
+    });
+    
+    
+</script>
+<script type="text/javascript"> 
+            $(function(){
+                var scorllTop = 600;
+                
+                
+                $("#foor_floatBox .thisoff").click(function(){
+                    if($.browser.msie && ($.browser.version == "6.0") && !$.support.style){
+                    
+                        $("#foor_floatBox").stop().animate({marginTop:90+"px"},function(){
+                            $(this).remove();
+                        });
+                        return;
+                        
+                    }
+                    else{
+                        $("#foor_floatBox").animate({bottom:-90+"px"},function(){
+                            $(this).remove();
+                        });
+                    }
+                })
+                
+                $(window).scroll(function(){
+                    var windowTop = $(window).scrollTop();
+                    if(windowTop>=scorllTop && windowTop<=700){
+                    
+                        if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) {
+                            $("#foor_floatBox").stop().animate({marginTop:0+"px"});
+                            return;
+                        } 
+                        else{
+                            $("#foor_floatBox").stop().animate({bottom:0+"px"});
+                        }
+                    }
+                    else if(windowTop<=-1){//修改-1
+                        if($.browser.msie && ($.browser.version == "6.0") && !$.support.style) {
+                            $("#foor_floatBox").stop().animate({marginTop:90+"px"});
+                                return;
+                        
+                        }
+                        else{
+                        $("#foor_floatBox").stop().animate({bottom:-90+"px"});
+                        }
+                    }
+                })
+                
+            })
+</script>
+<script>
+    // 7849
+    function NTKF_kf(){
+        NTKF.im_openInPageChat('hq_1000_1497338556618');
+    }
+    // onclick="NTKF_kf()"
+</script>
+<script language="javascript" type="text/javascript">
+NTKF_PARAM = {
+    siteid:"hq_1000",                   //企业ID，为固定值，必填
+    settingid:"hq_1000_1497338556618",  //接待组ID，为固定值，必填
+    // uid:"12323",                     //用户ID，未登录可以为空，但不能给null，uid赋予的值显示到小能客户端上
+    // uname:"eminyli@163.com",         //用户名，未登录可以为空，但不能给null，uname赋予的值显示到小能客户端上
+    // isvip:"0",                          //是否为vip用户，0代表非会员，1代表会员，取值显示到小能客户端上
+    // userlevel:"1",                       //网站自定义会员级别，0-N，可根据选择判断，取值显示到小能客户端上
+    // erpparam:"abc" 关键词 访客地域 url ip                     //erpparam为erp功能的扩展字段，可选，购买erp功能后用于erp功能集成
+    } 
+</script>
+    <!--基础脚本加载 -->
+<script type="text/javascript" src="//dl.ntalker.com/js/b2b/ntkfstat.js?siteid=hq_1000" charset="utf-8"></script>
+</html>

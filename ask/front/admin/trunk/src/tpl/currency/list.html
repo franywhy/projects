@@ -1,0 +1,40 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+        <th >日期</th>
+        <th >充值金额</th>
+        <th >消费金额</th>
+        <th >消费渠道</th>
+        <th >备注</th>
+    </tr>
+	</thead>
+
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=new Date(data[i].gtime).format("yyyy-MM-dd")%></td>
+            <td class="auto"><%=data[i].money_recharge%></td>
+            <td class="auto"><%=data[i].money_consume%></td>
+            <td class="auto">打赏</td>
+            <td class="auto"></td>
+        </tr>
+		<%}%>
+    </tbody>
+
+    <tfoot >
+        <tr>
+            <td class="short"  style="color:red">当前页合计：</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_money_recharge%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_money_consume%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="short" style="color:red">合计：</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=all_money_recharge%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=all_money_consume%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+    </tfoot>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

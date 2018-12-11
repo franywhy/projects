@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.GenseeCallbackDao">
+    <select id="queryReplayCallback" resultType="io.renren.modules.job.pojo.log.ReplayCallbackForLogGenseeWatchPOJO">
+        SELECT
+            replay_callback_detail.*, course_classplan_lives.classplan_live_id,course_classplan_lives.start_time,course_classplan_lives.end_time
+        FROM
+            `replay_callback_detail` replay_callback_detail
+       JOIN
+              course_classplan_lives course_classplan_lives ON replay_callback_detail.video_id = course_classplan_lives.back_id
+		WHERE
+        replay_callback_detail.join_time &gt; #{startTime}
+        AND replay_callback_detail.join_time &lt; #{endTime}
+        AND replay_callback_detail.product_id = #{productId}
+        <if test="isOfflive != null">AND replay_callback_detail.`is_offlive` = #{isOfflive}</if>
+    </select>
+</mapper>

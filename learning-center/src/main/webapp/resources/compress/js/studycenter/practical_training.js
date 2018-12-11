@@ -1,0 +1,1 @@
+window.pageScript=(new function(){var i=this;this.init=function(){return i},this.close=function(){$(".mask-layer").fadeOut(500)},this.showLayer=function(){$(".mask-layer").fadeIn(500)}}).init();

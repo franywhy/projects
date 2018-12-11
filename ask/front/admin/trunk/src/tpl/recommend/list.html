@@ -1,0 +1,113 @@
+<!--每日推送-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">推荐标题</th>
+        <th class="auto">推荐内容URL</th>
+        <th class="auto">推荐图标URL</th>
+        <th class="auto">推荐类型</th>
+        <th class="longtime">直播开始时间</th>
+        <th class="longtime">直播结束时间</th>
+        <th class="auto">语音时长</th>
+        <th class="longtime">推荐时间</th>
+        <th class="auto">是否推荐</th>
+        <th class="auto">是否预约</th>
+        <th class="auto">是否正在直播</th>
+        <th class="auto">题库文章类型</th>
+        <th class="auto">定时推送</th>
+        <th class="auto">创建时间</th>
+        <th class="auto">阅读次数</th>
+        <th class="action action150">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr>
+        <td class="auto"><%=i+1 %></td>
+        <!--<td class="auto"><%=data[i]._id %></td>-->
+        <td class="auto"><%=data[i].recommend_title %></td>
+        <td class="auto"><%=data[i].recommend_infourl %></td>
+        <td class="auto"><%=data[i].recommend_picurl %></td>
+        <%if(data[i].recommend_type){%>
+        <%if(data[i].recommend_type==0){%>
+        <td class="auto">直播</td>
+        <%}else if(data[i].recommend_type==1){%>
+        <td class="auto">语音</td>
+        <%}else if(data[i].recommend_type==2){%>
+        <td class="auto">文章</td>
+        <%}else if(data[i].recommend_type==4){%>
+        <td class="auto">题库文章</td>
+        <%}else if(data[i].recommend_type==3){%>
+        <td class="auto">微课</td>
+        <%}else{%>
+        <td class="auto">直播</td>
+        <%}}else{%>
+        <td class="auto">直播</td>
+        <%}%>
+        <td class="longtime"><%=new Date(data[i].recommend_live_starttime).toLocaleString() %></td>
+        <td class="longtime"><%=new Date(data[i].recommend_live_endtime).toLocaleString()%></td>
+        <td class="auto"><%=data[i].recommend_radio_time %></td>
+        <td class="longtime"><%=new Date(data[i].recommend_time).toLocaleString()%></td>
+        <%if(data[i].is_recommend){%>
+        <%if(data[i].is_recommend==0){%>
+        <td class="auto">否</td>
+        <%}else if(data[i].is_recommend==1){%>
+        <td class="auto">是</td>
+        <%}else{%>
+        <td class="auto">否</td>
+        <%}}else{%>
+        <td class="auto">否</td>
+        <%}%>
+        <%if(data[i].is_reservation){%>
+        <%if(data[i].is_reservation==0){%>
+        <td class="auto">否</td>
+        <%}else if(data[i].is_reservation==1){%>
+        <td class="auto">是</td>
+        <%}else{%>
+        <td class="auto">否</td>
+        <%}}else{%>
+        <td class="auto">否</td>
+        <%}%>
+        <%if(data[i].is_live){%>
+        <%if(data[i].is_live==0){%>
+        <td class="auto">尚未开始</td>
+        <%}else if(data[i].is_live==1){%>
+        <td class="auto">已经开始</td>
+        <%}else if(data[i].is_live==2){%>
+        <td class="auto">已经结束</td>
+        <%}else{%>
+        <td class="auto">尚未开始</td>
+        <%}}else{%>
+        <td class="auto">尚未开始</td>
+        <%}%>
+        <td class="auto"><%=data[i].tk_article_type_name %></td>
+        <td class="longtime"><%=new Date(data[i].push_time).toLocaleString() %></td>
+        <td class="longtime"><%=new Date(data[i].create_time).toLocaleString() %></td>
+        <td class="auto"><%=data[i].read_count %></td>
+        <td  class="action action150">
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <%if(data[i].recommend_type){%>
+            <%if(data[i].recommend_type==1){%>
+            <button class="d-button" onclick="Izb.controller.<%=pty.key%>.editvoice('<%=data[i]._id%>')">修改语音</button>
+            <%}%>
+            <%if(data[i].recommend_type==3){%>
+            <button class="d-button" onclick="Izb.controller.<%=pty.key%>.editvideo('<%=data[i]._id%>')">修改微课</button>
+            <%}%>
+            <%if(data[i].recommend_type==4){%>
+            <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edittkarticle('<%=data[i]._id%>')">题库文章</button>
+            <%}%>
+            <%if(data[i].recommend_type==2){%>
+            <button class="d-button" onclick="Izb.controller.<%=pty.key%>.editarticle('<%=data[i]._id%>')">修改文章</button>
+            <%}}%>
+            <button class="d-button" onclick="Izb.controller.<%=pty.key%>.recommend('<%=data[i]._id%>','<%=data[i].is_recommend%>')">推荐/不推荐</button>
+            <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+            <%}%>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/每日推送-->

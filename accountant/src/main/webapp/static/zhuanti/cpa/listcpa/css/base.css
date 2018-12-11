@@ -1,0 +1,93 @@
+body{	
+	font-family:"微软雅黑";
+	color:#333;
+	font-size: 16px;
+}
+body,html,p,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6{
+	margin:0;
+	padding:0;
+}
+a{
+	text-decoration: none;
+	color:#333;
+}
+ul,li,dl,dt,dd{
+	list-style: none;
+}
+i,em{
+	font-style: normal;
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight: normal;
+}
+img{
+	display: block;
+	border:none;
+}
+.clear{
+	clear: both;
+}
+.clearfix:after{
+	font-size: 0;
+	content: " ";
+	display: table;
+	clear: both;
+}
+.left{
+	float:left;
+}
+.right{
+	float:right;
+}
+.none{
+	display: none;
+}
+.relative{
+	position: relative;
+}
+.absolute{
+	position: absolute;
+}
+.w1200{
+	width:1200px;
+	margin:0 auto;
+}
+.w1000{
+	width:1000px;
+	margin:0 auto;
+}
+.v-mid{
+	display: inline-block;
+	vertical-align: middle;
+}
+.v-mid-a{
+	display: inline-block;
+	vertical-align: middle;
+	height:100%;
+}
+.box-sizing{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+.no-mar-bot{
+	margin-bottom:0 !important;
+}
+.no-mar-right{
+	margin-right:0 !important;
+}
+.no-bor-right{
+	border-right: 0 !important;
+}
+.no-bor-bottom{
+	border-bottom: 0 !important;
+}
+.no-pad-left{
+	padding-left: 0 !important;
+}
+.no-pad-top{
+	padding-top: 0 !important;
+}
+.no-mar-left{
+	margin-left: 0 !important;
+}

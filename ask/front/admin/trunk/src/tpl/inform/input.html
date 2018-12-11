@@ -1,0 +1,37 @@
+<!--海报输入--> 
+<form name="inputForm">
+    <table width="100%">
+        <tr>
+            <td align="right">URL</td>
+            <td>
+                <input type="hidden" class="input" id="_id" name="_id"/>
+                <input name="url" class="input"  type="text"  />
+                </td>
+        </tr>
+        <tr>
+            <td align="right">内容</td>
+            <td>
+                <textarea name="msg" cols="80" rows="3"  class="input"></textarea>
+                </td>
+        </tr>
+        <tr>
+            <td>类型</td>
+            <td>
+    <select name="type" class="input">
+		<option value="1">PC</option>
+		<option value="2">手机端</option>
+    </select></td>
+        </tr>
+        <tr>
+            <td align="right">时间段</td>
+            <td>
+                <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss', maxDate: '#F{$dp.$D(\'etime\')}' })"  class="input"/>
+    到
+<input id="etime" type="text" name="etime"   class="input" value="" size="20" readonly onClick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss', minDate: '#F{$dp.$D(\'stime\')}' })"/>
+
+            </td>
+        </tr>
+
+    </table>
+</form>
+<!--/海报输入--> 

@@ -1,0 +1,25 @@
+.xuefen-table{
+	margin-bottom: 40px;
+}
+.xuefen-table table{
+	font-size: 14px;
+	border-color: #eee;
+}
+.xuefen-table table th{
+	height: 40px;
+	font-weight: normal;
+}
+.xuefen-table table td{
+	height: 50px;
+}
+.xuefen-table table td .t-h1 span,.xuefen-table table td .t-h2 span{
+	display: inline-block;
+	letter-spacing: 2px;
+	padding-left: 2px;
+}
+.xuefen-table table td .t-h1 span{
+	color:#18aa1f;
+}
+.xuefen-table table td .t-h2{
+	color:#c2c2c2;
+}

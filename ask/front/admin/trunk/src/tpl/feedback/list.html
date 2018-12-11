@@ -1,0 +1,31 @@
+<!--意见反馈-->
+
+ <script type="text/javascript">
+
+ </script>
+<div class="autoTable">
+<table  width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="longtime">反馈时间</th>
+        <th class="short">用户Id</th>
+        <th class="short">用户昵称</th>
+        <th class="short">用户类型</th>
+		<th class="title" width="300">反馈内容</th>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+        <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+		<td class="short"><%=data[i].user_id %></td>
+		<td class="short"><%=data[i].nick_name %></td>
+		<td class="short"><%=data[i].priv == 2 ? "老师" : "学员"%></td>
+		<td class="short"><%=Izb.controller.feedback.process(data[i].content) || '-'%></td>
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+</div>
+<div class="appPager"></div>
+<!--/海报列表-->

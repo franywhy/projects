@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningcenter.school.dao.CourseMaterialTypeDao">
+
+	<select id="queryByMaterialId" resultType="com.hq.learningcenter.school.entity.CourseMaterialTypeEntity">
+		select course_material_type.* 
+		from  course_material_type
+		join sys_business_product
+		on  course_material_type.product_id = sys_business_product.product_id
+		where material_id = #{materialId}
+		and business_id = #{businessId}
+	</select>
+
+</mapper>

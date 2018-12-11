@@ -1,0 +1,45 @@
+<!--礼物列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+			<th>ID</th>
+			<th>日期</th>
+            <th>比赛</th>
+            <th>分类</th>  
+            <th>状态</th>
+            <th>人数统计</th>
+            <th>总星币</th>
+            <th>创建时间</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action150">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%
+		for(var i=0;i<data.length;i++){%>
+                       <tr>
+                           <td><%=data[i]._id%></td>
+                           <td><%=data[i].date%></td>
+                           <td><%=data[i].match%></td>
+                           <td><%=['-','胜负平','胜负'][data[i].cat||0]%></td>
+                           <td><%=data[i].status?"已开奖":"未开奖"%></td>
+                           <td>A队：<%=data[i].A%>，B队：<%=data[i].B%>，平队：<%=data[i].C%></td>
+                           <td><%=data[i].coins%></td>
+
+                           <td><%=new Date(data[i].timestamp).toLocaleString()%></td>
+
+                           <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                           <td class="action">
+                               <!--<%if(!data[i].status){%>-->
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.daily_del(<%=data[i]._id%>)">删</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.daily_publish(<%=data[i]._id%>,<%=data[i].cat%>,<%=data[i].teamA%>,<%=data[i].teamB%>)">设置结果</button>
+                               <!--<%}%>-->
+                           </td>
+                           <%}%>
+                       </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/礼物列表-->

@@ -1,0 +1,27 @@
+<!--公告输入-->
+<form name="inputForm">
+    <table width="100%" border="0">
+        
+        <tr>
+            <td align="right"><input name="_id" type="hidden" value="" />
+                标题:</td>
+            <td><input type="text" class="input" value="" name="title" size="50" />
+            	类型:
+                <select id="noticeType" name="type"><option value="0">公告</option><option value="1">帮助</option><option value="2">主播通知</option><option value="3">充值公告</option></select>
+                排序:
+                <input name="order" class="input" type="text" value="0" id="order" size="5" />                
+                </td>
+        </tr>
+        <tr>
+            <td align="right">内容:</td>
+			<td><iframe name="editor" id="editor" src="/editor/index.html" style="width:830px;height:500px; padding:0; marging:0; border:1px solid #C0BBB4"></iframe>
+                <textarea class="J_editor" name="content" style="display:none"></textarea></td>
+
+        </tr>
+        <tr>
+            <td align="right">链接:&nbsp;</td>
+            <td><input type="text" class="input" value="" name="click_url" size="50" /></td>
+        </tr>
+    </table>
+</form>
+<!--/公告输入-->

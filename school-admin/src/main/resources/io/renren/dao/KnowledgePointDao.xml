@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.KnowledgePointDao">
+
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		knowledge_point.id AS id , knowledge_point.name AS name ,
+		knowledge_point.create_by AS createBy , knowledge_point.create_time AS
+		createTime , knowledge_point.update_by AS updateBy ,
+		knowledge_point.update_time AS updateTime , knowledge_point.course AS
+		course , knowledge_point.chapter AS chapter , knowledge_point.verse AS
+		verse
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where knowledge_point.course = #{course}
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from knowledge_point as knowledge_point
+	</sql>
+	<sql id="other_where">
+		<if test=" null != chapter and chapter.trim() != ''">
+			and knowledge_point.chapter = #{chapter}
+		</if>
+		<if test=" null != verse and verse.trim() != ''">
+			and knowledge_point.verse = #{verse}
+		</if>
+
+		<if test=" null != name and name.trim() != ''">
+			and knowledge_point.name  like concat('%',#{name},'%')
+		</if>
+
+
+	</sql>
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.KnowledgePointEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		
+		where  id = #{id}
+	</select>
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="io.renren.entity.KnowledgePointEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		<include refid="other_where" />
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数 -->
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from" />
+		<include refid="base_where" />
+		<include refid="other_where" />
+	</select>
+	
+	<select id="queryList1" resultType="map">
+		select
+		knowledge_point.id AS id , knowledge_point.name AS name ,
+		suc.username AS createBy , knowledge_point.create_time AS
+		createTime , su.username AS updateBy ,
+		knowledge_point.update_time AS updateTime , knowledge_point.course AS
+		course , knowledge_point.chapter AS chapter , knowledge_point.verse AS
+		verse,
+	 	sum(case when md.type=2 then 1 else 0 end) as questionBank,
+		sum(case when md.type=3 then 1 else 0 end) as sem,
+		sum(case when md.type=0 then 1 else 0 end) as video,
+		sum(case when md.type=1 then 1 else 0 end) as handout
+		from knowledge_point as knowledge_point 
+		left join knowledge_point_material kpm on kpm.knowledge_point_id = knowledge_point.id
+		left join material_detail md on kpm.material_id = md.id
+		left join sys_user suc on suc.user_id = knowledge_point.create_by
+		left join sys_user su on su.user_id = knowledge_point.update_by
+		
+		where knowledge_point.course = #{course}
+		<if test=" null != chapter and chapter.trim() != ''">
+			and knowledge_point.chapter = #{chapter}
+		</if>
+		<if test=" null != verse and verse.trim() != ''">
+			and knowledge_point.verse = #{verse}
+		</if>
+
+		<if test=" null != name and name.trim() != ''">
+			and knowledge_point.name  like concat('%',#{name},'%')
+		</if>
+		group by id
+		
+		<if test="sTime != null and sTime.trim() != ''">
+		ORDER BY ${sTime}
+	 	</if>
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<!--资料分页列表-->
+	<select id="queryListForDetail"  resultType="io.renren.entity.MaterialDetailEntity">
+		
+		select
+		
+	 	d.id AS id , 	d.name AS name , 	d.type AS type , 	d.property  AS property , 	suc.username as createBy  , 
+		d.create_time  as createTime, 	su.username  as updateBy, 	
+		d.update_time  as updateTime
+		from material_detail d inner join knowledge_point_material kpm on d.id = kpm.material_id
+		left join sys_user suc on suc.user_id = d.create_by
+		left join sys_user su on su.user_id = d.update_by
+	
+		
+		<where>
+			<if test="point_id != null ">
+				 kpm.knowledge_point_id = #{point_id}
+			</if>
+		</where>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		
+	</select>
+	<!--资料分页总数-->
+ 	<select id="queryTotalForDetail" resultType="int">
+		select count(1) 
+		from material_detail d inner join knowledge_point_material kpm on d.id = kpm.material_id
+		
+	
+		
+		<where>
+			<if test="point_id != null ">
+				and kpm.knowledge_point_id = #{point_id}
+			</if>
+		</where>
+	</select>
+	
+	<!--新增 -->
+	<insert id="save" parameterType="io.renren.entity.KnowledgePointEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into knowledge_point
+		(
+		`name`, `create_by`,
+		`create_time`, `update_by`, `update_time`, `course`, `chapter`,
+		`verse`, `course_name`, `chapter_name`,
+		`verse_name` )
+		values
+		(
+		#{name} , #{createBy},
+		#{createTime}, #{updateBy}, #{updateTime}, #{course}, #{chapter},
+		#{verse} , #{courseName}, #{chapterName},
+		#{verseName})
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.KnowledgePointEntity">
+		update knowledge_point
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			
+			<if test="createBy != null">`create_by` = #{createBy}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateBy != null">`update_by` = #{updateBy}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="course != null">`course` = #{course}, </if>
+			<if test="chapter != null">`chapter` = #{chapter}, </if>
+			<if test="verse != null">`verse` = #{verse},</if>
+			
+			<if test="courseName != null">`course_name` = #{courseName}, </if>
+			<if test="chapterName != null">`chapter_name` = #{chapterName}, </if>
+			<if test="verseName != null">`verse_name` = #{verseName}</if>
+		</set>
+		<include refid="base_where" />
+		AND id = #{id}
+	</update>
+
+	<!--删除 -->
+	<delete id="delete">
+		DELETE FROM knowledge_point
+		
+		where  id = #{id}
+	</delete>
+
+	<!--批量删除 -->
+	<delete id="deleteBatch">
+		DELETE FROM knowledge_point
+		
+		where  id IN
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

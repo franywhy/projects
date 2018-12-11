@@ -1,0 +1,63 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th class="auto">大区</th>
+			<th class="auto">校区</th>
+			<th class="auto">老师名称</th>
+			<th class="auto">班级名称</th>
+			<th class="auto">学员名称</th>
+			<th class="auto">报名日期</th>
+			<th class="auto">科目名称</th>
+			<th class="auto">出勤实修学分</th>
+			<th class="auto">出勤应修学分</th>
+			<th class="auto">作业实修学分</th>
+			<th class="auto">作业应修学分</th>
+			<th class="auto">结课考核实修学分</th>
+			<th class="auto">结课考核应修学分</th>
+			<th class="auto">合计实修学分</th>
+			<th class="auto">合计应修学分</th>
+			<th class="auto">是否合格</th>
+			<th class="auto">是否考核</th>
+		</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr>
+			<td class="auto"><%=i+1 %></td>
+			<td class="auto" name="largeAreaName"><%=data[i].largeAreaName%></td>
+			<td class="auto"><%=data[i].orgName%></td>
+			<%if(data[i].teacherName == null){%>
+				<td class="auto"></td>
+			<%}else{%>
+				<td class="auto"><%=data[i].teacherName%></td>
+		
+			<%}%>
+			<td class="auto"><%=data[i].arrName%></td>
+			<td class="auto"><%=data[i].studentName%></td>
+			<td class="auto"><%=data[i].signDate%></td>
+			<td class="auto"><%=data[i].subjectName%></td>
+			<td class="auto"><%=data[i].attendanceActualScore%></td>
+			<td class="auto"><%=data[i].attendanceClaimScore%></td>
+			<td class="auto"><%=data[i].workActualScore%></td>
+			<td class="auto"><%=data[i].workClaimScore%></td>
+			<td class="auto"><%=data[i].examActualScore%></td>
+			<td class="auto"><%=data[i].examClaimScore%></td>
+			<td class="auto"><%=data[i].totalScore%></td>
+			<td class="auto"><%=data[i].claimScore%></td>
+			<%if(data[i].isPass==0){%>
+			<td class="auto">是</td>
+			<%}else{%>
+				<td class="auto">否</td>
+			<%}%>
+			<%if(data[i].isCheck==0){%>
+			<td class="auto" type="text" name="is_check" >是</td>
+			<%}else{%>
+				<td class="auto" type="text" name="is_check" >否</td>
+			<%}%>
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

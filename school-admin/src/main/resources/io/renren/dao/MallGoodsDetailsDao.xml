@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallGoodsDetailsDao">
+	<select id="getGoods" resultType="long"  parameterType="Map">
+		SELECT
+			DISTINCT(goods_info.id)
+		FROM
+			mall_goods_details AS goods_details,
+			mall_goods_info AS goods_info
+		WHERE 
+			goods_details.mall_goods_id = goods_info.id
+			AND goods_details.course_id = #{courseId}
+	</select>
+	<select id="getCourses" resultType="long"  parameterType="Map">
+		SELECT 
+			DISTINCT(goods_details.course_id)
+		FROM
+			mall_goods_details AS goods_details
+		WHERE
+			goods_details.mall_goods_id = #{goodsInfoId}
+	</select>
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		mall_goods_details.id AS id ,
+		mall_goods_details.mall_goods_id AS mallGoodsId ,
+		mall_goods_details.mall_area_id AS mallAreaId ,
+		mall_goods_details.course_id AS courseId ,
+		mall_goods_details.is_substituted AS isSubstituted ,
+		mall_goods_details.is_substitute AS isSubstitute ,
+		mall_goods_details.is_united_exam AS isUnitedExam ,
+		mall_goods_details.is_suitable AS isSuitable ,
+		mall_goods_details.school_id AS schoolId ,
+		mall_goods_details.order_num AS orderNum , 
+		mall_goods_details.dr AS dr
+	</sql>
+	<sql id="other_name_column">
+		(select area.area_name from mall_area area where area.area_id = mall_goods_details.mall_area_id) AS areaName,
+		(select course.course_name from courses course where course.course_id = mall_goods_details.course_id) AS courseName
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where mall_goods_details.dr = 0
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from mall_goods_details as mall_goods_details
+	</sql>
+
+	<select id="queryListMap" resultType="map">
+		select
+		<include refid="base_column" />
+		,
+		(select course.course_eq from courses course where course.course_id = mall_goods_details.course_id) AS courseEq,
+		<include refid="other_name_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND mall_goods_details.mall_goods_id = #{goodsId}
+		ORDER BY
+			mall_goods_details.mall_area_id asc , 
+			<!-- 被替代课程 -->
+			mall_goods_details.is_substituted asc , 
+			<!-- 代替课程 -->
+			mall_goods_details.is_suitable asc , 
+			<!-- 专业不对口课程 -->
+			mall_goods_details.is_united_exam asc , 
+			mall_goods_details.course_id asc
+	</select>
+	<!-- 查询商品某一个省份下的课程 -->
+	<select id="selectAreaCouresList" resultType="io.renren.entity.MallGoodsDetailsEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND mall_goods_details.mall_goods_id = #{id}
+		AND mall_goods_details.mall_area_id = #{areaId}
+		<if test="courseId!=null and courseId>0">
+		   AND mall_goods_details.`course_id` =#{courseId}
+		</if>
+	</select>
+	
+	
+	<!-- 查询商品所销售的地区 -->
+	<select id="queryAreaByGoodId" resultType="map">
+		SELECT
+			good_detail.mall_area_id AS value,
+			(SELECT area.area_name FROM mall_area area WHERE area.area_id = good_detail.mall_area_id ) AS text
+		FROM
+			mall_goods_details good_detail
+		WHERE
+			good_detail.mall_goods_id = #{commodityId}
+		GROUP BY
+			good_detail.mall_area_id
+	</select>
+	
+	<select id="queryList" resultType="io.renren.entity.MallGoodsDetailsEntity">
+		select * from mall_goods_details where mall_goods_id = #{mallGoodsId}
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from mall_goods_details where mall_goods_id = #{mallGoodsId}
+	</select>
+ 	<select id="getAreaIdByGoodsId" resultType="long">
+		SELECT
+	  mall_goods_details.mall_area_id
+      FROM
+	  mall_goods_details mall_goods_details
+      WHERE
+	  mall_goods_details.mall_goods_id = #{id}
+      AND mall_goods_details.dr = 0
+      limit 1
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MallGoodsDetailsEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_goods_details
+		(
+			`mall_goods_id`, 
+			`mall_area_id`, 
+			`course_id`, 
+			`is_substituted`, 
+			`is_substitute`, 
+			`is_united_exam`, 
+			`is_suitable`,
+			`school_id` ,
+			`order_num`,
+			`dr`
+		)
+		values
+		(
+			#{mallGoodsId}, 
+			#{mallAreaId}, 
+			#{courseId}, 
+			#{isSubstituted}, 
+			#{isSubstitute}, 
+			#{isUnitedExam}, 
+			#{isSuitable},
+			#{schoolId},
+			#{orderNum},
+			#{dr}
+		)
+	</insert>
+	
+	<update id="update" parameterType="io.renren.entity.MallGoodsDetailsEntity">
+		update mall_goods_details 
+		<set>
+			<if test="mallGoodsId != null">`mall_goods_id` = #{mallGoodsId}, </if>
+			<if test="mallAreaId != null">`mall_area_id` = #{mallAreaId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="isSubstituted != null">`is_substituted` = #{isSubstituted}, </if>
+			<if test="isSubstitute != null">`is_substitute` = #{isSubstitute}, </if>
+			<if test="isUnitedExam != null">`is_united_exam` = #{isUnitedExam}, </if>
+			<if test="isSuitable != null">`is_suitable` = #{isSuitable}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from mall_goods_details where mall_goods_id = #{value}
+	</delete>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.MallGoodsDetailsEntity">
+		UPDATE mall_goods_details 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		and mall_goods_id in 
+		<foreach item="mallGoodsId" collection="ids" open="(" separator="," close=")">
+			#{mallGoodsId}
+		</foreach>
+	</update>
+
+	<update id="deleteBatchNotIn" parameterType="io.renren.entity.MallGoodsDetailsEntity">
+		UPDATE mall_goods_details 
+		<set> dr = 1 </set>
+		where mall_goods_id = #{mallGoodsId}
+		<if test="ids != null and ids.size() > 0 ">
+			and id not in 
+			<foreach item="item" collection="ids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
+</mapper>

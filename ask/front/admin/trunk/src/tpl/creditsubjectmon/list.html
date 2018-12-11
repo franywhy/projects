@@ -1,0 +1,58 @@
+
+ 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th class="auto">大区</th>
+			<th class="auto">校区</th>
+			<th class="auto">报读月份</th>   
+			<th class="auto">课程科目</th>
+			<th class="auto">学员数量</th>
+			<th class="auto">合格人数</th>
+			<th class="auto">合格率</th>
+			<th class="auto">已排课人数</th>
+			<th class="auto">未排课人数</th>
+			<th class="auto">排课率</th>
+			<th class="auto">应修学分</th>
+            <th class="auto">实修学分</th>
+            <th class="auto">学分完成率</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i
+		<data.length;i++){%>
+		 
+	 <tr did="<%=data[i].id%>" >
+	  
+ 
+		
+		 
+
+		 
+			<td class="auto"><%=i+1 %></td>
+			<td class="auto" name="largeAreaName"><%=data[i].largeAreaName%></td>
+			<td class="auto" name="orgName"><%=data[i].orgName%></td>
+			<td class="auto" name="signDate"><%=data[i].signDate%></td>
+
+
+            <td class="auto" name="subjectName"><%=data[i].subjectName%></td>
+	
+			<td class="auto" name="studentnumber"><%=data[i].studentnumber%></td>
+			<td class="auto" name="passrs"><%=data[i].passrs%></td>
+            <td class="auto" type="text" name="tglv" ><%=data[i].passrate%> </td>
+ 
+ 
+			<td class="auto" name="pkrs"><%=data[i].pkrs%></td>		 
+            <td class="auto" name="nopkrs"><%=data[i].nopkrs%></td>	
+			<td class="auto" name="nopkrslv"><%=data[i].paikerate%></td>
+			<td class="auto" name="claimScore"><%=data[i].claimScore%></td>
+			<td class="auto" name="totalScore"><%=data[i].totalScore%></td>
+			<td class="auto" name="xflv" ><%=data[i].creditcompletionrate%></td>
+			   
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

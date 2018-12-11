@@ -1,0 +1,101 @@
+<!--加盟公司结算比率输入-->
+
+
+<form name="inputForm">
+    <div class="tagArea">
+        <ul class="tagList">
+            <li class="tab-nav"><a><span>加盟公司结算比率</span></a></li>
+            <li class="tab-nav-action"><a><span>提成比率</span></a></li>
+        </ul>
+    </div>
+
+    <div id="tabs-body" class="tabs-body">
+        <div style="display:block">
+
+            <input name="_id" hidden="hidden"/>
+            <table height="100px">
+                <tr>
+                    <td>
+                        单据编号<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <input class="input" name="bill_code" type="text"  value=""  required/>
+                    </td>
+                    <td>
+                        加盟公司<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <select style="width: 180px" class="input" id="company_id" name="company_id" type="text"  value="" ></select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        开始日期<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <input id="begin_date" class="input" type="text" name="begin_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" required/>
+                    </td>
+                    <td>
+                        失效日期<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <input id="end_date" class="input" type="text" name="end_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        月度结算日期<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <input id="month_day" class="input" type="text" name="month_day" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" required/>
+                    </td>
+                    <td>
+                        类型<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <select style="width: 180px" class="input" name="type" type="text"  value=""  >
+                            <option value="0">VIP会员</option>
+                            <option value="1">报读课程</option>
+                            <option value="2">报读包就业课程</option>
+                            <option value="3">公开课</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        月度提成比率<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <input id="month_ratio" class="input" type="number" name="month_ratio" value="" size="20" required/>
+                    </td>
+                    <td>
+                        年度结算日期<span class="red">*</span>:
+                    </td>
+                    <td>
+                        <input id="year_day" class="input" type="text" name="year_day" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        描述<span class="red">*</span>:
+                    </td>
+                    <td colspan="3">
+                        <input class="input" name="memo"  style="width: 445px" type="text"  value=""  required/>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+        <div style="display:none">
+            <table ID="addRatio">
+
+
+            </table>
+            <input type="button" class="d-button" value="+" onClick="Izb.controller.companysettleratio.addRatio();" />
+        </div>
+
+    </div>
+</form>
+<!--/加盟公司结算比率输入-->

@@ -1,0 +1,17 @@
+From 10.0.98.12:5000/jdk:8
+
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+
+VOLUME /tmp
+
+VOLUME /logs
+
+WORKDIR /home/service/learningapi
+
+EXPOSE 8083
+
+CMD ["java","-jar","-XX:+PrintGCDetails","-Xloggc:gc.log","-Xms512m","-Xmx1024m","-Xss1024K","-XX:MetaspaceSize=256m","-XX:MaxMetaspaceSize=512m","-XX:PretenureSizeThreshold=819200","-XX:+UseAdaptiveSizePolicy","api.jar","--spring.config.location=application.yml"]
+
+ADD ./config/application-test.yml /home/service/learningapi/application.yml
+
+ADD ./target/learningapi-1.0-SNAPSHOT.jar /home/service/learningapi/api.jar

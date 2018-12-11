@@ -1,0 +1,34 @@
+<!--考试地址管理-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">编号</th>
+        <th class="auto">名称</th>
+        <th class="auto">类型</th>
+        <th class="auto">地址</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){var d = data[i];%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto"><%=d.code %></td>
+            <td class="auto"><%=d.name %></td>
+            <td class="auto"><%=Izb.controller.provinceexam.tname(d.type) %></td>
+            <td class="auto"><%=d.url %></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/考试地址管理-->

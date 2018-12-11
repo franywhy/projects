@@ -1,0 +1,50 @@
+<div class="tagArea">
+    <ul class="tagList">
+        <li class="<%=params.tab=='detail'? 'cur':''%>"><h4>学分排课率全部学员详情</h4></li>
+    </ul>
+    <div class="tag_r">
+      <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="查看不参与考核的科目" />
+		<%}%>
+        <input type="button" value="返回" class="d-button J_back" />
+        <input type="button" value="导出表格" class="d-button J_export">
+    </div>
+</div>
+
+<form name="detailForm">
+ <table class="inputForm" cellpadding="10">
+ 	  <tr>
+ 	  		<td style="width:60px;">校区</td>
+            <td>
+                <input class="input" type="text" name="orgName"  id="orgName" value="<%=params.orgName%>"/>
+            </td>
+            <td style="width:30px;">当前月份</td>
+            <td style="width:10px;">
+                <input class="input" type="text" name="dbilldate"  id="dbilldate" value="<%=params.dbilldate%>" />
+            </td>
+            <td style="width:30px;">报名月份</td>
+            <td>
+                <input class="input" type="text" name="months"  id="months" value="<%=params.months%>" />
+            </td>
+            <td style="width:30px;">排课完成率</td>
+            <td>
+                <input class="input" type="text" name="pkpercent"  id="pkpercent" value="<%=params.pkpercent%>%" />
+            </td>
+            
+              <td style="width:30px;">目标完成率</td>
+            <td>
+                <input class="input" type="text" name="pkmbpercent"  id="pkmbpercent" value="<%=params.pkmbpercent%>%" />
+            </td>
+           
+
+              <td style="width:10px;">是否达标</td>
+            <td>
+                <input class="input" type="text" name="remark"  id="remark" value="<%=params.pkremark%>" />
+            </td>
+              <td style="width:30px;">取数日期</td>
+            <td>
+                <input class="input" type="text" name="remark"  id="remark" value="<%=params.ts%>" />
+            </td>
+        </tr>
+ </table>
+</form>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallClassTypeDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = m.product_id
+	</sql>
+	<select id="queryObject" resultType="io.renren.entity.MallClassTypeEntity">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.creator) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modifier) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_class_type m 
+			<include refid="join"/>
+		where classtype_id = #{classtypeId} and dr = 0  
+	</select>
+	
+	<select id="queryClassId" resultType="io.renren.entity.MallClassTypeEntity">
+		select classtype_id from mall_class_type where classtype_name = #{value}
+	</select>
+	
+	<select id="queryPojoObject" resultType="io.renren.pojo.classType.ClassTypePOJO">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.creator) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modifier) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_class_type m 
+			<include refid="join"/>
+		where classtype_id = #{classtypeId} and dr = 0  
+	</select>
+
+	<select id="querySelectList" resultType="map">
+		select classtype_id value , classtype_name name from mall_class_type where status = 1 and dr = 0
+		<if test="productId != null and productId > 0">
+            AND  product_id = #{productId}
+        </if>
+	</select>
+	
+	<select id="queryList" resultType="io.renren.entity.MallClassTypeEntity">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.creator) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modifier) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_class_type m 
+			<include refid="join"/>
+		where dr = 0 
+			<if test="classtypeName != null and classtypeName.trim() != ''">
+				and `classtype_name` like concat('%',#{classtypeName},'%') 
+			</if>
+			<if test="status != null">
+				and `status` = #{status} 
+			</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryPojoList" resultType="io.renren.pojo.classType.ClassTypePOJO">
+		select 
+			m.*,
+			(select cu.username from sys_user cu where cu.user_id = m.creator) as creationName,
+			(select cm.username from sys_user cm where cm.user_id = m.modifier) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_class_type m 
+			<include refid="join"/>
+		where dr = 0 
+			<if test="classtypeName != null and classtypeName.trim() != ''">
+				and m.classtype_name like concat('%',#{classtypeName},'%') 
+			</if>
+			<if test="productName != null and productName.trim() != ''">
+				and sys_product.product_name like concat('%',#{productName},'%') 
+			</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from mall_class_type m 
+			<include refid="join"/>
+		where dr = 0
+		<if test="classtypeName != null and classtypeName.trim() != ''">
+			and m.classtype_name like concat('%',#{classtypeName},'%') 
+		</if>
+		<if test="productName != null and productName.trim() != ''">
+			and sys_product.product_name like concat('%',#{productName},'%') 
+		</if>
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MallClassTypeEntity" useGeneratedKeys="true" keyProperty="classtypeId">
+		insert into mall_class_type
+		(
+			`dr`, 
+			`school_id`,
+			`classtype_name`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`status`, 
+			`remake`,
+			`product_id`
+		)
+		values
+		(
+			#{dr}, 
+			#{schoolId},
+			#{classtypeName}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime}, 
+			#{status}, 
+			#{remake},
+			#{productId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.MallClassTypeEntity">
+		update mall_class_type 
+		<set>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="classtypeName != null">`classtype_name` = #{classtypeName}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remake != null">`remake` = #{remake}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		where classtype_id = #{classtypeId}
+	</update>
+	<update id="updateBatch">
+	   update mall_class_type set status = #{status} where classtype_id in
+	   <foreach item="classtypeId" collection="list" open="(" separator="," close=")">
+	   	#{classtypeId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from mall_class_type where classtype_id = #{value}
+	</delete>
+	
+	<delete id="deleteClassType">
+		delete from mall_class_type where classtype_id = #{classtypeId}
+	</delete>
+	<!-- <delete id="deleteBatch">
+		delete from mall_class_type where classtype_id in 
+		<foreach item="classtypeId" collection="array" open="(" separator="," close=")">
+			#{classtypeId}
+		</foreach>
+	</delete> -->
+	<update id="deleteBatch">
+		update mall_class_type 
+		<set>
+			dr = 1 
+		</set> 
+		where classtype_id in 
+		<foreach item="classtypeId" collection="array" open="(" separator="," close=")">
+	   		#{classtypeId}
+		</foreach>
+	</update>
+
+</mapper>

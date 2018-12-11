@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.courses.dao.CsKnowledgeQuestiontypeDao">
+
+		
+	<select id="queryList"  resultType="com.hq.courses.pojo.CsKnowledgeQuestiontypePOJO">
+		SELECT
+			cs_knowledge_questiontype.id AS id,
+			cs_knowledge_questiontype.knowledge_id AS knowledgeId,
+			cs_knowledge_questiontype.questiontype_id AS questiontypeId,
+			cs_config.cname AS cname
+		FROM cs_knowledge_questiontype AS cs_knowledge_questiontype
+			JOIN cs_config AS cs_config 
+			ON (cs_config.ckey = #{ckey} AND cs_config.cvalue = cs_knowledge_questiontype.questiontype_id)	
+		WHERE cs_knowledge_questiontype.knowledge_id = #{knowledgeId}	
+		ORDER BY cs_knowledge_questiontype.questiontype_id DESC
+	</select>
+	
+	 
+	<insert id="save" parameterType="com.hq.courses.entity.CsKnowledgeQuestiontypeEntity">
+		INSERT INTO cs_knowledge_questiontype
+		(
+			`knowledge_id`, 
+			`questiontype_id`
+		)
+		values
+		(
+			#{knowledgeId}, 
+			#{questiontypeId}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM cs_knowledge_questiontype WHERE knowledge_id = #{knowledgeId}
+	</delete>
+
+</mapper>

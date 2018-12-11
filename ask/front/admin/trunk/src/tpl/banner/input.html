@@ -1,0 +1,33 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:60px;">序号</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="sort" id="sort" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">图片</td>
+            <td>
+                <input class="input" type="text" name="pic" id="pic"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('pic', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">跳转地址</td>
+            <td>
+                <input class="input" type="text" name="url"  id="url"/>
+            </td>
+        </tr>
+
+        <!--<tr>
+            <td style="width:60px;">新增字段</td>
+            <td>
+                <input class="input" type="text" name="new_field"  id="new_field"/>
+            </td>
+        </tr>-->
+
+
+    </table>
+</form>

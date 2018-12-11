@@ -1,0 +1,28 @@
+<div id="attendanceDetailsLayDiv" style="display: none">
+<!-- 考勤详情查询条件 -->
+<table  border="0">
+	<!-- <tr class="row" >
+		<td class=""><label for="name">学员名称</label></td>
+		<td >
+			<input type="text" class="form-control" id="quserName" placeholder="学员名称">
+		</td>
+		<td class=""><label for="name">手机号码</label></td>
+		<td >
+			<input type="text" class="form-control" id="qmobile" placeholder="手机号码">
+		</td>
+		按钮
+		<td class="grid-btn">
+			<a class="btn btn-primary" @click="clearQueryOrderParams">清空</a> 
+			<a class="btn btn-default" onclick="usersByclassplanLay.reload();">查询</a> 
+		</td>
+	</tr> -->
+	<tr class="row" >
+		<td >
+			<a class="btn btn-danger" onclick="hq.ui.exportData('attendanceDetailsLay_jqGrid');" style="float: right;">导出</a>
+		</td>
+	</tr>
+</table>
+<table id="attendanceDetailsLay_jqGrid" ></table>
+<table id="attendanceDetailsLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/attendanceDetailsLay.js?_${date.systemTime}"></script>

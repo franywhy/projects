@@ -1,0 +1,22 @@
+<form name="inputForm" style="width:1200px;height:800px ">
+<table class="inputForm" cellpadding="10" id="area-detail-query-table">
+        <tr>
+            <td>帐号:
+            	<input class="input" id="name" type="text" name="name" value="" />
+            	昵称:
+            	<input class="input" id="nick_name" type="text" name="nick_name" value=""  />
+            	<input id="_id" name="_id" type="hidden" value="" />
+            </td>
+        </tr>
+        <tr>
+            <td >
+            	 校区编码
+             	<input name="q_org_code"  class="input" id="q_org_code" type="text" />
+            	校区名称
+                <input name="q_org_name"  class="input" id="q_org_name" type="text" />
+                <input type="button"  value="查询" onclick="Izb.controller.creditpermission.queryAreaDetail()">
+            </td>
+        </tr>
+</table>
+ <table id="q-area-permission-detail"></table>
+</form>

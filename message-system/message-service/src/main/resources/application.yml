@@ -1,0 +1,107 @@
+server:
+  port: 8102
+swagger:
+  basePackage: com.hqjy.msg.controller
+task:
+  pool:
+    corePoolSize: 100
+    maxPoolSize: 200
+    keepAliveSeconds: 60
+    queueCapacity: 1000
+    threadNamePrefix: myThreadPool
+
+#service-name: service-msg-api
+spring.application.index: ${random.uuid} # this ensures that our applicationId is unique
+## 刷新时，关闭安全验证
+management.security.enabled: false
+## 开启消息跟踪
+spring.cloud.bus.trace.enabled: true
+spring:
+  profiles:
+    active: pro
+    #active: dev
+  #application:
+  #  name: service-msg-api     #服务ID
+  cloud:
+    stream:
+           bindings:
+             springCloudBusOutput:
+               destination: HqEventExchange
+             springCloudBusInput:
+                         group: ${service-name}
+    config:
+          #uri: http://127.0.0.1:4100/  # 指定配置中心的地址
+          profile: dev                # 指定配置中心配置文件的{profile}
+          label: master                # 指定配置中心配置文件的{label}
+          discovery:
+            enabled: true                    # 使用注册中心里面已注册的配置中心
+            serviceId: config-server  # 指定配置中心注册到注册中心的serviceId
+
+
+eureka:                   # 设置微服务调用地址为IP优先（缺省为false）
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.ip}:${server.port}
+  client:
+    serviceUrl:
+       #defaultZone: http://admin:hqjymicro@hqjy.eks.master:8100/eureka/,http://admin:hqjymicro@hqjy.eks.slave1:8101/eureka/
+       defaultZone: http://admin:hqjymicro@10.0.98.17:8100/eureka/,http://admin:hqjymicro@10.0.98.17:8101/eureka/,http://admin:hqjymicro@10.0.98.17:8102/eureka/
+
+
+druid:
+  type: com.alibaba.druid.pool.DruidDataSource
+  master-count: 2
+  slave-count: 2
+  mapperMXLLoc: classpath:mybatis/mapper/*.xml
+  #pojoPackage: com.kerry.model
+  configLocations: classpath:mybatis/mybatis-config.xml
+  master-01:
+
+    url: jdbc:mysql://localhost:3306/msg?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=true&&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    initial-size: 3
+    min-idle: 1
+    max-active: 20
+    test-on-borrow: true
+ip:
+  urls: localhost,10.0.33.220
+  filterSwitch: false
+
+redis:
+  hostName:  10.0.81.166 #10.0.98.39 #
+  port: 6378  #6379
+  maxIdle: 1500
+  password:
+  maxTotal: 1500
+  maxWaitMillis: 10
+  testOnBorrow: false
+  index: 0
+  indexMsg: 1
+  indexWait: 2
+  indexChannel: 3
+  topic:
+    wait: __keyevent@2__:expired
+    msg: __keyevent@1__:expired
+mq:
+  hostName: 10.0.81.166
+  port: 5674
+  userName: guest
+  pwd: guest
+  virtualHost: /
+  confirms: true
+xinge:
+  android:
+    accessid: 2100275758
+    secretkey: f5a12b9343c0447143eda816f83c74c9
+  ios:
+    accessid: 2200275759
+    secretkey: 076df362039d2bbfd655b73a37eb6f15
+  iosenv: 2
+  enable: false
+common:
+  group: common
+queues:
+  test: msg_test_wait
+is-sync: true

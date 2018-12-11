@@ -1,0 +1,47 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10" align="cent">
+<tr>
+  <td> 本月月份</td>    
+            <td>
+              <input id="dbilldate" type="text" name="dbilldate" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM',maxDate:'#F{$dp.$D(\'dbilldate\')}'})" />
+            </td>
+   </tr><tr>
+  <td>开始月份</td>
+
+            <td>
+              <input id="s_months" type="text" name="s_months" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM',maxDate:'#F{$dp.$D(\'S_months\')}'})" />
+            </td>
+            </tr><tr>
+  <td>结束月份</td>
+
+            <td>
+              <input id="e_months" type="text" name="e_months" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM',maxDate:'#F{$dp.$D(\'e_months\')}'})" />
+            </td>
+</tr>
+ 
+          
+
+        <!--  <tr>
+           <td>运算学分</td>
+            <td size="10" >
+               <select style="width:50px" type="text" class="input" id="syncall" name="syncall">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+           </td>
+           <td>
+              <input id="begin_all_time" type="text" name="begin_all_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_all_time\')}'})" />
+            </td>
+            
+            <td>
+              <input id="end_all_time" type="text" name="end_all_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_all_time\')}'})" />
+            </td>
+       </tr>
+  -->
+
+
+    </table>
+    <hr/>
+ 
+    <table id="q-standard-creditoperation-xfpercent"></table>
+</form>

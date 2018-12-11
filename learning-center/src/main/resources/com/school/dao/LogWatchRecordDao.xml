@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.dao.LogWatchRecordDao">
+
+    <select id="queryAttendCount" resultType="Integer">
+        select SQL_CACHE COUNT(log_watch_record_id)
+        from log_watch_record 
+        where user_id = #{userId}
+        and record_id in
+        <foreach item="recordId" collection="list" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+        and attend = #{attend}
+    </select>
+	
+	<insert id="save" parameterType="com.school.entity.LogWatchRecordEntity" useGeneratedKeys="true" keyProperty="logWatchRecordId">
+		insert into log_watch_record
+		(
+			`user_id`, 
+			`record_id`,
+			`attend`,
+			`ts`
+		)
+		values
+		(
+			#{userId}, 
+			#{recordId},
+			#{attend},
+			#{ts}
+		)
+	</insert>
+	
+	<select id="queryRecordNum" resultType="int">
+		select count(1) from log_watch_record where record_id = #{recordId} and user_id = #{userId} and attend = 1
+	</select>
+	
+	<update id="update" parameterType="com.school.entity.LogWatchRecordEntity">
+		update log_watch_record
+		<set>
+			<if test="ts != null">`ts` = #{ts}</if>
+		</set>
+		where record_id = #{recordId}	
+		and user_id = #{userId}
+	</update>
+</mapper>

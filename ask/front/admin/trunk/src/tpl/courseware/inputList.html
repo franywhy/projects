@@ -1,0 +1,41 @@
+<!--星币输入-->
+<form name="inputForm" enctype="multipart/form-data" method="post">
+    <table >
+        <tr>
+            <td>
+                所属讲师<span class="red">*</span>:
+            </td>
+            <td>
+                <select id="teacher_id" name="teacher_id" class="input J_teacher_id" style="width:240px" data-options="required:true" required>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                提交审核<span class="red">*</span>:
+            </td>
+            <td>
+                <select id="upload_flag" name="upload_flag" class="input" style="width:240px" data-options="required:true" required>
+                    <option value="true">提交</option>
+                    <option value="false" selected>不提交</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                视频(mp4)<span class="red">*</span>:
+            </td>
+            <td nowrap="nowrap">
+                <input id="j-uploadify" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" >
+                <!--<p id="queueStatus"></p>-->
+                <div  id="logList" style=" height: 600px;" ></div>
+            </td>
+        </tr>
+
+    </table>
+</form>
+<br/>

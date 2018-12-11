@@ -1,0 +1,384 @@
+/*--------------------------------------------------------------------
+----------------------------------------------------------------------
+ @Author's xiaotianjia
+ @---Date 2016-10-10
+ @---When you need to customize the new public style, 
+     please write the name of the author, 
+     and the use of the annotation style
+----------------------------------------------------------------------
+--------------------------------------------------------------------*/
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.mainCon-recoding{
+	background: #282828;
+	height: 100%;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		padding-top: 60px;
+}	
+.recoding-head{
+	/* padding: 0 0 0 36px; */
+	height: 60px;
+	line-height: 60px;
+	/* overflow: hidden; */
+	position: absolute;
+	z-index: 100;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background: #282828;
+}
+.recoding-head .left-logo,
+.recoding-head .center-p{
+	float: left;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+}
+.recoding-head .left-logo{
+	width: 12%;
+	display: block;
+	height: 60px;
+	cursor: pointer;
+	position: relative;
+	padding-left: 36px;
+}
+.recoding-head .left-logo i{
+	background: url('../images/icon/oRecoding/nav.png') left center no-repeat;
+	width: 19px;
+	display: inline-block;
+	height: 60px;
+}
+.recoding-head .left-logo  span{
+	display: inline-block;
+	vertical-align: top;
+	color: #ccc;
+	font-size: 16px;
+	padding-left: 10px;
+	height: 60px;
+}
+
+.recoding-head .center-p{
+	text-align: center;
+	color: #fff;
+	width: 50%;
+	width: 88%;
+	padding-right: 400px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.recoding-head .right-box{
+	float: right;
+	width: 460px;
+	box-sizing: border-box;
+		 -webkit-box-sizing: border-box;
+		 position: absolute;
+		 top: 0;
+		 right: 0
+}
+.recoding-head .right-box a.right-box-p{
+	float: left;
+	color: #aaa;
+	margin-right: 10px;
+	padding-left: 20px;
+	font-size: 16px;
+	cursor: pointer;
+	display: block;
+	height: 70px;
+	line-height: 70px;
+	position: relative
+}
+.recoding-head .right-box a.right-box-p:hover{
+	color:#fff
+}
+.recoding-head .right-box a.right-box-p b{
+	font-weight: normal;
+	margin-top: -10px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.recoding-head .right-box a.right-box-p i{
+	height: 17px;
+	width: 18px;
+	display: inline-block;
+	margin-right: 10px;
+	/* transition: All 0.4s ease;
+  	-webkit-transition: All 0.4s ease;
+  	-moz-transition: All 0.4s ease;
+  	-o-transition: All 0.4s ease; */
+}
+.recoding-head .right-box a.right-box-p1 i{
+	background: url(../images/icon/oLive/oLive.png) -284px -0px no-repeat;
+	_background: none;
+	_padding-left: 284px;
+	_margin-left: -284px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.recoding-head .right-box a.right-box-p1:hover i{
+	background: url(../images/icon/oLive/oLive.png) -158px -0px no-repeat;
+	_background: none;
+	_padding-left: 158px;
+	_margin-left: -158px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.recoding-head .right-box a.right-box-p2 i{
+	background: url(../images/icon/oLive/oLive.png) -176px -0px no-repeat;
+	_background: none;
+	_padding-left: 176px;
+	_margin-left: -176px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.recoding-head .right-box a.right-box-p2:hover i{
+	background: url(../images/icon/oLive/oLive.png) -194px -0px no-repeat;
+	_background: none;
+	_padding-left: 194px;
+	_margin-left: -194px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.recoding-head .right-box a.right-box-p3 i{
+	background: url(../images/icon/oLive/oLive.png) -212px -0px no-repeat;
+	_background: none;
+	_padding-left: 212px;
+	_margin-left: -212px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.recoding-head .right-box a.right-box-p3:hover i{
+	background: url(../images/icon/oLive/oLive.png) -230px -0px no-repeat;
+	_background: none;
+	_padding-left: 230px;
+	_margin-left: -230px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.recoding-head .right-box a.right-box-p2 .hide-img{
+	position: absolute;
+	z-index: 9999;
+	left: 25px;
+	top: 60px;
+	background: #313131;
+	/* width: 100px; */
+	display: none;
+}
+.recoding-head .right-box a.right-box-p2 .hide-img img{
+	width: 88px;
+	height: 88px;
+	/* opacity: 0; */
+	text-align: center;
+	/* display: none; */
+}
+.recoding-head .right-box a.right-box-p2:hover .hide-img img{
+	/* display: block; */
+	/* opacity: 1; */
+}
+.nav-box{
+	position: absolute;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		height: 100%;
+		width: 350px;
+		background: #222;
+		padding: 67px 0 20px 0;
+		top: 0;
+		left: 0;
+		z-index: 99;
+		text-align: center;
+		display: none;
+}
+.nav-box .txt-box{
+
+}
+.nav-box a{
+	display: inline-block;
+	color: #747474;
+	width: 100%;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		transition: All 0.3s ease;
+  	-webkit-transition: All 0.3s ease;
+  	-moz-transition: All 0.3s ease;
+  	-o-transition: All 0.3s ease;
+	text-align: left;
+}
+.nav-box a b,
+.nav-box a span,
+.nav-box a i{
+	font-weight: normal;
+	display: inline-block
+}
+.nav-box a.nav-h1{
+	color: #ccc;
+	/* line-height: 60px; */
+	padding: 0 20px;    line-height: 31px;
+	height: 31px;
+	font-size: 15px;
+	text-align: left;
+}
+ .nav-box a.nav-h1.only.active,
+.nav-box a.nav-h1.only:hover{
+    background-color: #171717;
+    color:#cdcdcd;
+} 
+.nav-box a.nav-h1 b{
+	width: 20%;
+	text-align: left;
+}
+.nav-box a.nav-h1 span{
+	width: 56%;
+	text-align: left;
+}
+.nav-box a.nav-h1 i{
+	width: 22%;
+	text-align: left;
+	font-size: 12px;
+}
+.nav-box a.nav-p{
+	padding: 0 15px 0 20px;
+	/* line-height: 24px; */
+	margin: 1px 0;line-height: 30px;
+	font-size: 14px;
+}
+.nav-box a.nav-p b{
+	width: 20%;
+	text-align: left;
+	vertical-align: top;
+}
+.nav-box a.nav-p span{
+	width: 56%;
+	text-align: left;
+}
+.nav-box a.nav-p i{
+	width: 22%;
+	font-size: 12px;
+}
+.nav-box a.nav-p.active,
+.nav-box a.nav-p:hover{
+	background: #171717;
+	color: #cdcdcd
+}
+.recoding-main{
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		position: relative;
+}
+.recoding-main .recoding-left{
+	height: 100%;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		background: #000;
+		z-index: 98;
+}
+.recoding-main .recoding-right{
+	width: 300px;
+	height: 100%;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		position: absolute;
+		background: #222;
+		/* right: 0; */
+		right: -300px;
+		top: 0;
+		z-index: 99;
+}
+.recoding-main .recoding-right .right-con{
+	background: url('../images/icon/oRecoding/down-txt.png') center center no-repeat;
+	width: 18px;
+	height: 89px;
+	position: absolute;
+	left: -18px;
+	top: 56%;
+	cursor: pointer;
+	transform:rotate(360deg);
+	-ms-transform:rotate(360deg); 	/* IE 9 */
+	-moz-transform:rotate(360deg); 	/* Firefox */
+	-webkit-transform:rotate(360deg); /* Safari 和 Chrome */
+	-o-transform:rotate(360deg); 	/* Opera */
+	/* transition: All 0.3s ease;
+  	-webkit-transition: All 0.3s ease;
+  	-moz-transition: All 0.3s ease;
+  	-o-transition: All 0.3s ease; */
+}
+.recoding-main .recoding-right .right-box{
+		overflow-y: overlay;
+	height: 100%;
+}
+.recoding-main .recoding-right .right-con.slidedown{
+	background: url('../images/icon/oRecoding/right-s.png') center center no-repeat;
+	width: 18px;
+	height: 39px;
+	left: 0;
+	transform:rotate(180deg);
+	-ms-transform:rotate(180deg); 	/* IE 9 */
+	-moz-transform:rotate(180deg); 	/* Firefox */
+	-webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+	-o-transform:rotate(180deg); 	/* Opera */
+}
+.recoding-main .recoding-right .box-h1{
+	height: 55px;
+	line-height: 55px;
+	font-size: 16px;
+	color: #bababa;
+	padding-left: 20px;
+	width: 280px;
+	background: #313131;
+	margin-bottom: 5px;
+}
+.recoding-main .recoding-right .box-down{
+	display: inline-block;
+	font-size: 14px;
+	color: #999999;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		width: 300px;
+		padding: 10px 20px;
+		transition: All 0.2s ease;
+  	-webkit-transition: All 0.2s ease;
+  	-moz-transition: All 0.2s ease;
+  	-o-transition: All 0.2s ease;
+}
+.recoding-main .recoding-right .box-down.active,
+.recoding-main .recoding-right .box-down:hover{
+	background: #2a2a2a;
+	color: #33b573
+}
+.recoding-main .recoding-right .box-down span{
+	width: 80%;
+	display: inline-block
+}
+.recoding-main .recoding-right .box-down i{
+	background: url('../images/icon/oRecoding/down.png') center center no-repeat;
+	width: 18%;
+	height: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	transition: All 0.2s ease;
+  	-webkit-transition: All 0.2s ease;
+  	-moz-transition: All 0.2s ease;
+  	-o-transition: All 0.2s ease;
+}
+.recoding-main .recoding-right .box-down.active i,
+.recoding-main .recoding-right .box-down:hover i{
+	background: url('../images/icon/oRecoding/down-hover.png') center center no-repeat;
+}
+/**/
+.mCSB_inside > .mCSB_container{
+	margin-right: 0 !important;
+}
+#mCSB_1_scrollbar_vertical{
+	/* opacity: 0; */
+}

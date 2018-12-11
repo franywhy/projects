@@ -1,0 +1,15 @@
+#数据库配置
+spring:
+  datasource:
+    url: jdbc:mysql://172.16.2.223:3306/hq_pay?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+paycofig: 
+  borrowMoneyUrl: https://ib.hdfex.com/hd-merchant-biz-app/gateway/queryOrder
+  zhfReturnUrl: http://pay.hqjy.com/alipay/callback/return
+  zhfNotifyUrl: http://pay.hqjy.com/alipay/callback/notify
+  config: pro
+  wxReturnUrl: http://pay.hqjy.com/wxpay/callback/notify
+  url: http://pay.hqjy.com

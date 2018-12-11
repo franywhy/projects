@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallStudioDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = m.product_id
+	</sql>
+	<select id="findStudioList" resultType="io.renren.entity.MallStudioEntity">
+		select * from mall_studio where status = 1 and dr = 0
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryObject" resultType="io.renren.entity.MallStudioEntity">
+		select 
+			m.*,
+			<include refid="join_productName"/>
+		from mall_studio m 
+			<include refid="join"/>
+		where studio_id = #{studioId} and dr = 0
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.MallStudioEntity">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.creator) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modifier) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_studio m 
+			<include refid="join"/>
+		where dr = 0 
+			<if test="studioName != null and studioName.trim() != ''">
+				and m.studio_name like concat('%',#{studioName},'%') 
+			</if>
+			<if test="productName != null and productName.trim() != ''">
+				and sys_product.product_name like concat('%',#{productName},'%') 
+			</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 查询status=1，dr=0的直播室列表 -->
+	<select id="queryList1" resultType="io.renren.entity.MallStudioEntity">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.creator) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modifier) as modifiedName
+		from mall_studio m where dr = 0 and status = 1
+			<if test="studioName != null and studioName.trim() != ''">
+				and `studio_name` like concat('%',#{studioName},'%') 
+			</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from mall_studio m 
+			<include refid="join"/>
+		where dr = 0
+		<if test="studioName != null and studioName.trim() != ''">
+			and m.studio_name like concat('%',#{studioName},'%') 
+		</if>
+		<if test="productName != null and productName.trim() != ''">
+			and sys_product.product_name like concat('%',#{productName},'%') 
+		</if>
+	</select>
+	<!-- 查询status=1，dr=0的直播室列表总数 -->
+	<select id="queryTotal1" resultType="int">
+		select count(1) from mall_studio where dr = 0 and status = 1
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MallStudioEntity" useGeneratedKeys="true" keyProperty="studioId">
+		insert into mall_studio
+		(
+			`school_id`,
+			`dr`, 
+			`studio_name`, 
+			`status`, 
+			`remake`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`,
+			`product_id`
+		)
+		values
+		(
+			#{schoolId},
+			#{dr}, 
+			#{studioName}, 
+			#{status}, 
+			#{remake}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime},
+			#{productId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.MallStudioEntity">
+		update mall_studio 
+		<set>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="studioName != null">`studio_name` = #{studioName}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remake != null">`remake` = #{remake}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		where studio_id = #{studioId}
+	</update>
+	<update id="updateBatch">
+	   update mall_studio set status = #{status} where studio_id in
+	   <foreach item="studioId" collection="list" open="(" separator="," close=")">
+	   	#{studioId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from mall_studio where studio_id = #{value}
+	</delete>
+	
+	
+	<!-- <delete id="deleteBatch">
+		delete from mall_studio where studio_id in 
+		<foreach item="studioId" collection="array" open="(" separator="," close=")">
+			#{studioId}
+		</foreach>
+	</delete> -->
+	<update id="deleteBatch">
+		update mall_studio 
+		<set>
+			dr = 1
+		</set>
+		where studio_id in 
+		<foreach item="studioId" collection="array" open="(" separator="," close=")">
+			#{studioId}
+		</foreach>
+	</update>
+
+</mapper>

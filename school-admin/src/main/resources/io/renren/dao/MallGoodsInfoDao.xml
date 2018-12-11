@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallGoodsInfoDao">
+
+    <!-- 通用查询表头 -->
+    <sql id="base_column">
+		mall_goods_info.id AS id , 
+		mall_goods_info.nc_id AS ncId , 
+		mall_goods_info.name AS name ,
+		mall_goods_info.class_type_id AS classTypeId ,
+		mall_goods_info.thumb_path AS thumbPath , 
+		mall_goods_info.origin_path AS originPath , 
+		mall_goods_info.present_price AS presentPrice ,
+		mall_goods_info.original_price AS originalPrice ,
+		mall_goods_info.suitable_user AS suitableUser ,
+		mall_goods_info.learning_time AS learningTime , 
+		mall_goods_info.pattern AS pattern , 
+		mall_goods_info.status AS status ,
+		mall_goods_info.profession_id AS professionId ,
+		mall_goods_info.level_id AS levelId , 
+		mall_goods_info.is_audited AS isAudited , 
+		mall_goods_info.create_person AS createPerson ,
+		mall_goods_info.modify_person AS modifyPerson ,
+		mall_goods_info.create_time AS createTime , 
+		mall_goods_info.modify_time AS modifyTime , 
+		mall_goods_info.school_id AS schoolId ,
+		mall_goods_info.day_validity AS dayValidity ,
+		mall_goods_info.product_id AS productId ,
+		mall_goods_info.dr AS dr,
+		mall_goods_info.only_one AS onlyOne,
+		mall_goods_info.good_recomment AS goodRecomment
+	</sql>
+    <sql id="baseLay_column">
+        goods.`profession_id`,
+        goods.`id`,
+        goods.`thumb_path`,
+        goods.`present_price`,
+        goods.`origin_path` ,goods.`original_price`,
+        goods.`name`,class.`classtype_name` ,
+        pro.`profession_name`,le.`level_name`,
+        goods.`original_price`
+    </sql>
+    <sql id="base_colum_join_name">
+        (select class_type.classtype_name from mall_class_type class_type where class_type.classtype_id = mall_goods_info.class_type_id) as classTypeName,
+        (select level.level_name from mall_level level where level.level_id = mall_goods_info.level_id) as levelName,
+        (select profession.profession_name from mall_profession profession where profession.profession_id = mall_goods_info.profession_id) as professionName,
+        (select sys_product.product_name from sys_product AS sys_product where sys_product.product_id = mall_goods_info.product_id) as productName,
+        (select contract_template.template_name from contract_template AS contract_template where contract_template.id = mall_goods_info.contract_template_id) as templateName
+        
+    </sql>
+    <sql id="base_colum_modify">
+        (select cu.username from sys_user cu where cu.user_id = mall_goods_info.create_person) as createPersonName,
+        (select cm.username from sys_user cm where cm.user_id = mall_goods_info.modify_person) as modifyPersonName,
+        (select sys_product.product_name from sys_product AS sys_product where sys_product.product_id = mall_goods_info.product_id) as productName
+    </sql>
+    <!-- 通用查询条件 -->
+    <sql id="base_where">
+        WHERE mall_goods_info.dr=0
+        <if test="commodityName != null and commodityName.trim() != ''">
+            and mall_goods_info.name like concat('%',#{commodityName},'%')
+        </if>
+        <if test="commodityId > 0">
+            and mall_goods_info.id  = #{commodityId}
+        </if>
+    </sql>
+    <sql id="base_other_where">
+        <if test="name != null and name.trim() != ''">
+            and mall_goods_info.name like concat('%',#{name},'%')
+        </if>
+        <if test="suitableUser != null and suitableUser.trim() != ''">
+            and mall_goods_info.suitable_user like concat('%',#{suitableUser},'%')
+        </if>
+        <if test="status != null and status > -1">
+            AND mall_goods_info.status=#{status}
+        </if>
+        <if test="professionId != null and professionId > 0">
+            AND mall_goods_info.profession_id=#{professionId}
+        </if>
+        <if test="levelId != null and levelId > 0">
+            AND mall_goods_info.level_id=#{levelId}
+        </if>
+        <if test="classTypeId != null and classTypeId > 0">
+            AND mall_goods_info.class_type_Id=#{classTypeId}
+        </if>
+        <if test="id != null and id > 0">
+            AND mall_goods_info.id=#{id}
+        </if>
+        <if test="ncId != null">
+            AND mall_goods_info.nc_id=#{ncId}
+        </if>
+        <if test="productId != null and productId> 0">
+            AND mall_goods_info.product_id=#{productId}
+        </if>
+    </sql>
+    <!-- 通用from -->
+    <sql id="base_from">
+        FROM mall_goods_info as mall_goods_info
+    </sql>
+
+    <select id="queryGoodsInfo" resultType="io.renren.entity.MallGoodsInfoEntity">
+        SELECT * FROM `mall_goods_info` goods WHERE goods.`nc_id`=#{commodityId} and goods.dr=0 LIMIT 1
+    </select>
+
+    <!-- =======================================================简单查询==================================================== -->
+    <select id="simpleQueryList" resultType="map">
+        select
+        good.*,
+        (select profession.profession_name from mall_profession profession where profession.profession_id = good.profession_id) professionName,
+        (select level.level_name from mall_level level where level.level_id = good.level_id) levelName,
+        (select classtype.classtype_name from mall_class_type classtype where classtype.classtype_id = good.class_type_id) classTypeName
+        from mall_goods_info good
+        where good.dr = 0
+        <!-- ================================================= 不定条件查询 ================================================ -->
+        <!-- 上架状态 -->
+        <if test="status != null and status > 0">
+            and good.status  = #{status}
+        </if>
+        <!-- 专业 -->
+        <if test="professionId != null and professionId > 0">
+            and good.profession_id  = #{professionId}
+        </if>
+        <!-- 层次 -->
+        <if test="levelId != null and levelId > 0">
+            and good.level_id  = #{levelId}
+        </if>
+        <!-- 名称 -->
+        <if test="name != null and name.trim() != ''">
+            and good.name  = #{name}
+        </if>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <!-- =======================================================简单查询==================================================== -->
+
+    <!-- <select id="queryLayList" resultType="io.renren.entity.MallGoodsInfoLayEntity">
+      SELECT
+      <include refid="baseLay_column"/>
+     FROM `mall_goods_info` goods,`mall_class_type` class ,`mall_level` le,`mall_profession` pro
+     WHERE goods.`class_type_id`=class.`classtype_id` AND goods.`level_id`=le.`level_id` AND goods.`profession_id`=pro.`profession_id`
+     AND status = 1 AND is_audited = 1 AND dr = 0
+    </select> -->
+    <select id="queryLayList" resultType="map">
+        select
+        <include refid="base_column"/>
+        ,
+        <include refid="base_colum_join_name"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND mall_goods_info.is_audited = 1
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="findGoodsList" resultType="io.renren.entity.MallGoodsInfoEntity">
+        select
+        m.* ,
+        (select aa.profession_name from mall_profession aa where aa.profession_id = m.profession_id) as professionName,
+        (select bb.level_name from mall_level bb where bb.level_id = m.level_id) as levelName,
+        (select cc.classtype_name from mall_class_type cc where cc.classtype_id = m.class_type_id) as alias
+        from mall_goods_info m where status = 1 and dr = 0
+    </select>
+    <!-- 因为queryObject的选项是根据queryList得出来的，所以不需要考虑dr等于0的情况 -->
+    <select id="queryObject" resultType="io.renren.entity.MallGoodsInfoEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        where 1=1
+        and mall_goods_info.id = #{id}
+    </select>
+
+    <select id="queryGoodsInfoId" resultType="io.renren.entity.MallGoodsInfoEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        where mall_goods_info.id = #{id}
+    </select>
+
+    <select id="queryMap" resultType="map">
+        select
+        <include refid="base_column"/>
+        ,
+        <include refid="base_colum_join_name"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND mall_goods_info.id = #{id}
+    </select>
+
+    <!--分页列表-->
+    <select id="queryList" resultType="io.renren.entity.MallGoodsInfoEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryListMap" resultType="map">
+        select
+        <include refid="base_column"/>
+        ,
+        <include refid="base_colum_join_name"/>
+        ,
+        <include refid="base_colum_modify"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        <include refid="base_other_where"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <!--分页总数-->
+    <select id="queryTotal" resultType="int">
+        select count(1)
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        <include refid="base_other_where"/>
+    </select>
+    <select id="queryTotal1" resultType="int">
+        select count(1)
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND is_audited = 1
+    </select>
+    <select id="checkClassType" resultType="int">
+        select count(1)
+        <include refid="base_from"/>
+        where mall_goods_info.class_type_id=#{classtypeId}
+    </select>
+    <select id="checkProfession" resultType="int">
+        select count(1)
+        <include refid="base_from"/>
+        where mall_goods_info.profession_id=#{professionId}
+    </select>
+    <select id="checkExist" resultType="int">
+        select count(1)
+        <include refid="base_from"/>
+        where mall_goods_info.id=#{id}
+    </select>
+    <insert id="save" parameterType="io.renren.entity.MallGoodsInfoEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into mall_goods_info
+        (
+        `id`,
+        `name`,
+        `class_type_id`,
+        `thumb_path`,
+        `origin_path`,
+        `present_price`,
+        `original_price`,
+        `suitable_user`,
+        `learning_time`,
+        `pattern`,
+        `status`,
+        `profession_id`,
+        `level_id`,
+        `is_audited`,
+        `create_person`,
+        `modify_person`,
+        `create_time`,
+        `modify_time`,
+        `school_id`,
+        `dr`,
+        `m_id`,
+        `day_validity`,
+        `product_id`,
+        `nc_id`,
+        `only_one`,
+        `contract_template_Id`,
+        `good_recomment`
+        )
+        values
+        (
+        #{id},
+        #{name},
+        #{classTypeId},
+        #{thumbPath},
+        #{originPath},
+        #{presentPrice},
+        #{originalPrice},
+        #{suitableUser},
+        #{learningTime},
+        #{pattern},
+        #{status},
+        #{professionId},
+        #{levelId},
+        #{isAudited},
+        #{createPerson},
+        #{modifyPerson},
+        #{createTime},
+        #{modifyTime},
+        #{schoolId},
+        #{dr},
+        #{mId},
+        #{dayValidity},
+        #{productId},
+        #{ncId},
+        #{onlyOne},
+        #{contractTemplateId},
+        #{goodRecomment}
+        )
+    </insert>
+
+    <update id="update" parameterType="io.renren.entity.MallGoodsInfoEntity">
+        update mall_goods_info
+        <set>
+            <if test="name != null">`name` = #{name}, </if>
+            <if test="classTypeId != null">`class_type_id` = #{classTypeId}, </if>
+            <if test="thumbPath != null">`thumb_path` = #{thumbPath}, </if>
+            <if test="originPath != null">`origin_path` = #{originPath}, </if>
+            <if test="presentPrice != null">`present_price` = #{presentPrice}, </if>
+            <if test="originalPrice != null">`original_price` = #{originalPrice}, </if>
+            <if test="suitableUser != null">`suitable_user` = #{suitableUser}, </if>
+            <if test="learningTime != null">`learning_time` = #{learningTime}, </if>
+            <if test="pattern != null">`pattern` = #{pattern}, </if>
+            <if test="professionId != null">`profession_id` = #{professionId}, </if>
+            <if test="levelId != null">`level_id` = #{levelId}, </if>
+            <if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+            <if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+            <if test="dayValidity != null">`day_validity` = #{dayValidity}, </if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="ncId != null">`nc_id` = #{ncId},</if>
+            <if test="contractTemplateId != null">`contract_Template_Id` = #{contractTemplateId},</if>
+            <if test="goodRecomment != null">`good_recomment` = #{goodRecomment},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateBatch">
+        update mall_goods_info set status = #{status} where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="reject">
+	   update mall_goods_info set is_audited = 0 where id = #{value}
+	</update>
+
+    <update id="accept">
+	   update mall_goods_info set is_audited = 1 where id = #{value}
+	</update>
+
+    <update id="delete">
+		update mall_goods_info set dr =1 where id = #{value}
+	</update>
+    <update id="deleteBatch">
+        update mall_goods_info set dr =1  where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="queryGoodsInfoByNcId" resultType="io.renren.entity.MallGoodsInfoEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        where 1=1
+        AND  dr = 0
+        and mall_goods_info.nc_id = #{ncId}
+    </select>
+</mapper>

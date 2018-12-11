@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+     	
+	<tx:annotation-driven />
+	<bean id="dataSourceCourses" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${courses.jdbc.url}"/>
+		<property name="username" value="${courses.jdbc.username}"/>
+		<property name="password" value="${courses.jdbc.password}"/>
+		<property name="initialSize" value="${courses.jdbc.initialSize}"/>
+		<property name="maxActive" value="${courses.jdbc.maxActive}"/>
+		<property name="proxyFilters">
+			<list>
+				<ref bean="stat-filter-courses" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="stat-filter-courses" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="slowSqlMillis" value="1000" />
+		<property name="logSlowSql" value="true" />
+		<property name="mergeSql" value="true" />
+	</bean>
+
+	<bean id="transactionManagerCourses" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceCourses"/>
+	</bean>
+	<!-- 基于注解的声明式事务管理配置 -->
+	<tx:annotation-driven transaction-manager="transactionManagerCourses" proxy-target-class="true"/>
+
+	<bean id="sqlSessionFactoryCourses" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-courses.xml" />
+		<property name="dataSource" ref="dataSourceCourses" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.hq.courses.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryCourses"/>
+	</bean>
+</beans>

@@ -1,0 +1,31 @@
+<!--联运列表-->
+<table width="100%" class="listTable tablesorter">
+ <thead>
+    <tr>
+            <th class="longnum">联运账号</th>
+			<th class="short">昵称</th>
+			<th class="short">所属渠道</th>
+			<th class="title">创建时间</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action100">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="longnum"><%=data[i]._id%></td>
+			<td class="short"><%=data[i].nick_name%></td>
+			<td class="short"><%=data[i].qd%></td>             
+            <td class="short"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td  class="action">
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删</button>
+			</td>
+			<%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/联运列表-->

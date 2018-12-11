@@ -1,0 +1,45 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        推荐标题
+        <input type="text" name="recommend_title" size="20" />
+
+        推荐类型
+        <select name="recommend_type">
+            <option value="" selected>==所有==</option>
+            <option value="0">直播</option>
+            <option value="1">语音</option>
+            <option value="2">文章</option>
+            <option value="3">微课</option>
+            <option value="4">题库知识点</option>
+        </select>
+
+        <br/><br/>
+
+        推荐时间
+        <input id="srecommend_time" class="input" type="text" name="srecommend_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'srecommend_time\')}'})"/>
+        至
+        <input id="erecommend_time" class="input" type="text" name="erecommend_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate:'#F{$dp.$D(\'erecommend_time\')}'})"/>
+
+        是否推荐到首页
+        <select name="is_recommend">
+            <option value="" selected></option>
+            <option value="0">否</option>
+            <option value="1">是</option>
+        </select>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<div>
+    <button class="d-button" onclick="Izb.controller.<%=pty.key%>.addarticle()">新增文章</button>
+    <button class="d-button" onclick="Izb.controller.<%=pty.key%>.addvoice()">新增语音</button>
+    <button class="d-button" onclick="Izb.controller.<%=pty.key%>.addvideo()">新增微课</button>
+    <button class="d-button" onclick="Izb.controller.<%=pty.key%>.addtkarticle()">新增题库知识点文章</button>
+</div>
+<!--/通用应用头--> 

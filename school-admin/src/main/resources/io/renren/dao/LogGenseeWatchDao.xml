@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.LogGenseeWatchDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	log_gensee_watch.log_watch_id AS logWatchId , 
+	log_gensee_watch.video_id AS videoId , 
+	log_gensee_watch.live_id AS liveId ,
+	log_gensee_watch.user_id AS userId , 
+	log_gensee_watch.business_id AS businessId , 
+	log_gensee_watch.full_dur AS fullDur ,
+	log_gensee_watch.watch_dur AS watchDur , 
+	log_gensee_watch.video_dur AS videoDur , 
+	log_gensee_watch.live_dur AS liveDur ,
+	log_gensee_watch.attend_per AS attendPer , 
+	log_gensee_watch.m_id AS mId,
+	log_gensee_watch.create_time AS createTime , 
+	log_gensee_watch.ts AS ts
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	<where>
+		    <if test="businessId != null">
+		         log_gensee_watch.business_id = #{businessId}
+		    </if>
+		    <if test="userId != null">
+		        AND log_gensee_watch.user_id = #{userId}
+		    </if>
+		</where>
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM log_gensee_watch AS log_gensee_watch
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  log_watch_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.LogGenseeWatchEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.LogGenseeWatchEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.LogGenseeWatchEntity" useGeneratedKeys="true" keyProperty="logWatchId">
+	insert into log_gensee_watch
+	(
+		`video_id`,
+		`live_id`,
+		`user_id`,
+		`business_id`,
+		`full_dur`,
+		`watch_dur`,
+		`video_dur`,
+		`live_dur`,
+		`attend_per`,
+		`m_id`, 
+		`create_time`
+	)
+	values
+	(
+		#{videoId}, 
+		#{liveId}, 
+		#{userId}, 
+		#{businessId}, 
+		#{fullDur}, 
+		#{watchDur},
+		#{videoDur}, 
+		#{liveDur}, 
+		#{attendPer}, 
+		#{mId}, 
+		#{createTime}
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.LogGenseeWatchEntity">
+		update log_gensee_watch 
+		<set>
+			<if test="videoId != null">`video_id` = #{videoId}, </if>
+			<if test="liveId != null">`live_id` = #{liveId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="businessId != null">`business_id` = #{businessId}, </if>
+			<if test="fullDur != null">`full_dur` = #{fullDur}, </if>
+			<if test="watchDur != null">`watch_dur` = #{watchDur}, </if>
+			<if test="videoDur != null">`video_dur` = #{videoDur}, </if>
+			<if test="liveDur != null">`live_dur` = #{liveDur}, </if>
+			<if test="attendPer != null">`attend_per` = #{attendPer}, </if>
+			<if test="mId != null">`m_id` = #{mId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime} </if>
+		</set>
+		<include refid="base_where"/>
+		AND log_watch_id = #{logWatchId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM log_gensee_watch 
+		<include refid="base_where"/>
+		AND log_watch_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM log_gensee_watch 
+		<include refid="base_where"/> 
+		AND log_watch_id IN 
+		<foreach item="logWatchId" collection="ids" open="(" separator="," close=")">
+			#{logWatchId}
+		</foreach>
+	</delete>
+	
+	<select id="sumWatchTime" resultType="io.renren.pojo.log.LogAttendWatchTimePOJO">
+		SELECT IFNULL(SUM(live.watch_dur),0) watch_time, IFNULL(SUM(live.full_dur_new),0) full_time FROM (
+			SELECT ccpl.classplan_live_name,
+			ccpl.end_time,ccpl.start_time,
+			(UNIX_TIMESTAMP(ccpl.end_time)-UNIX_TIMESTAMP(ccpl.start_time))*1000 full_dur_new,
+			(SELECT CASE WHEN l.watch_dur > full_dur_new THEN full_dur_new ELSE l.watch_dur END FROM log_gensee_watch l WHERE l.user_id = #{userId} AND l.business_id = ccpl.classplan_live_id) watch_dur
+			FROM course_classplan_lives ccpl
+			JOIN course_classplan ccp ON ccp.classplan_id=ccpl.classplan_id
+			WHERE ccp.classplan_id IN 
+				<foreach collection="classplanId" item="cpId" open="(" separator="," close=")">
+					#{cpId}
+				</foreach>
+			 AND ccpl.dr = 0 
+			 AND ccpl.start_time &gt;= #{startTime} AND ccpl.end_time &lt;= #{endTime}
+			 AND find_in_set(#{classTypeId}, ccpl.live_class_type_ids) 
+			) live
+	</select>
+
+    <select id="sumWatchTimeByClassPlanLives" resultType="io.renren.pojo.log.LogAttendWatchTimePOJO">
+        SELECT IFNULL(SUM(live.watch_dur),0) watch_time, IFNULL(SUM(live.full_dur_new),0) full_time FROM (
+        SELECT ccpl.classplan_live_name,
+        ccpl.end_time,ccpl.start_time,
+        (UNIX_TIMESTAMP(ccpl.end_time)-UNIX_TIMESTAMP(ccpl.start_time))*1000 full_dur_new,
+        (SELECT CASE WHEN l.watch_dur > full_dur_new THEN full_dur_new ELSE l.watch_dur END FROM log_gensee_watch l WHERE l.user_id = #{userId} AND l.business_id = ccpl.classplan_live_id) watch_dur
+        FROM course_classplan_lives ccpl
+        JOIN course_classplan ccp ON ccp.classplan_id=ccpl.classplan_id
+        WHERE ccpl.classplan_live_id IN
+        <foreach collection="classPlacLiveIds" item="cplId" open="(" separator="," close=")">
+            #{cplId}
+        </foreach>
+        AND ccpl.dr = 0
+        AND find_in_set(#{classTypeId}, ccpl.live_class_type_ids)
+        ) live
+    </select>
+    
+    	<select id="queryVideoWatch" resultType="io.renren.entity.StudyInfoEntity">
+			SELECT
+				a.user_id,
+		 		a.full_dur AS fullDur,
+				a.watch_dur AS watchDur,
+				a.video_dur AS videoDur,
+				a.live_dur AS liveDur,
+				a.study_persents as studyPersents
+			FROM
+				study_info a
+			WHERE
+				a.dr = 0
+				<if test="userId != null">
+					and a.user_id = #{userId}
+				</if>
+				<if test="courseId != null">
+					and a.course_id = #{courseId}
+				</if>
+	</select>
+</mapper>

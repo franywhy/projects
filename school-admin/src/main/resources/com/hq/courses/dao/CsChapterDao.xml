@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.courses.dao.CsChapterDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		cs_chapter.chapter_id AS chapterId,
+		cs_chapter.chapter_name AS chapterName,
+		cs_chapter.chapter_no AS chapterNo,
+		cs_chapter.course_id AS courseId,
+		cs_chapter.update_time AS updateTime,
+		cs_chapter.create_time AS createTime,
+		cs_chapter.dr AS dr,
+		cs_chapter.order_num AS orderNum
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE cs_chapter.dr = 0
+	</sql>
+	<sql id="base_and_parent">
+		AND cs_chapter.course_id = #{courseId}
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM cs_chapter AS cs_chapter
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by chapter_id asc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.courses.entity.CsChapterEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND chapter_id = #{chapterId}
+	</select>
+	<select id="queryObjectByName" resultType="com.hq.courses.entity.CsChapterEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND cs_chapter.chapter_name = #{chapterName}
+		AND cs_chapter.course_id = #{courseId}
+	</select>
+	<select id="queryObjectByChapterNo" resultType="com.hq.courses.entity.CsChapterEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		where 1=1
+		<if test="chapterId != null">
+				AND cs_chapter.chapter_id != #{chapterId}
+		</if>
+		<if test="chapterNo != null and chapterNo.trim() != ''">
+				AND cs_chapter.chapter_no = #{chapterNo}
+		</if>
+	</select>
+	<select id="queryList" resultType="com.hq.courses.entity.CsChapterEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_and_parent"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_and_parent"/>
+	</select>
+	 
+	<insert id="save" parameterType="com.hq.courses.entity.CsChapterEntity" useGeneratedKeys="true" keyProperty="chapterId">
+		INSERT INTO cs_chapter
+		(
+			`chapter_name`, 
+			`chapter_no`, 
+			`course_id`, 
+			`dr`, 
+			`order_num`
+		)
+		values
+		(
+			#{chapterName}, 
+			#{chapterNo}, 
+			#{courseId}, 
+			#{dr}, 
+			#{orderNum}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.courses.entity.CsChapterEntity">
+		UPDATE cs_chapter 
+		<set>
+			<if test="chapterName != null">`chapter_name` = #{chapterName}, </if>
+			<if test="chapterNo != null">`chapter_no` = #{chapterNo}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}</if>
+		</set>
+		WHERE chapter_id = #{chapterId}
+	</update>
+	
+	<update id="delete">
+		UPDATE cs_chapter set dr = 1 where chapter_id = #{chapterId}
+	</update>
+
+</mapper>

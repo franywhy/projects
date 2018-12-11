@@ -1,0 +1,53 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th >角色</th>
+        <th >角色ID</th>
+        <th >昵称</th>
+
+        <th >内容类型</th>
+        <th >内容</th>
+        <th >时间</th>
+
+        <th>显示类型</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <% var rdata = data.trData ; for(var i=0;i<rdata.length;i++){ var tcolor = rdata[i].role_type == 2 ? 'red' : ''; %>
+    <tr>
+
+        <td class="short <%=tcolor%>"><%=rdata[i].role_name || "-"%></td>
+        <td class="short <%=tcolor%>"><%=rdata[i].user_id || "-"%></td>
+        <td class="short <%=tcolor%>"><%=rdata[i].user_name || "-"%></td>
+
+        <td class="short <%=tcolor%>">
+            <%=rdata[i].reply_type_name%>
+        </td>
+
+        <% if(rdata[i].reply_type == 1 || rdata[i].reply_type == 4 ){%>
+            <td class="pic">
+                <img src="<%=rdata[i].reply_content%>" onclick="javascript:window.open('<%=rdata[i].reply_content%>')">
+            </td>
+        <% }else if(rdata[i].reply_type == 2 ){%>
+            <td class="short <%=tcolor%>">
+                <a href="javascrip:void(0);" onclick="javascript:window.open('<%=rdata[i].reply_content%>')">语音>>></a>
+            </td>
+        <% }else{ %>
+            <td class="short <%=tcolor%>">
+                <%=rdata[i].reply_content%>
+            </td>
+        <% } %>
+
+        <td  class="time <%=tcolor%>"><%=new Date(rdata[i].reply_time).toLocaleString()%></td>
+
+        <td class="short <%=tcolor%>"><%=rdata[i].show_type_name%></td>
+
+    </tr>
+    <%}%>
+    </tbody>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

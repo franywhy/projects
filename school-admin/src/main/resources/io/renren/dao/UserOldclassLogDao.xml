@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.UserOldclassLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.UserOldclassLogEntity" id="userOldclassLogMap">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="goodId" column="good_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="classId" column="class_id"/>
+        <result property="className" column="class_name"/>
+        <result property="classtypeId" column="classtype_id"/>
+        <result property="classtypeName" column="classtype_name"/>
+        <result property="classTeacherId" column="class_teacher__id"/>
+        <result property="classTeacherNickname" column="class_teacher_nickName"/>
+        <result property="classTeacherMobile" column="class_teacher_mobile"/>
+        <result property="onlyOne" column="only_one"/>
+        <result property="open" column="open"/>
+        <result property="isNewClass" column="is_new_class"/>
+        <result property="ts" column="ts"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.UserOldclassLogEntity">
+		select * from user_oldclass_log where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.UserOldclassLogEntity">
+		select * from user_oldclass_log
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_oldclass_log 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.UserOldclassLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into user_oldclass_log
+		(
+			`order_no`, 
+			`good_id`, 
+			`user_id`, 
+			`nick_name`, 
+			`mobile`, 
+			`class_id`, 
+			`class_name`, 
+			`classtype_id`, 
+			`classtype_name`, 
+			`class_teacher__id`, 
+			`class_teacher_nickName`, 
+			`class_teacher_mobile`, 
+			`only_one`, 
+			`open`, 
+			`is_new_class`, 
+			`ts`
+		)
+		values
+		(
+			#{orderNo}, 
+			#{goodId}, 
+			#{userId}, 
+			#{nickName}, 
+			#{mobile}, 
+			#{classId}, 
+			#{className}, 
+			#{classtypeId}, 
+			#{classtypeName}, 
+			#{classTeacherId}, 
+			#{classTeacherNickname}, 
+			#{classTeacherMobile}, 
+			#{onlyOne}, 
+			#{open}, 
+			#{isNewClass}, 
+			now()
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.UserOldclassLogEntity">
+		update user_oldclass_log 
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="goodId != null">`good_id` = #{goodId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="nickName != null">`nick_name` = #{nickName}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="classId != null">`class_id` = #{classId}, </if>
+			<if test="className != null">`class_name` = #{className}, </if>
+			<if test="classtypeId != null">`classtype_id` = #{classtypeId}, </if>
+			<if test="classtypeName != null">`classtype_name` = #{classtypeName}, </if>
+			<if test="classTeacherId != null">`class_teacher__id` = #{classTeacherId}, </if>
+			<if test="classTeacherNickname != null">`class_teacher_nickName` = #{classTeacherNickname}, </if>
+			<if test="classTeacherMobile != null">`class_teacher_mobile` = #{classTeacherMobile}, </if>
+			<if test="onlyOne != null">`only_one` = #{onlyOne}, </if>
+			<if test="open != null">`open` = #{open}, </if>
+			<if test="isNewClass != null">`is_new_class` = #{isNewClass}, </if>
+			<if test="ts != null">`ts` = #{ts}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from user_oldclass_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from user_oldclass_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+    <select id="queryMessage" resultType="map">
+       SELECT
+            `order_no`  AS orderNo,
+			`good_id` AS goodId,
+			`user_id` AS userId,
+			`nick_name` AS nickName,
+			`mobile` AS mobile,
+			`class_id` AS classId,
+			`class_name` AS className,
+			`classtype_id` AS classTypeId,
+			`classtype_name` AS classTypeName,
+			`class_teacher__id` AS classTeacherId,
+			`class_teacher_nickName` AS classTeacerNickName,
+			`class_teacher_mobile` AS classTeacherAccount,
+			`only_one` AS onlyOne,
+			`open` AS open,
+			`is_new_class` AS isNewClass,
+			`ts` as ts
+        FROM user_oldclass_log WHERE ts &gt; #{ts}
+  </select>
+</mapper>

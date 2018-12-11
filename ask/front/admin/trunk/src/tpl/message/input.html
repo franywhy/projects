@@ -1,0 +1,88 @@
+<!--海报输入--> 
+<form name="inputForm">
+
+    <input id="_id" class="input" type="hidden" name="_id" value="0" />
+
+
+
+    <table width="100%">
+        <tr>
+            <td align="right">标题</td>
+            <td><input type="text" class="input" id="title" size="40" name="title" value="" data-options="required:true"/></td>
+        </tr>
+         <tr>
+            <td align="right">通知类型</td>
+            <td>
+                <select class="input" id="msg_action" name="msg_action">
+                    <option value="tourl">图文推广（带URL）</option>
+                    <option value="donothing">普通文字消息</option>
+                    <option value="mytopices_topic">跳转到问题详情的推送</option>
+                    <option value="mytest">跳转到题库首页</option>
+                    <option value="live_detail">跳转到直播间</option>
+                    <option value="video">跳转到微课</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td align="right">通知对象</td>
+            <td>
+                <select class="input" id="type" name="type">
+                    <option value="1">个人消息</option>
+                    <option value="0">公共消息</option>
+                </select>
+
+              <input type="button" id="message_adduser" onclick="Izb.controller.message.initSelectUsers();" value="添加用户"/>
+
+                <select class="input" id="user_type" name="user_type">
+                    <!--<option value="0">全体人员</option>-->
+                    <option value="3" selected="selected">学生</option>
+                    <option value="2">教师</option>
+                    <option value="6">中级职称学员</option>
+                    <!--<option value="4" selected="selected">学生-安卓端</option>-->
+                    <!--<option value="5" selected="selected">学生-苹果端</option>-->
+
+                </select>
+            </td>
+        </tr>
+        <tr id="pnl_users">
+            <td align="right">用户ID</td>
+            <td>
+                <textarea id="t_users" name="t_users" class="input" cols="80" rows="3"></textarea>
+                <br />
+                <span class="tip">多个用户ID<strong>英文逗号</strong>分隔</span>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" id="content_type_name">内容</td>
+            <td>
+                <textarea name="content" id="message_content" class="input" cols="80" rows="3"></textarea>
+                <input type="button" id="message_addquestion" onclick="Izb.controller.message.initSelectqc();" value="添加精彩问答"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" id="content_type_name2">内容</td>
+            <td>
+                <textarea name="video_content" id="message_video" class="input" cols="80" rows="3"></textarea>
+                <input type="button" id="message_addvideo" onclick="Izb.controller.message.initSelectVideo();" value="添加微课"/>
+            </td>
+        </tr>
+
+
+
+        <tr>
+            <td align="right">是否发送</td>
+            <td>
+                <select class="input" id="send" name="send">
+                    <option value="0">暂不发送</option>
+                    <option value="1">立即发送</option>
+                    <option value="2">定时发送</option>
+                </select>
+            </td>
+
+        </tr>
+        <tr id="send_time_box">
+            <td align="right">定时发送时间</td>
+            <td><input class="input" type="datetime" name="send_time" id="send_time" size="63" required="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:00'})"></td>
+        </tr>
+    </table>
+</form>
+<!--/海报输入--> 

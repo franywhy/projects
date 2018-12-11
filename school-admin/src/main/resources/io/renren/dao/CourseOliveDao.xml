@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseOliveDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = course_olive.product_id
+	</sql>
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		course_olive.olive_id AS oliveId , 
+		course_olive.olive_title AS oliveTitle ,
+		course_olive.olive_introduction AS oliveIntroduction ,
+		course_olive.card_title AS cardTitle ,
+		course_olive.card_subtitle AS cardSubtitle ,
+		course_olive.teacher_id AS teacherId ,
+		course_olive.olive_start_time AS oliveStartTime ,
+		course_olive.olive_end_time AS oliveEndTime , 
+		course_olive.olive_pic AS olivePic , 
+		course_olive.app_status AS appStatus ,
+		course_olive.live_room_id AS liveRoomId ,
+		course_olive.replay_url AS replayUrl ,  
+		course_olive.create_person AS createPerson ,
+		course_olive.creation_time AS creationTime , 
+		course_olive.modify_person AS modifyPerson , 
+		course_olive.modified_time AS modifiedTime ,
+		course_olive.school_id AS schoolId ,
+		course_olive.product_id AS productId,
+		course_olive.teacher_name AS teacherName,
+		course_olive.teacher_avatar AS teacherAvatar,
+		course_olive.teacher_introduction AS teacherIntroduction,
+		course_olive.content AS content,
+		course_olive.suitable AS suitable,
+		course_olive.push_status AS pushStatus,
+		course_olive.push_time AS pushTime,
+		course_olive.push_msg_id AS pushMsgId,
+		course_olive.push_find_msg_id AS pushFindMsgId,
+		course_olive.dr AS dr,
+		course_olive.authority_id AS authorityId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_olive as course_olive
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseOliveEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND olive_id = #{oliveId}
+	</select>
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="io.renren.pojo.CourseOlivePOJO">
+		select 
+      	<include refid="base_column"/>
+      	,
+		(select su.nick_name from sys_user su where su.user_id = course_olive.teacher_id) as teacherName,
+		(select ml.live_room_name from mall_live_room ml where ml.live_room_id = course_olive.live_room_id) as liveRoomName,
+		(select cu.username from sys_user cu where cu.user_id = course_olive.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = course_olive.modify_person) as modifiedName,
+		<include refid="join_productName"/>
+		<include refid="base_from"/>
+		<include refid="join"/>
+		<include refid="base_where"/>
+		AND olive_id = #{oliveId}
+	</select>
+
+	<!--根据ID查询-->
+	<select id="queryMsgMap" resultType="java.util.Map">
+		select
+			olive_id AS oliveId,
+			olive_title AS oliveTitle ,
+			olive_introduction AS oliveIntroduction ,
+			card_title AS cardTitle ,
+			card_subtitle AS cardSubtitle ,
+			olive_start_time AS oliveStartTime ,
+			olive_end_time AS oliveEndTime ,
+			olive_pic AS olivePic ,
+			teacher_name AS teacherName,
+			app_status AS appStatus,
+			push_msg_id AS pushMsgId,
+			push_find_msg_id AS pushFindMsgId,
+			push_time AS pushTime
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND olive_id = #{oliveId}
+	</select>
+
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseOliveEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="io.renren.pojo.CourseOlivePOJO">
+		select
+		<include refid="base_column"/>
+		,
+		(select ml.live_room_name from mall_live_room ml where ml.live_room_id = course_olive.live_room_id) as liveRoomName,
+		(select cu.username from sys_user cu where cu.user_id = course_olive.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = course_olive.modify_person) as modifiedName,
+		<include refid="join_productName"/>
+		<include refid="base_from"/>
+		<include refid="join"/> 
+		<include refid="base_where"/>
+		AND dr = 0
+		<if test="oliveTitle != null and oliveTitle.trim() != ''">
+			and `olive_title` like concat('%',#{oliveTitle},'%') 
+		</if>
+		order by creation_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		AND dr = 0
+		<if test="oliveTitle != null and oliveTitle.trim() != ''">
+			and `olive_title` like concat('%',#{oliveTitle},'%') 
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseOliveEntity" useGeneratedKeys="true" keyProperty="oliveId">
+		insert into course_olive
+		(
+			`olive_title`,
+			`olive_introduction`,
+			`card_title`,
+			`card_subtitle`,
+			`teacher_id`, 
+			`olive_start_time`, 
+			`olive_end_time`,
+			`olive_pic`,
+			`app_status`, 
+			`live_room_id`,
+			`replay_url`,
+			`create_person`, 
+			`creation_time`, 
+			`modify_person`, 
+			`modified_time`,
+			`school_id`,
+			`product_id`,
+			`teacher_name`,
+			`teacher_avatar`,
+			`teacher_introduction`,
+			`content`,
+			`suitable`,
+			`push_status`,
+			`push_time`,
+			`push_msg_id`,
+			`push_find_msg_id`,
+			`dr`,
+			`authority_id`
+		)
+		values
+		(
+			#{oliveTitle},
+			#{oliveIntroduction},
+			#{cardTitle},
+			#{cardSubtitle},
+			#{teacherId},
+			#{oliveStartTime},
+			#{oliveEndTime}, 
+			#{olivePic},
+			#{appStatus}, 
+			#{liveRoomId},
+			#{replayUrl},
+			#{createPerson}, 
+			#{creationTime}, 
+			#{modifyPerson},
+			#{modifiedTime},
+			#{schoolId},
+			#{productId},
+			#{teacherName},
+			#{teacherAvatar},
+			#{teacherIntroduction},
+			#{content},
+			#{suitable},
+			#{pushStatus},
+			#{pushTime},
+			#{pushMsgId},
+			#{pushFindMsgId},
+			#{dr},
+			#{authorityId}
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseOliveEntity">
+		update course_olive 
+		<set>
+			<if test="oliveTitle != null">`olive_title` = #{oliveTitle}, </if>
+			<if test="oliveIntroduction != null">`olive_introduction` = #{oliveIntroduction}, </if>
+			<if test="cardTitle != null">`card_title` = #{cardTitle}, </if>
+			<if test="cardSubtitle != null">`card_subtitle` = #{cardSubtitle}, </if>
+			<if test="teacherId != null">`teacher_id` = #{teacherId}, </if>
+			<if test="oliveStartTime != null">`olive_start_time` = #{oliveStartTime}, </if>
+			<if test="oliveEndTime != null">`olive_end_time` = #{oliveEndTime}, </if>
+			<if test="olivePic != null">`olive_pic` = #{olivePic}, </if>
+			<if test="appStatus != null">`app_status` = #{appStatus}, </if>
+			<if test="liveRoomId != null">`live_room_id` = #{liveRoomId}, </if>
+			<if test="replayUrl != null">`replay_url` = #{replayUrl}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="teacherName != null">`teacher_name` = #{teacherName}, </if>
+			<if test="teacherAvatar != null">`teacher_avatar` = #{teacherAvatar}, </if>
+			<if test="teacherIntroduction != null">`teacher_introduction` = #{teacherIntroduction}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="suitable != null">`suitable` = #{suitable}, </if>
+			<if test="pushStatus != null">`push_status` = #{pushStatus}, </if>
+			<if test="pushTime != null">`push_time` = #{pushTime}, </if>
+			<if test="pushMsgId != null">`push_msg_id` = #{pushMsgId}, </if>
+			<if test="pushFindMsgId != null">`push_find_msg_id` = #{pushFindMsgId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="authorityId != null">`authority_id` = #{authorityId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND olive_id = #{oliveId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM course_olive 
+		<include refid="base_where"/>
+		AND olive_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<update id="deleteBatch">
+		update course_olive set dr = 1 where olive_id in
+		<foreach item="oliveId" collection="list" open="(" separator="," close=")">
+			#{oliveId}
+		</foreach>
+	</update>
+
+	<!-- 批量更新状态 -->
+	<update id="updateBatch">
+	   update course_olive set app_status = #{appStatus} where olive_id in
+	   <foreach item="oliveId" collection="list" open="(" separator="," close=")">
+	   	#{oliveId}
+	   </foreach>
+	</update>
+
+	<!-- 更新推送状态 -->
+	<update id="updatePushStatus">
+		update course_olive set push_status = #{pushStatus}, push_time = #{pushTime}, push_msg_id = #{pushMsgId}, push_find_msg_id = #{pushFindMsgId}, app_status = #{appStatus}
+		where olive_id = #{oliveId}
+	</update>
+
+    <select id="queryCountByPushTime" resultType="string">
+        SELECT  push_time FROM course_olive WHERE  push_time  BETWEEN #{startTime} AND #{endTime} ORDER BY push_time desc limit 1
+    </select>
+</mapper>

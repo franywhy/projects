@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>省份档案业务表</title> #parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				#if($shiro.hasPermission("mallarea:list")) 
+				<table  class="table table-condensed" border="0">
+					<td><label for="name">省份:</label></td>
+					<td>
+						<input type="text" class="form-control" v-model.trim="q.areaName" @keyup.enter="query" placeholder="省份">
+					</td>
+					<td><label for="name">NCID:</label></td>
+					<td>
+						<input type="text" class="form-control" v-model.trim="q.ncId" @keyup.enter="query" placeholder="NCID">
+					</td>
+				</table>
+				<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+				<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+				#end
+				#if($shiro.hasPermission("mallarea:save")) 
+				<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				#end 
+				#if($shiro.hasPermission("mallarea:update")) 
+				<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			    #end
+				#if($shiro.hasPermission("mallarea:delete")) 
+				<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				#end 
+				#if($shiro.hasPermission("mallarea:resume")) 
+				<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+				#end 
+				#if($shiro.hasPermission("mallarea:pause")) 
+				<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;停用</a>
+				#end
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group" style="display: none">
+					<div class="col-sm-2 control-label">地区ID</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallArea.areaId"
+							placeholder="地区ID" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">地区名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="mallArea.areaName" placeholder="地区名称" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">NCID</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="mallArea.ncId" placeholder="NCID" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">NCCODE</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="mallArea.ncCode" placeholder="NCCODE" />
+					</div>
+				</div>
+				
+				<div class="form-group" id = "createTime">
+					<div class="col-sm-2 control-label">创建时间</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="mallArea.createTime" placeholder="创建时间" id = "createTimeText"/>
+					</div>
+				</div>
+				<div class="form-group" id = "modifyTime">
+					<div class="col-sm-2 control-label">修改时间</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="mallArea.modifyTime" placeholder="修改时间" id = "modifyTimeText"/>
+					</div>
+				</div>
+				<div class="form-group" id = "createPerson">
+					<div class="col-sm-2 control-label">创建人</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="mallArea.createPerson" placeholder="创建人" id = "createPersonText"/>
+					</div>
+				</div>
+				<div class="form-group" id = "modifyPerson">
+					<div class="col-sm-2 control-label">修改人</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="mallArea.modifyPerson" placeholder="修改人" id = "modifyPersonText"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate"
+						value="确定" /> &nbsp;&nbsp;<input type="button"
+						class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script src="${rc.contextPath}/js/mall/mallarea.js?_${date.systemTime}"></script>
+</body>
+</html>

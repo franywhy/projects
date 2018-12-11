@@ -1,0 +1,52 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th class="auto">报名日期</th>
+			<th class="auto">报读班型</th>
+			<th class="auto">学员名称</th>
+			<th class="auto">学员电话</th>
+			<th class="auto">科目名称</th>
+			<th class="auto">科目编号</th>
+			<th class="auto">排课状态</th>
+			<th class="auto">出勤实修学分</th>
+			<th class="auto">出勤应修学分</th>
+			<th class="auto">作业实修学分</th>
+			<th class="auto">作业应修学分</th>
+			<th class="auto">结课考核实修学分</th>
+			<th class="auto">结课考核应修学分</th>
+			<th class="auto">应修学分合计</th>
+			<th class="auto">实修学分合计</th>
+			<th class="auto">是否合格</th>
+		    <th class="auto">班级名称</th>
+		    <th class="auto">老师名称</th>
+		</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr did="<%=data[i].id%>">
+			<td class="auto"><%=i+1 %></td>
+			<td class="auto" name="StudentName"><%=data[i].signDate%></td>
+			<td class="auto" name="SequenceName"><%=data[i].sequenceName%></td>
+			<td class="auto" name="StudentName"><%=data[i].studentName%></td>
+			<td class="auto" name="StudentName"><%=data[i].phone%></td>
+			<td class="auto" name="SubjectName"><%=data[i].subjectName%></td>
+			<td class="auto" name="SubjectName"><%=data[i].subjectCode%></td>
+			<td class="auto" name="SubjectName"><%=data[i].paikeRemark%></td>
+			<td class="auto" name="attendance_actual_score"><%=data[i].attendanceActualScore%></td>
+			<td class="auto" name="attendance_claim_score"><%=data[i].attendanceClaimScore%></td>
+			<td class="auto" name="work_claim_score"><%=data[i].workActualScore%></td>
+			<td class="auto" name="work_claim_score"><%=data[i].workClaimScore%></td>
+			<td class="auto" name="exam_actual_score"><%=data[i].examActualScore%></td>
+			<td class="auto" name="exam_claim_score"><%=data[i].examClaimScore%></td>
+				<td class="auto" name="eclaim_score"><%=data[i].claimScore%></td>
+			<td class="auto" name="total_score"><%=data[i].totalScore%></td>
+			 <td class="auto" name="SubjectName"><%=data[i].passRemark%></td>
+			<td class="auto" name="className"><%=data[i].className%></td>
+			<td class="auto" name="teacherName"><%=data[i].teacherName%></td>
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

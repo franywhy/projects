@@ -1,0 +1,32 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        名称
+        <input id="name" type="text" name="name" value="" size="20"  />
+
+        开始时间
+        <input id="sstart_time" type="text" name="sstart_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'sstart_time\')}'})"  />
+        到
+        <input id="estart_time" type="text" name="estart_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'estart_time\')}'})" />
+
+        结束时间
+        <input id="send_time" type="text" name="send_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'send_time\')}'})"  />
+        到
+        <input id="eend_time" type="text" name="eend_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'eend_time\')}'})" />
+
+        <br/>
+
+        教师名称
+        <input id="teacher_name" type="text" name="teacher_name" value="" size="20"  />
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<div>
+    <button class="d-button" onclick="Izb.controller.liveclasstab.add()">新增</button>
+</div>
+<!--/通用应用头--> 

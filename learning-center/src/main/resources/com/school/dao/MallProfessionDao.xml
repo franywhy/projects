@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.dao.MallProfessionDao">
+
+	<select id="queryName" resultType="String">
+		select mp.profession_name
+		from   course_userplan cu
+		join mall_profession mp
+		on mp.profession_id = cu.profession_id
+		where user_id = #{userId}
+		and cu.dr = #{dr} 
+		and cu.`status` = #{status}
+		and cu.order_id= #{orderId}
+		and mp.dr=#{dr} 
+		and mp.`status`=#{status}
+	</select>
+
+</mapper>

@@ -1,0 +1,14 @@
+<!--基础数据页头|选择日期-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span></h2>
+<div class="searchForm">
+    <form name="searchForm">
+        选择日期
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00'})" />
+        <input class="d-button J_search" type="button" value="查询"/>
+        <input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/基础数据页头--> 

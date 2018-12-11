@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("mallmarketcourse:list"))
+            <table  class="table table-condensed" border="0">
+                <tr border="0">
+
+				<td>
+                    <input type="text" class="form-control" v-model="q.parentName" @keyup.enter="query" placeholder="分类名称">
+                </td>
+
+			<td>
+				<input type="text" class="form-control" v-model="q.titleName" @keyup.enter="query" placeholder="标题名称">
+            </td>
+			<td>
+				<input type="text" class="form-control" v-model="q.productName" @keyup.enter="query" placeholder="产品线">
+            </td>
+			<td>
+                <a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("mallmarketcourse:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("mallmarketcourse:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("mallmarketcourse:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("mallmarketcourse:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+			#end
+			#if($shiro.hasPermission("mallmarketcourse:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a>
+			#end
+                    </td>
+                </tr>
+            </table>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.id" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">所属分类</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" v-model="mallMarketCourse.parentId" style="width:370px">
+				       <option v-for="option in selData.classifyList" v-bind:value="option.parentId">{{ option.parentName }}</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">标题</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.name" placeholder="标题"/>
+			    </div>
+			</div>
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">图片</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.pic" placeholder="图片"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">图片</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.pic" placeholder="图片" readonly="readonly" onclick="hq.core.upload(null,'vm.mallMarketCourse.pic');"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">pcUrl</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.pcUrl" placeholder="pcUrl"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">appUrl</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.appUrl" placeholder="appUrl"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">上课方式</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.classWay" placeholder="上课方式"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">试用对象</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.suitableObject" placeholder="试用对象"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">排序</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.orderNum" placeholder="序号越小课程就排在越前面"/>
+			    </div>
+			</div>
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.productId" placeholder="产品线"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallMarketCourse.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">是否可分享</div> 
+				<label class="radio-inline">
+				  <input type="radio" name="isShare" value="1" v-model="mallMarketCourse.isShare"/> 是
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="isShare" value="0" v-model="mallMarketCourse.isShare"/> 否
+				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/mallmarketcourse.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/productLay.html")
+</body>
+</html>

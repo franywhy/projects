@@ -1,0 +1,573 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.school</groupId>
+	<artifactId>accountant</artifactId>
+	<packaging>war</packaging>
+	<version>2.0</version>
+	<name>jee Maven Webapp</name>
+
+	<!-- 集中定义依赖版本号 -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.7</jdk.version>
+		<junit.version>4.10</junit.version>
+		<servlet.version>2.5</servlet.version>
+		<jsp.version>2.1</jsp.version>
+		<slf4j.version>1.7.12</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
+		<commons.lang3.version>3.4</commons.lang3.version>
+		<commons.codec.version>1.10</commons.codec.version>
+		<commons.fileupload.version>1.3.1</commons.fileupload.version>
+		<commons.io.version>2.4</commons.io.version>
+		<commons.email.version>1.4</commons.email.version>
+		<commons.validator.version>1.4.1</commons.validator.version>
+		<commons.exec.version>1.3</commons.exec.version>
+		<httpcomponents.version>4.5.2</httpcomponents.version>
+		<mysql.connector.java.version>5.1.38</mysql.connector.java.version>
+		<druid.version>1.0.9</druid.version>
+		<tomcat.jdbc.version>8.0.30</tomcat.jdbc.version>
+		<spring.version>4.2.4.RELEASE</spring.version>
+		<mybatis.version>3.3.0</mybatis.version>
+		<mybatis.spring.version>1.2.2</mybatis.spring.version>
+		<mybatis.generator.version>1.3.5</mybatis.generator.version>
+		<freemarker.version>2.3.23</freemarker.version>
+		<jackson.version>2.6.3</jackson.version>
+		<fastjson.version>1.2.7</fastjson.version>
+		<spymemcached.version>2.11.6</spymemcached.version>
+		<prettytime.version>4.0.0.Final</prettytime.version>
+		<jedis.version>2.9.0</jedis.version>
+		<spring-data-redis.version>1.8.3.RELEASE</spring-data-redis.version>
+		<jsoup.version>1.9.2</jsoup.version>
+		<google.zxing.version>2.2</google.zxing.version>
+		<weixin.java.version>2.2.0</weixin.java.version>
+		
+		<!-- 实训系统接口地址 -->
+		<pom.SHIXUN_ALL_PRODUCTS><![CDATA[http://sx.hqjy.com/api/hs/product/practice?key=291880BD247C346FCE8F74BDE15BB3F8]]></pom.SHIXUN_ALL_PRODUCTS>
+		<pom.SHIXUN_USER_PRODUCTS><![CDATA[http://sx.hqjy.com/api/hs/member/practice?key=@key&loginName=@loginName]]></pom.SHIXUN_USER_PRODUCTS>
+		<!-- imageDomain -->
+		<pom.image.domain><![CDATA[http://img.kjcity.com]]></pom.image.domain>
+	</properties>
+	
+	<profiles>
+		<profile>
+			<!-- 开发环境 -->
+			<id>dev</id>
+			<properties>
+				<pom.jdbc.driver>com.mysql.jdbc.Driver</pom.jdbc.driver>
+				<pom.jdbc.url><![CDATA[jdbc:mysql://177.77.77.158:3307/kjcity?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&useSSL=false]]></pom.jdbc.url>
+				<pom.jdbc.username>root</pom.jdbc.username>
+				<pom.jdbc.password>root</pom.jdbc.password>
+				<!-- redis -->
+				<pom.spring.redis.host>177.77.77.158</pom.spring.redis.host>
+				<pom.spring.redis.port>6379</pom.spring.redis.port>
+				<pom.spring.redis.database>0</pom.spring.redis.database>
+				<pom.spring.redis.maxTotal>5000</pom.spring.redis.maxTotal>
+				<pom.spring.redis.maxWaitMillis>2000</pom.spring.redis.maxWaitMillis>
+				<pom.spring.redis.maxIdle>50</pom.spring.redis.maxIdle>
+				<pom.spring.redis.minIdle>20</pom.spring.redis.minIdle>
+				<pom.spring.redis.timeout>100000</pom.spring.redis.timeout>
+				<pom.spring.redis.testOnBorrow>false</pom.spring.redis.testOnBorrow>
+				<pom.spring.redis.testOnReturn>false</pom.spring.redis.testOnReturn>
+				<pom.spring.redis.testWhileIdle>false</pom.spring.redis.testWhileIdle>
+				<!-- session域名 -->
+				<pom.session.domain>localhost</pom.session.domain>
+				<!-- 学习中心地址 -->
+				<pom.learningCenterUrl><![CDATA[http://10.0.98.15:18088/learningCenter/web/home?token=]]></pom.learningCenterUrl>
+				<!-- SSO接口 -->
+				<pom.sso_domain><![CDATA[http://177.77.77.186:8084]]></pom.sso_domain>
+				<pom.sso_login_post_url>${pom.sso_domain}<![CDATA[/inner/login?mobileNo=@mobileNo&passWord=@passWord&clientType=web&versionCode=1]]></pom.sso_login_post_url>
+				<pom.sso_userInfo_get>${pom.sso_domain}<![CDATA[/inner/userInfo?token=@token]]></pom.sso_userInfo_get>
+				<pom.sso_userMobileNo_get>${pom.sso_domain}<![CDATA[/inner/userMobileNo?token=@token]]></pom.sso_userMobileNo_get>
+				<pom.sso_logout_post>${pom.sso_domain}<![CDATA[/inner/logout?token=@token]]></pom.sso_logout_post>
+				<pom.sso_sendSMS_get>${pom.sso_domain}<![CDATA[/inner/otpSMS?mobileNo=@mobileNo]]></pom.sso_sendSMS_get>
+				<pom.sso_register_post>${pom.sso_domain}<![CDATA[/inner/register?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_register_post>
+				<pom.sso_passWord_post>${pom.sso_domain}<![CDATA[/inner/passWord?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_passWord_post>
+				<pom.sso_checkMobileNo_get>${pom.sso_domain}<![CDATA[/inner/checkMobileNo?mobileNo=@mobileNo]]></pom.sso_checkMobileNo_get>
+			</properties>
+		</profile>
+		
+		<profile>
+			<!-- 测试环境 -->
+			<id>test</id>
+			<properties>
+				<pom.jdbc.driver>com.mysql.jdbc.Driver</pom.jdbc.driver>
+				<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.5:3306/hq_school?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&useSSL=false]]></pom.jdbc.url>
+				<pom.jdbc.username>root</pom.jdbc.username>
+				<pom.jdbc.password>root</pom.jdbc.password>
+				<!-- redis -->
+				<pom.spring.redis.host>10.0.98.9</pom.spring.redis.host>
+				<pom.spring.redis.port>6384</pom.spring.redis.port>
+				<pom.spring.redis.database>0</pom.spring.redis.database>
+				<pom.spring.redis.maxTotal>5000</pom.spring.redis.maxTotal>
+				<pom.spring.redis.maxWaitMillis>2000</pom.spring.redis.maxWaitMillis>
+				<pom.spring.redis.maxIdle>50</pom.spring.redis.maxIdle>
+				<pom.spring.redis.minIdle>20</pom.spring.redis.minIdle>
+				<pom.spring.redis.timeout>100000</pom.spring.redis.timeout>
+				<pom.spring.redis.testOnBorrow>false</pom.spring.redis.testOnBorrow>
+				<pom.spring.redis.testOnReturn>false</pom.spring.redis.testOnReturn>
+				<pom.spring.redis.testWhileIdle>false</pom.spring.redis.testWhileIdle>
+				<!-- session域名 -->
+				<pom.session.domain>hqjy.com</pom.session.domain>
+				<!-- 学习中心地址 -->
+				<pom.learningCenterUrl><![CDATA[http://10.0.98.15:18088/learningCenter/web/home?SSOTOKEN=]]></pom.learningCenterUrl>
+				<!-- SSO接口 -->
+				<pom.sso_domain><![CDATA[http://10.0.98.14:8084]]></pom.sso_domain>
+				<pom.sso_login_post_url><![CDATA[${pom.sso_domain}/inner/login?mobileNo=@mobileNo&passWord=@passWord&clientType=web&versionCode=1]]></pom.sso_login_post_url>
+				<pom.sso_userInfo_get><![CDATA[${pom.sso_domain}/inner/userInfo?token=@token]]></pom.sso_userInfo_get>
+				<pom.sso_userMobileNo_get><![CDATA[${pom.sso_domain}/inner/userMobileNo?token=@token]]></pom.sso_userMobileNo_get>
+				<pom.sso_logout_post><![CDATA[${pom.sso_domain}/inner/logout?token=@token]]></pom.sso_logout_post>
+				<pom.sso_sendSMS_get><![CDATA[${pom.sso_domain}/inner/otpSMS?mobileNo=@mobileNo]]></pom.sso_sendSMS_get>
+				<pom.sso_register_post><![CDATA[${pom.sso_domain}/inner/register?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_register_post>
+				<pom.sso_passWord_post><![CDATA[${pom.sso_domain}/inner/passWord?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_passWord_post>
+				<pom.sso_checkMobileNo_get><![CDATA[${pom.sso_domain}/inner/checkMobileNo?mobileNo=@mobileNo]]></pom.sso_checkMobileNo_get>
+                <pom.sso.tokenExpired.url><![CDATA[${pom.sso_domain}/inner/tokenExpired?token=@token]]></pom.sso.tokenExpired.url>
+			</properties>
+		</profile>
+
+		<profile>
+			<!-- 预生产环境 -->
+			<id>preProduct</id>
+			<properties>
+				<pom.jdbc.driver>com.mysql.jdbc.Driver</pom.jdbc.driver>
+				<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.100:3306/hq_school?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&useSSL=false]]></pom.jdbc.url>
+				<pom.jdbc.username>root</pom.jdbc.username>
+				<pom.jdbc.password>root</pom.jdbc.password>
+				<!-- redis -->
+				<pom.spring.redis.host>10.0.98.100</pom.spring.redis.host>
+				<pom.spring.redis.port>6379</pom.spring.redis.port>
+				<pom.spring.redis.database>0</pom.spring.redis.database>
+				<pom.spring.redis.maxTotal>5000</pom.spring.redis.maxTotal>
+				<pom.spring.redis.maxWaitMillis>2000</pom.spring.redis.maxWaitMillis>
+				<pom.spring.redis.maxIdle>50</pom.spring.redis.maxIdle>
+				<pom.spring.redis.minIdle>20</pom.spring.redis.minIdle>
+				<pom.spring.redis.timeout>100000</pom.spring.redis.timeout>
+				<pom.spring.redis.testOnBorrow>false</pom.spring.redis.testOnBorrow>
+				<pom.spring.redis.testOnReturn>false</pom.spring.redis.testOnReturn>
+				<pom.spring.redis.testWhileIdle>false</pom.spring.redis.testWhileIdle>
+				<!-- session域名 -->
+				<pom.session.domain>hqjy.com</pom.session.domain>
+				<!-- 学习中心地址 -->
+				<pom.learningCenterUrl><![CDATA[http://lcbetakuaiji.ljtest.hqjy.com/learningCenter/web/home?SSOTOKEN=]]></pom.learningCenterUrl>
+				<!-- SSO接口 -->
+				<pom.sso_domain><![CDATA[http://dev.api.hqjy.cn/service-sso-api-dev]]></pom.sso_domain>
+				<pom.sso_login_post_url><![CDATA[${pom.sso_domain}/inner/login?mobileNo=@mobileNo&passWord=@passWord&clientType=web&versionCode=1]]></pom.sso_login_post_url>
+				<pom.sso_userInfo_get><![CDATA[${pom.sso_domain}/inner/userInfo?token=@token]]></pom.sso_userInfo_get>
+				<pom.sso_userMobileNo_get><![CDATA[${pom.sso_domain}/inner/userMobileNo?token=@token]]></pom.sso_userMobileNo_get>
+				<pom.sso_logout_post><![CDATA[${pom.sso_domain}/inner/logout?token=@token]]></pom.sso_logout_post>
+				<pom.sso_sendSMS_get><![CDATA[${pom.sso_domain}/inner/otpSMS?mobileNo=@mobileNo]]></pom.sso_sendSMS_get>
+				<pom.sso_register_post><![CDATA[${pom.sso_domain}/inner/register?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_register_post>
+				<pom.sso_passWord_post><![CDATA[${pom.sso_domain}/inner/passWord?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_passWord_post>
+				<pom.sso_checkMobileNo_get><![CDATA[${pom.sso_domain}/inner/checkMobileNo?mobileNo=@mobileNo]]></pom.sso_checkMobileNo_get>
+				<pom.sso.tokenExpired.url><![CDATA[${pom.sso_domain}/inner/tokenExpired?token=@token]]></pom.sso.tokenExpired.url>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 生产环境 -->
+			<id>prod</id>
+			<properties>
+				<pom.jdbc.driver>com.mysql.jdbc.Driver</pom.jdbc.driver>
+				<pom.jdbc.url><![CDATA[jdbc:mysql://172.16.2.223:3306/hq_school?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&useSSL=true]]></pom.jdbc.url>
+				<pom.jdbc.username>root</pom.jdbc.username>
+				<pom.jdbc.password>root</pom.jdbc.password>
+				<!-- redis -->
+				<pom.spring.redis.host>172.16.2.223</pom.spring.redis.host>
+				<pom.spring.redis.port>6379</pom.spring.redis.port>
+				<pom.spring.redis.database>3</pom.spring.redis.database>
+				<pom.spring.redis.maxTotal>5000</pom.spring.redis.maxTotal>
+				<pom.spring.redis.maxWaitMillis>2000</pom.spring.redis.maxWaitMillis>
+				<pom.spring.redis.maxIdle>50</pom.spring.redis.maxIdle>
+				<pom.spring.redis.minIdle>20</pom.spring.redis.minIdle>
+				<pom.spring.redis.timeout>100000</pom.spring.redis.timeout>
+				<pom.spring.redis.testOnBorrow>false</pom.spring.redis.testOnBorrow>
+				<pom.spring.redis.testOnReturn>false</pom.spring.redis.testOnReturn>
+				<pom.spring.redis.testWhileIdle>false</pom.spring.redis.testWhileIdle>
+				<!-- session域名 -->
+				<pom.session.domain>hqjy.com</pom.session.domain>
+				<!-- 学习中心地址 -->
+				<pom.learningCenterUrl><![CDATA[http://kuaiji.learning.hqjy.com/learningCenter/web/home?SSOTOKEN=]]></pom.learningCenterUrl>
+				<!-- SSO接口 -->
+				<pom.sso_domain><![CDATA[http://172.16.2.222:8102]]></pom.sso_domain>
+				<pom.sso_login_post_url><![CDATA[${pom.sso_domain}/inner/login?mobileNo=@mobileNo&passWord=@passWord&clientType=web&versionCode=1]]></pom.sso_login_post_url>
+				<pom.sso_userInfo_get><![CDATA[${pom.sso_domain}/inner/userInfo?token=@token]]></pom.sso_userInfo_get>
+				<pom.sso_userMobileNo_get><![CDATA[${pom.sso_domain}/inner/userMobileNo?token=@token]]></pom.sso_userMobileNo_get>
+				<pom.sso_logout_post><![CDATA[${pom.sso_domain}/inner/logout?token=@token]]></pom.sso_logout_post>
+				<pom.sso_sendSMS_get><![CDATA[${pom.sso_domain}/inner/otpSMS?mobileNo=@mobileNo]]></pom.sso_sendSMS_get>
+				<pom.sso_register_post><![CDATA[${pom.sso_domain}/inner/register?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_register_post>
+				<pom.sso_passWord_post><![CDATA[${pom.sso_domain}/inner/passWord?mobileNo=@mobileNo&passWord=@passWord&otp=@otp]]></pom.sso_passWord_post>
+				<pom.sso_checkMobileNo_get><![CDATA[${pom.sso_domain}/inner/checkMobileNo?mobileNo=@mobileNo]]></pom.sso_checkMobileNo_get>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${jsp.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons.lang3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons.codec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons.fileupload.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons.io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>${commons.email.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>${commons.validator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-exec</artifactId>
+			<version>${commons.exec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpcomponents.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>${httpcomponents.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.java.version}</version>
+		</dependency>
+		<!-- 连接池 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid.version}</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.apache.tomcat</groupId> <artifactId>tomcat-jdbc</artifactId> 
+			<version>${tomcat.jdbc.version}</version> <exclusions> <exclusion> <groupId>org.apache.tomcat</groupId> 
+			<artifactId>tomcat-juli</artifactId> </exclusion> </exclusions> </dependency> -->
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Spring END -->
+
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis.spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>${freemarker.version}</version>
+		</dependency>
+
+		<!-- 支持JSON输出 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<classifier>jdk15</classifier>
+			<version>2.3</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>${fastjson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.spy</groupId>
+			<artifactId>spymemcached</artifactId>
+			<version>${spymemcached.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${jedis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>${spring-data-redis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+			<version>1.2.2.RELEASE</version>
+			<!-- <type>pom</type> -->
+		</dependency>
+
+		<!-- 显示相对日期 -->
+		<dependency>
+			<groupId>org.ocpsoft.prettytime</groupId>
+			<artifactId>prettytime</artifactId>
+			<version>${prettytime.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
+		</dependency>
+		<!-- 验证码 -->
+		<dependency>
+			<groupId>com.google.code.kaptcha</groupId>
+			<artifactId>kaptcha</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<!-- 生成二维码 -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>${google.zxing.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>${google.zxing.version}</version>
+		</dependency>
+
+		<!-- 第三方开源的微信工具包 -->
+		<dependency>
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>weixin-java-mp</artifactId>
+			<version>${weixin.java.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>weixin-java-cp</artifactId>
+			<version>${weixin.java.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>accountant</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+					<include>**/*.ftl</include>
+					<include>**/*.txt</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<!-- 资源文件拷贝插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- java编译插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>2.20</version>
+			    <configuration>
+			    	<skipTests>true</skipTests>
+			    </configuration>
+			</plugin>
+			<!-- 配置Tomcat插件 -->
+			<!-- <plugin> <groupId>org.apache.tomcat.maven</groupId> <artifactId>tomcat7-maven-plugin</artifactId> 
+				<version>2.2</version> <configuration> <path>/</path> <port>8080</port> URL按UTF-8进行编码，解决中文参数乱码 
+				<uriEncoding>UTF-8</uriEncoding> </configuration> </plugin> -->
+
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<configuration>
+					<scanIntervalSeconds>30</scanIntervalSeconds>
+					<webApp>
+						<contextPath>/</contextPath>
+					</webApp>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

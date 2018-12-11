@@ -1,0 +1,65 @@
+<!--商品查询列表-->
+<% var type=$.parseParam(location.hash).item_type; if(type==0){%>
+<table id ="item0" data-toggle="table"
+       data-url="/payorder/item_list.json?item_type=0"
+       data-pagination="true"
+       data-side-pagination="server"
+       data-page-list="[5, 10, 20, 50, 100, 200]"
+       data-search="true"
+       data-sort-order="desc"
+       data-click-to-select="true"
+       data-select-item-name="radioName">
+    <thead>
+    <tr>
+        <th data-field="state" data-radio="true"></th>
+        <th data-field="course_code" data-align="center" data-sortable="true">课程编号</th>
+        <th data-field="course_name" data-align="center" data-sortable="true">课程名称</th>
+        <th data-field="teacher_name" data-align="center" data-sortable="true">所属讲师</th>
+        <th data-field="item_price" data-align="center" data-sortable="true">课程价格</th>
+    </tr>
+    </thead>
+</table>
+<%} else if (type==1) {%>
+<table id ="item1" data-toggle="table"
+       data-url="/payorder/item_list.json?item_type=1"
+       data-pagination="true"
+       data-side-pagination="server"
+       data-page-list="[5, 10, 20, 50, 100, 200]"
+       data-search="true"
+       data-sort-order="desc"
+       data-click-to-select="true"
+       data-select-item-name="radioName">
+    <thead>
+    <tr>
+        <th data-field="state" data-radio="true"></th>
+        <th data-field="course_code" data-align="center" data-sortable="true">课程编号</th>
+        <th data-field="course_name" data-align="center" data-sortable="true">课程名称</th>
+        <th data-field="teacher_name" data-align="center" data-sortable="true">所属讲师</th>
+        <th data-field="item_price" data-align="center" data-sortable="true">课程价格</th>
+    </tr>
+    </thead>
+</table>
+<%}else  if (type==3){%>
+<table id ="item3" data-toggle="table"
+       data-url="/payorder/item_list.json?item_type=3"
+       data-pagination="true"
+       data-side-pagination="server"
+       data-page-list="[5, 10, 20, 50, 100, 200]"
+       data-search="true"
+       data-sort-order="desc"
+       data-click-to-select="true"
+       data-select-item-name="radioName">
+    <thead>
+    <tr>
+        <th data-field="state" data-radio="true"></th>
+        <th data-field="room_ids" data-align="center" data-sortable="true">房间编号</th>
+        <th data-field="room_name" data-align="center" data-sortable="true">直播间名称</th>
+        <th data-field="nick_name" data-align="center" data-sortable="true">主播名称</th>
+        <th data-field="room_type_name" data-align="center" data-sortable="true">直播间类型</th>
+        <th data-field="price" data-align="center" data-sortable="true">价格</th>
+    </tr>
+    </thead>
+</table>
+<%}%>
+<!--/商品查询列表-->
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>教材档案</title> #parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				#if($shiro.hasPermission("coursetextbook:save")) <a
+					class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				#end #if($shiro.hasPermission("coursetextbook:update")) <a
+					class="btn btn-primary" @click="update"><i
+					class="fa fa-pencil-square-o"></i>&nbsp;修改</a> #end
+				#if($shiro.hasPermission("coursetextbook:delete")) <a
+					class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				#end
+				 
+				#if($shiro.hasPermission("coursetextbook:resume")) <a
+					class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启动</a>
+				#end #if($shiro.hasPermission("coursetextbook:pause")) <a
+					class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a>
+				#end
+			</div>
+			<div style="padding: 10px;" class="row">
+				<table>
+				    <tr>
+				      <td>
+				      <div class="form-group">
+						<div class="col-sm-8">
+							<input type="text" class="form-control"
+								v-model="courseTextbook.textbookName" placeholder="教材名称" />
+						</div>
+			   	     
+					</div>
+					
+				      </td>
+				      <td>
+				      <div class="col-sm-8">
+			                <input type="text" class="form-control" v-model="courseTextbook.courseName" readonly="readonly" placeholder="选择课程" @click="selectCourse"/>
+			         </div>
+						<div class="col-sm-4">
+							<a class="btn btn-default" @click="query"><i
+								class="fa fa-search"></i>&nbsp;查询</a>
+						</div>
+				      </td>
+				    </tr>
+				</table>
+					
+			
+			</div>
+			<table id="jqGrid"></table>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group" style="display: none">
+					<div class="col-sm-2 control-label">主键</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="courseTextbook.textbookId" placeholder="主键" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">教材名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="courseTextbook.textbookName" placeholder="教材名称" />
+					</div>
+				</div>
+				<div class="form-group">
+			   	<div class="col-sm-2 control-label">课程名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseTextbook.courseName" readonly="readonly" placeholder="选择课程" @click="selectCourse"/>
+			      <!-- <input type="hidden" class="form-control" v-model="courseClassplan.courseId" readonly="readonly" placeholder="课程名称"/> -->
+			    </div>
+			    <!-- <a class="btn btn-default" @click="selCourse">选择课程</a> -->
+			</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">备注</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="courseTextbook.remark" placeholder="备注" />
+					</div>
+				</div>
+				<!-- <div class="form-group">
+					<div class="col-sm-2 control-label">建档日期</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="courseTextbook.creationTime" placeholder="建档日期" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">建档人</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="courseTextbook.createPerson" placeholder="建档人" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">最后修改日期</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="courseTextbook.modifiedTime" placeholder="最近修改日期" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">最后修改用户</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="courseTextbook.modifyPerson" placeholder="最近修改用户" />
+					</div>
+				</div>
+			 -->
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate"
+						value="确定" /> &nbsp;&nbsp;<input type="button"
+						class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script
+		src="${rc.contextPath}/js/course/coursetextbook.js?_${date.systemTime}"></script>
+	#parse("../../statics/plugins/upload/upload.html")
+	#parse("layer/courseLay.html")
+</body>
+</html>

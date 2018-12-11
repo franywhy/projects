@@ -1,0 +1,88 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:130px;">优惠券名称</td>
+            <td>
+                <input name="id" type="hidden" value=""/>
+                <input class="input" type="text" name="name" id="name" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">面值</td>
+            <td>
+                <input class="input" type="text" name="money" id="money" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">数量</td>
+            <td>
+                <input class="input" type="text" name="limitNumber" id="limitNumber" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">当日领取数量限制</td>
+            <td>
+                <input class="input" type="text" name="dayMaxNum" id="dayMaxNum" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">有效期</td>
+            <td>
+                <label>
+                    <input type="radio" class="time_type_radio" name="timeType" value="0" onclick="Izb.controller.discount.ChangeRadio(this);" checked/>
+                    固定日期
+                    <input id="startTime" type="text" name="startTime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'startTime\')}'})" />
+                    至
+                    <input id="endTime" type="text" name="endTime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endTime\')}'})" />
+                </label><br />
+                <label>
+                    <input type="radio" class="time_type_radio" name="timeType" value="1" onclick="Izb.controller.discount.ChangeRadio(this);"/>
+                    领取后有效天数
+                    <select  name="validDays" id="validDays" >
+                        <option value="" selected>无</option>
+                        <option value="30">30天</option>
+                        <option value="90">90天</option>
+                        <option value="180">180天</option>
+                        <option value="365">1年</option>
+                    </select>
+                </label><br />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">优惠券类型</td>
+            <td>
+                <label>
+                    <input type="radio" class="type_radio" name="type" value="0" checked/>
+                    标准
+                </label><br />
+                <label>
+                    <input type="radio" class="type_radio" name="type" value="1" />
+                    活动赠送
+                </label><br />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">限制平台</td>
+            <td>
+                <select  name="workType" id="workType">
+                    <option value="0" selected>不限制</option>
+                    <option value="1">恒企在线</option>
+                    <option value="2">会答APP</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:130px;">使用条件</td>
+            <td>
+                在单笔订单中，购买金额满<input class="input" type="text" name="enoughMoney" id="enoughMoney" value="" data-options="required:true"/>元才可使用
+            </td>
+        </tr>
+        <tr>
+            <td style="width:30px;"></td>
+            <td>
+                亲，请计算好使用优惠券后的价格，避免商品亏本出售。
+            </td>
+        </tr>
+
+    </table>
+</form>

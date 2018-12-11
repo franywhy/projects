@@ -1,0 +1,13 @@
+From 10.0.98.12:5000/jdk:8
+
+VOLUME /tmp
+
+VOLUME /logs
+
+WORKDIR /home/service/msg
+
+EXPOSE 8666
+
+CMD ["java","-jar","-XX:+PrintGCDetails","-Xloggc:gc.log","msg.jar","--spring.profiles.active=test"]
+
+ADD ./message-web/target/msg.jar /home/service/msg/msg.jar

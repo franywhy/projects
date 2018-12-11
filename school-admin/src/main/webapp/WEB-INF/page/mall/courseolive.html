@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>公开课</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("courseolive:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.oliveTitle" @keyup.enter="query" placeholder="标题">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("courseolive:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("courseolive:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("courseolive:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("customcard:push"))
+			<a class="btn btn-primary" @click="pushRulesLayerShow"><i class="fa fa-tag"></i>&nbsp;推送/更新</a>
+			<a class="btn btn-primary" @click="delMessage"><i class="fa fa-trash-o"></i>&nbsp;取消推送</a>
+			<a class="btn btn-primary" @click="updateMsgRecommend(1)"><i class="fa fa-play"></i>&nbsp;推荐</a>
+			<a class="btn btn-primary" @click="updateMsgRecommend(0)"><i class="fa fa-pause"></i>&nbsp;取消推荐</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseOlive.oliveId" placeholder="主键"/>
+			    </div>
+		    </div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">标题</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseOlive.oliveTitle" placeholder="标题"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">公开课简介</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.oliveIntroduction" placeholder="公开课简介"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">卡片标题</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.cardTitle" placeholder="卡片标题"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">卡片副标题</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.cardSubtitle" placeholder="卡片副标题"/>
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseOlive.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">讲师姓名</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.teacherName" placeholder="讲师姓名"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">讲师头像</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.teacherAvatar" placeholder="讲师头像" readonly="readonly" onclick="hq.core.upload(null,'vm.courseOlive.teacherAvatar');"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">讲师简介</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.teacherIntroduction" placeholder="讲师简介"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">适用对象</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.suitable" placeholder="适用对象"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">开始时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="detailStartTime" readonly="readonly" placeholder="开始时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">结束时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="detailEndTime" readonly="readonly" placeholder="结束时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">封面</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseOlive.olivePic" placeholder="选择封面" readonly="readonly" onclick="hq.core.upload(null,'vm.courseOlive.olivePic');"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseOlive.liveRoomName" readonly="readonly" placeholder="选择直播间" @click="selectLiveroom"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">直播类型</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseOlive.authorityName" readonly="readonly" placeholder="选择直播类型" @click="courseOliveAuthorityShow"/>
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">回放地址</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseOlive.replayUrl" placeholder="回放地址"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">课程内容</div>
+				<div class="col-sm-10">
+					<textarea class="form-control" v-model="courseOlive.content" style="width:371px;height:100px;" placeholder="课程内容不得超过200个字">
+					</textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/courseolive.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/teacherLay.html")
+#parse("layer/liveroomLay.html")
+#parse("layer/polyvVideoLay.html")
+#parse("layer/productLay.html")
+#parse("layer/pushRulesLay.html")
+#parse("layer/courseOliveAuthorityLay.html")
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!--直播统计页头-->
+<h2 class="appTitle"><input type="button" value="导出表格" class="d-button J_export" />
+<input type="button" value="返回" class="d-button J_back" /><span class="text"><%=pty.name%></span></h2>
+<div class="searchForm">
+<form name="searchForm">
+        直播时间
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+    到
+<input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+
+        主播ID
+        <input name="_id" type="number" size="10">
+        经纪人ID
+        <input name="broker" type="number" size="10">
+        <input class="d-button J_search" type="button" name="" value="查询"><input class="d-button J_reset" type="reset" name="" value="重置">
+
+    <!--<input id="J_vipStat" class="d-button" type="button" name="" value="计算所有VIP销售额">-->
+    </form>
+</div>
+<!--/直播统计页头-->

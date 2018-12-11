@@ -1,0 +1,16 @@
+<!--问答数据表-页头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+
+
+        选择日期
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate: '2015-09-20 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}' , maxDate: '%y-%M-%d'})"/>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/问答数据表-页头-->

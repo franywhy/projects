@@ -1,0 +1,17 @@
+<!--奇迹礼物添加-->
+
+<form name="inputForm">
+	<input type="hidden" name="_id" value="special_gifts">
+    奇迹时间: <input id="stime" class="input"  type="text" name="stime" value="" size="20" readonly="" onclick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'etime\')}'})"> -- <input id="etime" type="text" class="input"  name="etime" value="" size="20" readonly="" onclick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'stime\')}'})">
+	<br />
+    <br />
+    奖励设置: <input type="number" class="input" name="ratio" value="" size="2"  /> %
+    <br />
+    <br />
+	<p class="red" style="margin-bottom:3px;">友情提示：礼物id按照 _ 分割，比如 1_3_22</p>
+    礼物池: <input type="text" class="input" name="seeds" value="" size="50" />
+    <br />
+    <br />
+</form>
+<br />
+<!--/奇迹礼物添加-->

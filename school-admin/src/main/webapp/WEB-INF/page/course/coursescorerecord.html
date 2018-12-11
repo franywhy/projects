@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>分数登记</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("coursescorerecord:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model.trim="q.scoreRecordNo" @keyup.enter="query" placeholder="分数登记单号">
+			</div>
+			<a class="btn btn-default" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("coursescorerecord:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("coursescorerecord:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("coursescorerecord:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("coursescorerecord:accept") || $shiro.hasPermission("coursescorerecord:reaccept"))
+			<a class="btn btn-primary" @click="audit"><i class="fa fa-question-circle"></i>&nbsp;审核</a>
+			#end
+			#if($shiro.hasPermission("coursescorerecord:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+			#end
+			#if($shiro.hasPermission("coursescorerecord:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+			#end
+			 <a class="btn btn-primary" @click="uploadExcelMethod"><i class="fa fa-upload"></i>&nbsp;导入数据</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="courseScoreRecord.scoreRecordId" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">单号</div>
+			   	<div class="col-sm-8">
+			      <input type="text" disabled="disabled" id="scoreRecordNo" class="form-control" v-model.trim="courseScoreRecord.scoreRecordNo" placeholder="单号"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">报考登记单号</div>
+			   	<div class="col-sm-5">
+			      <input type="text"  id="examRecordNo" class="form-control" v-model.trim="examRecordNo" placeholder="报考登记单号"/>
+			    </div>
+			    <div class="col-sm-2">
+			    	<a id="examRecordShow" class="btn btn-primary" @click="examRecordShow"><i class="fa"></i>&nbsp;报考登记</a>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-8">
+			      <input type="text" id="remark" class="form-control" v-model.trim="courseScoreRecord.remark" placeholder="备注"/>
+			    </div>
+			</div>
+			<!-- ---------------------------------ITEM 子表--------------------------------- -->
+			<div class="form-group" id="detailBtn">
+				<div class="tab-pane col-sm-2 col-sm-offset-1 fade in active">
+					<a id="addScore" class="btn btn-primary" @click="scoreAdd"><i class="fa fa-pencil"></i>&nbsp;录入分数</a>
+					<a id="updateScore" class="btn btn-primary" @click="scoreUpdate"><i class="fa fa-pencil"></i>&nbsp;修改分数</a>
+				</div>
+			</div>
+			<div class="form-group">
+				<table id="detailGrid"></table>
+				<!-- <div id="detailGridPager"></div> -->
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" id="okBtn" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>&nbsp;&nbsp;
+				#if($shiro.hasPermission("coursescorerecord:accept"))
+				<input type="button" id="acceptBtn" class="btn btn-primary" @click="accept" value="通过"/>&nbsp;&nbsp;
+				#end
+				#if($shiro.hasPermission("coursescorerecord:reaccept"))
+				<input type="button" id="reacceptBtn" class="btn btn-primary" @click="reaccept" value="不通过"/>&nbsp;&nbsp;
+				#end
+				<input type="button" class="btn btn-warning" @click="reload" value="返回"/>&nbsp;&nbsp;
+			</div>
+		</form>
+	</div>
+	
+	<!-- 报考登记弹窗 -->
+	<div id="examRecordlayer" style="display: none;">
+		<table id="examRecordGrid"></table>
+		<div id="examRecordGridPager"></div>
+	</div>
+	<!-- 分数录入修改弹窗 -->
+	<div id="scorelayer" style="display: none;">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">分数</div>
+				<div class="col-sm-8">
+					<input type="number" class="form-control" v-model.trim="detail.obj.score" placeholder="分数"/>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 上传文件弹窗 -->
+		<div id="uploadScoreExcel" style="display: none;">
+			<form name="form_uploadImg" action="" enctype="multipart/form-data">
+				<input id="file_data"  type="file"  name="file_data" style="height: 35px; width: 200px;" /> 
+			</form>
+		</div>
+</div>
+
+<script src="${rc.contextPath}/js/course/coursescorerecord.js?_${date.systemTime}"></script>
+</body>
+</html>

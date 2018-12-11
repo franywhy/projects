@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hqjy.pay.mapper.PayConfigDao">
+<!-- 通用查询表头 -->
+	<sql id="base_column">
+	   nc_url as ncUrl,borrow_money_url as borrowMoneyUrl,bw_url as bwUrl, zfb_callback_url as zfbCallBackUrl
+	</sql>
+      <select id="find" resultType="com.hqjy.pay.PayConfig">
+          select 
+          <include refid="base_column"/> 
+          from pay_config
+      </select>
+</mapper>

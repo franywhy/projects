@@ -1,0 +1,19 @@
+<div id="examScheduleLayDiv" style="display: none">
+<!-- 考试时间段查询条件 -->
+<table  border="0">
+	<tr class="row" >
+		<td class=""><label for="name">考试时间段名称</label></td>
+		<td >
+			<input type="text" class="form-control" id="qscheduleName" placeholder="考试时间段名称">
+		</td>
+		<!-- 按钮 -->
+		<td class="grid-btn">
+			<!-- <a class="btn btn-primary" @click="clearQueryOrderParams">清空</a>  -->
+			<a class="btn btn-default" onclick="examScheduleLay.reload();">查询</a> 
+		</td>
+	</tr>
+</table>
+<table id="examScheduleLay_jqGrid" ></table>
+<table id="examScheduleLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/examScheduleLay.js?_${date.systemTime}"></script>

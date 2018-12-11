@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlConfigDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="commone_column">
+		adl_config.id AS id,
+		adl_config.cname AS cname,
+		adl_config.cvalue AS cvalue,
+		adl_config.remark AS remark
+	</sql>
+	<sql id="base_column">
+		adl_config.id AS id,
+		adl_config.ckey AS ckey,
+		adl_config.cname AS cname,
+		adl_config.cvalue AS cvalue,
+		adl_config.order_num AS orderNum,
+		adl_config.status AS status,
+		adl_config.remark AS remark,
+		adl_config.update_time AS updateTime,
+		adl_config.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1	
+		<if test="ckey != null and ckey.trim() != ''">
+			AND adl_config.ckey = #{ckey}
+		</if>
+		<if test="cvalue != null">
+			AND adl_config.cvalue = #{cvalue}
+		</if>
+		<if test="cname != null and cname.trim() != '' ">
+			AND adl_config.cname = #{cname}
+		</if>
+	</sql>
+	<sql id="base_where_list">
+		AND adl_config.`status` = 1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_config AS adl_config
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by order_num asc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.adaptive.pojo.AdlConfigPOJO">
+		SELECT
+			adl_config.id AS id,
+			adl_config.cname AS cname,
+			adl_config.cvalue AS cvalue,
+			adl_config.remark AS remark
+		FROM adl_config AS adl_config
+		WHERE 1=1	
+			AND adl_config.ckey = #{ckey}
+			AND adl_config.cvalue = #{cvalue}
+		Limit 1
+	</select>
+	
+	<select id="queryNameByValue" resultType="string">
+		SELECT
+			adl_config.cvalue AS cvalue
+		FROM adl_config AS adl_config
+		WHERE 1=1	
+			AND adl_config.ckey = #{ckey}
+			AND adl_config.cname = #{cname}
+		Limit 1
+	</select>
+
+	<select id="queryList" parameterType="com.hq.adaptive.pojo.query.AdlConfigQuery" resultType="com.hq.adaptive.pojo.AdlConfigPOJO">
+		SELECT
+		<include refid="commone_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_where_list"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="com.hq.adaptive.pojo.query.AdlConfigQuery"  resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_where_list"/>
+	</select>
+	 
+
+</mapper>

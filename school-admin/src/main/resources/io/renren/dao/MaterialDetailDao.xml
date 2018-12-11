@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MaterialDetailDao">
+	<resultMap type="io.renren.entity.MaterialDetailEntity" id="materialDetailResultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="type" column="type"
+			javaType="io.renren.constant.MaterialType" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+		<result property="property" column="property"
+			javaType="io.renren.constant.MaterialProperty" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+		<result property="createBy" column="create_by" />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateTime" column="update_time" />
+		<result property="status" column="status" />
+		<result property="vedioAddr" column="vedio_addr" />
+		<result property="returnAddr" column="return_addr" />
+		<result property="pushContent" column="push_content" />
+		<result property="pushType" column="push_type" />
+		<result property="pushTime" column="push_time" />
+		<result property="questionBankCourse" column="question_bank_course" />
+		<result property="questionBankChapter" column="question_bank_chapter" />
+		<result property="questionBankVerse" column="question_bank_verse" />
+		<result property="questionBankKnowledge" column="question_bank_knowledge" />
+	</resultMap>
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		material_detail.id AS id , material_detail.name AS name , material_detail.type AS type ,
+		material_detail.property AS property , material_detail.create_by AS
+		createBy , material_detail.create_time AS createTime ,
+		material_detail.update_by AS updateBy , material_detail.update_time AS
+		updateTime , material_detail.status AS status ,
+		material_detail.vedio_addr AS vedioAddr , material_detail.return_addr
+		AS returnAddr , material_detail.push_content AS pushContent ,
+		material_detail.push_type AS pushType , material_detail.push_time AS
+		pushTime , material_detail.question_bank_course AS questionBankCourse
+		, material_detail.question_bank_chapter AS questionBankChapter ,
+		material_detail.question_bank_verse AS questionBankVerse ,
+		material_detail.question_bank_knowledge AS questionBankKnowledge
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where 1=1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from material_detail as material_detail
+	</sql>
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.MaterialDetailEntity">
+		select
+		<include refid="base_column" />
+		
+		<include refid="base_from" />
+		
+		where id = #{id}
+	</select>
+	
+	<!--根据ID查询已关联的资料个体  -->
+	<select id="queryObjectIsRe" resultType="io.renren.entity.MaterialDetailEntity">
+	 	select tc.*,qb.course_name as qbCourseName, qb.charpter_name as qbChapterName, qb.section_name as qbVerseName from (
+		 SELECT tb.*,kp.name AS kpName,kp.chapter_name AS chapterName,kp.course_name AS courseName,kp.verse_name AS verseName FROM (
+			SELECT kpm.knowledge_point_id AS kpmId ,
+			
+			material_detail.id AS id , material_detail.name AS NAME ,
+			material_detail.type AS TYPE ,
+			material_detail.property AS property ,
+			material_detail.create_by AS
+			createBy , material_detail.create_time AS
+			createTime ,
+			material_detail.update_by AS updateBy ,
+			material_detail.update_time AS
+			updateTime , material_detail.status AS
+			STATUS ,
+			material_detail.vedio_addr AS vedioAddr ,
+			material_detail.return_addr
+			AS returnAddr ,
+			material_detail.push_content AS pushContent ,
+			material_detail.push_type AS pushType , material_detail.push_time AS
+			pushTime , material_detail.question_bank_course AS questionBankCourse
+			, material_detail.question_bank_chapter AS questionBankChapter ,
+			material_detail.question_bank_verse AS questionBankVerse ,
+			material_detail.question_bank_knowledge AS questionBankKnowledge
+			
+			FROM material_detail ,knowledge_point_material kpm  WHERE material_detail.id=#{id} AND kpm.material_id=#{id}) AS tb,knowledge_point kp WHERE tb.kpmId=kp.id
+		 )tc 
+		 left join question_bank qb on qb.course_code = tc.questionBankCourse 
+		and qb.charpter_code =  tc.questionBankChapter
+		and qb.section_code = tc.questionBankVerse
+	</select>
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="io.renren.entity.MaterialDetailEntity">
+		select 
+		<include refid="base_column" />
+		,
+		
+		(select cu.username from sys_user cu where cu.user_id = material_detail.create_by) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = material_detail.update_by) as modified_name
+	   from material_detail
+		<where>
+			<if test="materialDetailEntity.name != null and materialDetailEntity.name.trim() != ''">
+				and `name` like concat('%',#{materialDetailEntity.name},'%') 
+			</if>
+			<if test="materialDetailEntity.s_property != null  ">
+				and `property`=#{materialDetailEntity.s_property.value} 
+			</if>
+			<if test="materialDetailEntity.s_type != null ">
+				and `type`=#{materialDetailEntity.s_type.value} 
+			</if>
+			<!-- <if test="materialDetailEntity.property != null and materialDetailEntity.property.trim() != ''">
+				and `property`=#{materialDetailEntity.isRelevance} 
+			</if> -->
+		</where>
+		<if test="materialDetailEntity.timeOrdering != null and materialDetailEntity.timeOrdering.trim() != ''">
+			 ORDER BY ${materialDetailEntity.timeOrdering} 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数 -->
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from" />
+		<where>
+			<if test="materialDetailEntity.name != null and materialDetailEntity.name.trim() != ''">
+				and `name` like concat('%',#{materialDetailEntity.name},'%') 
+			</if>
+			<if test="materialDetailEntity.s_property != null  ">
+				and `property`=#{materialDetailEntity.s_property.value} 
+			</if>
+			<if test="materialDetailEntity.s_type != null ">
+				and `type`=#{materialDetailEntity.s_type.value} 
+			</if>
+		</where>
+	</select>
+
+	<!--已经关联的分页总数-->
+ 	<select id="queryYesTotal" resultType="int">
+		select count(1) FROM knowledge_point_material kpm, material_detail md 
+		<where>
+			<if test="materialDetailEntity.name != null and materialDetailEntity.name.trim() != ''">
+				and md.name like concat('%',#{materialDetailEntity.name},'%') 
+			</if>
+			<if test="materialDetailEntity.s_property != null  ">
+				and md.property=#{materialDetailEntity.s_property.value} 
+			</if>
+			<if test="materialDetailEntity.s_type != null ">
+				and md.type=#{materialDetailEntity.s_type.value} 
+			</if>
+			<if test="true">
+				and	md.id =kpm.material_id
+			</if>
+		</where>
+	</select>
+	
+	<select id="judgeIds" resultType="int">
+		select count(1) FROM knowledge_point_material kpm
+		where
+		<foreach item="id" collection="ids" open="" separator="OR" close="">
+		kpm.material_id=#{id}
+		</foreach>
+	</select>
+	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MaterialDetailEntity" useGeneratedKeys="true" keyProperty="id">
+insert into material_detail
+		(
+		`name`, `type`, `property`, `create_by`, `create_time`, `update_by`,
+		`update_time`, `status`, `vedio_addr`, `return_addr`, `push_content`,
+		`push_type`, `push_time`, `question_bank_course`,
+		`question_bank_chapter`, `question_bank_verse`,
+		`question_bank_knowledge` )
+		values
+		(
+		#{name}, #{s_type.value}, #{s_property.value}, #{createBy}, #{createTime},
+		#{updateBy}, #{updateTime}, #{status}, #{vedioAddr}, #{returnAddr},
+		#{pushContent}, #{pushType}, #{pushTime}, #{questionBankCourse},
+		#{questionBankChapter}, #{questionBankVerse}, #{questionBankKnowledge}
+		)
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.MaterialDetailEntity">
+		update material_detail
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="s_type != null">`type` = #{s_type.value}, </if>
+			<if test="s_property != null">`property` = #{s_property.value}, </if>
+			<if test="updateBy != null">`update_by` = #{updateBy}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="vedioAddr != null">`vedio_addr` = #{vedioAddr}, </if>
+			<if test="returnAddr != null">`return_addr` = #{returnAddr}, </if>
+			<if test="pushContent != null">`push_content` = #{pushContent}, </if>
+			<if test="pushType != null">`push_type` = #{pushType}, </if>
+			<if test="pushTime != null">`push_time` = #{pushTime}, </if>
+			<if test="questionBankCourse != null">`question_bank_course` = #{questionBankCourse}, </if>
+			<if test="questionBankChapter != null">`question_bank_chapter` = #{questionBankChapter}, </if>
+			<if test="questionBankVerse != null">`question_bank_verse` = #{questionBankVerse}, </if>
+			<if test="questionBankKnowledge != null">`question_bank_knowledge` = #{questionBankKnowledge}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!--删除 -->
+	<delete id="delete">
+		DELETE FROM material_detail
+		where id = #{id}
+	</delete>
+
+	<!--批量删除 -->
+	<delete id="deleteBatch">
+		DELETE FROM material_detail 
+		where id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		#{id}
+		</foreach>
+	</delete>
+
+	<!--lay浮层数据分页列表 -->
+	<select id="queryListForLay" resultType="io.renren.entity.MaterialDetailEntity">
+	select * from (
+	select
+	material_detail.id AS id , material_detail.name AS name ,
+	material_detail.type AS type , material_detail.property AS property ,
+	suc.username AS createBy , material_detail.create_time AS
+	createTime , suc.username AS updateBy ,
+	material_detail.update_time AS updateTime , material_detail.status AS
+	status , material_detail.vedio_addr AS vedioAddr ,
+	material_detail.return_addr AS returnAddr ,
+	material_detail.push_content AS pushContent ,
+	material_detail.push_type AS pushType , material_detail.push_time AS
+	pushTime , material_detail.question_bank_course AS questionBankCourse
+	, material_detail.question_bank_chapter AS questionBankChapter ,
+	material_detail.question_bank_verse AS questionBankVerse ,
+	material_detail.question_bank_knowledge AS questionBankKnowledge,
+ 	N'否' as is_relevance
+
+	from material_detail as material_detail
+	left join sys_user suc on suc.user_id = material_detail.create_by
+	left join sys_user su on su.user_id = material_detail.update_by
+	<where>
+		<if test="name != null and name.trim() != ''">
+			and `name` like concat('%',#{name},'%')
+		</if>
+		<if test="type != null">
+			and material_detail.`type` = #{type}
+		</if>
+
+		<if test="property != null ">
+			and material_detail.`property` = #{property}
+		</if>
+		and not exists(select kpm.material_id from knowledge_point_material
+		kpm where kpm.material_id = material_detail.id )
+	</where>
+	<if test="point_id != null ">
+		union
+		select
+		material_detail.id AS id , material_detail.name AS name ,
+		material_detail.type AS type , material_detail.property AS property ,
+		suc.username AS createBy , material_detail.create_time AS
+		createTime , su.username AS updateBy ,
+		material_detail.update_time AS updateTime , material_detail.status AS
+		status , material_detail.vedio_addr AS vedioAddr ,
+		material_detail.return_addr AS returnAddr ,
+		material_detail.push_content AS pushContent ,
+		material_detail.push_type AS pushType , material_detail.push_time AS
+		pushTime , material_detail.question_bank_course AS questionBankCourse
+		, material_detail.question_bank_chapter AS questionBankChapter ,
+		material_detail.question_bank_verse AS questionBankVerse ,
+		material_detail.question_bank_knowledge AS questionBankKnowledge,
+		N'是' as is_relevance
+
+
+		from
+		material_detail as material_detail
+ 	 	left join sys_user suc on suc.user_id = material_detail.create_by
+	 	left join sys_user su on su.user_id = material_detail.update_by
+		
+		<where>
+		and EXISTS(select kpm.material_id from knowledge_point_material kpm
+		where kpm.material_id = material_detail.id
+
+		and kpm.knowledge_point_id = #{point_id}
+		)
+			<if test="name != null and name.trim() != ''">
+				and `name` like concat('%',#{name},'%')
+			</if>
+			<if test="type != null ">
+				and material_detail.`type` = #{type}
+			</if>
+
+			<if test="property != null ">
+				and material_detail.`property` = #{property}
+			</if>
+		</where>
+	</if>
+
+
+
+	
+
+	) result 
+	<where>
+	 <if test="isRelevance != null and isRelevance.trim() != ''"> 
+	 and result.`is_relevance` = #{isRelevance} </if>
+	</where>
+	<if test="sTime != null and sTime.trim() != ''">
+		ORDER BY ${sTime}
+	</if>
+	
+	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+</select>
+	<!--分页总数 -->
+	<select id="queryTotalForLay" resultType="int">
+		select count(1) from (
+	select
+	material_detail.id AS id , material_detail.name AS name ,
+	material_detail.type AS type , material_detail.property AS property ,
+	suc.username AS createBy , material_detail.create_time AS
+	createTime , su.username AS updateBy ,
+	material_detail.update_time AS updateTime , material_detail.status AS
+	status , material_detail.vedio_addr AS vedioAddr ,
+	material_detail.return_addr AS returnAddr ,
+	material_detail.push_content AS pushContent ,
+	material_detail.push_type AS pushType , material_detail.push_time AS
+	pushTime , material_detail.question_bank_course AS questionBankCourse
+	, material_detail.question_bank_chapter AS questionBankChapter ,
+	material_detail.question_bank_verse AS questionBankVerse ,
+	material_detail.question_bank_knowledge AS questionBankKnowledge,
+ 	N'否' as is_relevance
+
+	from material_detail as material_detail
+	left join sys_user suc on suc.user_id = material_detail.create_by
+	left join sys_user su on su.user_id = material_detail.update_by
+	<where>
+		<if test="name != null and name.trim() != ''">
+			and `name` like concat('%',#{name},'%')
+		</if>
+		<if test="type != null ">
+			and material_detail.`type` = #{type}
+		</if>
+
+		<if test="property != null ">
+			and material_detail.`property` = #{property}
+		</if>
+		and not exists(select kpm.material_id from knowledge_point_material
+		kpm where kpm.material_id = material_detail.id )
+	</where>
+	<if test="point_id != null ">
+		union
+		select
+		material_detail.id AS id , material_detail.name AS name ,
+		material_detail.type AS type , material_detail.property AS property ,
+		suc.username AS createBy , material_detail.create_time AS
+		createTime , su.username AS updateBy ,
+		material_detail.update_time AS updateTime , material_detail.status AS
+		status , material_detail.vedio_addr AS vedioAddr ,
+		material_detail.return_addr AS returnAddr ,
+		material_detail.push_content AS pushContent ,
+		material_detail.push_type AS pushType , material_detail.push_time AS
+		pushTime , material_detail.question_bank_course AS questionBankCourse
+		, material_detail.question_bank_chapter AS questionBankChapter ,
+		material_detail.question_bank_verse AS questionBankVerse ,
+		material_detail.question_bank_knowledge AS questionBankKnowledge,
+		N'是' as is_relevance
+
+
+		from
+		material_detail as material_detail
+ 	 	left join sys_user suc on suc.user_id = material_detail.create_by
+	 	left join sys_user su on su.user_id = material_detail.update_by
+		
+		<where>
+		and EXISTS(select kpm.material_id from knowledge_point_material kpm
+		where kpm.material_id = material_detail.id
+
+		and kpm.knowledge_point_id = #{point_id}
+		)
+			<if test="name != null and name.trim() != ''">
+				and `name` like concat('%',#{name},'%')
+			</if>
+			<if test="type != null ">
+				and material_detail.`type` = #{type}
+			</if>
+
+			<if test="property != null ">
+				and material_detail.`property` = #{property}
+			</if>
+		</where>
+	</if>
+
+
+
+	
+
+	) result 
+	<where>
+	 <if test="isRelevance != null and isRelevance.trim() != ''"> 
+	 and result.`is_relevance` = #{isRelevance} </if>
+	</where>
+	</select>
+
+	<!--根据ID查询已经关联的数目  数目少于0 则无关联，数目大于0则有关联-->
+	<select id="queryCount" resultType="int" >
+      	select count(1) FROM knowledge_point_material where material_id=#{id}
+	</select>
+	
+	<select id="queryMaterialDetailYess"  resultType="int" >
+		select material_id FROM knowledge_point_material 
+	</select>
+	
+	<select id="queryMaterialDetailYesIds"  resultType="int" >
+		select material_id FROM knowledge_point_material
+		<if test="flag==true and offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="querymateriDetailYesList" resultType="io.renren.entity.MaterialDetailEntity">
+		select m.*,
+		(select cu.username from sys_user cu where cu.user_id = m.create_by) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = m.update_by) as modified_name
+		
+		FROM material_detail m 
+		<where>
+			<if test="materialDetailEntity.name != null and materialDetailEntity.name.trim() != ''">
+				and `name` like concat('%',#{materialDetailEntity.name},'%') 
+			</if>
+			<if test="materialDetailEntity.s_property != null  ">
+				and `property`=#{materialDetailEntity.s_property.value} 
+			</if>
+		 
+
+			<if test="materialDetailEntity.s_type != null ">
+				and `type`=#{materialDetailEntity.s_type.value} 
+			</if>
+			<if test="true">
+				and m.id IN
+			</if>
+			<foreach collection="materialIds" item="materialId" index="index" open="(" close=")" separator=",">
+				#{materialId}
+			</foreach>
+		</where>
+		<if test="materialDetailEntity.timeOrdering != null and materialDetailEntity.timeOrdering.trim() != ''">
+			 ORDER BY ${materialDetailEntity.timeOrdering} 
+		</if>
+	</select>
+	
+	<select id="querymateriDetailNoList" resultType="io.renren.entity.MaterialDetailEntity">
+		select m.*,
+		(select cu.username from sys_user cu where cu.user_id = m.create_by) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = m.update_by) as modified_name
+		
+		FROM material_detail m 
+		<where>
+			<if test="materialDetailEntity.name != null and materialDetailEntity.name.trim() != ''">
+				and `name` like concat('%',#{materialDetailEntity.name},'%') 
+			</if>
+			<if test="materialDetailEntity.s_property != null  ">
+				and `property`=#{materialDetailEntity.s_property.value} 
+			</if>
+			<if test="materialDetailEntity.s_type != null ">
+				and `type`=#{materialDetailEntity.s_type.value} 
+			</if>
+			and m.id NOT IN
+			<foreach collection="materialIds" item="materialId" index="index" open="(" close=")" separator=",">
+				#{materialId}
+			</foreach>
+		</where>
+		<if test="materialDetailEntity.timeOrdering != null and materialDetailEntity.timeOrdering.trim() != ''">
+			 ORDER BY ${materialDetailEntity.timeOrdering} 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+</mapper>

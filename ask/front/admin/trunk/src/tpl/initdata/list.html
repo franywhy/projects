@@ -1,0 +1,25 @@
+<!--banner管理-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <th class="auto">说明</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){ var d = data[i];%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <td class="auto"><%=d.text %></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.tomethod('<%=d.method%>')">启动</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/banner管理-->

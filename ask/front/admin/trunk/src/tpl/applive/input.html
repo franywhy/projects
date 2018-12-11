@@ -1,0 +1,189 @@
+<!--答疑类型输入//		"live_title" : "猎才计划-面向零基础学员",
+//		"live_banner_url" : "http://answerimg.kjcity.com/coursebanner/4.png",
+//		"live_teacher_name" : "春晓",
+//		"live_teacher_pic" : "",
+//		"live_teacher_detail" : "高级会计师、组里快基础上",
+//		"live_applicable_people" : "零起步想入行当会计的学员",
+//		"live_course_detail" : "这个是课程内容描述",
+//		"live_time_detail" : "直播时间：09-02 18:00",
+//		"live_start_time" : NumberLong(1491440400000),
+//		"live_end_time" : NumberLong(1493082000000),
+//		"live_num" : "09909534",
+//		"live_id" : "b2794d22b70c44149349060ac9768e90",
+//		"live_domain" : "hqyzx.gensee.com"-->
+<form name="inputForm">
+    <input name="_id" hidden="hidden"/>
+    <table style="height:100px;">
+        <tr><td>
+            直播间标题<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_title" value="" size="50" required/>
+            </td></tr>
+
+        <tr><td>
+            直播间url:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_url" value="" size="50" readonly/>
+            </td></tr>
+        
+        <tr><td>
+            直播间banner<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_banner_url" value="" size="50" required/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('live_banner_url', 'Posters');" />
+            </td></tr>
+
+        <tr><td>
+            直播间广告图片<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_ad_pic_url" value="" size="50"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('live_ad_pic_url', 'Posters');" />
+            </td></tr>
+
+        <tr><td>
+            直播间广告推广链接<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_ad_url" value="" size="50"/>
+            </td></tr>
+        <tr><td>
+            H5是否启用广告<span class="red">*</span>:
+        </td>
+            <td>
+                <select id="live_ad_isshow" name="live_ad_isshow" class="input" style="width:200px" data-options="required:true">
+                    <option value="0" selected>停用</option>
+                    <option value="1" >启用</option>
+                </select>
+            </td>
+        </tr>
+        <tr><td>
+            App是否启用广告<span class="red">*</span>:
+        </td>
+            <td>
+                <select id="live_ad_app_isshow" name="live_ad_app_isshow" class="input" style="width:200px" data-options="required:true">
+                    <option value="0" selected>停用</option>
+                    <option value="1" >启用</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr><td>
+            直播类型<span class="red">*</span>:
+        </td>
+            <td>
+                <select id="live_type" name="live_type" class="input" style="width:200px" data-options="required:true">
+                    <option value="1001" selected>普通</option>
+                    <!--<option value="1101" >中级</option>-->
+                    <option value="1201" >CPA</option>
+                    <option value="1301" >中央财大研修班</option>
+                    <option value="1401" >全能级以上</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr><td>
+            直播间老师<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_teacher_name" value="" size="50" required/>
+            </td></tr>
+        <tr><td>
+            直播间老师介绍<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_teacher_detail" value="" size="50" required/>
+            </td></tr>
+        <tr><td>
+            直播间老师头像<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_teacher_pic" value="" size="50" required/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('live_teacher_pic', 'Posters');" />
+            </td></tr>
+        <!--<tr><td>
+            相关介绍图片<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_correlation_pic" value="" size="50" required/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('live_correlation_pic', 'Posters');" />
+            </td></tr>-->
+        <tr><td>
+            直播间适用人群<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_applicable_people" value="" size="50" />
+            </td></tr>
+        <tr><td>
+            直播间课程详情<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_course_detail" value="" size="50" />
+            </td></tr>
+        <tr><td>
+            直播开始时间<span class="red">*</span>:
+        </td>
+            <td>
+                <input id="live_start_time" type="text" name="live_start_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+            </td></tr>
+        <tr><td>
+            直播结束时间<span class="red">*</span>:
+        </td>
+            <td>
+                <input id="live_end_time" type="text" name="live_end_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+            </td></tr>
+
+        <tr><td>
+            直播sdk-直播房间号<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_num" value="" size="50" required/>
+            </td></tr>
+        <tr><td>
+            直播sdk-直播id<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_id" value="" size="50" required/>
+            </td></tr>
+        <tr><td>
+            直播sdk-直播域名<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_domain" value="hqyzx.gensee.com" size="50" required/>
+            </td></tr>
+
+        <tr><td>
+            回放平台<span class="red">*</span>:
+        </td>
+            <td>
+                <select id="live_studio_type" name="live_studio_type" class="input" style="width:200px" data-options="required:true">
+                    <option value="1" selected>展示互动</option>
+                    <option value="2" >保利威视</option>
+                </select>
+            </td>
+        </tr>
+        <tr><td>
+            直播回放地址:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_reply_url" value="" size="50" />
+            </td></tr>
+        <tr><td>
+            回放sdk-回放房间号:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_reply_room_number" value="" size="50" />
+            </td></tr>
+        <tr><td>
+            回放sdk-回放id:
+        </td>
+            <td>
+                <input class="input" type="text" name="live_reply_id" value="" size="50" />
+            </td></tr>
+
+    </table>
+</form>
+<!--/答疑类型输入-->

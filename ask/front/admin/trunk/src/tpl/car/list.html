@@ -1,0 +1,52 @@
+<!--礼物列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="num">编号</th>
+			<th class="icon">图标</th>
+            <th class="title">名称</th>
+            <th class="short">类别</th>
+            <th class="short">类型</th>
+            <th class="short">价格</th> 
+			<th class="order">排序</th>       
+            <th>动画</th>      
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action150">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%
+		var allCatList = Izb.controller.giftcat.getAllCatList();
+		for(var i=0;i<data.length;i++){%>
+                       <tr>
+                           <td class="num"><%=data[i]._id%></td>
+                           <td class="icon"><img width="50" height="50" src="<%=data[i].pic_url%>" alt="<%=data[i].name%>" /></td>
+                           <td class="title"><%=data[i].name%></td>
+                           <td class="short"><%=data[i].cat || "-" %></td>
+                           <td class="short"><%=["-","可售","不可售"][data[i].type||0] %></td>
+                           <td class="short"><%=data[i].coin_price%></td>
+                           <td class="order"><%=data[i].order%></td>
+                           <td><%=data[i].swf_url%></td>
+                           <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                           <%
+                           var model = $.extend({},data[i]);
+                           model.status = model.status ? 0  : 1 ;
+                           %>
+                           <td class="action">
+                               <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit(<%=data[i]._id%>)">改</button>
+                               <button class="d-button" onclick="Izb.controller.<%=pty.key%>.update(<%=JSON.stringify(model)%>)"><%=data[i].status ? '下'  : '上'%>线</button>
+                               <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del(<%=data[i]._id%>)">删</button>
+
+                               <%if(Izb.user.checkLimits('finance/donate_car',Izb.enumList.menuType.all)){%>
+                               <br /><br />
+                               <button class="d-button" onclick="Izb.controller.<%=pty.key%>.donate_car('','<%=data[i]._id%>')">座驾赠送</button>
+                               <%}%>
+                           </td>
+                           <%}%>
+                       </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/礼物列表-->

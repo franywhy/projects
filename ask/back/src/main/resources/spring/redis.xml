@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+        default-lazy-init="true">
+
+    <bean id="redisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+    p:hostName="${redis.host}" p:port="${redis.port}"/>
+	
+	 <bean id="chatJedisPoolConfig"
+          class="redis.clients.jedis.JedisPoolConfig"
+          p:maxActive="${chat.pool.maxActive}"
+          p:maxIdle="${chat.pool.maxIdle}"
+          p:maxWait="${chat.pool.maxWait}"
+          p:testOnBorrow="${redis.pool.testOnBorrow}"
+          p:testOnReturn="${redis.pool.testOnReturn}"/>
+	
+	
+	<bean id="chatConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.chat.host}" p:port="${redis.chat.port}"  p:poolConfig-ref="chatJedisPoolConfig"/>
+	
+    <bean id="liveConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.mem.host}" p:port="${redis.mem.port}"/>
+
+    <bean id="kgsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.kgs.host}" p:port="${redis.kgs.port}"/>
+
+    <bean id="mainRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="redisConnectionFactory" />
+          
+	<bean id="chatRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="chatConnectionFactory" />
+
+    <bean id="liveRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="liveConnectionFactory" />
+
+    <bean id="kgsUniqueRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="kgsConnectionFactory" />
+    <bean id="posterKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+          p:nameSpace="poster" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>
+    <bean id="noticeKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+          p:nameSpace="notice" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>
+    <bean id="giftKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+          p:nameSpace="gift" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>
+    <bean id="msgKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+          p:nameSpace="gift" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>
+          
+    <!--  bean id="questionnaireTypeKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+       p:nameSpace="professional" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>-->
+       
+    <bean id="seqKGS" class="com.izhubo.rest.persistent.SimpleKGS" p:nameSpace="seq"
+          p:offset="12780"
+          p:kgsRedis-ref="kgsUniqueRedis"/>
+    
+	<!-- add by shiHongjie date:2015-01-12 -->
+    <bean id="coursewareKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="courseware"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="5"
+          p:offset="4000000">
+    </bean>
+    <!-- add by shiHongjie date:2015-03-10 CDN文件编号 -->
+	<bean id="coursewareIValueKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+		p:nameSpace="coursewareIValue"
+		p:kgsRedis-ref="kgsUniqueRedis"
+		p:step="5"
+		p:offset="33330000">
+	</bean>
+	 
+	 
+    
+	<!-- add by shiHongjie date:2015-01-12 -->
+    <bean id="maintypeKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="maintype"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="5"
+          p:offset="1000">
+   </bean>
+   <!-- add  date:2015-01-15 -->
+   <bean id="companyKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="company"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="100000">
+   </bean>
+
+   
+   <bean id="professionalKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+          p:nameSpace="professional" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>
+          
+          <bean id="paymentKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+          p:nameSpace="professional" p:kgsRedis-ref="kgsUniqueRedis" p:offset="10000000"/>
+
+      <!-- add  date:2015-01-16-->
+   <bean id="answerTypeKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="answertype"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10000">
+   </bean>
+   <bean id="questionnaireTypeKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="questionnairetype"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10000">
+   </bean>
+      <bean id="roomKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="rooms"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="1000000">
+   </bean>
+   <bean id="baseKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="base"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10000">
+   </bean>
+   <bean id="userKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="base"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="100"
+          p:offset="10000000">
+   </bean>
+   <bean id="discountKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="base"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="100000">
+   </bean>
+   
+       <bean id="msgAdminKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+          p:nameSpace="gift" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>
+</beans>

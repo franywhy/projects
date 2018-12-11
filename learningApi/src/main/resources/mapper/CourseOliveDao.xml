@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.CourseOliveDao">
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		course_olive.olive_id AS oliveId , 
+		course_olive.olive_title AS oliveTitle , 
+		course_olive.olive_start_time AS oliveStartTime ,
+		course_olive.olive_end_time AS oliveEndTime , 
+		course_olive.olive_pic AS olivePic , 
+		course_olive.live_room_id AS liveRoomId ,
+		course_olive.replay_url AS replayUrl ,  
+		course_olive.teacher_name AS teacherName,
+		course_olive.teacher_avatar AS teacherAvatar,
+		course_olive.teacher_introduction AS teacherIntroduction,
+		course_olive.suitable AS suitable,
+		course_olive.content AS content,
+		course_olive.product_id AS productId,
+		course_olive.creation_time AS creationTime,
+		course_olive.authority_id AS authorityId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_olive as course_olive
+	</sql>
+
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="java.util.Map">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND course_olive.olive_id = #{oliveId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="com.hq.learningapi.pojo.CourseOlivePOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		and course_olive.school_id = #{schoolId}
+		and course_olive.dr = 0
+		and course_olive.app_status = 1
+		and course_olive.olive_id in
+		(
+			select distinct mc.message_id from channel_message mc
+			where mc.message_type = 0
+			and mc.channel_id in
+			<foreach collection="list" item="channel" index="index" separator="," >
+				(#{channel})
+			</foreach>
+		)
+		order by creation_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryMapList" resultType="map">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		and course_olive.dr = 0
+		<!--and course_olive.app_status = 1-->
+        <if test="productIdList.size() > 0">
+		and course_olive.product_id in
+		<foreach item="productId" collection="productIdList" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+        </if>
+        order by (CASE WHEN  olive_start_time > NOW() THEN 2 WHEN olive_end_time &lt; NOW() THEN 3 ELSE 1 END ) ASC,olive_start_time DESC 
+        <if test="page_num != null and page_size != null">
+			limit #{page_num}, #{page_size}
+		</if>
+	</select>
+
+	<select id="checkAuthority" resultType="java.lang.Boolean">
+		SELECT 1 FROM nc_commodity_open_course_info
+		WHERE authority_id = #{authorityId} AND nc_commodity_id IN
+		<foreach collection="ncCommodityIdList" item="ncCommodityId" open="(" separator="," close=")">
+			#{ncCommodityId}
+		</foreach>
+		limit 1
+	</select>
+
+</mapper>

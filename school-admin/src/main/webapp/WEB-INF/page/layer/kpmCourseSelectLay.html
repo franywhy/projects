@@ -1,0 +1,20 @@
+<div id="kpmCourseLayDiv" style="display: none">
+<!-- 课程查询条件 -->
+			<div class="select_div">
+			<label style="float: left; text-align: center;margin:12px 5px;">课程名称</label></td>
+					
+			<input type="text" class="form-control"
+			 	style="width: 100px; float: left;margin-top: 5px;"
+			 id="kpmcourseName" placeholder="课程名称">
+			</div>		
+				
+			<!-- 按钮 -->
+			<div class="grid-btn" style="float: left; margin: 5px;">
+				<!-- <a class="btn btn-primary" @click="clearQueryOrderParams">清空</a>  -->
+				<a class="btn btn-default" onclick="kpmCourseLay.reload();">查询</a> 
+			</div>
+			<div style="display:table;clear:both"></div>
+<table id="kpmCourseLay_jqGrid" ></table>
+<table id="kpmCourseLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/kpmCourseSelectLay.js?_${date.systemTime}"></script>

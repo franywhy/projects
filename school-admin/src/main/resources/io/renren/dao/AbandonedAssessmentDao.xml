@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.AbandonedAssessmentDao">
+
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.AbandonedAssessmentEntity">
+		select * from  abandoned_assessment where id = #{value}     			
+	</select>
+
+	<!--按照条件查询列表-->
+	<select id="queryList" resultType="io.renren.entity.AbandonedAssessmentEntity">
+		select * from abandoned_assessment
+		where dr = 0
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and `teacher_name` like concat('%',#{teacherName},'%')
+		</if>
+		<if test="course != null and course.trim() != ''">
+			and `course` like concat('%',#{course},'%')
+		</if>
+		<if test="studentMobile != null and studentMobile.trim() != ''">
+			and `student_mobile` like concat('%',#{studentMobile},'%')
+		</if>
+		<if test="applicationStatus != null">
+			and `application_status` = #{applicationStatus}
+		</if>
+			order by creation_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>		
+	</select>
+	
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from abandoned_assessment
+		where dr = 0 
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and `teacher_name` like concat('%',#{teacherName},'%')
+		</if>
+		<if test="course != null and course.trim() != ''">
+			and `course` like concat('%',#{course},'%')
+		</if>
+		<if test="studentMobile != null and studentMobile.trim() != ''">
+			and `student_mobile` like concat('%',#{studentMobile},'%')
+		</if>
+		<if test="applicationStatus != null">
+			and `application_status` = #{applicationStatus}
+		</if>
+	</select>
+	
+	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.AbandonedAssessmentEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into abandoned_assessment
+		(
+			`student_name`, 
+			`student_mobile`, 
+			`class_name`, 
+			`teacher_name`,
+			`course`, 
+			`application_time`, 
+			`deadline_time`,
+			`reason`, 
+			`application_status`,
+			`creator`, 
+			`creation_time`,
+			`modifier`, 
+			`modified_time`,
+			`dr`	
+		)
+		values
+		(
+			#{studentName}, 
+			#{studentMobile}, 
+			#{className},
+			#{teacherName}, 
+			#{course},
+			#{applicationTime},
+			#{deadlineTime}, 
+			#{reason}, 
+			#{applicationStatus}, 
+			#{creator},	
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime}, 
+			#{dr}
+		)
+	</insert>
+	
+	<insert id="saveBatch">
+		insert into abandoned_assessment
+		(
+		`student_name`,
+		`student_mobile`,
+		`class_name`,
+		`teacher_name`,
+		`course`,
+		`application_time`,
+		`deadline_time`,
+		`reason`,
+		`application_status`,
+		`creator`,
+		`creation_time`,
+		`modifier`,
+		`modified_time`,
+		`dr`
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+		(
+		#{item.studentName},
+		#{item.studentMobile},
+		#{item.className},
+		#{item.teacherName},
+		#{item.course},
+		#{item.applicationTime},
+		#{item.deadlineTime},
+		#{item.reason},
+		#{item.applicationStatus},
+		#{item.creator},
+		#{item.creationTime},
+		#{item.modifier},
+		#{item.modifiedTime},
+		#{item.dr}
+		)
+		</foreach>
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.AbandonedAssessmentEntity">
+		update abandoned_assessment 
+		<set>
+			<if test="studentName != null">`student_name` = #{studentName}, </if>
+			<if test="studentMobile != null">`student_mobile` = #{studentMobile}, </if>
+			<if test="className != null">`class_name` = #{className}, </if>
+			<if test="teacherName != null">`teacher_name` = #{teacherName}, </if>
+			<if test="course != null">`course` = #{course}, </if>
+			<if test="applicationTime != null">`application_time` = #{applicationTime}, </if>
+			<if test="deadlineTime != null">`deadline_time` = #{deadlineTime}, </if>
+			<if test="reason != null">`reason` = #{reason}, </if>
+			<if test="applicationStatus != null">`application_status` = #{applicationStatus}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>		
+		where id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="io.renren.entity.AbandonedAssessmentEntity">
+		delete from  abandoned_assessment where id = #{id}				
+	</delete>
+	
+	<!--批量删除-->	
+	<delete id="deleteBatch">
+		delete from abandoned_assessment where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 更新审核状态 -->
+	<delete id="updateStatusBatch">
+		update abandoned_assessment
+		set application_status = #{applicationStatus}
+		where id in
+		<foreach item="id" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

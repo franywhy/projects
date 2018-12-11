@@ -1,0 +1,4 @@
+moduleName = RestExtension
+moduleVersion = 1.0
+extensionClasses = com.izhubo.rest.ext.RestExtension,org.apache.commons.lang3.StringUtils
+staticExtensionClasses = com.izhubo.rest.ext.SystemStaticExtension

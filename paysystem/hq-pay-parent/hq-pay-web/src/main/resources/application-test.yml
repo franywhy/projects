@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mysql://10.0.98.5:3306/hq_pay?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+paycofig: 
+  zhfReturnUrl: http://test.pay.hqjy.com/alipay/callback/return
+  zhfNotifyUrl: http://test.pay.hqjy.com/alipay/callback/notify
+  config: test
+  wxReturnUrl: http://183.63.120.222:8010/pay/dev/wxpay/callback/notify
+  url: 

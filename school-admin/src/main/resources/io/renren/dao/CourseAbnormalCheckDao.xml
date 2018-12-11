@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseAbnormalCheckDao">
+
+
+	<!--异常订单-其他-->
+	<select id="queryAbnormalOrder" resultType="int">
+		SELECT
+			count( 1 )
+		FROM
+			mall_order AS mall_order
+		WHERE
+			mall_order.order_id = #{orderId}
+			AND mall_order.is_teacher = 1
+			AND mall_order.dr = 0
+	</select>
+
+	<!--休学\失联单 结束-->
+	<select id="queryCourseAbnormalOrderEnd" resultType="int">
+		SELECT
+			count( 1 )
+		FROM
+			course_abnormal_order AS course_abnormal_order
+		WHERE
+			course_abnormal_order.order_id = #{orderId}
+		AND course_abnormal_order.abnormal_type = ${abnormalType}
+		AND course_abnormal_order.audit_status = 2
+		AND course_abnormal_order.start_time &lt; #{startTime}
+		AND course_abnormal_order.end_time &gt; #{endTime}
+		ORDER BY
+			course_abnormal_order.start_time DESC
+			LIMIT 1
+	</select>
+
+	<!--休学\失联单 未结束-->
+	<select id="queryCourseAbnormalOrderOpen" resultType="int">
+		SELECT
+			count( 1 )
+		FROM
+			course_abnormal_order AS course_abnormal_order
+		WHERE
+			course_abnormal_order.order_id = #{orderId}
+		AND course_abnormal_order.abnormal_type = #{abnormalType}
+		AND course_abnormal_order.audit_status = 2
+		AND course_abnormal_order.start_time &gt; #{endTime}
+		AND ISNULL( course_abnormal_order.end_time )
+		ORDER BY
+			course_abnormal_order.start_time DESC
+			LIMIT 1
+	</select>
+
+	<!--免考核-->
+	<select id="queryCourseAbnormalFreeAssessment" resultType="int">
+		SELECT
+			count( 1 )
+		FROM
+			course_abnormal_free_assessment AS course_abnormal_free_assessment
+		WHERE
+			course_abnormal_free_assessment.course_id = #{courseId}
+		AND course_abnormal_free_assessment.order_id = #{orderId}
+		AND course_abnormal_free_assessment.audit_status = 2
+		AND course_abnormal_free_assessment.start_time &lt; #{startTime}
+		AND course_abnormal_free_assessment.end_time &gt; #{endTime}
+		ORDER BY
+			course_abnormal_free_assessment.start_time DESC
+			LIMIT 1
+	</select>
+
+	<!--弃考-->
+	<select id="queryCourseAbnormalAbandonExam" resultType="int">
+		SELECT
+			count( 1 )
+		FROM
+			course_abnormal_abandon_exam AS course_abnormal_abandon_exam
+			LEFT JOIN course_abnormal_registration AS course_abnormal_registration ON course_abnormal_registration.id = course_abnormal_abandon_exam.registration_id
+		WHERE
+			course_abnormal_registration.user_plan_id = #{userplanId} -- 学员规划PK
+
+			AND course_abnormal_registration.course_id = #{courseId}
+			AND course_abnormal_registration.dr = 0
+			AND course_abnormal_abandon_exam.`status` = 2
+			AND course_abnormal_registration.`status` = 2
+			AND course_abnormal_registration.exam_schedule_id = #{examScheduleId}
+		ORDER BY
+			course_abnormal_abandon_exam.id ASC
+			LIMIT 1
+	</select>
+
+</mapper>

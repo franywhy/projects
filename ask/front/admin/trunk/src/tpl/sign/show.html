@@ -1,0 +1,87 @@
+<!--签约申请信息-->
+<table width="100%">
+    <tr>
+        <td>用户ID:</td>
+        <td><%=xy_user_id%></td>
+    </tr>
+    <tr>
+        <td>姓名:</td>
+        <td><%=real_name%></td>
+    </tr>
+	<tr>
+        <td>昵称:</td>
+        <td><%=nick_name%></td>
+    </tr>
+	 <tr>
+        <td>经纪人:</td>
+        <td><%=broker%></td>
+    </tr>
+    <tr>
+        <td>电话:</td>
+        <td><%=tel%></td>
+    </tr>
+    <tr>
+        <td>Q Q:</td>
+        <td><%=qq%></td>
+    </tr>
+    <tr>
+        <td>身份证:</td>
+        <td><%=sfz%></td>
+    </tr>
+    <tr>
+        <td>地址:</td>
+        <td><%=address%></td>
+    </tr>
+	<tr><td colspan="1">&nbsp;</td></tr>
+	<tr>
+        <td>开户银行:</td>
+        <td><%=bank%></td>
+    </tr>
+	<tr>
+        <td>开户人姓名:</td>
+        <td><%=bank_user_name%></td>
+    </tr>
+	<tr>
+        <td>银行卡号:</td>
+        <td><%=bank_id%></td>
+    </tr>
+	<tr>
+        <td>开户地:</td>
+        <td><%=bank_location%></td>
+    </tr>
+	<tr>
+        <td>支行名称:</td>
+        <td><%=bank_name%></td>
+    </tr>
+	
+	<tr><td colspan="1">&nbsp;</td></tr>
+
+
+    <tr>
+        <td>大类:</td>
+        <td><%=(mainTypeCode || "") + " " +(MainTypeName || "") %></td>
+    </tr>
+    <tr>
+        <td>行业:</td>
+        <td><%=(industryCode || "") + " " +(industryName || "") %></td>
+    </tr>
+    <tr>
+        <td>专业:</td>
+        <td><%=(professionalCode || "") + " " +(ProfessionalName || "") %></td>
+    </tr>
+    <tr>
+        <td>直播时间:</td>
+        <td><%=live_time%></td>
+    </tr>
+    <tr>
+        <td>申请时间:</td>
+        <td><%=new Date(timestamp).toLocaleString()%></td>
+    </tr>
+	<tr>
+        <td>最后修改时间:</td>
+        <td><%var lastmodif=lastmodif||"";%>
+            <%=new Date(lastmodif).toLocaleString() %>
+        </td>
+    </tr>
+</table>
+<!--/签约申请信息-->

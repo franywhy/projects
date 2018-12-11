@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课程档案</title> #parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<!-- 主表列表 -->
+		<div v-show="showType == 1">
+			<div class="grid-btn">
+				#if($shiro.hasPermission("courses:list"))
+				<table class="table table-condensed" border="0">
+					<tr border="0">
+						<td><label for="name">课程编号:</label></td>
+						<td><input type="text" class="form-control" v-model="q.courseNo" @keyup.enter="query" placeholder="课程编号"></td>
+						<td><label for="name">课程名称:</label></td>
+						<td><input type="text" class="form-control" v-model="q.courseName" @keyup.enter="query" placeholder="课程名称"></td>
+						
+						<td><label for="name">产品线:</label></td>
+						<td><input type="text" class="form-control" v-model="q.productName" @keyup.enter="query" readonly="readonly" placeholder="点击权限产品线" @click="selectProductQuery"></td>
+						
+					</tr>
+				</table>
+				<a class="btn  btn-default" @click="rest">重置</a> 
+				<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+				#end
+				#if($shiro.hasPermission("courses:save"))
+				<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a> 
+				#end
+				#if($shiro.hasPermission("courses:update")) 
+				<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a> 
+				#end 
+				#if($shiro.hasPermission("courses:liveList")) 
+				<a class="btn btn-primary" @click="liveList"><i class="fa fa-pencil-square-o"></i>&nbsp;直播基础课次</a> 
+				#end
+				#if($shiro.hasPermission("courses:recordList")) 
+				<a class="btn btn-primary" @click="recordList"><i class="fa fa-pencil-square-o"></i>&nbsp;录播课</a> 
+				#end
+				#if($shiro.hasPermission("courses:delete")) 
+				<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a> 
+				#end
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+		<!-- 主表编辑 -->
+		<div v-show="showType == 2" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-2 control-label">课程编号</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"  v-model="courses.courseNo" placeholder="课程编号" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">课程名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"  v-model="courses.courseName" placeholder="课程名称" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+				   	<div class="col-sm-2 control-label">产品线</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="courses.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"  /><!--placeholder="点击选择产品线" @click="selectProduct"-->
+				      
+				    </div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">课程类别</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="courses.courseLb" placeholder="课程类别" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">课程类型</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="courses.courseType" placeholder="课程类型" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">考试方式</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="courses.examType" placeholder="考试方式" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">学分</div>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" v-model="courses.courseCredit" placeholder="学分" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">排课冲突</div>
+					<label class="radio-inline"><input type="radio" name="courseEq" value="0" v-model="courses.courseEq" /> 不可冲突</label> 
+					<label class="radio-inline"> <input type="radio" name="courseEq" value="1" v-model="courses.courseEq" /> 可冲突</label>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">是否是双师课程</div>
+					<label class="radio-inline"><input type="radio" name="status" value="0" v-model="courses.status" />不是</label> 
+					<label class="radio-inline"><input type="radio" name="status" value="1" v-model="courses.status" />是</label>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">试听地址</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="courses.listenUrl" placeholder="试听地址" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>
+
+		</div>
+		<!-- 直播课基础课次列表 -->
+		<div v-show="showType == 3">
+			<div class="grid-btn">
+				<a class="btn btn-primary" @click="liveQuery"><i class="fa fa-search"></i>&nbsp;刷新</a> 
+				<a class="btn btn-primary" @click="liveAdd"><i class="fa fa-plus"></i>&nbsp;新增</a> 
+				<a class="btn btn-primary" @click="liveUpdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+				<a class="btn btn-primary" @click="liveDelete"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				<a class="btn btn-warning" @click="goList">返回</a>
+			</div>
+			<table id="livejqGrid"></table>
+			<div id="livejqGridPager"></div>
+		</div>
+
+		<!-- 直播基础课次编辑弹窗 -->
+		<div id="liveLayer" style="display: none;">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="form-group" style="display: none;">
+						<div class="col-sm-2 control-label">ID</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model="liveDetail.obj.liveId"  />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">名称</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model.trim="liveDetail.obj.liveName" placeholder="课次名称" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">排序</div>
+						<div class="col-sm-10">
+							<input type="number" class="form-control" v-model="liveDetail.obj.orderNum" placeholder="排序" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">班型权限</div>
+						<div class="col-sm-10">
+							<select class="form-control" style="height:200px;"  multiple="multiple" placeholder="班型权限" v-model="liveDetail.obj.liveClassTypeIdsArray">
+								<option v-for="option in classTypeList" v-bind:value="option.value">{{ option.name }}</option>
+							</select>
+						</div>
+					</div>
+					
+
+					<!--//app4.0.1注释掉字段-->
+					<div class="form-group">
+					<div class="col-sm-2 control-label">上期复习</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="liveDetail.obj.reviewUrl" placeholder="文件上传(文件名不要带空格)" readonly="readonly" onclick="hq.core.mulit_upload('vm.liveDetail.obj.reviewName','vm.liveDetail.obj.reviewUrl','上期复习文件');"/>
+					</div>
+					</div>
+					<div class="form-group">
+					<div class="col-sm-2 control-label">本次预习</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="liveDetail.obj.prepareUrl" placeholder="文件上传(文件名不要带空格)" readonly="readonly" onclick="hq.core.mulit_upload('vm.liveDetail.obj.prepareName','vm.liveDetail.obj.prepareUrl','本次预习文件');"/>
+					</div>
+					</div>
+					<div class="form-group">
+					<div class="col-sm-2 control-label">课堂资料</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="liveDetail.obj.coursewareUrl" placeholder="文件上传(文件名不要带空格)" readonly="readonly" onclick="hq.core.mulit_upload('vm.liveDetail.obj.coursewareName','vm.liveDetail.obj.coursewareUrl','课堂资料文件');"/>
+					</div>
+					</div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">阶段</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="liveDetail.obj.examStageName" readonly="readonly" placeholder="选择阶段" @click="selectPhaseForDetail"/>
+                        </div>
+                    </div>
+					<!--<div class="form-group">
+						<div class="col-sm-2 control-label">练习阶段</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model="liveDetail.obj.practiceStageId" placeholder="练习阶段" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">考试阶段</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model="liveDetail.obj.examStageId" placeholder="考试阶段" />
+						</div>
+					</div>-->
+
+					
+				</div>
+			</form>
+		</div>
+
+		<!-- 录播课列表 -->
+		<div v-show="showType == 4">
+			<div class="grid-btn">
+				<a class="btn btn-primary" @click="recordQuery"><i class="fa fa-search"></i>&nbsp;刷新</a> 
+				<a class="btn btn-primary" @click="recordAddZ"><i class="fa fa-plus"></i>&nbsp;新增章</a> 
+				<a class="btn btn-primary" @click="recordAddJ"><i class="fa fa-plus"></i>&nbsp;新增节</a> 
+				<a class="btn btn-primary" @click="recordUpdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+				<a class="btn btn-primary" @click="recordDelete"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				<a class="btn btn-warning" @click="goList">返回</a>
+			</div>
+		<!-- 	<div class="row">
+				<div class="col-md-3">.col-md-4</div>
+				<div class="col-md-8">
+				</div>
+			</div> -->
+			<!-- <table id="recordjqGrid"></table>
+			<div id="recordjqGridPager"></div> -->
+			
+			<table id="recordTable" data-mobile-responsive="true" data-click-to-select="true">
+				<thead>
+					<tr>
+						<th data-field="selectItem" data-checkbox="true"></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		
+		<!-- 录播课编辑弹窗 -->
+		<div id="recordLayer" style="display: none;">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="form-group">
+						<div class="col-sm-2 control-label">名称</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model="recordDetail.obj.name" placeholder="名称" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">视频</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model="recordDetail.obj.polyvName" readonly="readonly" placeholder="点击选择视频" @click="selectVideo"/>
+							<a class="btn btn-primary" @click="clearRecordDetail"><i class="fa fa-trash-o"></i>&nbsp;清空</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">教师</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model="recordDetail.obj.userName" readonly="readonly" placeholder="点击选择教师" @click="selectTeacher" />
+							<a class="btn btn-primary" @click="clearTeacher"><i class="fa fa-trash-o"></i>&nbsp;清空</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">排序</div>
+						<div class="col-sm-10">
+							<input type="number" class="form-control" v-model="recordDetail.obj.orderNum" placeholder="排序" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">文件上传</div>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" v-model="recordDetail.obj.fileUrl" placeholder="文件上传(文件名不要带空格)" readonly="readonly" onclick="hq.core.mulit_upload('vm.recordDetail.obj.fileName','vm.recordDetail.obj.fileUrl','录播课文件');"/>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		
+	</div>
+
+<script src="${rc.contextPath}/js/course/courses.js?_${date.systemTime}"></script>
+#parse("layer/teacherLay.html")
+#parse("layer/polyVideoLay.html")
+#parse("layer/productLay.html")
+#parse("../../statics/plugins/upload/upload.html")
+    #parse("layer/phaseLay.html")
+</body>
+</html>

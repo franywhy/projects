@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlPhaseDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_phase.phase_id AS phaseId,
+		adl_phase.course_id AS courseId,
+		adl_phase.phase_name AS phaseName,
+		adl_phase.phase_no AS phaseNo,
+		adl_phase.key_point AS keyPoint,
+		adl_phase.version_no AS versionNo,
+		adl_phase.version_hash AS versionHash,
+		adl_phase.status AS status,
+		adl_phase.dr AS dr,
+		adl_phase.update_time AS updateTime,
+		adl_phase.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE adl_phase.dr = 0
+		<if test="courseId != null and courseId > 0">
+			AND adl_phase.`course_id` = #{courseId}
+		</if>
+		<if test="keyPoint != null">
+			AND adl_phase.`key_point` = #{keyPoint}
+		</if>
+		<if test="phaseName != null and phaseName.trim() != ''">
+			AND adl_phase.`phase_name` like concat('%',#{phaseName},'%')
+		</if>
+		<if test="phaseNo != null and phaseNo.trim() != ''">
+			AND adl_phase.`phase_no` like concat('%',#{phaseNo},'%')
+		</if>
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_phase AS adl_phase
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by phase_id desc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.adaptive.pojo.AdlPhasePOJO">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND phase_id = #{phaseId}
+	</select>
+
+	<select id="queryList" parameterType="com.hq.adaptive.pojo.query.AdlPhaseQuery" resultType="com.hq.adaptive.pojo.AdlPhasePOJO">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="queryTotal" parameterType="com.hq.adaptive.pojo.query.AdlPhaseQuery"  resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+ 	<select id="selectPhaseNameTotal" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		WHERE adl_phase.course_id = #{courseId}
+		  AND adl_phase.phase_name = #{phaseName}
+		<if test="phaseId != null and phaseId > 0">
+			AND adl_phase.phase_id &lt;&gt; #{phaseId}
+		</if>
+		AND dr = 0
+	</select>
+ 	<select id="selectPhaseNoTotal" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		WHERE adl_phase.phase_no = #{phaseNo}
+		<if test="phaseId != null and phaseId > 0">
+			AND adl_phase.phase_id &lt;&gt; #{phaseId}
+		</if>
+		AND dr = 0
+	</select>
+
+	<insert id="save" parameterType="com.hq.adaptive.entity.AdlPhaseEntity" useGeneratedKeys="true" keyProperty="phaseId">
+		INSERT INTO adl_phase
+		(
+			`course_id`, 
+			`phase_name`, 
+			`phase_no`, 
+			`key_point`, 
+			`version_no`,
+			`version_hash`, 
+			`status`, 
+			`dr`
+		)
+		values
+		(
+			#{courseId}, 
+			#{phaseName}, 
+			#{phaseNo}, 
+			#{keyPoint}, 
+			#{versionNo},
+			#{versionHash}, 
+			#{status}, 
+			#{dr}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.adaptive.entity.AdlPhaseEntity">
+		UPDATE adl_phase 
+		<set>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="phaseName != null">`phase_name` = #{phaseName}, </if>
+			<if test="phaseNo != null">`phase_no` = #{phaseNo}, </if>
+			<if test="keyPoint != null">`key_point` = #{keyPoint}, </if>
+			<if test="versionNo != null">`version_no` = #{versionNo}, </if>
+			<if test="versionHash != null">`version_hash` = #{versionHash}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		WHERE phase_id = #{phaseId}
+	</update>
+	<update id="delDr" parameterType="long">
+		UPDATE adl_phase
+		   SET `dr` = 1
+		WHERE phase_id = #{phaseId}
+	</update>
+	<update id="updateStatus" >
+		UPDATE adl_phase
+		<set>
+			<if test="status != null">`status` = #{status}</if>
+		</set>
+		WHERE phase_id = #{phaseId}
+	</update>
+</mapper>

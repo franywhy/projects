@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ClassGoodsDeptsDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		class_goods_depts.id AS id , 
+		class_goods_depts.class_id AS classId ,
+		class_goods_depts.good_id AS goodId , 
+		class_goods_depts.dept_id AS deptId ,
+		class_goods_depts.dr AS dr , 
+		class_goods_depts.creator AS creator ,
+		class_goods_depts.creation_time AS creationTime ,
+		class_goods_depts.modifier AS modifier , 
+		class_goods_depts.modify_time AS modifyTime ,
+		mall_class.class_name AS className ,
+		mall_class.default_class AS defaultClass,
+		mall_goods_info.name AS goodName ,
+		sys_dept.name AS deptName ,
+		sys_user.nick_name AS teacherName
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM class_goods_depts AS class_goods_depts
+    	 LEFT JOIN mall_class AS mall_class ON mall_class.class_id = class_goods_depts.class_id
+    	 LEFT JOIN sys_user AS sys_user ON sys_user.user_id = mall_class.user_id
+    	 LEFT JOIN mall_goods_info AS mall_goods_info ON mall_goods_info.id = class_goods_depts.good_id
+    	 LEFT JOIN sys_dept AS sys_dept ON sys_dept.dept_id = class_goods_depts.dept_id
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE class_goods_depts.dr=0
+    		  AND mall_class.dr=0
+    		  AND mall_goods_info.dr=0
+    		  AND sys_dept.dr=0
+    		  <if test="className != null and className.trim() != ''">
+    		  	  and mall_class.class_name like concat('%',#{className},'%')
+    		  </if>
+    		  <if test="teacherName != null and teacherName.trim() != ''">
+    		  	  and sys_user.nick_name like concat('%',#{teacherName},'%')
+    		  </if>
+    		  <if test="goodName != null and goodName.trim() != ''">
+    		  	  and mall_goods_info.name like concat('%',#{goodName},'%')
+    		  </if>
+    		  <if test="deptName != null and deptName.trim() != ''">
+    		  	  and sys_dept.name like concat('%',#{deptName},'%')
+    		  </if>
+    </sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY mall_class.default_class DESC,class_goods_depts.id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObjectPOJO" resultType="io.renren.pojo.ClassGoodsDeptsPOJO">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND class_goods_depts.id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryListPOJO" resultType="io.renren.pojo.ClassGoodsDeptsPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+ 	<select id="queryNumByGoodIdAndDeptId" resultType="int">
+		select count(1) 
+		from 
+			class_goods_depts 
+		where 
+			class_id = #{classId} and good_id = #{goodId} and dept_id = #{deptId} and dr = 0
+	</select>
+ 	<select id="queryNumBydeptIdAndGoodId" resultType="int">
+		select count(1) 
+		from 
+			class_goods_depts as class_goods_depts
+			left join mall_class as mall_class on mall_class.class_id = class_goods_depts.class_id
+		where 
+			class_goods_depts.good_id = #{goodId} and class_goods_depts.dept_id = #{deptId} and class_goods_depts.dr = 0
+			 and mall_class.default_class = 1
+			 and mall_class.dr = 0
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.ClassGoodsDeptsEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into class_goods_depts
+		(
+		`class_id`, `good_id`, `dept_id`,`dr`,
+		`creator`, `creation_time`, `modifier`, `modify_time` )
+		values
+		(
+		#{classId}, #{goodId}, #{deptId}, 0,
+		#{creator}, #{creationTime}, #{modifier},
+		#{modifyTime} )
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.ClassGoodsDeptsEntity">
+		update class_goods_depts 
+		<set>
+			<if test="classId != null">`class_id` = #{classId}, </if>
+			<if test="goodId != null">`good_id` = #{goodId}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}</if>
+		</set>
+		WHERE 
+			dr = 0
+			AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.ClassGoodsDeptsEntity">
+		UPDATE class_goods_depts 
+		<set> dr = 1 </set>
+		WHERE dr = 0
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.ClassGoodsDeptsEntity">
+		UPDATE class_goods_depts 
+		<set> dr = 1 </set>
+		WHERE dr = 0
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<select id="queryClassList" resultType="io.renren.entity.ClassGoodsDeptsEntity">
+		select 
+			class_goods_depts.class_id
+		from
+			class_goods_depts as class_goods_depts
+			left join mall_class as mall_class on mall_class.class_id = class_goods_depts.class_id
+		where 	
+			class_goods_depts.dr = 0
+			and mall_class.default_class = 1
+			<if test="goodId > 0 and goodId != null">
+				and class_goods_depts.good_id = #{goodId}
+			</if>
+			<if test="deptId > 0 and deptId != null">
+				and class_goods_depts.dept_id = #{deptId}
+			</if>
+			order by class_goods_depts.creation_time desc
+	</select>
+	<delete id="deleteById">
+		delete from class_goods_depts where id = #{id}
+	</delete>
+	
+</mapper>

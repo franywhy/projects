@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MsgContentTopDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	msg_content_top.top_id AS topId , 	msg_content_top.user_id AS userId , 	msg_content_top.type AS type , 	msg_content_top.content_id AS contentId , 	msg_content_top.school_id AS schoolId , 	msg_content_top.timestamp AS timestamp 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from msg_content_top as msg_content_top
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.MsgContentTopEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND top_id = #{topId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.MsgContentTopEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MsgContentTopEntity" useGeneratedKeys="true" keyProperty="topId">
+		insert into msg_content_top
+		(
+				`user_id`, 				`type`, 				`content_id`, 				`school_id`, 				`timestamp`		)
+		values
+		(
+															#{userId}, 																			#{type}, 																			#{contentId}, 																			#{schoolId}, 																			#{timestamp}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.MsgContentTopEntity">
+		update msg_content_top 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="contentId != null">`content_id` = #{contentId}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="timestamp != null">`timestamp` = #{timestamp}</if>
+		</set>
+		<include refid="base_where"/>
+		AND top_id = #{topId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM msg_content_top 
+		<include refid="base_where"/>
+		AND top_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM msg_content_top 
+		<include refid="base_where"/> 
+		AND top_id IN 
+		<foreach item="topId" collection="ids" open="(" separator="," close=")">
+			#{topId}
+		</foreach>
+	</delete>
+</mapper>

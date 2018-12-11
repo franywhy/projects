@@ -1,0 +1,150 @@
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+service-name: service-learningcenter-api
+spring.application.index: ${random.uuid} # this ensures that our applicationId is unique
+## 刷新时，关闭安全验证
+management.security.enabled: false
+## 开启消息跟踪
+spring.cloud.bus.trace.enabled: true
+server:
+    port: 8088
+    address: 0.0.0.0
+    session-timeout: 30
+    compression:
+        enabled: true
+    undertow:
+            access-log-dir: /logs/access/
+            access-log-enabled: false
+            access-log-pattern: common
+            buffer-size: 131072
+            buffers-per-region:
+            direct-buffers: false
+            io-threads: 4
+            worker-threads: 32
+
+spring:
+    application:
+      name: service-learningcenter-api     #服务ID
+    datasource:
+            type: com.zaxxer.hikari.HikariDataSource
+            url: jdbc:mysql://10.0.98.100:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+            password: root
+            username: root
+            driver-class-name: com.mysql.jdbc.Driver
+            minimum-idle: 5
+            maximum-pool-size: 20
+            idle-timeout: 600000
+            connection-timeout: 30000
+            max-lifetime: 1800000
+
+redis:
+        sentinel:
+            group: mymaster
+            nodes: 10.0.98.9:6384
+        maxTotal: 1000
+        minIdle: 8
+        maxIdle: 100
+        maxWaitMillis: 5000
+        testOnBorrow: false
+        testOnReturn: false
+        password:
+        timeout: 10000
+
+logging:
+    path: /logs
+    file: /logs/com.hq.learningcenter.log
+    level:
+       com:
+           hq:
+               com.hq.learningcenter:
+                   controller: INFO
+                   config: INFO
+                   interceptor: INFO
+
+http:
+    timeout:
+        conn: 4000
+        request: 6000
+        socket: 4000
+    pool:
+        max-total: 30
+        route-total: 6
+    retry-count: 1
+    expect-continue-enable: true
+
+local-info:
+    captcha-timeout: 600000
+    cookie-token-name: token
+    cookie-token-timeout: 86400
+    sso-host: http://10.0.98.80:8084 #http://10.0.98.14:8084       #http://10.0.98.15:28087
+    #获取我的学分接口
+    credit-getmycredit-url: http://axdd.kjcity.com/credit/getMyCredit.json?studentid=@studentid&secretKey=@secretKey
+    live-callback-info: dev.live.callback.info
+    replay-callback-info: dev.replay.callback.info
+    #gensee配置
+    gensee-webcast-web: http://hqzk.gensee.com/webcast/site/entry/join-
+    gensee-ctx: webcast
+    gensee-k-timeout: 30000
+    gensee-k-white: 545f1d8d23511d6213146dbca3310814
+    #CC回放地址
+    cc-vod-url: http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=
+    #小能(联系班主任用)
+    customer-care-url: http://downt.ntalker.com/t2d/chat.php?siteid=kf_9005&settingid=wx_code&baseuri=http%3A%2F%2Fdl.ntalker.com%2Fjs%2Fxn6%2F
+    #旧版学习中心PC接口
+    old-center: http://app.sso.hqjy.com/redirect_to_other_4old_pc?username=
+    #CC商品
+    cc-commodity: 0
+    #云合同测试线
+    online-contract-url: https://api.yunhetong.com/api/
+    online-contract-appid: 2018060118124200004
+    online-contract-appkey: 7GS8xU1oOsuWj
+    online-contract-appsignerid: 9252
+    insurance-deskey: hqertguk
+    #无业务id域名
+    not-business-domain: http://zikao.learning.hqjy.com/
+
+sso-info:
+    sso-userinfo-url: http://10.0.98.80:8084/inner/userInfo
+    sso-usertokendetail-url: http://10.0.98.80:8084/inner/userTokenDetail
+    sso-usermobileno-url: http://10.0.98.80:8084/inner/userMobileNo
+    sso-getbussinessid-url: http://10.0.98.80:8084/inner/getBussinessId
+    sso-ncid-url: http://10.0.98.80:8084/inner/ncId
+
+swagger:
+    enable: true
+    title-name: LearningCenter Api 接口文档
+    base-package: com.hq.learningcenter
+    author: Glenn
+    version: 1.0
+
+kaptcha:
+     border: yes
+     border-color: 105,179,90
+     text-producer-fond-color: blue
+     image-width: 130
+     image-height: 55
+     session-key: code
+     text-producer-char-length: 4
+     text-producer-font-names: 宋体,楷体,微软雅黑
+     validate: false      #是否对图形验证码进行验证
+
+# IP 白名单
+ip-white-list:
+    filter-switch: false
+    list:
+        - 8.8.8.8
+        - 0.0.0.0
+        - 127.0.0.1
+        - 0:0:0:0:0:0:0:1
+        - 177.77.83.149
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true                     # 设置微服务调用地址为IP优先（缺省为false）
+    ipAddress: 10.0.98.20
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://admin:hqjymicro@10.0.98.17:8100/eureka/,http://admin:hqjymicro@10.0.98.17:8101/eureka/,http://admin:hqjymicro@10.0.98.17:8102/eureka/
+    enabled: true
+

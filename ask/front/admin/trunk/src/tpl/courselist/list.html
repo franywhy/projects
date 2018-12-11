@@ -1,0 +1,63 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <th class="auto">NC科目id</th>
+        <th class="auto">NC内容</th>
+        <th class="auto">展示名称</th>
+        <th class="auto">科目编码</th>
+        <th class="auto">备注</th>
+        <th class="auto">课次排序</th>
+        <th class="auto">是否是线上</th>
+        <th class="auto">免费试听地址</th>
+        <th class="auto">题库地址</th>
+        <th class="auto">实训地址</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <td class="auto"><%=data[i].nc_id %></td>
+            <td class="auto"><%=data[i].nc_name %></td>
+            <td class="auto"><%=data[i].show_name %></td>
+            <td class="auto"><%=data[i].course_code %></td>
+            <td class="auto"><%=data[i].remark %></td>
+            <td class="auto"><%=data[i].sort %></td>
+            <%if(data[i].is_online){%>
+            <%if(data[i].is_online==0){%>
+            <td class="auto">否</td>
+            <%}else if(data[i].is_online==1){%>
+            <td class="auto">是</td>
+            <%}else{%>
+            <td class="auto">否</td>
+            <%}}else{%>
+            <td class="auto">否</td>
+            <%}%>
+            <td class="auto">
+                <button class="d-button" onclick="javascript:window.open('<%=data[i].try_video %>')">跳  转</button>&nbsp;&nbsp;
+                <%=data[i].try_video %>
+            </td>
+            <td class="auto">
+                <button class="d-button" onclick="javascript:window.open('<%=data[i].tiku_url %>')">跳  转</button>&nbsp;&nbsp;
+                <%=data[i].tiku_url %>
+            </td>
+            <td class="auto">
+                <button class="d-button" onclick="javascript:window.open('<%=data[i].shixun_url %>')">跳  转</button>&nbsp;&nbsp;
+                <%=data[i].shixun_url %>
+            </td>
+          <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详细</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

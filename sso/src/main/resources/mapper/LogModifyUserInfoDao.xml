@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elise.singlesignoncenter.dao.LogModifyUserInfoDao">
+
+    <insert id="insertModifyLog" parameterType="com.elise.singlesignoncenter.entity.LogModifyUserInfoEntity" useGeneratedKeys="true" keyProperty="id">
+       insert into `log_modify_userinfo`
+       (
+         user_id,
+         modify_user,
+         modify_time,
+         detail,
+         login_ip,
+         business_id,
+         path,
+         method
+       )
+       values
+       (
+        #{userId},
+        #{modifyUser},
+        #{modifyTime},
+        #{detail},
+        #{loginIp},
+        #{businessId},
+        #{path},
+        #{method}
+       )
+
+    </insert>
+
+
+</mapper>

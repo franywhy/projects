@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.KnowledgePointMaterialDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	knowledge_point_material.id AS id , 	knowledge_point_material.knowledge_point_id AS knowledgePointId , 	knowledge_point_material.material_id AS materialId 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from knowledge_point_material as knowledge_point_material
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.KnowledgePointMaterialEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.KnowledgePointMaterialEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.KnowledgePointMaterialEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into knowledge_point_material
+		(
+				`knowledge_point_id`, 				`material_id`		)
+		values
+		(
+															#{knowledgePointId}, 																			#{materialId}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.KnowledgePointMaterialEntity">
+		update knowledge_point_material 
+		<set>
+			<if test="knowledgePointId != null">`knowledge_point_id` = #{knowledgePointId}, </if>
+			<if test="materialId != null">`material_id` = #{materialId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM knowledge_point_material 
+		
+		where  id = #{id}
+	</delete>
+	
+	<delete id="deleteByMaterialId" parameterType="int">
+		DELETE FROM knowledge_point_material 
+		
+		where  material_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM knowledge_point_material 
+		
+		where knowledge_point_id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="findByPointId" resultType="map">
+		select
+		material_id as id
+		from knowledge_point_material
+		where knowledge_point_id = #{point_id}
+	</select>
+	
+</mapper>

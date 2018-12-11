@@ -1,0 +1,611 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.hq</groupId>
+  <artifactId>school-learningCenter</artifactId>
+  <packaging>war</packaging>
+  <version>2.0.1</version>
+  <name>school-learningCenter Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+ 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+ 	<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+   	<spring.version>4.2.9.RELEASE</spring.version>
+   	<mybatis.version>3.1.1</mybatis.version>  
+   	<mybatisspring.version>1.1.1</mybatisspring.version>
+   	<com.fasterxml.jackson.core>2.4.4</com.fasterxml.jackson.core>
+   	<servlet-version>3.1.0</servlet-version>
+   	
+   	<!-- gensee配置 -->
+   	<pom.gensee.webcast.web><![CDATA[http://hqzk.gensee.com/webcast/site/entry/join-]]></pom.gensee.webcast.web>
+   	<pom.gensee.ctx><![CDATA[webcast]]></pom.gensee.ctx>
+   	<pom.gensee.k.timeout><![CDATA[30000]]></pom.gensee.k.timeout>
+   	<pom.gensee.k.white><![CDATA[545f1d8d23511d6213146dbca3310814]]></pom.gensee.k.white>
+   	<!-- CC回放地址 -->
+	<pom.cc.vod.url><![CDATA[http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=]]></pom.cc.vod.url>
+   	
+   	<!-- 获取我的学分接口 -->
+   	<pom.credit.getMyCredit.url><![CDATA[http://axdd.kjcity.com/credit/getMyCredit.json?studentid=@studentid&secretKey=@secretKey]]></pom.credit.getMyCredit.url>
+   	
+   	<!-- 小能(联系班主任用) -->
+   	<pom.customer.care.url><![CDATA[http://downt.ntalker.com/t2d/chat.php?siteid=kf_9005&settingid=wx_code&baseuri=http%3A%2F%2Fdl.ntalker.com%2Fjs%2Fxn6%2F]]></pom.customer.care.url>
+  	<!-- 旧版学习中心PC接口 -->
+	<pom.old.center><![CDATA[http://app.sso.hqjy.com/redirect_to_other_4old_pc?username=]]></pom.old.center>
+	<!-- CC商品 -->
+	<pom.cc.commodity><![CDATA[0]]></pom.cc.commodity>
+	<!-- 云合同测试线 -->
+	<pom.online.contract.url><![CDATA[https://api.yunhetong.com/api/]]></pom.online.contract.url>
+	<pom.online.contract.appId><![CDATA[2018060118124200004]]></pom.online.contract.appId>
+	<pom.online.contract.appKey><![CDATA[7GS8xU1oOsuWj]]></pom.online.contract.appKey>
+	<pom.online.contract.appSignerId><![CDATA[9252]]></pom.online.contract.appSignerId>
+    <pom.insurance.desKey><![CDATA[hqertguk]]></pom.insurance.desKey>
+  </properties>
+	
+	<profiles>
+		<!-- 开发线 -->
+		<profile>
+			<id>dev</id>
+			
+			<properties>
+				<pom.jdbc.driverclassname><![CDATA[com.mysql.jdbc.Driver]]></pom.jdbc.driverclassname>
+			   	<pom.jdbc.url><![CDATA[jdbc:mysql://177.77.77.219:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8]]></pom.jdbc.url>
+			   	<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+			   	<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+			   	
+			   	<pom.c3p0.pool.size.max><![CDATA[20]]></pom.c3p0.pool.size.max>
+			   	<pom.c3p0.pool.size.min><![CDATA[5]]></pom.c3p0.pool.size.min>
+			   	<pom.c3p0.pool.size.ini><![CDATA[3]]></pom.c3p0.pool.size.ini>
+			   	<pom.c3p0.pool.size.increment><![CDATA[2]]></pom.c3p0.pool.size.increment>
+			   	<!-- memcached配置 -->
+				<pom.memcached.servers><![CDATA[177.77.77.118:11211]]></pom.memcached.servers>
+				<pom.memcached.protocol><![CDATA[BINARY]]></pom.memcached.protocol>
+				<pom.memcached.opTimeout><![CDATA[6000]]></pom.memcached.opTimeout>
+				<pom.memcached.timeoutExceptionThreshold><![CDATA[1998]]></pom.memcached.timeoutExceptionThreshold>
+				<!-- redis配置 -->
+				<pom.redis.host><![CDATA[177.77.77.219]]></pom.redis.host>
+				<pom.redis.port><![CDATA[6379]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[3]]></pom.redis.dbindex>
+
+				<redis.pool.maxActive>500</redis.pool.maxActive>
+				<redis.pool.maxIdle>500</redis.pool.maxIdle>
+				<redis.pool.maxWait>-1</redis.pool.maxWait>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+			   	<!-- soo -->
+			   	<pom.sso.domain><![CDATA[http://177.77.77.232:28089]]></pom.sso.domain>
+			   	<pom.sso.tokenExpired.url>${pom.sso.domain}<![CDATA[/inner/tokenExpired]]></pom.sso.tokenExpired.url>
+			   	<pom.sso.userTokenDetail.url>${pom.sso.domain}<![CDATA[/inner/userTokenDetail]]></pom.sso.userTokenDetail.url>
+			   	<pom.sso.userMobileNo.url>${pom.sso.domain}<![CDATA[/inner/userMobileNo]]></pom.sso.userMobileNo.url>
+			   	<pom.sso.userInfo.url>${pom.sso.domain}<![CDATA[/inner/userInfo]]></pom.sso.userInfo.url>
+			   	<pom.sso.ncId.url>${pom.sso.domain}<![CDATA[/inner/ncId]]></pom.sso.ncId.url>
+			   	<!-- rabbitmq 配置-->
+			   	<queue.servers><![CDATA[10.0.98.18]]></queue.servers>
+				<queue.username><![CDATA[admin]]></queue.username>
+				<queue.password><![CDATA[HQJY666]]></queue.password>
+				<queue.nc.sign.sync.common><![CDATA[accfun.dev.nc.sign.sync.common]]></queue.nc.sign.sync.common>
+  				<queue.nc.plan.sync.kj><![CDATA[dev.nc.plan.sync.kj]]></queue.nc.plan.sync.kj>
+				<queue.nc.teacher.sync.kj><![CDATA[dev.nc.teacher.sync.kj]]></queue.nc.teacher.sync.kj>
+				<queue.nc.sign.sync.kingdee><![CDATA[dev.nc.sign.sync.kingdee]]></queue.nc.sign.sync.kingdee>
+				<queue.live.callback.info><![CDATA[dev.live.callback.info]]></queue.live.callback.info>
+				<queue.replay.callback.info><![CDATA[dev.replay.callback.info]]></queue.replay.callback.info>
+  				<!-- 无业务id域名 -->
+  				<pom.not.business.domain><![CDATA[http://177.77.77.232:18086/]]></pom.not.business.domain>
+				<!-- 会计乐报名表消息队列消费休眠时间 1秒 -->
+				<pom.queue.sleep.millis>1000</pom.queue.sleep.millis>
+                <!--入学测评页面地址-->
+                <pom.testing.url>www.baidu.com</pom.testing.url>
+			</properties>
+		</profile>
+		<!-- 测试线 -->
+		<profile>
+			<id>test</id>
+
+			<properties>
+				<pom.jdbc.driverclassname><![CDATA[com.mysql.jdbc.Driver]]></pom.jdbc.driverclassname>
+			   	<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.5:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.jdbc.url>
+			   	<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+			   	<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+			   	
+			   	<pom.c3p0.pool.size.max><![CDATA[20]]></pom.c3p0.pool.size.max>
+			   	<pom.c3p0.pool.size.min><![CDATA[5]]></pom.c3p0.pool.size.min>
+			   	<pom.c3p0.pool.size.ini><![CDATA[3]]></pom.c3p0.pool.size.ini>
+			   	<pom.c3p0.pool.size.increment><![CDATA[2]]></pom.c3p0.pool.size.increment>
+			   	<!-- memcached配置 -->
+				<pom.memcached.servers><![CDATA[177.77.77.118:11211]]></pom.memcached.servers>
+				<pom.memcached.protocol><![CDATA[BINARY]]></pom.memcached.protocol>
+				<pom.memcached.opTimeout><![CDATA[6000]]></pom.memcached.opTimeout>
+				<pom.memcached.timeoutExceptionThreshold><![CDATA[1998]]></pom.memcached.timeoutExceptionThreshold>
+			   	<!-- redis配置 -->
+				<pom.redis.host><![CDATA[10.0.98.9]]></pom.redis.host>
+			    <pom.redis.port><![CDATA[6384]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[3]]></pom.redis.dbindex>
+
+				<!-- admin redis配置 -->
+				<pom.admin.redis.host><![CDATA[10.0.98.9]]></pom.admin.redis.host>
+				<pom.admin.redis.port><![CDATA[6384]]></pom.admin.redis.port>
+				<pom.admin.redis.timeout><![CDATA[15000]]></pom.admin.redis.timeout>
+				<pom.admin.redis.dbindex><![CDATA[4]]></pom.admin.redis.dbindex>
+
+				<redis.pool.maxActive>500</redis.pool.maxActive>
+				<redis.pool.maxIdle>500</redis.pool.maxIdle>
+				<redis.pool.maxWait>-1</redis.pool.maxWait>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+				<!-- soo -->
+			   	<pom.sso.domain><![CDATA[http://dev.api.hqjy.cn/service-sso-api-dev]]></pom.sso.domain>
+			   	<!--<pom.sso.domain><![CDATA[http://10.0.98.15:28087]]></pom.sso.domain>-->
+			   	<!--<pom.sso.domain><![CDATA[http://10.0.98.15:28089]]></pom.sso.domain>-->
+			   	<pom.sso.tokenExpired.url>${pom.sso.domain}<![CDATA[/inner/tokenExpired]]></pom.sso.tokenExpired.url>
+			   	<pom.sso.userTokenDetail.url>${pom.sso.domain}<![CDATA[/inner/userTokenDetail]]></pom.sso.userTokenDetail.url>
+			   	<pom.sso.userMobileNo.url>${pom.sso.domain}<![CDATA[/inner/userMobileNo]]></pom.sso.userMobileNo.url>
+			   	<pom.sso.userInfo.url>${pom.sso.domain}<![CDATA[/inner/userInfo]]></pom.sso.userInfo.url>
+			   	<pom.sso.ncId.url>${pom.sso.domain}<![CDATA[/inner/ncId]]></pom.sso.ncId.url>
+			   	<!-- rabbitmq 配置-->
+			   	<queue.servers><![CDATA[10.0.98.46]]></queue.servers>
+				<queue.username><![CDATA[admin]]></queue.username>
+				<queue.password><![CDATA[mon4498]]></queue.password>
+				<queue.nc.sign.sync.common><![CDATA[accfun.test.nc.sign.sync.common]]></queue.nc.sign.sync.common>
+  				<queue.nc.plan.sync.kj><![CDATA[testRmote.nc.plan.sync.kj]]></queue.nc.plan.sync.kj>
+				<queue.nc.teacher.sync.kj><![CDATA[test.nc.teacher.sync.kj]]></queue.nc.teacher.sync.kj>
+				<queue.nc.sign.sync.kingdee><![CDATA[test.nc.sign.sync.kingdee]]></queue.nc.sign.sync.kingdee>
+				<queue.live.callback.info><![CDATA[test.live.callback.info]]></queue.live.callback.info>
+				<queue.replay.callback.info><![CDATA[test.replay.callback.info]]></queue.replay.callback.info>
+  				<!-- 无业务id域名 -->
+  				<pom.not.business.domain><![CDATA[http://10.0.98.15:18086/]]></pom.not.business.domain>
+				<!-- 会计乐报名表消息队列消费休眠时间 1秒 -->
+				<pom.queue.sleep.millis>1000</pom.queue.sleep.millis>
+                <!--入学测评页面地址-->
+                <pom.testing.url>www.baidu.com</pom.testing.url>
+			</properties>
+		</profile>
+		<!-- 预正式线 -->
+		<profile>
+			<id>preProduct</id>
+			<properties>
+				<pom.jdbc.driverclassname><![CDATA[com.mysql.jdbc.Driver]]></pom.jdbc.driverclassname>
+			   	<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.100:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true]]></pom.jdbc.url>
+			   	<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+			   	<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+			   	
+			   	<pom.c3p0.pool.size.max><![CDATA[20]]></pom.c3p0.pool.size.max>
+			   	<pom.c3p0.pool.size.min><![CDATA[5]]></pom.c3p0.pool.size.min>
+			   	<pom.c3p0.pool.size.ini><![CDATA[3]]></pom.c3p0.pool.size.ini>
+			   	<pom.c3p0.pool.size.increment><![CDATA[0]]></pom.c3p0.pool.size.increment>
+			   	<!-- memcached配置 -->
+				<pom.memcached.servers><![CDATA[172.16.2.222:11211]]></pom.memcached.servers>
+				<pom.memcached.protocol><![CDATA[BINARY]]></pom.memcached.protocol>
+				<pom.memcached.opTimeout><![CDATA[6000]]></pom.memcached.opTimeout>
+				<pom.memcached.timeoutExceptionThreshold><![CDATA[1998]]></pom.memcached.timeoutExceptionThreshold>
+			   	<!-- redis配置 -->
+				<pom.redis.host><![CDATA[10.0.98.100]]></pom.redis.host>
+			    <pom.redis.port><![CDATA[6379]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[0]]></pom.redis.dbindex>
+
+                <!-- admin redis配置 -->
+                <pom.admin.redis.host><![CDATA[10.0.98.100]]></pom.admin.redis.host>
+                <pom.admin.redis.port><![CDATA[6379]]></pom.admin.redis.port>
+                <pom.admin.redis.timeout><![CDATA[15000]]></pom.admin.redis.timeout>
+                <pom.admin.redis.dbindex><![CDATA[4]]></pom.admin.redis.dbindex>
+
+				<redis.pool.maxActive>500</redis.pool.maxActive>
+				<redis.pool.maxIdle>500</redis.pool.maxIdle>
+				<redis.pool.maxWait>-1</redis.pool.maxWait>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+				<!-- soo -->
+			   	<pom.sso.domain><![CDATA[http://10.0.98.80:8084]]></pom.sso.domain>
+			   	<!--<pom.sso.domain><![CDATA[http://api.hqjy.com/service-sso-api]]></pom.sso.domain>-->
+<!-- 				<pom.sso.domain><![CDATA[http://commom.sso.hqjy.com]]></pom.sso.domain> -->
+			   	<pom.sso.tokenExpired.url>${pom.sso.domain}<![CDATA[/inner/tokenExpired]]></pom.sso.tokenExpired.url>
+			   	<pom.sso.userTokenDetail.url>${pom.sso.domain}<![CDATA[/inner/userTokenDetail]]></pom.sso.userTokenDetail.url>
+			   	<pom.sso.userMobileNo.url>${pom.sso.domain}<![CDATA[/inner/userMobileNo]]></pom.sso.userMobileNo.url>
+			   	<pom.sso.userInfo.url>${pom.sso.domain}<![CDATA[/inner/userInfo]]></pom.sso.userInfo.url>
+			   	<pom.sso.ncId.url>${pom.sso.domain}<![CDATA[/inner/ncId]]></pom.sso.ncId.url>
+				<!-- rabbitmq 配置-->
+				<queue.servers><![CDATA[10.0.98.46]]></queue.servers>
+				<queue.username><![CDATA[admin]]></queue.username>
+				<queue.password><![CDATA[mon4498]]></queue.password>
+                <queue.nc.sign.sync.common><![CDATA[accfun.prod.nc.sign.sync.common]]></queue.nc.sign.sync.common>
+				<queue.nc.plan.sync.kj><![CDATA[prod.nc.plan.sync.kj]]></queue.nc.plan.sync.kj>
+				<queue.nc.teacher.sync.kj><![CDATA[prod.nc.teacher.sync.kj]]></queue.nc.teacher.sync.kj>
+				<queue.nc.sign.sync.kingdee><![CDATA[prod.nc.sign.sync.kingdee]]></queue.nc.sign.sync.kingdee>
+				<queue.live.callback.info><![CDATA[live.callback.info]]></queue.live.callback.info>
+				<queue.replay.callback.info><![CDATA[replay.callback.info]]></queue.replay.callback.info>
+				<!-- 无业务id域名 -->
+  				<pom.not.business.domain><![CDATA[http://zikao.learning.hqjy.com/]]></pom.not.business.domain>
+                <!-- 会计乐报名表消息队列消费休眠时间 1秒 -->
+                <pom.queue.sleep.millis>1000</pom.queue.sleep.millis>
+                <!--入学测评页面地址-->
+                <pom.testing.url>http://10.0.98.20:8848</pom.testing.url>
+                <!--请求删除缓存接口的校验值-->
+                <pom.redis.remove.checkKey>6666</pom.redis.remove.checkKey>
+                <!--首页课程列表 过期时间(min)-->
+                <pom.redis.timeout.centerCourseList>5</pom.redis.timeout.centerCourseList>
+                <!--课程列表topMsg 过期时间(min)-->
+                <pom.redis.timeout.centerCourseTopMsg>5</pom.redis.timeout.centerCourseTopMsg>
+                <!--直播课次考勤 过期时间(min)-->
+                <pom.redis.timeout.centerPlanLivesAttendPer>5</pom.redis.timeout.centerPlanLivesAttendPer>
+                <!--商品维度下的录播课详情(pc端) 过期时间(min)-->
+                <pom.redis.timeout.centerRecordWeb>5</pom.redis.timeout.centerRecordWeb>
+                <!--课程维度下的录播详情(app端) 过期时间(min)-->
+                <pom.redis.timeout.centerRecordApp>5</pom.redis.timeout.centerRecordApp>
+                <!--录播考勤 过期时间(min)-->
+                <pom.redis.timeout.centerRecordAttendPer>5</pom.redis.timeout.centerRecordAttendPer>
+			</properties>
+		</profile>
+		<!-- 正式线 -->
+		<profile>
+			<id>product</id>
+
+			<properties>
+				<pom.jdbc.driverclassname><![CDATA[com.mysql.jdbc.Driver]]></pom.jdbc.driverclassname>
+			   	<pom.jdbc.url><![CDATA[jdbc:mysql://172.16.2.223:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true]]></pom.jdbc.url>
+			   	<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+			   	<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+
+			   	<pom.c3p0.pool.size.max><![CDATA[20]]></pom.c3p0.pool.size.max>
+			   	<pom.c3p0.pool.size.min><![CDATA[5]]></pom.c3p0.pool.size.min>
+			   	<pom.c3p0.pool.size.ini><![CDATA[3]]></pom.c3p0.pool.size.ini>
+			   	<pom.c3p0.pool.size.increment><![CDATA[0]]></pom.c3p0.pool.size.increment>
+			   	<!-- memcached配置 -->
+				<pom.memcached.servers><![CDATA[172.16.2.222:11211]]></pom.memcached.servers>
+				<pom.memcached.protocol><![CDATA[BINARY]]></pom.memcached.protocol>
+				<pom.memcached.opTimeout><![CDATA[6000]]></pom.memcached.opTimeout>
+				<pom.memcached.timeoutExceptionThreshold><![CDATA[1998]]></pom.memcached.timeoutExceptionThreshold>
+			   	<!-- redis配置 -->
+				<pom.redis.host><![CDATA[172.16.2.223]]></pom.redis.host>
+			    <pom.redis.port><![CDATA[6379]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[0]]></pom.redis.dbindex>
+
+				<!-- admin redis配置 -->
+				<pom.admin.redis.host><![CDATA[172.16.2.223]]></pom.admin.redis.host>
+				<pom.admin.redis.port><![CDATA[6379]]></pom.admin.redis.port>
+				<pom.admin.redis.timeout><![CDATA[15000]]></pom.admin.redis.timeout>
+				<pom.admin.redis.dbindex><![CDATA[4]]></pom.admin.redis.dbindex>
+
+				<redis.pool.maxActive>500</redis.pool.maxActive>
+				<redis.pool.maxIdle>500</redis.pool.maxIdle>
+				<redis.pool.maxWait>-1</redis.pool.maxWait>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+				<!-- soo -->
+			   	<pom.sso.domain><![CDATA[http://172.16.2.222:8105]]></pom.sso.domain>
+<!-- 				<pom.sso.domain><![CDATA[http://commom.sso.hqjy.com]]></pom.sso.domain> -->
+			   	<pom.sso.tokenExpired.url>${pom.sso.domain}<![CDATA[/inner/tokenExpired]]></pom.sso.tokenExpired.url>
+			   	<pom.sso.userTokenDetail.url>${pom.sso.domain}<![CDATA[/inner/userTokenDetail]]></pom.sso.userTokenDetail.url>
+			   	<pom.sso.userMobileNo.url>${pom.sso.domain}<![CDATA[/inner/userMobileNo]]></pom.sso.userMobileNo.url>
+			   	<pom.sso.userInfo.url>${pom.sso.domain}<![CDATA[/inner/userInfo]]></pom.sso.userInfo.url>
+			   	<pom.sso.ncId.url>${pom.sso.domain}<![CDATA[/inner/ncId]]></pom.sso.ncId.url>
+				<!-- rabbitmq 配置-->
+				<queue.servers><![CDATA[172.16.2.247]]></queue.servers>
+				<queue.username><![CDATA[hquser]]></queue.username>
+				<queue.password><![CDATA[mon4498]]></queue.password>
+				<queue.nc.sign.sync.common><![CDATA[accfun.prod.nc.sign.sync.common]]></queue.nc.sign.sync.common>
+				<queue.nc.plan.sync.kj><![CDATA[prod.nc.plan.sync.kj]]></queue.nc.plan.sync.kj>
+				<queue.nc.teacher.sync.kj><![CDATA[prod.nc.teacher.sync.kj]]></queue.nc.teacher.sync.kj>
+				<queue.nc.sign.sync.kingdee><![CDATA[prod.nc.sign.sync.kingdee]]></queue.nc.sign.sync.kingdee>
+				<queue.live.callback.info><![CDATA[live.callback.info]]></queue.live.callback.info>
+				<queue.replay.callback.info><![CDATA[replay.callback.info]]></queue.replay.callback.info>
+				<!-- 无业务id域名 -->
+  				<pom.not.business.domain><![CDATA[http://zikao.learning.hqjy.com/]]></pom.not.business.domain>
+				<!-- 会计乐报名表消息队列消费休眠时间 1秒 -->
+				<pom.queue.sleep.millis>1000</pom.queue.sleep.millis>
+				<!-- 云合同正式 -->
+				<pom.online.contract.appId><![CDATA[2018070408523900018]]></pom.online.contract.appId>
+				<pom.online.contract.appKey><![CDATA[nLjKNLaVh2oap9HZ]]></pom.online.contract.appKey>
+				<pom.online.contract.appSignerId><![CDATA[1099684]]></pom.online.contract.appSignerId>
+                <!--入学测评页面地址-->
+                <pom.testing.url>www.baidu.com</pom.testing.url>
+                <!--请求删除缓存接口的校验值(123456 md5 16位)-->
+                <pom.redis.remove.checkKey>49BA59ABBE56E057</pom.redis.remove.checkKey>
+                <!--首页课程列表 过期时间(min)-->
+                <pom.redis.timeout.centerCourseList>10</pom.redis.timeout.centerCourseList>
+                <!--课程列表topMsg 过期时间(min)-->
+                <pom.redis.timeout.centerCourseTopMsg>14400</pom.redis.timeout.centerCourseTopMsg>
+                <!--直播课次考勤 过期时间(min)-->
+                <pom.redis.timeout.centerPlanLivesAttendPer>300</pom.redis.timeout.centerPlanLivesAttendPer>
+                <!--商品维度下的录播课详情(pc端) 过期时间(min)-->
+                <pom.redis.timeout.centerRecordWeb>30</pom.redis.timeout.centerRecordWeb>
+                <!--课程维度下的录播详情(app端) 过期时间(min)-->
+                <pom.redis.timeout.centerRecordApp>30</pom.redis.timeout.centerRecordApp>
+                <!--录播考勤 过期时间(min)-->
+                <pom.redis.timeout.centerRecordAttendPer>300</pom.redis.timeout.centerRecordAttendPer>
+			</properties>
+		</profile>
+	</profiles>
+  <dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatisspring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.38</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.10</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.1.41</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		
+		<!-- Freemarker视图所需jar -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.23</version>
+			<!-- <version>${freemarker-version}</version> -->
+		</dependency>
+		
+		<!-- 消息队列配置 -->
+        <dependency>
+	        <groupId>com.fasterxml</groupId>
+	        <artifactId>classmate</artifactId>
+	        <version>1.1.0</version>
+    	</dependency>
+    	<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${com.fasterxml.jackson.core}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${com.fasterxml.jackson.core}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${com.fasterxml.jackson.core}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.spy</groupId>
+			<artifactId>spymemcached</artifactId>
+			<version>2.11.6</version>
+		</dependency>
+		
+	   	<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>3.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+			<version>1.3.5.RELEASE</version>
+		</dependency>
+			<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+	  <dependency>
+		  <groupId>redis.clients</groupId>
+		  <artifactId>jedis</artifactId>
+		  <version>2.9.0</version>
+	  </dependency>
+		<!-- Spring Session Start -->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+			<version>1.2.2.RELEASE</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.1.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.1.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<!-- Spring Session End -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- swagger-springmvc -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.6.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>2.6.1</version>
+		</dependency>
+
+        <!-- poi office -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>3.9</version>
+        </dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+	  <dependency>
+		  <groupId>net.sf.json-lib</groupId>
+		  <artifactId>json-lib</artifactId>
+		  <version>2.4</version>
+		  <classifier>jdk15</classifier>
+	  </dependency>
+  </dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+		  	    <groupId>org.codehaus.mojo</groupId>
+		        <artifactId>tomcat-maven-plugin</artifactId>
+		        <configuration>
+		          <server>tomcat</server>
+		          <!-- 端口 -->
+		          <port>8080</port>
+		          <!-- 访问路径 -->
+		          <path>/</path>
+		          <contextReloadable>true</contextReloadable>
+		        </configuration>
+		    </plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<version>3.0</version>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+               	<filtering>true</filtering>  
+               	<includes>  
+	                <include>**/*.properties</include>  
+	                <include>**/*.xml</include>
+               	</includes>
+			</resource>
+		</resources>
+		<!-- <finalName>${project.artifactId}_${project.version}_${maven.build.timestamp}</finalName> -->
+		<finalName>${project.artifactId}</finalName>
+	</build>
+	
+	
+</project>

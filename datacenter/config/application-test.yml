@@ -1,0 +1,107 @@
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+
+server:
+    port: 8081
+    address: 0.0.0.0
+    session-timeout: 30
+    compression:
+        enabled: true
+    undertow:
+        access-log-dir: /logs/access/
+        access-log-enabled: false
+        access-log-pattern: common
+        max-post-size: 0
+        buffer-size: 131072
+        buffers-per-region:
+        direct-buffers: false
+        io-threads: 4
+        worker-threads: 32
+
+logging:
+    path: /logs
+    file: /logs/datacenter.log
+    level:
+       com:
+         elise:
+           datacenter:
+                 controller: INFO
+                 config: INFO
+                 interceptor: INFO
+spring:
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mysql://10.0.98.5:3306/hk_file?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        password: root
+        username: root
+        driver-class-name: com.mysql.jdbc.Driver
+        minimum-idle: 5
+        maximum-pool-size: 20
+        idle-timeout: 600000
+        connection-timeout: 30000
+        max-lifetime: 1800000
+
+multipart:
+    enabled: true
+    max-file-size: 20MB
+    max-request-size: 40MB
+
+guava:
+    cache:
+        # Guava LRU 缓存大小,单位是 M
+        maximum-weight: 256
+        concurrency-level: 16
+http:
+    timeout:
+        conn: 4000
+        request: 6000
+        socket: 4000
+    pool:
+        max-total: 30
+        route-total: 6
+    retry-count: 1
+    expect-continue-enable: true
+
+swagger:
+    enable: true
+    title-name: DataCenter 接口文档
+    base-package: com.elise.datacenter
+    author: Glenn
+    version: 1.0
+
+
+# 服务本地化配置
+local-info:
+    service-url: http://10.0.98.14:8081/file/singleDirectDownload/
+    sso-host: http://172.16.3.1/service-sso-api        #http://10.0.98.14:8084       #http://10.0.98.15:28087
+# 阿里OSS配置
+ali-oss:
+  endpoint: http://oss-cn-shenzhen.aliyuncs.com
+  ssoHost: http://alifile.hqjy.com
+  bucketName: hqjynanj
+  picLocation: hq/classfile/
+  accessKeyId: LTAIfbNDmPJMUGRz
+  accessKeySecret: Si8TqjLKJ0jQWQaASob9tc95G3Vo5C
+
+# FastDFS 服务配置
+fdfs:
+    enabled: true
+    network-timeout: 5
+    connect-timeout: 30
+    tracker-server:
+         - 172.16.2.222:22122
+        #- 10.0.98.13:22122
+        #- 177.77.77.183:22122
+    charset: UTF-8
+    tracker-http-port: 8080
+    anti-steal-token: false
+    secret-key: FastDFS1234567890
+
+# IP 白名单
+ip-white-list:
+    filter-switch: false
+    list:
+        - 8.8.8.8
+        - 0.0.0.0
+        - 127.0.0.1
+        - 0:0:0:0:0:0:0:1
+        - 177.77.83.149

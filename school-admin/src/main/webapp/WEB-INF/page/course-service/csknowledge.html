@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>知识点</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	
+	<!-- 顶部按钮 -->
+	<div style="overflow: hidden;" v-show="show1">
+		#if($shiro.hasPermission("courses:knowledge:list"))
+		<input type="text" class="form-control" v-model.trim="selectCourseName" readonly="readonly"  @click="csCourseLayShow" placeholder="选择课程" style="background-color: white;width: 400px;float: left;">
+ 		<input class="btn btn-default" style="float: left;margin-left: 10px" type="button" value="选择课程" @click="csCourseLayShow" />
+ 		#end
+ 		<a class="btn btn-primary" @click="downExcelTemplate"><i class="fa fa-download"></i>&nbsp;下载Excel模板</a>
+	</div>	
+	
+	<!-- 底部 -->
+	<div style="margin-top: 20px;" v-show="show2">
+		<!-- 左侧树 -->
+		<div style="float: left;width:300px">
+			<ul id="courseTree" class="ztree"></ul>
+		</div>
+		
+		<div style="float: left; width:800px ;position: relative;"  style="display: none" >
+			<div style="width:100%;">
+				<div style="margin: 0px; margin-bottom: 5px;">
+					<div class="form-group col-sm-2">
+						<input type="text" class="form-control" v-model.trim="q.knowledgeName" @keyup.enter="query" placeholder="请输入知识点名称" >
+					</div>
+					<div class="form-group col-sm-2">
+						<input type="text" class="form-control" v-model.trim="q.knowledgeNo" @keyup.enter="query" placeholder="请输入知识点编号">
+					</div>
+					<div class="form-group col-sm-2">
+						<input type="text" class="form-control" v-model.trim="q.keyPointName" @click="knowldgeKeyPointQueryShow" placeholder="点击选择重点" readonly="readonly">
+					</div>
+					#if($shiro.hasPermission("courses:knowledge:list"))
+						<a class="btn btn-default" @click="clearQuery"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+						<a class="btn btn-primary" @click="query" ><i class="fa fa-search"></i>&nbsp;查询</a>
+					#end
+					<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+					
+				</div>
+				<br/>
+				<div style="margin-bottom: 5px; ">
+					#if($shiro.hasPermission("courses:knowledge:edit"))
+					<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+					<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+					<!--<a class="btn btn-primary" @click="enable"><i class="fa fa-unlock"></i>&nbsp;启用</a>-->
+					<!--<a class="btn btn-primary" @click="unenable"><i class="fa fa-unlock-alt"></i>&nbsp;禁用</a>-->
+					<a class="btn btn-primary" @click="importExcel"><i class="fa fa-file-excel-o"></i>&nbsp;Excel批量导入</a>
+					#end
+					<a class="btn btn-primary" @click="checkKnowledgeClose"><i class="fa fa-retweet"></i>&nbsp;校验知识点空间</a>
+			 	</div>
+			    <table id="jqGrid"></table>
+			    <div id="jqGridPager"></div>
+			</div>
+		</div>
+	</div>
+	<!-- 新增 -->
+	<div v-show="show3">
+		<div class="panel-heading">{{title}}</div>
+		<!-- 章节按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="save"><i class="fa fa-plus"></i>&nbsp;保存</a>
+			<a class="btn btn-warning" @click="goBack">返回</a>
+		</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-all"><label for="name">知识点基础信息</label></div>
+				<div class="col-sm-2 control-label" title="课程">课程</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.courseName" readonly="readonly" />
+				</div>
+				<div class="col-sm-2 control-label">节</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.sectionName" readonly="readonly" @click="csSectionLayShow" placeholder="点击选择"/>
+						<a class="btn btn-primary input-group-addon" @click="csSectionLayShow" title="选择节"><i class="fa fa-folder-open"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearKnowledgeSectionName" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">编号</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<span class="input-group-addon" title="编码前缀" id="knowledge_parent"></span>
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.knowledgeNo" placeholder="请输入数字"/>
+						<a class="btn btn-primary input-group-addon" @click="checkKnowledgeNo" title="校验重复性"><i class="fa fa-exclamation-circle"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.knowledgeName" />
+				</div>
+				<div class="col-sm-2 control-label">难度</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.levelName" @click="knowldgeLevelShow" readonly="readonly" placeholder="点击选择"/>
+						<a class="btn btn-primary input-group-addon" @click="knowldgeLevelShow" title="选择难度"><i class="fa fa-folder-open"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearKnowledgeLevelName" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">考点</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.keyPointName" @click="knowldgeKeyPointShow" readonly="readonly" placeholder="点击选择"/>
+						<a class="btn btn-primary input-group-addon" @click="knowldgeKeyPointShow" title="选择考点"><i class="fa fa-folder-open"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearKnowledgeKeyPointName" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label" title="支持多选">题型</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.questiontypeListName" @click="knowledgeQuestionTypeShow" readonly="readonly" placeholder="点击选择"/>
+						<a class="btn btn-primary input-group-addon" @click="knowledgeQuestionTypeShow" title="选择题型"><i class="fa fa-folder-open"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearKnowledgeQuestionType" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<!--<div class="col-sm-2 control-label" title="支持多选">包含知识点</div>-->
+				<!--<div class="col-sm-10">-->
+					<!--<div class="input-group m-b">-->
+						<!--<input type="text" class="form-control" v-model.trim="knowledgeObj.childListName" @click="csKnowleTreeLayShow" readonly="readonly" placeholder="点击选择"/>-->
+						<!--<a class="btn btn-primary input-group-addon" @click="csKnowleTreeLayShow" title="选择知识点"><i class="fa fa-folder-open"></i>&nbsp;</a>-->
+						<!--<a class="btn btn-primary input-group-addon" @click="clearKnowledgeChild" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>-->
+					<!--</div>-->
+				<!--</div>-->
+			</div>
+		</form>
+	</div>
+	
+	<div id="fileUploadLayer" style="display: none;">
+		<div class="panel-heading">批量上传</div>
+		<input type="file" id="file_data" name="file_data" accept=".xls"/>
+	</div>
+</div>
+<script src="${rc.contextPath}/js/course-service/csknowledge.js?_${date.systemTime}"></script>
+
+#parse("course-service-layer/csCourseLay.html")
+#parse("course-service-layer/csConfigLay.html")
+#parse("course-service-layer/csConfigMutiSelectLay.html")
+#parse("course-service-layer/csKnowleTreeLay.html")
+#parse("course-service-layer/csCourseTreeLay.html")
+</body>
+</html>

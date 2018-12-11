@@ -1,0 +1,10 @@
+#
+# Created by Glenn on 2017/8/7 0024.
+#
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
+  com.hq.starter.AbstractRedisServiceConfiguration,\
+  com.hq.starter.Swagger2Configuration,\
+  com.hq.starter.HttpConnConfiguration,\
+  com.hq.starter.MultiPartConfiguration,\
+  com.hq.starter.FastDFSConfiguration

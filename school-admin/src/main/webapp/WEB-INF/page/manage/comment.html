@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>评论管理</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("comment:list"))
+			<table  class="table table-condensed" border="0" style="width: 50%">
+				<tr border="0">
+					<td><label for="name">评论内容:</label></td>
+					<td><input type="text" class="form-control" v-model="q.content" @keyup.enter="query" placeholder="内容"></td>
+					<td><label for="name">状态:</label></td>
+					<td>
+						<select class="form-control" v-model="q.appStatus">
+							<option value="">全部</option>
+							<option value="0">下架</option>
+							<option value="1">上架</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("comment:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;上架</a>
+			#end
+			#if($shiro.hasPermission("comment:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;下架</a>
+			#end
+			#if($shiro.hasPermission("comment:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+		</div>
+		<table id="jqGrid"></table>
+		<div id="jqGridPager"></div>
+    </div>
+</div>
+
+<script src="${rc.contextPath}/js/manage/comment.js?_${date.systemTime}"></script>
+</body>
+</html>

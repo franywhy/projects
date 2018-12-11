@@ -1,0 +1,50 @@
+
+<!--公告列表--> 
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+    		<th class="longtime">开始时间</th>
+            <th class="title">消息</th>
+			<th class="link">链接</th>
+			
+            <th class="auto">每多少秒发布一次</th>
+            <th class="auto">还需发布次数</th>
+            <th class="auto">添加时间</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action300">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i in data){%>
+        <tr>
+        	<td class="longtime"><%=new Date(data[i].time).toLocaleString()%></td>           	
+            <td class="title">
+			<%if(data[i].url){%>
+				<a href="<%=data[i].url%>" target="_blank">
+			<%}%>
+			<%=data[i].msg%>
+			<%if(data[i].url){%>
+				</a>
+			<%}%>
+			</td>
+			<td class="link">
+			<a href="<%=data[i].url%>" target="_blank"><%=data[i].url%></a>
+			</td>                     
+            <td class="auto"><%=data[i].frequency%>秒</td>
+            <td class="auto"><%=data[i].count%></td>                       
+            <td class="longtime"><%=new Date(data[i].guid).toLocaleString()%></td>            
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i].guid%>')">删</button>
+			</td>
+			<%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<%if($.isEmptyObject(data)){%>
+<div class="listEmpty">暂无消息！</div>
+<%}%>
+<div class="appPager"></div>
+<!--/公告列表--> 

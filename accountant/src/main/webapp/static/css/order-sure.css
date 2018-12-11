@@ -1,0 +1,230 @@
+.order-sure-main{
+	background-color: #f8f8f8;
+	padding-top:40px;
+	padding-bottom:50px;
+}
+.order-step {
+  height: 36px;
+  line-height: 36px;
+  overflow: hidden;
+  background: #e4e4e4;
+  border-radius: 3px;
+  margin-bottom:30px;
+}
+
+.order-step li {
+  position: relative;
+  float: left;
+  width: 33.33333333%;
+  text-align: center;
+  color: #424452;
+}
+
+.order-step .step1 {
+  width: 33.3%;
+  border-radius: 3px 0 0 3px;
+}
+
+.order-step .step3 {
+  border-radius: 0 3px 3px 0;
+}
+
+.order-step .step1:before, .order-step .step1:after, .order-step .step2:before, .order-step .step2:after {
+  position: absolute;
+  top: -7px;
+  right: -47px;
+  display: block;
+  line-height: 0;
+  border: 26px solid #f4f7f9;
+  border-color: transparent transparent transparent #f4f7f9;
+  font-size: 0;
+  content: '';
+  z-index: 2;
+}
+
+.order-step .step1:after, .order-step .step2:after {
+  right: -40px;
+  border-color: transparent transparent transparent #e4e4e4;
+}
+
+.order-step .finish {
+  background: #98d077;
+  color: #f4f7f9;
+}
+
+.order-step .finish:after {
+  border-left-color: #98d077;
+}
+
+.order-step .active {
+  background: #18aa1f;
+  color: #f4f7f9;
+}
+
+.order-step .active:after {
+  border-left-color: #18aa1f;
+}
+
+.steps {
+  background: #e4e4e4;
+  /* Gecko browsers */
+  -moz-border-radius: 5px;
+  /* Webkit browsers */
+  -webkit-border-radius: 5px;
+  /* W3C syntax */
+  border-radius: 5px;
+}
+
+.step-upload {
+  /* Gecko browsers */
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  /* Webkit browsers */
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  /* W3C syntax */
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.step {
+  color: #2c2f33;
+  background: #e4e4e4;
+  width: 30%;
+  height: 36px;
+  line-height: 36px;
+  float: left;
+  text-align: center;
+  position: relative;
+  top: 0 !important;
+  left: 0 !important;
+  margin-right: 25px;
+}
+
+.bd-body .tit{
+	border:1px solid #ddd;
+	height:42px;
+	line-height: 42px;
+	background-color: #f7f7f7;
+}
+.bd-body .tit li{
+	float: left;
+	font-size: 16px;
+	color:#666;
+}
+.bd-body .tit li.t-h1{
+	width:657px;
+	text-indent: 20px;
+}
+.bd-body .tit li.t-h2{
+	width:220px;
+	text-align: center;
+}
+.bd-body .tit li.t-h3{
+	width:320px;
+	text-align: center;
+}
+
+.bd-body .cont .t-c{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	float: left;
+	height:180px;
+	padding: 20px 0;
+	font-size: 16px;
+	background-color: #fff;
+}
+.bd-body .cont .t-h1{
+	width:660px;
+	border-left:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	border-right:1px solid #ddd;
+	padding-left:60px;
+	padding-right:60px;
+}
+.bd-body .cont .t-h1 .img-box{
+	width:230px;
+	height:139px;
+}
+.bd-body .cont .t-h1 .img-box img{
+	width:100%;
+	height:100%;
+}
+.bd-body .cont .t-h1 .right{
+	width:280px;
+}
+.bd-body .cont .t-h1 .right h1{
+	font-size: 20px;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.bd-body .cont .t-h1 .right h2{
+	font-size: 16px;
+	color:#666;
+}
+.bd-body .cont .t-h1 .dian-btn{
+	top:0;
+	bottom:0;
+	margin: auto 0;
+	left:20px;
+	width:20px;
+	height:20px;
+	border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border:1px solid #ccc;
+	cursor: pointer;
+}
+.bd-body .cont .t-h1 .dian-btn em{
+	width:12px;
+	height:12px;
+	background-color: #ccc;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	margin: auto;
+	border-radius: 12px;
+	-webkit-border-radius: 12px;
+}
+.bd-body .cont .t-h1 .dian-btn.act{
+	border-color: #66BA6A;
+}
+.bd-body .cont .t-h1 .dian-btn.act em{
+	background-color: #66BA6A;
+}
+.bd-body .cont .t-h2{
+	width:220px;
+	border-bottom:1px solid #ddd;
+	border-right:1px solid #ddd;
+	line-height: 139px;
+	color:#FE5040;
+	text-align: center;
+}
+.bd-body .cont .t-h3{
+	width:320px;
+	border-bottom:1px solid #ddd;
+	border-right:1px solid #ddd;
+	line-height: 139px;
+	color:#666;
+	text-align: center;
+}
+.bd-footer .t-h1{
+	font-size: 16px;
+	margin-bottom:20px;
+}
+.bd-footer .t-h1 i{
+	font-size: 20px;
+	color:#FE5040;
+}
+.bd-footer .main-btn-g{
+	font-size: 24px;
+	width:182px;
+	height:50px;
+	line-height: 50px;
+	text-align: center;
+	color:#fff;
+	float: right;
+	cursor: pointer;
+}
+.bd-body{
+	margin-bottom:30px;
+}

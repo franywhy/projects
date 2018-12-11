@@ -1,0 +1,56 @@
+<!--奖金池设置页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        付款单编号
+        <input type="text" name="payFlowId" size="20" />
+
+        提交状态
+        <select name="upload_flag">
+            <option value="" selected>==所有==</option>
+            <option value="0">未提交</option>
+            <option value="1">已提交</option>
+        </select>
+
+        审核状态
+        <select name="audit_flag">
+            <option value="" selected>==所有==</option>
+            <option value="0">未审核</option>
+            <option value="1">已审核</option>
+        </select>
+
+        支付状态
+        <select name="alipay_state">
+            <option value="" selected>==所有==</option>
+            <option value="0">未申请</option>
+            <option value="1">申请中</option>
+            <option value="2">申请失败</option>
+            <option value="3">申请成功</option>
+        </select>
+
+        <br/><br/>
+
+        创建日期
+        <input id="begin_date" class="input" type="text" name="begin_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'end_date\')}'})"/>
+        至
+        <input id="end_date" class="input" type="text" name="end_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate:'#F{$dp.$D(\'begin_date\')}'})"/>
+        <br/><br/>
+        支付日期
+        <input id="pay_begin_date" class="input" type="text" name="pay_begin_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'pay_end_date\')}'})"/>
+        至
+        <input id="pay_end_date" class="input" type="text" name="pay_end_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate:'#F{$dp.$D(\'pay_begin_date\')}'})"/>
+
+
+
+      <!--   开始日期p
+        <input id="begin_date" class="input" type="text" name="begin_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+         失效日期
+        <input id="end_date" class="input" type="text" name="end_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/加盟公司结算页头-->

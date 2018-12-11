@@ -1,0 +1,86 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:120px;">语音标题</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="recommend_title" id="recommend_title" value="" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">语音内容说明</td>
+            <td>
+                <input class="input" type="text" name="recommend_info" id="recommend_info" value="" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">语音URL</td>
+            <td>
+                <input class="input" type="text" name="recommend_infourl" id="recommend_infourl"/>
+                <input type="button" class="d-button" value="选择文件" onClick="Izb.ui.upload('recommend_infourl', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">语音（MP3）URL</td>
+            <td>
+                <input class="input" type="text" name="recommend_mp3url" id="recommend_mp3url"/>
+                <input type="button" class="d-button" value="选择文件" onClick="Izb.ui.upload('recommend_mp3url', 'Posters');" required />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">语音时长（请输入秒数）</td>
+            <td>
+                <input class="input" type="number" name="recommend_radio_time" id="recommend_radio_time"  value=""required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">语音简介</td>
+            <td>
+                <input class="input" type="textarea" name="summary" id="summary" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">定时推送</td>
+            <td>
+                <input id="push_time" class="input" type="text" name="push_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">教师姓名</td>
+            <td>
+                <input class="input" type="text" name="recommend_radio_teacher_name" id="recommend_radio_teacher_name" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">教师头像</td>
+            <td>
+                <input class="input" type="text" name="recommend_radio_teacher_pic" id="recommend_radio_teacher_pic"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('recommend_radio_teacher_pic', 'Posters');" />
+            </td>
+
+        </tr>
+
+        <tr>
+            <td style="width:120px;">语音内容URL</td>
+            <td>
+                <input class="input" type="text" name="voiceurl" id="voiceurl" value=""/>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:120px;">3.0语音封面图片</td>
+            <td>
+                <input class="input" type="text" name="recommend_radio_banner" id="recommend_radio_banner"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('recommend_radio_banner', 'Posters');" required/>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td style="width:120px;">详情</td>
+            <td>
+                <textarea name="recommend_html"  id="recommend_html" style="width:1000px;height:400px" value=""></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

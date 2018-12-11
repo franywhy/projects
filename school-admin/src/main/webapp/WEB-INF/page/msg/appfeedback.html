@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>APP意见反馈表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("appfeedback:list"))
+			<div class="form-group col-sm-3">
+				<input type="text" class="form-control" v-model="q.content" @keyup.enter="query" placeholder="反馈内容">
+			</div>
+			<div class="form-group col-sm-3">
+				<input type="text" class="form-control" v-model="q.nickName" @keyup.enter="query" placeholder="前台用户">
+			</div>
+			<div class="form-group col-sm-3">
+				<input type="text" class="form-control" v-model="q.mobile" @keyup.enter="query" placeholder="手机号码">
+			</div>
+			<a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("appfeedback:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;查看</a> 
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键pk</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appFeedback.feedbackId" placeholder="主键pk"/>
+			    </div>
+		    </div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">反馈内容</div>
+			   	<div class="col-sm-10">
+			      <textarea class="form-control" v-model="appFeedback.content" style="width:371px;height:100px;" placeholder="反馈内容">
+                  </textarea>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">反馈时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appFeedback.timestamp" placeholder="反馈时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">前台用户id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appFeedback.userId" placeholder="前台用户id"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">客户端类型</div>
+			   	<div class="col-sm-10">
+			      <label class="radio-inline">
+				  	<input type="radio" name="clientType" value="0" v-model="appFeedback.clientType"/> web
+				  </label>
+				  <label class="radio-inline">
+				  	<input type="radio" name="clientType" value="1" v-model="appFeedback.clientType"/> android
+				  </label>
+				  <label class="radio-inline">
+				  	<input type="radio" name="clientType" value="2" v-model="appFeedback.clientType"/> ios
+				  </label>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">客户端版本</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appFeedback.clientVersion" placeholder="客户端版本"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/msg/appfeedback.js?_${date.systemTime}"></script>
+</body>
+</html>

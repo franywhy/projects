@@ -1,0 +1,247 @@
+/*通用样式*/
+body{
+    color: #333333;
+    background: #ffffff;
+}
+.head{
+    font-size: 42px;
+    text-align: center;
+}
+.tit{
+    font-size: 15px;
+    text-align: center;
+}
+.white{
+    color: #ffffff;
+}
+.gray{
+    color: #999999;
+}
+.padding-t-b{
+    padding-top: 90px;
+    padding-bottom: 90px;
+}
+.tc{
+    text-align: center;
+}
+.mt45{
+    margin-top: 45px;
+}
+.mt20{
+    margin-top: 20px;
+}
+.mt15{
+    margin-top: 15px;
+}
+.ml30{
+    margin-left: 30px;
+}
+.ml125{
+    margin-left: 125px;
+}
+/*图片中心居中*/
+.box-l{
+    width: 100%;
+    overflow: hidden;
+}
+.box-l .box-m{
+    position: relative;
+    height: 100%;
+}
+.box-l .box-m .box-s{
+    width: 1920px;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 50%;
+    margin-left: -960px;
+}
+/*财务总监研修班*/
+.cfo-top{
+    height: 56px;
+    line-height: 50px;
+}
+.cfo-top .cfo-top-h{
+    font-size: 20px;
+}
+.cfo-top .btn{
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    text-align: center;
+    background-color: rgba(255, 103, 0, 0.8);
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+.cfo-top .btn:hover{
+    background-color: #ff6700;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+}
+/*banner*/
+.banner .box-l{
+    height: 591px;
+}
+/*微利时代，财务总监必须解决的6大问题！*/
+.main1 ul{
+    width: 1170px;
+    margin: 50px auto 0 auto;
+}
+.main1 ul li{
+    width: 170px;
+}
+.main1 ul li dl dt{
+    height: 93px;
+    line-height: 93px;
+}
+.main1 ul li dl dt img{
+    margin: 0 auto;
+ }
+.main1 ul li dl dd{
+    font-size: 18px;
+    text-align: center;
+}
+/*联合办学再升级，财务总监研修班正式面世！*/
+.main2 .box-l{
+    height: 782px;
+}
+.main2 .box-l .box-m .box-s{
+    background: url("http://img.hengqijiaoyu.cn/web/cfo/images/bg-bxsj.jpg") no-repeat center;
+}
+.bxsj-box{
+    top: 345px;
+    right: 85px;
+}
+.bxsj-box .bxsj>div{
+    font-size: 16px;
+}
+.bxsj-box .bxsj>p{
+    font-size: 14px;
+    color: #999999;
+    text-align: right;
+    margin-top: 15px;
+}
+/*财务经理人闯关系统，直击国际CFO标准！*/
+.main3 .cfo-cg{
+    margin-top: 50px;
+}
+.main3 .cfo-cg img{
+    margin: 0 auto;
+}
+/*拿名校证书，身份&地位双提升！*/
+.main4 .box-l{
+    height: 840px;
+}
+.main4 .box-l .box-m .box-s{
+    background: url("http://img.hengqijiaoyu.cn/web/cfo/images/jyzs.jpg") no-repeat center;
+    padding-top: 90px;
+    box-sizing: border-box;
+}
+/*听名师讲课，培养超水准财务总监！*/
+.t-h{
+    font-size: 28px;
+    margin-top: 50px;
+    margin-bottom: 40px;
+}
+.teacher-name{
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.teacher-intro{
+    font-size: 14px;
+}
+/*顶级课程设计师*/
+.main5 .kcsjs ul{
+    width: 1170px;
+    margin: 0 auto;
+}
+.main5 .kcsjs ul li{
+    width: 270px;
+    height: 290px;
+}
+/*学院派名校教授*/
+/*实战派企业高管*/
+.main5 .mxjs ul,
+.main5 .qygg ul{
+    width: 1170px;
+    margin: 0 auto;
+}
+.main5 .mxjs ul li,
+.main5 .qygg ul li{
+    width: 170px;
+    height: 270px;
+}
+/*学名企案例，成为CEO的理想伙伴！*/
+.main6{
+    background: #F1F5F9;
+}
+.main6 .cwzj{
+    margin-top: 60px;
+}
+.main6 .cwzj img{
+    margin: 0 auto;
+}
+/*开课说明及安排*/
+.main7 ul{
+    width: 1012px;
+    margin: 50px auto 0 auto;
+}
+.main7 ul li{
+    width: 254px;
+    height: 254px;
+    display: table;
+}
+.main7 ul li .kkap-box{
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+.main7 ul li .kkap-box .t-h1{
+    font-size: 26px;
+}
+.main7 ul li .kkap-box .line{
+    width: 50px;
+    height: 2px;
+    background: #333333;
+    margin: 10px auto;
+}
+.main7 ul li .kkap-box .tit1{
+    font-size: 16px;
+}
+.main7 ul li .kkap-box .tit2{
+    font-size: 14px;
+}
+.main7 ul li.kkap01{
+    background: url("http://img.hengqijiaoyu.cn/web/cfo/images/kkap01.png") no-repeat center;
+}
+.main7 ul li.kkap02{
+    background: url("http://img.hengqijiaoyu.cn/web/cfo/images/kkap02.png") no-repeat center;
+}
+.main7 ul li.kkap03{
+    background: url("http://img.hengqijiaoyu.cn/web/cfo/images/kkap03.png") no-repeat center;
+}
+/*选择恒企，选择成功！*/
+.main8 .box-l{
+    height: 640px;
+}
+.main8 .box-l .box-m .box-s{
+    background: url("http://img.hengqijiaoyu.cn/web/cfo/images/xzhq-xzcg.jpg") no-repeat center;
+    box-sizing: border-box;
+    height: 640px;
+    display: table;
+}
+.main8 .box-l .box-m .box-s .xzhq-xzcg{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+.main8 .box-l .box-m .box-s .xzhq-xzcg p{
+    font-size: 20px;
+    line-height: 30px;
+}

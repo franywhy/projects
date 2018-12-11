@@ -1,0 +1,267 @@
+.clearfix::after{
+	content: '';
+	display: table;
+	clear: both
+}
+.mask-login{
+	width: 10000px;
+	height:10000px;
+	background: #000;
+	opacity: 0.6;
+	filter:alpha(opacity=60);
+	background: url(http://sandbox.runjs.cn/uploads/rs/390/vvqzmrls/gary_bg.png) center center repeat\9 !important;
+	position: fixed;
+	left:0;
+	top: 0;
+	z-index: 9998;
+}
+.login-box{
+	width: 502px;
+	background: #fff;
+	border-radius: 8px;
+	position: fixed;
+	left: 50%;
+	top: 15%;
+	margin-left: -251px;
+	z-index: 9999;
+	overflow-y:hidden;
+}
+ @media screen and (max-height:769px){
+ 	.login-box{
+ 		top: 2%;
+ 	}
+ }
+.login-box .red-alert{
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	background:rgba(255,133,50,0.9);
+	color: #fff;
+	text-align: center;
+	font-size: 16px;
+	position: absolute;
+	z-index: 9999;
+  margin-top: -60px;
+
+}
+.login-box .close{
+	width: 17px;
+  height: 17px;
+  cursor: pointer;
+  display: inline-block;
+  background: url(/static/images/icon/offBox-btn.png) no-repeat left top;
+  position: absolute;
+  right: 15px;
+  top:15px;
+}
+.login-box .close:hover {
+  background-position: -26px top;
+}
+.login-main{
+	padding: 32px 41px 60px 41px;
+}
+.login-main .react-p{
+	font-size: 24px;
+	padding-bottom: 30px;
+	line-height: 1;
+	cursor: pointer;
+	text-align: center;
+	color: #18aa1f
+}
+.login-title-tab{
+	width: 280px;
+	margin-left: 70px;
+	text-align: center;
+	position: relative;
+	color: #666
+}
+.login-title-tab .login-tab-title{
+	width: 50%;
+	float: left;
+	font-size: 24px;
+	padding-bottom: 30px;
+	line-height: 1;
+	cursor: pointer;
+}
+.login-title-tab .login-tab-title.act,
+.login-title-tab .login-tab-title:hover{
+	color: #18aa1f
+}
+.login-title-tab .login-tab-title-left::after{
+	content: '';
+	position: absolute;
+	left: 50%;
+	top:2px;
+	
+	font-size: 20px;
+	background: #999;
+	width: 1px;
+	height: 20px
+}
+.login-tab-main .input-login{
+	height: 50px;
+	line-height: 50px;
+	border: 1px solid #ccc;
+	display: block;
+	width: 79%;
+	padding: 0 8% 0 12%;
+	margin-bottom: 13px;
+	
+	font-size: 14px
+}
+.login-tab-main .cast-p{
+	font-size: 14px;
+	color: #666;
+	margin-bottom: 13px;
+	vertical-align: middle;
+}
+.login-tab-main .cast-p b{
+	font-weight: normal;
+	padding: 0 4px;
+	color: #18aa1f;
+	cursor:pointer;
+}
+.login-tab-main .cast-p #checkbox-cast{
+	  margin: 0;
+	  padding: 0;
+	  width: 20px;
+	  height: 20px;
+	  vertical-align: bottom;
+}
+.login-tab-main .input-btn{
+	width: 99%;
+	height: 60px;
+	line-height: 60px;
+	color: #fff;
+	background: #18aa1f;
+	text-align: center;
+	border-radius: 5px;
+	border: 1px solid #18aa1f;
+	
+	margin-bottom: 13px;
+	font-size: 18px;
+	cursor: pointer;
+	opacity: 0.8;
+	  transition: 0.3s all;
+  -webkit-transition: 0.3s all;
+  -moz-transition: 0.3s all;
+  -ms-transition: 0.3s all;
+}
+.login-tab-main .input-login.input-t{
+	background: url(/static/images/icon/t.png) left center no-repeat;
+}
+.login-tab-main .input-login.input-pw{
+	background: url(/static/images/icon/pw.png) left center no-repeat;
+}
+.login-tab-main .input-login.input-msg,
+.login-tab-main .input-login.input-img-yz{
+	background: url(/static/images/icon/writer.png) left center no-repeat;
+}
+
+.login-tab-main .input-btn:hover{
+	opacity: 1;
+}
+.login-tab-main .disremember{
+	text-align: right;
+	font-size: 14px;
+	display: block;
+	line-height: 1;
+}
+.login-tab-main .disremember:hover{
+	text-decoration:underline;
+}
+.login-tab-main .input-register-box{
+
+}
+.login-tab-main .input-register-box .input-login.input-img-yz,
+.login-tab-main .input-register-box .input-login.input-msg{
+	float: left;
+	
+	width: 41%
+}
+.login-tab-main .input-register-box .input-img{
+	width: 90px;
+	height: 40px;
+	margin-top: 5px;
+	display: block;
+	float: right;
+}
+.login-tab-main .input-register-box .recode{
+	display: block;
+	float: right;
+	line-height: 50px;
+	margin-left: 8px;
+	cursor: pointer;
+	height: 50px
+}
+.login-tab-main .input-register-box .input-btn{
+	float: right;
+	width: 145px;
+	height: 50px;
+	line-height: 50px;
+	margin-right: -1px;
+	font-size: 14px;
+}
+
+/*服务条款*/
+.login-box.login-txt{
+	width: 800px;
+	height: 600px;
+	margin-left: -400px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.login-box.login-txt .login-txt-title{
+	font-size: 30px;
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+.login-box.login-txt  .login-txt-p{
+	line-height: 30px;
+	font-size: 16px;
+	padding-bottom: 5px;
+}
+.login-box.login-txt  .login-txt-p.login-txt-p-big{
+	font-size: 20px;
+	line-height: 40px;
+}
+.login-box.login-txt .close{
+	position: fixed;
+  top: 18%;
+  left: 50%;
+  margin-left: 350px;
+}
+ @media screen and (max-height:769px){
+ 	.login-box.login-txt .close{
+ 		top: 5%
+ 	}
+ }
+.login-box.login-txt .iagree-btn{
+	width: 200px;
+	height: 50px;
+	line-height: 50px;
+	font-size: 16px;
+	color: #fff;
+	background:#18aa1f;
+	text-align: center;
+	margin: 0 auto;
+	border-radius: 5px;
+	cursor: pointer;
+}
+/*返回按钮*/
+.return-icon{
+	position: absolute;
+	background: url(/static/images/icon/return-gary.png) center center no-repeat;
+	width: 48px;
+	height: 48px;
+	left: 0;
+	cursor: pointer;
+}
+.return-icon:hover{
+	background: url(/static/images/icon/return.png) center center no-repeat;
+	width: 48px;
+	height: 48px;
+}

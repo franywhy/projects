@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.RecordInfoDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	 
+i.record_id recordId, 
+u.nick_name name, 
+u.sex sex, 
+i.user_id userId,
+i.id_card idCard, 
+i.age age, 
+i.record record, 
+u.mobile mobile, 
+i.qq qq, 
+i.marriage_status marriageStatus, 
+i.fertility_status fertilityStatus, 
+i.study_time_of_day studyTimeOfDay, 
+i.post_name postName, 
+i.Accounting_certificates accountingCertificates, 
+i.nc_student_id ncStudentId, 
+i.create_time createTime, 
+ 
+	i.modify_time AS modifyTime , 	
+	i.create_person AS createPerson , 
+	i.modify_person AS modifyPerson ,
+
+
+i.ts ts, 
+i.sync_time syncTime
+
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from record_info as i left join users u on i.user_id=u.user_id 
+    	 	 left join mall_order m on u.user_id=m.user_id 
+			 left join mall_class cls on m.class_id=cls.class_id
+			 left join sys_user bzr on cls.user_id=bzr.user_id 
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.RecordInfoEntity">
+		select 
+      	<include refid="base_column"/>
+      	from record_info as i left join users u on i.user_id=u.user_id
+		<include refid="base_where"/>
+		AND record_id = #{recordId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.RecordInfoEntity">
+	
+	
+	select distinct i.*  From (
+	select     i.record_id recordId, u.nick_name name, u.sex sex, i.user_id userId , i.id_card idCard, i.age age, i.record record, u.mobile mobile, i.qq qq, i.marriage_status marriageStatus, i.fertility_status fertilityStatus, i.study_time_of_day studyTimeOfDay, i.post_name postName, i.Accounting_certificates accountingCertificates, i.nc_student_id ncStudentId, i.create_time createTime, i.modify_time AS modifyTime , i.create_person AS createPerson , i.modify_person AS modifyPerson , i.ts ts, i.sync_time syncTime
+	 from record_info as i left join users u on i.user_id=u.user_id
+	 
+	 where 1=1
+
+		<if test="name != null and name.trim() != ''">
+			and u.nick_name =#{name}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and u.mobile = #{mobile}
+		</if>
+		<if test="ncStudentId != null and ncStudentId.trim() != ''">
+			and i.nc_student_id =#{ncStudentId}
+		</if>
+		<if test="userId != null  ">
+		  and  i.user_id=#{userId}
+		</if>
+	     <if test="idCard != null and idCard.trim() != ''">
+			and i.id_card =#{idCard}
+		</if>
+			<if test="recordId != null  ">
+			and i.record_id =#{recordId}
+		</if>
+	   order by i.record_id desc 
+   <if test="offset != null and limit != null and teacherId ==null ">
+			limit #{offset}, #{limit}
+		</if>
+ 	
+		 
+		
+	) i 
+	 left join mall_order m on i.userId=m.user_id 
+ left join mall_class cls on m.class_id=cls.class_id  
+   where 1=1  
+   
+    
+	
+	 
+		
+		<if test="teacherId != null    ">
+		  and  cls.user_id =#{teacherId}
+		</if>
+		 
+		
+		
+	 
+		
+		
+		
+		
+		
+		order by i.recordId desc
+		 <if test="offset != null and limit != null and teacherId !=null ">
+			limit #{offset}, #{limit}
+		</if>
+		 
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select 
+		<if  test=" teacherId !=null ">
+		 
+		
+		count(distinct i.record_id,u.user_id  ) 
+		</if>
+		<if  test=" teacherId ==null ">
+		 count(1)
+		</if>
+		 from record_info as i
+		<if  test=" condition !=null ">
+			left join users u on i.user_id=u.user_id
+		</if>
+		 <if  test=" teacherId !=null ">
+    	 	 left join mall_order m on u.user_id=m.user_id 
+			 left join mall_class cls on m.class_id=cls.class_id
+	 	</if>
+		<include refid="base_where"/>
+		<if test="name != null and name.trim() != ''">
+			and u.nick_name =#{name}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and u.mobile = #{mobile}
+		</if>
+		<if test="ncStudentId != null and ncStudentId.trim() != ''">
+			and i.nc_student_id =#{ncStudentId}
+		</if>
+		 <if test="userId != null  ">
+		  and  i.user_id  =#{userId}
+		</if>
+		<if test="teacherId != null    ">
+		  and  cls.user_id =#{teacherId}
+		</if>
+		<!-- <if test="teacherName != null and teacherName.trim() != '' ">
+		  and  bzr.nick_name =#{teacherName}
+		</if> -->
+		
+		
+			<if test="idCard != null and idCard.trim() != ''">
+			and i.id_card =#{idCard}
+		</if>
+			<if test="recordId != null  ">
+			and i.record_id =#{recordId}
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.RecordInfoEntity" useGeneratedKeys="true" keyProperty="recordId">
+	insert into record_info
+	(
+	`record_id`,`user_id`,
+	`id_card`,
+	`age`,
+	`record`,
+	`qq`,
+	`marriage_status`,
+	`fertility_status`,
+	`study_time_of_day`,
+	`post_name`,
+	`Accounting_certificates`,
+	`nc_student_id`,
+	`create_time`,
+	`ts`,
+	`sync_time`,
+	
+	`modify_time`,
+	`create_person`,
+	`modify_person`
+	)
+	values
+	(
+	#{recordId},#{userId},
+	#{idCard},
+	#{age},
+	#{record},
+	#{qq},
+	#{marriageStatus},
+	#{fertilityStatus},
+	#{studyTimeOfDay},
+	#{postName},
+	#{accountingCertificates},
+	#{ncStudentId},
+	#{createTime},
+	#{ts},
+	#{syncTime},
+	
+	#{modifyTime},
+	#{createPerson},
+	#{modifyPerson}
+	)
+
+
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.RecordInfoEntity">
+		update record_info 
+		<set> 
+		<if test="recordId != null">`record_id` = #{recordId}, </if>
+		<if test="userId != null">`user_id` = #{userId}, </if>
+<if test="idCard != null">`id_card` = #{idCard}, </if>
+<if test="age != null">`age` = #{age}, </if>
+<if test="record != null">`record` = #{record}, </if>
+<if test="qq != null">`qq` = #{qq}, </if>
+<if test="marriageStatus != null">`marriage_status` = #{marriageStatus}, </if>
+<if test="fertilityStatus != null">`fertility_status` = #{fertilityStatus}, </if>
+<if test="studyTimeOfDay != null">`study_time_of_day` = #{studyTimeOfDay}, </if>
+<if test="postName != null">`post_name` = #{postName}, </if>
+<if test="accountingCertificates != null">`Accounting_certificates` = #{accountingCertificates}, </if>
+<if test="ncStudentId != null">`nc_student_id` = #{ncStudentId}, </if>
+<if test="createTime != null">`create_time` = #{createTime}, </if>
+<if test="ts != null">`ts` = #{ts}, </if>
+
+<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+
+
+<if test="syncTime != null">`sync_time` = #{syncTime}  </if>
+
+		</set>
+		<include refid="base_where"/>
+		AND record_id = #{recordId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM record_info 
+		<include refid="base_where"/>
+		AND record_id = #{recordId}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM record_info 
+		<include refid="base_where"/> 
+		AND record_id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+	   update record_info set status = #{status} where record_id in
+	   <foreach item="id" collection="list" open="(" separator="," close=")">
+	   	#{recordId}
+		</foreach>
+	</update>
+</mapper>

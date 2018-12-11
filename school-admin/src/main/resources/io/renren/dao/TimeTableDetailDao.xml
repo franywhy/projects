@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.TimeTableDetailDao">
+
+    <select id="queryList" resultType="io.renren.entity.TimeTableDetailEntity">
+		select * from timetable_detail where number = #{value}
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from timetable_detail where number = #{value}
+	</select>
+		 
+	<insert id="save" parameterType="io.renren.entity.TimeTableDetailEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into timetable_detail
+		(
+			`number`, 
+			`week`, 
+			`time_bucket`, 
+			`start_time`, 
+			`end_time`, 
+			`comments` 
+		)
+		values
+		(
+			#{number}, 
+			#{week}, 
+			#{timeBucket}, 
+			#{startTime}, 
+			#{endTime}, 
+			#{comments}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.TimeTableDetailEntity">
+		update timetable_detail 
+		<set>
+			<if test="week != null">`week` = #{week}, </if>
+			<if test="timeBucket != null">`time_bucket` = #{timeBucket}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="comments != null">`comments` = #{comments}, </if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="delete">
+		delete from timetable_detail where number = #{value}
+	</delete>
+	
+	
+	<delete id="deleteBatch">
+		delete from timetable_detail where number in 
+		<foreach item="number" collection="array" open="(" separator="," close=")">
+			#{number}
+		</foreach>
+	</delete>
+
+	<delete id="deleteBatchNotIn">
+		delete from timetable_detail where number = #{number} 
+		<if test="ids != null and ids.size() > 0 ">
+			and id not in 
+			<foreach item="item" collection="ids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+	</delete>
+</mapper>

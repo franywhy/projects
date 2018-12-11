@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+	<title>公开课</title>
+	#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("headline:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.title" @keyup.enter="query" placeholder="标题">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("headline:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("headline:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("headline:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("customcard:push"))
+			<a class="btn btn-primary" @click="pushRulesLayerShow"><i class="fa fa-tag"></i>&nbsp;推送/更新</a>
+			<a class="btn btn-primary" @click="delMessage"><i class="fa fa-trash-o"></i>&nbsp;取消推送</a>
+			<a class="btn btn-primary" @click="updateMsgRecommend(1)"><i class="fa fa-play"></i>&nbsp;推荐</a>
+			<a class="btn btn-primary" @click="updateMsgRecommend(0)"><i class="fa fa-pause"></i>&nbsp;取消推荐</a>
+			#end
+		</div>
+		<table id="jqGrid"></table>
+		<div id="jqGridPager"></div>
+	</div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">标题</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.title" placeholder="标题"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">副标题</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.subtitle" placeholder="副标题"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">封面</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.cardBannerUrl" placeholder="选择封面" readonly="readonly" onclick="hq.core.upload(null,'vm.headline.cardBannerUrl');"/>
+				</div>
+			</div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">封面类型</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="headline.cardBannerType" style="width:150px">
+                        <option v-for="option in cardBannerTypeOptions" v-bind:value="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">标签</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.labels" readonly="readonly" placeholder="点击选择标签" @click="labelLayerShow">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">产品线</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">内容类型</div>
+				<div class="col-sm-10">
+					<select class="form-control" v-model="headline.contentType" style="width:150px" @change="contentTypeChange">
+						<option v-for="option in typeOptions" v-bind:value="option.value">
+							{{ option.text }}
+						</option>
+					</select>
+				</div>
+			</div>
+			<div id="voiceTitle-div" class="form-group" style="display: none">
+				<div class="col-sm-2 control-label">语音标题</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.voiceTitle" placeholder="语音标题"/>
+				</div>
+			</div>
+			<div id="voiceUrl-div" class="form-group" style="display: none">
+				<div class="col-sm-2 control-label">资源地址(音频)</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.contentUrl" placeholder="选择资源" readonly="readonly" onclick="hq.core.upload(null,'vm.headline.contentUrl');"/>
+				</div>
+			</div>
+			<div id="contentUrl-div" class="form-group" style="display: none">
+				<div class="col-sm-2 control-label">资源地址</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="headline.contentUrl" placeholder="请输入视频/音频地址"/>
+				</div>
+			</div>
+            <div id="contentTotalTime-div" class="form-group" style="display: none">
+                <div class="col-sm-2 control-label">资源时长</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control"  v-model="headline.contentTotalTime"  placeholder="如:03:17"/>
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">文章html内容</div>
+				<div class="col-sm-10">
+			    <textarea id="editor_id" name="contentHtml" style="width:1000px;height:400px;" >
+                </textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/manage/headline.js?_${date.systemTime}"></script>
+<script charset="utf-8" src="${rc.contextPath}/statics/editor/kindeditor-all.js"></script>
+<script charset="utf-8" src="${rc.contextPath}/statics/editor/zh_CN.js"></script>
+<script>
+    KindEditor.ready(function(K) {
+        window.editor = K.create("textarea[id='editor_id']",{
+            resizeType : 1,
+            allowPreviewEmoticons: false,
+            allowImageUpload:true,//允许上传图片
+            allowFileManager:true, //允许对上传图片进行管理
+            uploadJson:'../courseguide/uploadCourseGuide', //上传图片的java代码，只不过放在jsp中
+			/* fileManagerJson:'../../statics/editor/file_manager_json.jsp', */
+            afterUpload: function(){this.sync();}, //图片上传后，将上传内容同步到textarea中
+            afterBlur: function(){this.sync();}   ////失去焦点时，将上传内容同步到textarea中
+        });
+    });
+</script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/teacherLay.html")
+#parse("layer/liveroomLay.html")
+#parse("layer/polyvVideoLay.html")
+#parse("layer/productLay.html")
+#parse("layer/pushRulesLay.html")
+</body>
+</html>

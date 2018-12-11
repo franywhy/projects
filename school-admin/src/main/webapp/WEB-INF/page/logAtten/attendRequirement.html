@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>学员考勤报表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a class="btn btn-default" @click="clearQuery"><i class="fa fa-repeat"></i>&nbsp;重置</a>
+			<a class="btn btn-primary" @click="logDetails"><i class="fa fa-th-list"></i>&nbsp;查看日志</a>
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;"><i class="glyphicon glyphicon glyphicon-export"></i>&nbsp;导出</a>
+			<table class="table table-condensed" border="0">
+				<tr>
+					<td class="col-md-1">
+					<div class="col-md-12"><label for="name">按条件查询</label></div>
+					</td>
+					<td>
+					<table class="table-condensed" border="0">
+						<tr>
+							<td>
+							<!-- 班主任 -->
+							<div class="col-md-3">
+								<input type="text" class="form-control" v-model="q.classTeacherName" readonly="readonly" placeholder="选择班主任" @click="classTeacherLayerShow">
+							</div>
+							<!-- 班班级 -->
+							<div class="col-md-3">
+								<input type="text" class="form-control" v-model="q.className" readonly="readonly" placeholder="选择班级" @click="classLayerShow">
+							</div>
+							<!-- 省份 -->
+							<div class="col-md-3">
+								<input type="text" class="form-control" v-model="q.areaName" readonly="readonly" placeholder="选择省份" @click="areaLayerShow">
+							</div>
+							<!-- 校区 -->
+							<div class="col-md-3">
+								<input type="text" class="form-control" v-model="q.deptName" readonly="readonly" placeholder="选择校区" @click="deptLayerShowQuery">
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<!-- 状态 -->
+							<div class="col-md-3">
+								<input type="text" class="form-control" v-model="q.statusName" readonly="readonly" placeholder="选择状态" @click="studentStatusLayerShow">
+							</div>
+							<!-- 时间 -->	
+							<div class="col-md-6">
+								<input type="text" class="datetimepicker_start" readonly="readonly"  @keyup.enter="query" placeholder="开始时间">
+								-
+								<input type="text" class="datetimepicker_end" readonly="readonly" @keyup.enter="query" placeholder="结束时间">
+							</div>
+							<div class="col-md-2">
+								<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;按条件查询</a>
+							</div>
+							</td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <!--查看日志-->
+    <div v-show="showLogList" class="panel panel-default">
+        <div class="grid-btn">
+            <a class="btn btn-warning" @click="backMain">&nbsp;返回</a>
+        </div>
+        <table id="jqGridLogDetails"></table>
+        <div id="jqGridPagerLogDetails"></div>
+    </div>
+</div>
+
+<script src="${rc.contextPath}/js/logAtten/attendRequirement.js?_${date.systemTime}"></script>
+#parse("layer/areaLay.html")
+#parse("layer/classLay.html")
+#parse("layer/teacherLay.html")
+#parse("layer/deptLay.html")
+#parse("layer/studentStatusLay.html")
+</body>
+</html>

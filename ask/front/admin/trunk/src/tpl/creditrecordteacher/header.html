@@ -1,0 +1,31 @@
+
+<div class="searchForm">
+    <form name="searchForm">
+    	  大区
+        <input type="text" name="largeAreaName" size="20" />
+       	校区
+        <input type="text" name="orgName" size="20" />
+		报名日期
+        <input id="beginSignDate" type="text" name="beginSignDate" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+    	到
+        <input id="endSignDate" type="text" name="endSignDate" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+    	
+		科目名称
+        <input type="text" name="subjectName" size="20" />
+
+ 		班级名称
+        <input type="text" name="className" size="20" />
+
+		学员
+        <input type="text" name="studentName" size="20" />
+		
+		电话
+ 		<input type="text" name="phone" size="20" />
+		
+		老师名称
+ 		<input type="text" name="teacherName" size="20" />
+ 		
+       <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+       <input type="button" value="导出表格" class="d-button J_export">
+    </form>
+</div>

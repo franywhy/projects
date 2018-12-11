@@ -1,0 +1,38 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+	     	<th class="auto">报名日期</th>
+			<th class="auto">报读班型</th>
+			<th class="auto">学员名称</th>
+			<th class="auto">学员电话</th>
+			<th class="auto">科目名称</th>
+			<th class="auto">科目编号</th>
+			<th class="auto">排课状态</th>
+			<th class="auto">班级名称</th>
+		    <th class="auto">老师名称</th>
+ 
+		   
+		</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr did="<%=data[i].id%>">
+			<td class="auto"><%=i+1 %></td>
+
+		    <td class="auto" name="StudentName"><%=data[i].signDate%></td>
+			<td class="auto" name="SequenceName"><%=data[i].sequenceName%></td>
+			<td class="auto" name="StudentName"><%=data[i].studentName%></td>
+			<td class="auto" name="StudentName"><%=data[i].phone%></td>
+			<td class="auto" name="SubjectName"><%=data[i].subjectName%></td>
+			<td class="auto" name="SubjectName"><%=data[i].subjectCode%></td>
+			<td class="auto" name="SubjectName"><%=data[i].paikeRemark%></td>
+			<td class="auto" name="className">   <%=data[i].className%></td>
+			<td class="auto" name="teacherName"><%=data[i].teacherName%></td>
+			 
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

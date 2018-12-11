@@ -1,0 +1,115 @@
+<!--注册&收益汇总-->
+<%
+	var isHZ = !params._id,
+		isMobile = (params.client!=1),
+qdInfo=Izb.controller.qdzcsy.currentQd,
+isCPA=qdInfo?(qdInfo.type==1):false;
+%>
+<table width="100%" class="listTable tablesorter">
+ 	<thead>
+ 	<tr>	
+		<%if(isHZ){%>
+		<th class="short" rowspan="2">渠道名称</th>
+		<%}else{%>
+		<th class="time" rowspan="2">日期</th>
+		<%}%>
+         <%if(!isHZ&&isCPA){%>
+         <%if(isMobile){%>
+         <th>激活数</th>
+         <%}%>
+         <th>注册数</th>
+         <%}%>
+		<th class="short">付费额(元)</th>
+		<th class="short">付费人数</th>
+		<th class="short">人均付费(元)</th>
+         <%if(isMobile){%>
+		<th class="short" rowspan="2"><%=(!isHZ&&isCPA)?"正常":""%>激活数</th>
+		<%}%>
+		<th class="short"><%=(!isHZ&&isCPA)?"正常":""%>注册数</th>
+
+
+
+		<th class="action action150">详情</th>	
+    </tr>
+	</thead>
+	<tbody>
+		<%
+		var t_reg = 0,t_cny = 0,t_pay = 0,t_active=0,t_cpa1=0,t_cpa2=0;
+		for(var i=0;i<data.length;i++){%>
+        <%
+            var s_reg = $.isNumeric(data[i].reg) ? data[i].reg : 0,
+            	s_active = $.isNumeric(data[i].active) ? data[i].active : 0,
+                s_cny = $.isNumeric(data[i].cny) ? data[i].cny : 0,
+                s_pay = $.isNumeric(data[i].pay) ? data[i].pay : 0,
+                s_avg = ($.isNumeric(data[i].pay) ? (data[i].cny || 0)/data[i].pay : 0).toFixed(2),
+            s_cpa1 = $.isNumeric(data[i].cpa1) ? data[i].cpa1 : 0,
+            s_cpa2= $.isNumeric(data[i].cpa2) ? data[i].cpa2 : 0;
+                t_reg+=(s_reg-0); t_cny+=(s_cny-0); t_pay+=(s_pay-0); t_active+=(s_active-0);
+            t_cpa1+=(s_cpa1-0);t_cpa2+=(s_cpa2-0);
+        %>
+        <tr>
+			<%if(isHZ){%>
+			<td class="short"><a href="#a=qdzcsy&_id=<%=data[i].qd%>&client=<%=params.client%>&tab=<%=params.tab%>&menu=<%=params.menu%>&channel=<%=data[i].name%>&stime=<%=Izb.ui.getFirstDay()%>&etime=<%=Izb.ui.getLastDay(true)%>"><%=data[i].name%></a></td>
+			<%}else{%>
+			<td class="time"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+			<%}%>
+			
+
+            <%if(!isHZ&&isCPA){%>
+             <%if(isMobile){%>
+             <td><%=s_cpa1%></td>
+             <%}%>
+             <td><%=s_cpa2%></td>
+             <%}%>
+
+			<td class="short"><%=s_cny%></td>
+			<td class="short"><%=s_pay%></td>
+			<td class="short"><%=s_avg%></td>
+            <%if(isMobile){%>
+            <td class="short"><%=s_active%></td>
+			<%}%>			
+			<td class="short"><%=s_reg%></td>
+			<td class="action">	
+                <%if(!isHZ&&isCPA){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改扣量</button><br />
+                <%}%>
+			<%if(!isHZ){%>
+				<%
+					var dateTime1 = new Date(data[i].timestamp);					
+				%>		
+				<a href="#a=qdzc&_id=<%=data[i].qd %>&client=<%=params.client%>&stime=<%:u=dateTime1.format("yyyy-MM-dd 00:00:00")%>&etime=<%:u=dateTime1.format("yyyy-MM-dd 23:59:59")%>&tab=<%=params.tab%>&menu=<%=params.menu%>&channel=<%=params.channel %>">注册详情</a> | 
+				<a href="#a=qdcz&_id=<%=data[i].qd %>&client=<%=params.client%>&stime=<%:u=dateTime1.format("yyyy-MM-dd 00:00:00")%>&etime=<%:u=dateTime1.format("yyyy-MM-dd 23:59:59")%>&tab=<%=params.tab%>&menu=<%=params.menu%>&channel=<%=params.channel %>">收益详情</a>
+			
+			<%}else{%>
+				<a href="#a=qdzc&_id=<%=data[i].qd %>&client=<%=params.client%>&stime=<%:u=new Date().format("yyyy-MM-dd 00:00:00")%>&tab=<%=params.tab%>&menu=<%=params.menu%>&channel=<%=params.channel %>">今日注册详情</a> | 
+	    		<a href="#a=qdcz&_id=<%=data[i].qd %>&client=<%=params.client%>&stime=<%:u=new Date().format("yyyy-MM-dd 00:00:00")%>&tab=<%=params.tab%>&menu=<%=params.menu%>&channel=<%=params.channel %>">今日收益详情</a> 
+				 
+			<%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+	<tfooter>		
+        <tr>
+			<th class="short">总计</th>            
+			
+             <%if(!isHZ&&isCPA){%>
+         <%if(isMobile){%>
+            <th class="short"><%=t_cpa1%></th>
+             <%}%>
+            <th class="short"><%=t_cpa2%></th>
+             <%}%>
+
+			<th class="short"><%=t_cny%></th>
+			<th class="short"><%=t_pay%></th>
+			<th class="short"><%=t_pay == 0 ? 0:(t_cny/t_pay).toFixed(2)%></th>
+            <%if(isMobile){%>
+			<th class="short"><%=t_active%></th>
+			<%}%>
+			<th class="short"><%=t_reg%></th>
+			<th class="short"></th>
+        </tr>
+    </tfooter>
+</table>
+<div class="appPager"></div>
+<!--/注册&收益汇总-->

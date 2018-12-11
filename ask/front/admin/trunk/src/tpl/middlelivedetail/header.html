@@ -1,0 +1,30 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <span class="text"><%=pty.name%></span>
+</h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        手机号码
+        <input name="phone" type="number" size="12">
+        <br/>
+        排课计划
+        <select name="course_id" id="course_id" onchange="Izb.controller.middlelivedetail.courseOnChange();">
+        </select>
+        &nbsp;&nbsp;
+        课时
+        <select name="pid" id="pid">
+        <!--<select name="pid" id="pid" onchange="Izb.controller.middlelivedetail.courseOnChange();">-->
+        </select>
+        <br/>
+      <!--  选择日期
+        <input id="create_day" type="text" name="create_day" value="" size="20" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />-->
+        <input class="d-button J_search" type="button" name="" value="查询"><input class="d-button J_reset" type="reset" name="" value="重置">
+
+    </form>
+    <div>
+        <button class="d-button" onclick="Izb.controller.<%=pty.key%>.ca_watchtime()">新增文章</button>
+    </div>
+</div>
+<!--/通用应用头-->

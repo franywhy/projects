@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>订单</title> #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+            <a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+            #if($shiro.hasPermission("mallorder:save"))
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增订单</a>
+            #end
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;指定班级</a>
+            <a class="btn btn-primary" @click="updateDateValidity"><i
+                    class="fa fa-pencil-square-o"></i>&nbsp;修改订单有效期</a>
+            #if($shiro.hasPermission("mall:order:updateChange"))
+            <a class="btn btn-primary" @click="updateChangeWin"><i class="fa fa-user"></i>&nbsp;转专业</a>
+            #end
+            #if($shiro.hasPermission("mall:order:updateChangeArea"))
+            <a class="btn btn-primary" @click="updateChangeArea"><i class="fa fa-user"></i>&nbsp;转省份</a>
+            #end
+            #if($shiro.hasPermission("mallorder:delete"))
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除订单</a>
+            #end
+            #if($shiro.hasPermission("mallorder:updateIsTeacher"))
+            <a class="btn btn-primary" @click="chooseIsTeacher"><i class="fa fa-pencil-square-o"></i>&nbsp;指定角色</a>
+            #end
+            <a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+            <table class="table table-condensed" border="0">
+                <tr border="0">
+                    <td><label for="name">订单号</label></td>
+                    <td><input type="text" class="form-control" v-model="q.orderNo" @keyup.enter="query"
+                               @keyup.enter="query" placeholder="订单号"></td>
+                    <td><label for="name">手机</label></td>
+                    <td><input type="text" class="form-control" v-model="q.mobile" @keyup.enter="query"
+                               @keyup.enter="query" placeholder="手机"></td>
+                    <td><label for="name">昵称</label></td>
+                    <td><input type="text" class="form-control" v-model="q.nickName" @keyup.enter="query"
+                               @keyup.enter="query" placeholder="昵称"></td>
+                </tr>
+                <tr border="0">
+                    <td><label for="name">专业</label></td>
+                    <td><input type="text" class="form-control" v-model="q.professionName" readonly="readonly"
+                               @keyup.enter="query" placeholder="点击选择专业" @click="professionLayerShow"></td>
+                    <td><label for="name">省份</label></td>
+                    <td><input type="text" class="form-control" v-model="q.areaName" readonly="readonly"
+                               @keyup.enter="query" placeholder="点击选择省份" @click="areaLayerShow"></td>
+                    <td><label for="name">学员规划</label></td>
+                    <td>
+                        <select class="form-control" v-model="q.userplanType">
+                            <option value="">全部</option>
+                            <option value="0">未生成</option>
+                            <option value="1">已生成</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr border="0">
+                    <td><label for="name">班型</label></td>
+                    <td><input type="text" class="form-control" v-model="q.classTypeName" @keyup.enter="query"
+                               readonly="readonly" placeholder="点击选择班型" @click="classTypeLayerShow"></td>
+                    <td><label for="name">层次</label></td>
+                    <td><input type="text" class="form-control" v-model="q.levelName" @keyup.enter="query"
+                               readonly="readonly" placeholder="点击选择层次" @click="levelLayerShow"></td>
+                    <td><label for="name">班级</label></td>
+                    <td><input type="text" class="form-control" v-model="q.className" @keyup.enter="query"
+                               readonly="readonly" placeholder="点击选择班级" @click="classLayerShowQuery"></td>
+                </tr>
+                <tr border="0">
+                    <td><label for="name">NC报名表ID</label></td>
+                    <td><input type="text" class="form-control" v-model="q.ncId" @keyup.enter="query"
+                               placeholder="点击输入NCId号"></td>
+                    <td><label for="name">NC报名表号</label></td>
+                    <td><input type="text" class="form-control" v-model="q.ncCode" @keyup.enter="query"
+                               placeholder="点击输入NCCODE号"></td>
+                </tr>
+                <tr border="0">
+                    <td><label for="name">产品线</label></td>
+                    <td><input type="text" class="form-control" v-model="q.productName" @keyup.enter="query"
+                               readonly="readonly" placeholder="点击选择产品线" @click="productShowQuery"></td>
+                    <td><label for="name">部门</label></td>
+                    <td><input type="text" class="form-control" v-model="q.deptNameList" readonly="readonly"
+                               placeholder="点击选择部门" @click="deptLayerShowQuery"></td>
+                    <td><label for="name">签署状态</label></td>
+                    <td>
+                        <select class="form-control" v-model="q.signStatus">
+                            <option value="">全部</option>
+                            <option value="0">未签署</option>
+                            <option value="1">已签署</option>
+                            <option value="2">已驳回</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!flag" class="panel panel-default">
+        <div v-show="!showList" class="panel panel-default">
+            <div class="panel-heading">{{title}}</div>
+            <form class="form-horizontal">
+
+                <div class="form-group" style="display: none">
+                    <div class="col-sm-2 control-label">主键</div>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" v-model="mallOrder.orderId" placeholder="主键"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">班级</div>
+                    <div v-show="false" class="col-sm-10">
+                        <select class="form-control" v-model="mallOrder.classId" style="width: 150px" id="selClass">
+                            <option value="">加载中...</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" v-model="mallOrder.className" readonly="readonly"
+                               placeholder="点击选择班级" @click="classLayerShow">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                    &nbsp;&nbsp;
+                    <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div v-show="!flagDvalidity" class="panel panel-default">
+        <div v-show="!showList" class="panel panel-default">
+            <div class="panel-heading">{{title}}</div>
+            <form class="form-horizontal">
+
+                <div class="form-group" style="display: none">
+                    <div class="col-sm-2 control-label">主键</div>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" v-model="mallOrder.orderId" placeholder="主键"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">订单有效日</div>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control dateValidity" id="dateValidity" readonly="readonly"
+                               placeholder="订单有效日" style="width:150px"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                    &nbsp;&nbsp;
+                    <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- <div v-show="!flag1" class="panel panel-default"> -->
+    <div v-show="!showOrderAttempt" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">手机号码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.mobile" placeholder="请输入手机号码">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/> &nbsp;&nbsp;<input
+                    type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+    <!-- </div> -->
+    <div v-show="!showOrderList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group" style="display: none">
+                <div class="col-sm-2 control-label">主键</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.orderId" placeholder="主键"/>
+                </div>
+            </div>
+            <!-- 可编辑 -->
+            <div class="form-group">
+                <div class="col-sm-2 control-label">用户姓名</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.nickName" readonly="readonly"
+                           placeholder="点击选择用户姓名" @click="userInfoLayerShow">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商品</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.commodityName" readonly="readonly"
+                           placeholder="点击选择商品" @click="goodsInfoLayerShow">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">省份</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.areaName" readonly="readonly"
+                           placeholder="点击选择省份" @click="areaGoodsLayerShow">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">班级</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.className" readonly="readonly"
+                           placeholder="点击选择班级" @click="classLayerShow">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">部门</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.deptName" readonly="readonly"
+                           placeholder="点击选择部门" @click="deptLayerShow">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">备注</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.remark" placeholder="备注"/>
+                </div>
+            </div>
+
+            <!-- 不可编辑 -->
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.orderName" readonly="readonly"
+                           placeholder="订单名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单描述</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.orderDescribe" readonly="readonly"
+                           placeholder="订单描述"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单总额</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.payMoney" readonly="readonly"
+                           placeholder="订单总额"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">层次</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.levelName" readonly="readonly"
+                           placeholder="层次"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">班型</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.classTypeName" readonly="readonly"
+                           placeholder="班型"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">专业</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="mallOrder.professionName" readonly="readonly"
+                           placeholder="专业"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商品图片</div>
+                <div class="col-sm-10">
+                    <input type="text" name="thumbPath" class="form-control" readonly="readonly" v-model="mallOrder.pic"
+                           placeholder="商品图片"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">商品小图</div>
+                <div class="col-sm-10">
+                    <input type="text" name="originPath" class="form-control" readonly="readonly"
+                           v-model="mallOrder.spic" placeholder="商品小图"/>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/> &nbsp;&nbsp;<input
+                    type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+    <div v-show="!chooseRole" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">教师角色</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline">
+                        <input type="radio" name="roleRadiosinline" value="0"> 正常
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="roleRadiosinline" value="1"> 其他
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="updateIsTeacher" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+    <div id="changelayer" style="display: none;">
+        <table class="table table-condensed" border="0">
+            <tr border="0">
+                <td><label for="name">新商品</label></td>
+                <td>
+                    <input type="text" class="form-control" v-model="courseUserplanNewChange.commodityName"
+                           @click="selectCommodity" readonly="readonly" placeholder="点击选择商品"/>
+                </td>
+                <!-- <td><label for="name">新省份</label></td>
+                <td>
+                    <input type="text" class="form-control" v-model="courseUserplanNewChange.areaName" @click="selectArea" readonly="readonly" placeholder="点击选择省份" />
+                </td> -->
+                <!-- <td><label for="name">新班型</label></td>
+                <td>
+                    <input type="text" class="form-control" v-model="courseUserplanNewChange.classTypeName" readonly="readonly" placeholder="新班型" />
+                </td>
+                <td><label for="name">新层次</label></td>
+                <td>
+                    <input type="text" class="form-control" v-model="courseUserplanNewChange.levelName" readonly="readonly" placeholder="新层次" />
+                </td> -->
+                <td><label for="name">新专业</label></td>
+                <td>
+                    <input type="text" class="form-control" v-model="courseUserplanNewChange.professionName"
+                           readonly="readonly" placeholder="新专业"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="changeArealayer" style="display: none;">
+        <table class="table table-condensed" border="0">
+            <tr border="0">
+                <td><label for="name">新省份</label></td>
+                <td>
+                    <input type="text" class="form-control" v-model="areaNewChange.areaName" @click="areaLayerShow2"
+                           readonly="readonly" placeholder="点击选择省份"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8" src="https://api.yunhetong.com/api_page/api/yht.js"></script>
+<script src="${rc.contextPath}/js/mall/order.js?_${date.systemTime}"></script>
+
+#parse("layer/classLay.html") #parse("layer/classTypeLay.html")
+#parse("layer/levelLay.html") #parse("layer/areaLay.html")
+#parse("layer/professionLay.html") #parse("layer/userInfoLay.html")
+#parse("layer/goodsInfoLay.html") #parse("layer/areaGoodsLay.html")
+#parse("layer/productLay.html")
+#parse("layer/deptLay.html")
+#parse("layer/deptQueryLay.html")
+</body>
+</html>

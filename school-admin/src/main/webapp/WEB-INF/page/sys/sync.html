@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>同步数据</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div>
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="syncCourse"><i class="fa fa-plus"></i>&nbsp;同步-课程</a>
+
+			<a class="btn btn-primary" @click="syncCommodity"><i class="fa fa-plus"></i>&nbsp;同步-商品</a>
+
+			<a class="btn btn-primary" @click="syncTeacher"><i class="fa fa-plus"></i>&nbsp;同步-教学老师</a>
+			
+			<a class="btn btn-primary" @click="syncUsers"><i class="fa fa-plus"></i>&nbsp;同步-学员</a>
+			
+			<a class="btn btn-primary" @click="syncliveRoom"><i class="fa fa-plus"></i>&nbsp;同步-直播间</a>
+
+            <a class="btn btn-primary" @click="synccourseClassPlan"><i class="fa fa-plus"></i>&nbsp;同步-排课</a>
+            
+            <a class="btn btn-primary" @click="updateCourseClassPlan"><i class="fa fa-plus"></i>&nbsp;更新-排课信息</a>
+            
+            <a class="btn btn-primary" @click="syncCourseUserPlanClass"><i class="fa fa-plus"></i>&nbsp;同步-学习计划</a>
+            
+            <a class="btn btn-primary" @click="saveUserplanBatch"><i class="fa fa-plus"></i>&nbsp;批量生成学员规划-订单为生成学员规划的</a>
+		
+		   	<a class="btn btn-primary" @click="syncLiveLog"><i class="fa fa-plus"></i>&nbsp;同步-直播和录播</a>
+		    
+		   	<!-- <a class="btn btn-primary" @click="syncVideoLog"><i class="fa fa-plus"></i>&nbsp;同步-录播</a> -->
+		   
+		    <a class="btn btn-primary" @click="UpdatecourseClassplanLives"><i class="fa fa-plus"></i>&nbsp;更新排课明细回放</a>
+		    
+		    <a class="btn btn-primary" @click="syncKSLogMongodb"><i class="fa fa-plus"></i>&nbsp;同步考勤数据</a>
+		    
+		    <a class="btn btn-primary" @click="syncAgent"><i class="fa fa-plus"></i>&nbsp;同步客服</a>
+		    
+		    <a class="btn btn-primary" @click="syncCustomers"><i class="fa fa-plus"></i>&nbsp;同步客户</a>
+		</div>
+		
+	</div>
+	</div>
+<script src="${rc.contextPath}/js/sys/sync.js?_${date.systemTime}"></script>
+</body>
+</html>

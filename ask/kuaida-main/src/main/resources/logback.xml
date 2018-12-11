@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport
+      http://logback.qos.ch/translator/
+-->
+<configuration>
+    <appender name="R" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${webapp.main}/../logs/YeePay-${jetty.port}.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} [%F:%C:%L]-[%p] %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${webapp.main}/../logs/YeePay-${jetty.port}-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+        </rollingPolicy>
+    </appender>
+    
+    <appender name="pay" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${webapp.main}/../logs/pay-${jetty.port}.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} [%F:%C:%L]-[%p] %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${webapp.main}/../logs/pay-${jetty.port}-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+        </rollingPolicy>
+    </appender>
+    
+    
+    <appender name="loginlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${webapp.main}/../logs/login.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} [%F:%C:%L]-[%p] %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${webapp.main}/../logs/login-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+        </rollingPolicy>
+    </appender>
+    
+    
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %p [%F:%C:%L] - &lt;%m&gt;%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${webapp.main}/../logs/star-${jetty.port}.log</File>
+        <encoder>
+            <pattern>%d %p [%F:%C:%L] - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${webapp.main}/../logs/star-${jetty.port}-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <logger name="com.izhubo.web.PayController" level="DEBUG"/>
+    <logger name="com.izhubo.web.spring" level="INFO"/>
+    <logger name="com.izhubo.web" level="${log.web.level}"/>
+    <logger name="com.yeepay" level="DEBUG">
+        <appender-ref ref="R"/>
+    </logger>
+    
+    <logger name="com.qqpay" level="${log.web.level}">
+    	<appender-ref ref="pay"/>
+    	<appender-ref ref="${log.target}"/>
+    </logger>
+    
+    <logger name="com.izhubo.web.BaseController" level="${log.web.level}">
+    	<appender-ref ref="pay"/>
+    	<appender-ref ref="${log.target}"/>
+    </logger>
+    
+    <logger name="com.izhubo.web.qqbase.Qq2Controller" level="${log.web.level}">
+    	<appender-ref ref="loginlog"/>
+    </logger>
+    
+    <root level="INFO">
+        <appender-ref ref="${log.target}"/>
+    </root>
+</configuration>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseUserplanClassDetailDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	    course_userplan_class_detail.userplan_class_detail_id AS userplanClassDetailId , 
+	    course_userplan_class_detail.userplan_class_id AS userplanClassId , 
+	    course_userplan_class_detail.userplan_detail_id AS userplanDetailId , 
+	    course_userplan_class_detail.classplan_id AS classplanId , 
+	    course_userplan_class_detail.timestamp AS timestamp ,
+	    course_userplan_class_detail.remark AS remark ,
+	    course_userplan_class_detail.dr AS dr,
+	    course_userplan_class_detail.school_id AS schoolId,
+	    course_userplan_class_detail.order_num AS orderNum 	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where course_userplan_class_detail.dr=0 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_userplan_class_detail as course_userplan_class_detail
+	</sql>
+	
+	
+	<!--查询学员同一门课程有没有排在同意个排课计划中-->
+	<select id="selectOld" resultType="map">
+		select 
+			course_userplan_class.userplan_class_id AS userplanClassId ,
+		    course_userplan_class.userplan_id AS userplanId ,
+		    course_userplan_class.userplan_class_no AS userplanClassNo ,
+		    course_userplan_class.exam_schedule_id AS examScheduleId ,
+		    course_userplan_class.remark AS remark ,
+		    course_userplan_class.school_id AS schoolId ,
+		    course_userplan_class.create_time AS createTime ,
+		    course_userplan_class.modify_time AS modifyTime ,
+		    course_userplan_class.create_person AS createPerson ,
+		    course_userplan_class.modify_person AS modifyPerson ,
+		    course_userplan_class.dr AS dr,
+		    course_userplan_class.status AS status 	
+		from course_userplan_class as course_userplan_class
+		JOIN course_userplan_class_detail as course_userplan_class_detail ON course_userplan_class.userplan_class_id = course_userplan_class_detail.userplan_class_id
+		where course_userplan_class.dr=0 	
+		AND course_userplan_class_detail.classplan_id = #{classplanId}
+		AND course_userplan_class_detail.userplan_detail_id = #{userplanDetailId}
+		AND course_userplan_class_detail.dr = 0
+		<if test="userplanClassDetailId != null">
+			AND course_userplan_class_detail.userplan_class_detail_id &lt;&gt; #{userplanClassDetailId}
+		</if>
+		LIMIT 0,1
+	</select>
+	<!--推送学习计划队列-->
+	<select id="queryUserplanClassDetailForQueue" resultType="map">
+		SELECT
+	course_userplan_class_detail.userplan_class_detail_id,
+	course_userplan_class_detail.classplan_id,
+	course_userplan_class_detail.`timestamp` AS createdTime,
+	course_userplan_class_detail.dr,
+	course_userplan_class_detail.ts,
+	users.mobile AS studentCode,
+	sys_user.username AS teacherCode
+
+FROM
+	course_userplan_class_detail course_userplan_class_detail
+JOIN course_userplan_detail course_userplan_detail ON course_userplan_class_detail.userplan_detail_id = course_userplan_detail.userplan_detail_id
+JOIN course_userplan course_userplan ON course_userplan_detail.userplan_id = course_userplan.user_plan_id
+JOIN users users ON course_userplan.user_id = users.user_id
+JOIN mall_class mall_class ON course_userplan.class_id = mall_class.class_id
+JOIN sys_user sys_user ON sys_user.user_id = mall_class.user_id
+WHERE
+	course_userplan_class_detail.ts > #{millisecond}
+ORDER BY
+	course_userplan_class_detail.ts DESC;
+	</select>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseUserplanClassDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND userplan_class_detail_id = #{userplanClassDetailId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseUserplanClassDetailEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--根据userplanClassId查询子表列表信息-->
+	<select id="queryListByUserplanClassId" parameterType="map" resultType="io.renren.pojo.CourseUserplanClassDetailPOJO">
+		select
+		<include refid="base_column"/>
+		,
+		(select co.course_name from courses co where co.course_id = c.course_id) as courseName,
+		(select cc.classplan_name from course_classplan cc where cc.classplan_id = course_userplan_class_detail.classplan_id) as classplanName
+		<include refid="base_from"/> 
+		JOIN course_userplan_detail c ON(c.userplan_detail_id = course_userplan_class_detail.userplan_detail_id)
+		<include refid="base_where"/>
+		AND course_userplan_class_detail.userplan_class_id = #{userplanClassId}
+	</select>
+	
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseUserplanClassDetailEntity" useGeneratedKeys="true" keyProperty="userplanClassDetailId">
+	    insert into course_userplan_class_detail
+	    (
+	       `userplan_class_id`, 
+	       `userplan_detail_id`, 
+	       `classplan_id`, 
+	       `timestamp`, 
+	       `remark`,
+	       `dr` ,
+	       `school_id`,
+	       `order_num`
+	    )
+	    values
+	    (
+	       #{userplanClassId}, 
+	       #{userplanDetailId}, 
+	       #{classplanId}, 
+	       #{timestamp},
+	       #{remark},
+	       #{dr},
+	       #{schoolId},
+	       #{orderNum}
+	    )
+    </insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseUserplanClassDetailEntity">
+		update course_userplan_class_detail 
+		<set>
+			<if test="userplanClassId != null">`userplan_class_id` = #{userplanClassId}, </if>
+			<if test="userplanDetailId != null">`userplan_detail_id` = #{userplanDetailId}, </if>
+			<if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+			<if test="timestamp != null">`timestamp` = #{timestamp}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		<include refid="base_where"/>
+		AND userplan_class_detail_id = #{userplanClassDetailId}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.CourseUserplanClassDetailEntity">
+		UPDATE course_userplan_class_detail 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND userplan_class_detail_id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.CourseUserplanClassDetailEntity">
+		UPDATE course_userplan_class_detail 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND userplan_class_id IN 
+		<foreach item="userplanClassId" collection="ids" open="(" separator="," close=")">
+			#{userplanClassId}
+		</foreach>
+	</update>
+	
+	<update id="deleteBatchNotIn" parameterType="io.renren.entity.CourseUserplanClassDetailEntity">
+		UPDATE course_userplan_class_detail 
+		<set> dr = 1 </set>
+		where userplan_class_id = #{userplanClassId}
+		<if test="userplanClassDetailIds != null and userplanClassDetailIds.size() > 0 ">
+			and userplan_class_detail_id not in 
+			<foreach item="item" collection="userplanClassDetailIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
+    <update id="updateChangeByUserplanClassId">
+         UPDATE course_userplan_class_detail  set dr = 1,ts = now() where  userplan_class_id = #{courseUserplanClassId}
+    </update>
+</mapper>

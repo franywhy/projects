@@ -1,0 +1,33 @@
+<div id="userplanLayDiv" style="display: none">
+<!-- 学员规划查询条件 -->
+<table  border="0">
+	<tr class="row" >
+		<td class=""><label for="name">订单编号</label></td>
+		<td >
+			<input type="text" class="form-control" id="qorderNo" placeholder="订单编号">
+		</td>
+		<td class=""><label for="name">学员手机</label></td>
+		<td >
+			<input type="text" class="form-control" id="quserMobile" placeholder="学员手机">
+		</td>
+		<td class=""><label for="name">班级名称</label></td>
+		<td >
+			<input type="text" class="form-control" id="qclassName" placeholder="班级名称">
+		</td>
+		<td class=""><label for="name">班主任</label></td>
+		<td >
+			<input type="text" class="form-control" id="qteacherName" placeholder="班主任">
+		</td>
+	</tr>
+	<tr class="row" >
+		<!-- 按钮 -->
+		<td class="grid-btn">
+			<a class="btn btn-primary" onclick="userplanLay.clearQuery();">重置</a>
+			<a class="btn btn-primary" onclick="userplanLay.reload();"><i class="fa fa-search"></i>&nbsp;查询</a>
+		</td>
+	</tr>
+</table>
+<table id="userplanLay_jqGrid" ></table>
+<table id="userplanLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/userplanLay2.js?_${date.systemTime}"></script>

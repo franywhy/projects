@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.dao.manage.CommentDao" >
+
+  <sql id="base_column" >
+    comment_id, comment_object, comment_type, content, user_id, name, avatar, like_number, app_status, creation_time,
+    modified_time, dr
+  </sql>
+  <!-- 通用查询条件 -->
+  <sql id="base_where">
+    where 1=1
+  </sql>
+  <!-- 通用from -->
+  <sql id="base_from">
+    from comment as comment
+  </sql>
+
+  <!--分页列表-->
+  <select id="queryPojoList" resultType="io.renren.pojo.manage.CommentPOJO">
+    select
+    <include refid="base_column"/>
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="content != null and content.trim() != ''">
+      and `content` like concat('%',#{content},'%')
+    </if>
+    <if test="appStatus != null">
+      and `app_status` = #{appStatus}
+    </if>
+    order by creation_time desc
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <!--分页总数-->
+  <select id="queryTotal" resultType="int">
+    select count(1)
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="content != null and content.trim() != ''">
+      and `content` like concat('%',#{content},'%')
+    </if>
+  </select>
+
+  <!--批量删除-->
+  <update id="deleteBatch">
+    update comment set dr = 1 where comment_id in
+    <foreach item="commentId" collection="list" open="(" separator="," close=")">
+      #{commentId}
+    </foreach>
+  </update>
+
+  <!-- 批量更新状态 -->
+  <update id="updateBatch">
+    update comment set app_status = #{appStatus} where comment_id in
+    <foreach item="commentId" collection="list" open="(" separator="," close=")">
+      #{commentId}
+    </foreach>
+  </update>
+</mapper>

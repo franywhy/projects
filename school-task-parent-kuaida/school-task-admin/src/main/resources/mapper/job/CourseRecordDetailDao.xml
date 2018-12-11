@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.CourseRecordDetailDao">
+	<select id="queryRecordDetailPojoByRecordId" resultType="io.renren.modules.job.pojo.CourseRecordDetailPOJO">
+        SELECT
+            detail.record_id AS recordId,
+            detail.course_id AS courseId,
+            detail.duration AS duration,
+            detail.duration_s AS durationS,
+            courses.product_id AS productId
+        FROM
+            `course_record_detail` detail
+        LEFT JOIN courses courses ON courses.course_id = detail.course_id
+        WHERE
+           detail.record_id = #{recordId};
+    </select>
+
+    <select id="queryRecordDetailPojoByVid" resultType="io.renren.modules.job.pojo.CourseRecordDetailPOJO">
+        SELECT
+            detail.record_id AS recordId,
+            detail.course_id AS courseId,
+            detail.duration AS duration,
+            detail.duration_s AS durationS,
+            courses.product_id AS productId
+        FROM
+            `course_record_detail` detail
+        LEFT JOIN courses courses ON courses.course_id = detail.course_id
+        WHERE
+            detail.vid = #{vid}
+        LIMIT 1
+    </select>
+</mapper>

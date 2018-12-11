@@ -1,0 +1,77 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+            <th >频道</th>
+            <th >图片</th>
+            <th >价格</th>
+            <th >有效月数</th>
+            <th >开始时间</th>
+            <th >失效时间</th>
+            <th >描述</th>
+            <th >提交状态</th>
+            <th >审核状态</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action100">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="short"><%=data[i].main_type_name%></td>
+            <td class="short">
+                <a href="<%=data[i].card_url%>" target="_blank">
+                    <img height="80" src="<%=data[i].card_url%>" />
+                </a>
+            </td>
+            <td class="short"><%=data[i].price%></td>
+            <td class="short"><%=data[i].month_num%></td>
+            <td class="short"><%=data[i].begin_date%></td>
+            <td class="short"><%=data[i].end_date%></td>
+            <td class="short"><%=data[i].memo%></td>
+            <td  class="short"><%=data[i].manage_info.upload_flag ? "已提交" : "未提交"%></td>
+            <td  class="short"><%=data[i].manage_info.audit_flag ? "已审核" : "未审核"%></td>
+
+
+            <td class="short">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">查看</button>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <%if(Izb.user.audit(pty.menu,Izb.enumList.menuType.all)){%>
+                <%if(!data[i].manage_info.upload_flag){%>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.changestates( '<%=data[i]._id %>' )">提交</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit( '<%=data[i]._id %>' )">改
+                </button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删
+                </button>
+                <%}%>
+                <%if((data[i].manage_info.upload_flag)&&(!data[i].manage_info.audit_flag)){%>
+                <!--<div><h5>已提交</h5></div>-->
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.rollbackSubmit( '<%=data[i]._id %>' )">收回</button>
+                <%}%>
+                <%}%>
+
+                <%if(Izb.user.audit(pty.menu,Izb.enumList.menuType.audit)){%>
+                <%if(data[i].manage_info.upload_flag&&(!data[i].manage_info.audit_flag)){%>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.examine( '<%=data[i]._id %>' )">审核</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.rollbackSubmit( '<%=data[i]._id %>' )">收回</button>
+                <%}%>
+                <%if(data[i].manage_info.audit_flag){%>
+                <!-- <div><h5>已审核</h5></div>-->
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.rollbackAudit( '<%=data[i]._id %>' )">反审核</button>
+                <%}%>
+                <%if(!data[i].manage_info.upload_flag){%>
+                <!--<div><h5>没提交</h5></div>-->
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.changestates( '<%=data[i]._id %>' )">提交</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit( '<%=data[i]._id %>' )">改</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删 </button>
+                <%}%>
+                <%}%>
+                <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

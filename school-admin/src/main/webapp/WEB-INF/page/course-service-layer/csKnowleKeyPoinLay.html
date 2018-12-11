@@ -1,0 +1,17 @@
+<div id="csKnowleKeyPoinLayDiv" style="display: none">
+	<!-- 课程查询条件 -->
+	<div style="margin: 0px;margin-bottom: 5px;">
+		<div class="form-group col-sm-2">
+			<input type="text" class="form-control" style=" margin-top: 5px;" id="csKnowleKeyPoinLay_CourseName" placeholder="课程名称">
+		</div>
+		<div class="form-group col-sm-2">
+			<input type="text" class="form-control" style=" margin-top: 5px;"  id="csKnowleKeyPoinLay_CourseNo" placeholder="课程编号">
+		</div>
+	<!-- 按钮 -->
+		<a class="btn btn-default" style="margin-top: 5px;"  onclick="csKnowleKeyPoinLay.reload();">查询</a>
+	</div>	
+	<div style="display: table; clear: both"></div>
+	<table id="csKnowleKeyPoinLay_jqGrid"></table>
+	<table id="csKnowleKeyPoinLay_jqGridPager"></table>
+</div>
+<script src="${rc.contextPath}/js/course-service-layer/csKnowleKeyPoinLay.js?_${date.systemTime}"></script>

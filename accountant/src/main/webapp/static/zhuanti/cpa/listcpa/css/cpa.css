@@ -1,0 +1,588 @@
+.t-pad {
+    padding-top: 84px;
+    padding-bottom: 84px;
+}
+
+.r-main01-t-h1 {
+    font-size: 66px;
+    margin-top: 40px;
+}
+
+.t-cpa-h1 {
+    font-size: 42px;
+    text-align: center;
+}
+
+.t-cpa-h2 {
+    font-size: 18px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.t-btn {
+    background-color: #fe763a;
+    color: #fff;
+    border: 1px solid #fe763a;
+    font-size: 18px;
+    width: 272px;
+    margin: 0 auto;
+    line-height: 65px;
+    text-align: center;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    transition: 0.3s all;
+    -webkit-transition: 0.3s all;
+    -moz-transition: 0.3s all;
+    -ms-transition: 0.3s all;
+}
+
+.t-btn:hover {
+    /*background-color: transparent;*/
+    /*color:#d0382b;*/
+    background-color: #fb5d17;
+    border-color: #fb5d17;
+    color: #fff;
+    transition: 0.3s all;
+    -webkit-transition: 0.3s all;
+    -moz-transition: 0.3s all;
+    -ms-transition: 0.3s all;
+    cursor: pointer;
+}
+
+
+/* banner///// */
+
+.slide-banner-v2 {
+    overflow: hidden;
+}
+
+.slide-banner-v2 .slide-ul-v2 {
+    width: 10000px;
+}
+
+.slide-banner-v2 .slide-li-v2 {
+    float: left;
+    height: 580px;
+    /* text-align: center; */
+}
+
+.slide-banner-v2 .slide-li-1 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa-banner-1.jpg) no-repeat center 0;
+}
+
+.slide-banner-v2 .slide-li-2 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa-banner-2.jpg) no-repeat center 0;
+}
+
+.slide-banner-v2 .slide-li-3 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa-banner-3.jpg) no-repeat center 0;
+}
+
+.slide-banner-v2 {
+    position: relative;
+}
+
+.slide-dl-v2 {
+    position: absolute;
+    text-align: center;
+    bottom: 20px;
+    width: 100%;
+}
+
+.slide-dd-v2 {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    background-color: #abafb0;
+    margin: 0 4px;
+    cursor: pointer;
+}
+
+.slide-dd-v2.act {
+    background-color: #666;
+}
+
+
+/* cpa2///// */
+
+.cpa2-tp {
+    float: left;
+    margin-top: 50px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.cpa2-pic {
+    height: 256px;
+    width: 170px;
+    margin-right: 30px;
+}
+
+.cpa2-pic1 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa2-1.jpg) no-repeat center center;
+    margin-left: 15px;
+}
+
+.cpa2-pic2 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa2-2.jpg) no-repeat center center;
+}
+
+.cpa2-pic3 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa2-3.jpg) no-repeat center center;
+}
+
+.cpa2-pic4 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa2-4.jpg) no-repeat center center;
+}
+
+.cpa2-pic5 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa2-5.jpg) no-repeat center center;
+}
+
+.cpa2-pic6 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa2-6.jpg) no-repeat center center;
+    margin-right: 15px;
+}
+
+.cpa2-tex1 {
+    padding-top: 24px;
+    padding-bottom: 5px;
+    font-size: 30px;
+}
+
+.cpa2-tex2 {
+    padding-bottom: 10px;
+}
+
+.cpa2-t {
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+
+/* cpa3///// */
+
+.cpa3 {
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa3-2.jpg) no-repeat center 0;
+}
+
+.cpa3-img {
+    margin-top: 50px;
+    margin-left: 85px;
+    margin-bottom: 45px;
+}
+
+.cpa3-h1 {
+    color: #fff;
+}
+
+.cpa3-h2 {
+    color: #888888;
+    /* font-weight: bold; */
+}
+
+
+/* cpa4///// */
+
+.cpa4 {
+    background: #f9f9f9;
+    height: 747px;
+}
+
+.cpa4 .t-pad {
+    padding-bottom: 0;
+    /* overflow: hidden; */
+}
+
+.cpa4-h1 {
+    text-align: right;
+    margin-right: 15px;
+    font-size: 44px;
+    padding-top: 28px;
+}
+
+.cpa4-h2 {
+    float: right;
+    margin-right: 15px;
+    line-height: 1.4;
+    font-size: 18px;
+}
+
+.cpa4-img {
+    position: absolute;
+    top: 74px;
+}
+
+.cpa4-tab-t {
+    width: 713px;
+    height: 58px;
+    background: #66bb6a;
+    text-align: center;
+    line-height: 58px;
+    font-size: 22px;
+    color: #fff;
+    margin-right: 26px;
+    margin-top: 43px;
+}
+
+.cpa4-tab-t img {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.cpa4-ul1,
+.cpa4-ul2,
+.cpa4-ul3 {
+    position: absolute;
+    text-align: center;
+    top: 326px;
+    z-index: 10;
+}
+
+.cpa4-ul1 {
+    width: 214px;
+    right: 524px;
+    border-left: 1px solid #ededed;
+    border-bottom: 1px solid #ededed;
+}
+
+.cpa4-ul2 {
+    width: 248px;
+    right: 276px;
+    border-bottom: 1px solid #ededed;
+}
+
+.cpa4-ul3 {
+    width: 250px;
+    right: 26px;
+    border-bottom: 1px solid #ededed;
+    border-right: 1px solid #ededed;
+    box-sizing: border-box;
+}
+
+.cpa4-ul1 li,
+.cpa4-ul2 li,
+.cpa4-ul3 li {
+    height: 42px;
+    line-height: 42px;
+    background: #fff;
+    font-size: 14px;
+    border-right: 1px dashed #ededed;
+    border-bottom: 1px dashed #ededed;
+}
+
+.cpa4 ul .cpa4-ul3-t {
+    background: #f0efef;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+}
+
+.cpa4 ul .cpa4-ul3-b {
+    border-bottom: 0;
+}
+
+.cpa4-ul3 li {
+    border-right: 0;
+}
+
+.cpa4-ul-c {
+    color: #66bb6a;
+}
+
+
+/* cpa5///// */
+
+.cpa5 {
+    height: 721px;
+    background: url(http://img.hengqijiaoyu.cn/pc/statics/images/listcpa/image/cpa5-1.jpg) no-repeat center center;
+}
+
+.cpa5-h1,
+.cpa5-h2 {
+    text-align: left;
+    margin-left: 143px;
+}
+
+.cpa5-tp img {
+    display: inline-block;
+}
+
+.cpa5-tp {
+    width: 405px;
+    height: 420px;
+    background: #fff;
+    margin-left: 100px;
+    margin-top: 47px;
+    border: 1px solid #ededed;
+    text-align: center;
+}
+
+.cpa5-tex-t {
+    margin-top: 44px;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.cpa5-tex-t span {
+    color: #e64a20;
+    font-weight: bold;
+}
+
+.cpa5-area {
+    line-height: 52px;
+    width: 130px;
+    height: 52px;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    margin-left: 12px;
+    color: #888888;
+    margin-right: 10px;
+    margin-top: 26px;
+    outline: none;
+    appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+    padding-left: 12px;
+    box-sizing: border-box;
+    position:relative;z-index:1;
+}
+.cpa5-area::-ms-expand{
+    display: none;
+}
+.dispear{
+    width: 30px;
+    height: 20px;
+    background: #FFF;
+    position: relative;
+    z-index: 4;
+    left: 35px;
+    top: -20px;
+}
+.cpa5-se{
+    display: inline-block;
+}
+.cpa5-se-img1{
+    position: absolute;
+    right: 20px;
+    top: 45px;
+    z-index:2;
+}
+.cpa5-se-img2{
+    position: absolute;
+    right: 20px;
+    top: 45px;
+    z-index:2;
+}
+.cpa5-tp input {
+    width: 274px;
+    height: 52px;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #dedede;
+    margin-top: 10px;
+    box-sizing: border-box;
+    padding-left: 12px;
+    font-size: 16px;
+}
+
+.cpa5-btn {
+    height: 52px;
+    margin-top: 10px;
+    line-height: 52px;
+}
+
+
+/* cpa6//// */
+
+.cpa6 {
+    background: #f7f7f7;
+}
+
+.cpa6 ul {
+    width: 389px;
+    text-align: center;
+    background: #fff;
+    border-left: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    margin-top: 45px;
+}
+
+.cpa6 ul li {
+    box-sizing: border-box;
+    padding-top: 21px;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.cpa6 ul li span {
+    font-size: 18px;
+    color: #66bb6a;
+    font-weight: bold;
+}
+
+.cpa6 ul .cpa6-li-1 {
+    height: 55px;
+    line-height: 55px;
+    font-size: 18px;
+    background: #f0efef;
+}
+
+.cpa6 ul .cpa6-li-2 {
+    line-height: 60px;
+}
+
+.cpa6-li-3 {
+    height: 132px;
+}
+
+.cpa6-li-4 {
+    height: 143px;
+}
+
+.cpa6-li-5 {
+    height: 112px;
+}
+
+.cpa6-li-6 {
+    height: 90px;
+}
+
+.cpa6-btn {
+    width: 160px;
+    height: 44px;
+    line-height: 44px;
+}
+
+.cpa6 .cpa6-ul3 {
+    border-right: 1px solid #eaeaea;
+}
+
+.cpa6 .cpa6-ul1 {
+    margin-left: 15px;
+}
+
+.cpa6 ul li .cpa6-fz {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+
+/* cpa7///// */
+
+.cpa7-ul img {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.cpa7-ul {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.cpa7-ul li {
+    float: left;
+    margin-left: 72px;
+}
+
+.cpa7-btn {
+    width: 160px;
+    height: 42px;
+    line-height: 42px;
+}
+
+.cpa7-li-1 {
+    margin-left: 50px;
+}
+
+.cpa7-tex1 {
+    font-size: 22px;
+    margin-bottom: 17px;
+}
+
+.cpa7-tex2 {
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+
+/* cpa8///// */
+
+.cpa8 {
+    background: #f7f7f7;
+}
+
+.cpa8-img {
+    margin-left: 15px;
+    margin-top: 75px;
+}
+
+.cpa8-wolrd {
+    width: 540px;
+    height: 500px;
+    overflow-y: auto;
+    margin-top: 54px;
+    margin-right: 15px;
+  /* scrollbar-base-color:rgba(238, 238, 238, 0.1); */
+    /* scrollbar-base-color:red;
+     */
+}
+/*  设置滚动条的样式 */
+  /* .cpa8-wolrd::-webkit-scrollbar {
+       width: 12px;
+   } */
+  /*  滚动槽 */
+/* .cpa8-wolrd::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+} */
+  /*  滚动条滑块 */
+  /* .cpa8-wolrd::-webkit-scrollbar-thumb {
+       border-radius: 10px;
+       background: rgba(238, 238, 238, 0.1);
+       background:red;
+       -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+   }
+   ::-webkit-scrollbar-thumb:window-inactive {
+      background: rgba(255, 0, 0, 0.4);
+   } */
+.cpa8-wolrd-t {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.cpa8-wolrd img {
+    margin-bottom: 30px;
+}
+
+
+/* cpa9///// */
+
+.cpa9 .cpa7-ul li {
+    margin-right: 29px;
+    margin-left: 0;
+    background: #f7f7f7;
+    padding-bottom: 40px;
+    border-bottom: 2px solid #66bb6a;
+}
+
+.cpa9 .cpa7-ul .cpa9-li-1 {
+    margin-left: 15px;
+}
+
+.cpa9 .cpa7-ul .cpa9-li-3 {
+    margin-right: 15px;
+}
+
+.cpa9 .cpa7-ul li img {
+    margin-bottom: 35px;
+}
+
+.cpa9 .cpa7-ul li .cpa7-tex2 {
+    margin-bottom: 0;
+}

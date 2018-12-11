@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningapi.dao.AppGuideDao">
+
+    <select id="queryList" resultType="com.hq.learningapi.entity.AppGuideEntity">
+        select `guide_id`,`guide_name`,`guide_url`,`guide_pic`
+        from  course_guide
+        where profession_id in
+        <foreach item="professionId" collection="professionIdList" open="(" separator="," close=")">
+            #{professionId}
+        </foreach>
+        and   area_id in
+        <foreach item="areaId" collection="areaIdList" open="(" separator="," close=")">
+            #{areaId}
+        </foreach>
+        and   level_id in
+        <foreach item="levelId" collection="levelIdList" open="(" separator="," close=")">
+            #{levelId}
+        </foreach>
+        and   school_id = #{schoolId}
+        and   status = #{status}
+        order by order_num asc
+    </select>
+
+    <select id="queryList0" resultType="com.hq.learningapi.entity.AppGuideEntity">
+        select `guide_id`,`guide_name`,`guide_url`,`guide_pic`
+        from  course_guide
+        where profession_id = #{professionId}
+        and   area_id = #{areaId}
+        and   level_id = #{levelId}
+        and   school_id = #{schoolId}
+        and   status = #{status}
+        order by order_num asc
+    </select>
+
+</mapper>

@@ -1,0 +1,57 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:60px;">专题</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <select class="input" id="annals_id" name="annals_id" data-options="required:true"></select>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:60px;">栏目</td>
+            <td>
+                <input class="input" type="text" name="cover_type" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">标题</td>
+            <td>
+                <input class="input" type="text" name="cover_title" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">封面作者</td>
+            <td>
+                <input class="input" type="text" name="cover_author" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">状态</td>
+            <td>
+                <input class="input" type="radio" name="status" value="1" checked/>启用  <input class="input" type="radio" name="status" value="0"/>禁用
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">封面图片</td>
+            <td>
+                <input class="input" type="text" name="cover_pic" id="cover_pic"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('cover_pic', 'Posters');" />
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:60px;">导语</td>
+            <td>
+                <textarea name="cover_content" class="input" cols="80" rows="3"></textarea>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:60px;">简介</td>
+            <td>
+                <textarea name="content_html"  id="content_html" style="width:1000px;height:400px" value=""></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

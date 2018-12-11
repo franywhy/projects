@@ -1,0 +1,25 @@
+<!--通用应用头-->
+
+<div class="tagArea">
+    <div class="tag_r">
+
+        <input type="button" value="导出表格" class="d-button J_export" />
+        <input type="button" value="返回" class="d-button J_back" />
+        <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+        <%}%>
+
+    </div>
+</div>
+
+<div class="searchForm">
+    <form name="searchForm">
+        时间
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'stime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头-->

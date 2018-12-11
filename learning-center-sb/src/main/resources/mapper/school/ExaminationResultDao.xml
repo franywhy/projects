@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.ExaminationResultDao">
+    <!-- 通用查询表头 -->
+    <sql id="base_column">
+            examination_result.id as id,
+            examination_result.score as score,
+            examination_result.img as img,
+            course_abnormal_registration.registration_no as registerPK,
+            course_abnormal_registration.`status` as `status`,
+            mall_order.order_name AS orderName,
+            courses.course_name as courseName,
+            mall_area.area_name as registerProinve,
+            mall_exam_schedule.schedule_date as scheduleDate
+    </sql>
+    <!-- 通用查询条件 -->
+    <sql id="base_where">
+        WHERE examination_result.dr = 0
+        and examination_result.user_id = #{userId}
+        and course_abnormal_registration.product_id IN
+        (
+        select
+        product_id
+        from sys_business_product
+        where business_id = #{businessId}
+        )
+    </sql>
+    <!-- 通用from -->
+    <sql id="base_from">
+         FROM examination_result examination_result
+         LEFT	JOIN `course_abnormal_registration` course_abnormal_registration ON course_abnormal_registration.id = examination_result.registration_id
+         LEFT JOIN mall_order mall_order ON course_abnormal_registration.order_no = mall_order.order_no
+         LEFT JOIN courses courses ON course_abnormal_registration.course_id = courses.course_id
+         LEFT JOIN mall_area mall_area ON course_abnormal_registration.bk_area_id = mall_area.area_id
+         LEFT JOIN mall_exam_schedule mall_exam_schedule ON course_abnormal_registration.exam_schedule_id = mall_exam_schedule.id
+    </sql>
+    <!-- 通用排序 -->
+    <sql id="base_order">
+        ORDER BY  id DESC
+    </sql>
+    <!--成绩列表-->
+    <select id="queryPojoList" resultType="com.hq.learningcenter.school.pojo.ExaminationResultPOJO">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        <include refid="base_order"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <!--新增-->
+    <insert id="save" parameterType="com.hq.learningcenter.school.entity.ExaminationResultEntity" keyProperty="id">
+    insert into examination_result
+    (
+    `user_id`,
+    `registration_id`,
+    `score`,
+    `img`,
+    `exam_type`
+    )
+    values
+    (
+    #{userId},
+    #{registrationId},
+    #{score},
+    #{img},
+    #{examType}
+    )
+    </insert>
+</mapper>

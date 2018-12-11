@@ -1,0 +1,31 @@
+<!--公告列表-->
+
+<table width="100%" class="listTable tablesorter">
+    <thead>
+        <tr>
+            <th class="num">用户ID</th>
+            <th class="title">Client</th>
+            <th>备注</th>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action100">操作</th>
+            <%}%>
+        </tr>
+    </thead>
+    <tbody>
+        <%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="num"><a href="javascript:Izb.controller.user.show('<%=data[i]._id%>');"><%=data[i]._id%></a></td>
+            <td class="title"><%=data[i].client%></td>
+            <td><%=data[i].comment%></td>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action"><button class="d-button" onclick="Izb.controller.user.unban('<%=data[i]._id%>','<%=data[i].client%>',{client:'<%=data[i].client%>'});">解封设备</button></td>
+            <%}%>
+        </tr>
+        <%}%>
+    </tbody>
+</table>
+<%if(!data || data.length==0){%>
+<div class="listEmpty">暂无记录！</div>
+<%}%>
+<div class="appPager"></div>
+<!--/公告列表--> 

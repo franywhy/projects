@@ -1,0 +1,69 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:60px;">帐号:</td>
+            <td><input name="_id" type="hidden" value="" />
+                <input class="input" type="text" name="name" value="" /></td>
+        </tr>
+        <tr>
+            <td>公司:</td>
+            <td><select class="input" style="width: 182px" id="company_id" type="text" name="company_id" value="" ></select></td>
+        </tr>
+        <tr>
+            <td>昵称:</td>
+            <td><input class="input" type="text" name="nick_name" value="" /></td>
+        </tr>
+        <tr>
+            <td>密码:</td>
+            <td><input class="input" type="password" name="password" value="" />
+                * 不改为空!</td>
+        </tr>
+         <tr>
+            <td>岗位:</td>
+            <td><input class="input" type="text" name="post_name" value="" /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+            	<div class="adminTip">
+                    <div class="red">特殊权限配置说明：</div>
+                    <ul>
+                        <li>道具销售统计：用户信息+道具销售统计</li>
+                        <li>广播权限管理：用户权限+广播权限管理</li>
+                    </ul>
+                </div>
+        </tr>
+        </td>
+        
+        <tr>
+            <td>权限:</td>
+            <td valign="top" style="width:460px;">
+                <input type="hidden" name="giftcat" value="2" />
+                <%
+                var menus = Izb.main.getAllMenus();
+                for(var i=0,length=menus.length;i<length;i++){var item=menus[i];%>
+
+                    <% if(item.group){%>
+                <div class="lblItem" style="width: 460px; clear: both; font-weight: bold; background-color: #ddd; height: 24px;line-height:24px;text-indent:10px;">
+                        <span class="lblTxt" style="text-align:left;"><%=item.group%>：</span>
+                    </div>
+                    <%}else{%>
+
+                    <div class="lblItem" style="float:left; width:230px; height:24px;">
+                        <span class="lblTxt"><%=item.name%>：</span>
+                        <select name="<%=item.menu %>" data-parentpower="<%=item.parentPower%>" style=" width:80px;">
+                            <option selected value="0">无权限</option>
+                            <%if(item.menu.indexOf('/')==-1){%>
+                            <option value="1">查看权限</option>
+                            <option value="2">普通权限</option>
+                            <option value="3">全部权限</option>
+                            <%}else{%>
+                            <option value="1">查看权限</option>
+                            <%}%>
+                        </select>
+                    </div>
+                    <%}%>
+                    <%}%>
+            </td>
+        </tr>
+    </table>
+</form>

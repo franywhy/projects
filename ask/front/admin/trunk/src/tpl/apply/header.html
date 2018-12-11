@@ -1,0 +1,38 @@
+<!--提现申请设置页头-->
+<h2 class="appTitle">
+
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        申请人id
+        <input type="text" name="userId" size="10" />&nbsp;
+        呢称
+        <input type="text" name="nickName" size="10" />
+        <br/><br/>
+        真实姓名
+        <input type="text" name="realName" size="10" />
+        支付宝账号
+        <input type="text" name="alipayAccount" size="20" />
+
+        状态
+        <select name="applyState">
+            <option value="" >==所有==</option>
+            <option value="0" selected>申请中</option>
+            <option value="2">结算成功</option>
+            <option value="1">已作废</option>
+        </select>
+
+        <br/><br/>
+        修改日期
+        <input id="update_stime" type="text" name="update_stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'update_etime\')}'})" />
+        到
+        <input id="update_etime" type="text" name="update_etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'update_stime\')}'})"/>
+        <br/><br/>
+        创建日期
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/提现申请设置页头-->

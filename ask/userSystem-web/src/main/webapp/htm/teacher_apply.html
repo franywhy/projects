@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>教师申请页面</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,target-densitydpi=[dpi-value|device-dpi|high-dpi|medium-dpi|low-dpi],user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta name="browsermode" content="application"/>
+<meta name="full-screen" content="yes"/>
+<link rel="stylesheet" type="text/css" href="css/index_apply.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/select.js"></script>
+
+    <style type="text/css">
+        .no_active{
+            display:inline-block;
+            width:30%;
+            height:30px;
+            background-color: #B3B3B3;
+            vertical-align:middle;
+            color:#ffffff;
+            text-align:center;
+            line-height:30px;
+            text-decoration: none;
+            border-radius:4px;
+        }
+        .active{
+            display:inline-block;
+            width:30%;
+            height:30px;
+            background-color: #34c6eb;
+            vertical-align:middle;
+            color:#ffffff;
+            text-align:center;
+            line-height:30px;
+            text-decoration: none;
+            border-radius:4px;
+        }
+    </style>
+</head>
+<body>
+		
+<div class="header"><img src="images/heard.png"></div>
+<div class="main-con">
+
+	<div class="regigth-seep relative">
+		<div class="bar-bgColor" style="width:33%"></div>
+		<font class="absolute r-0 active"></font>
+		<font class="absolute r-1 active"></font>
+		<font class="absolute r-2"></font>
+		<font class="absolute r-3"></font>
+		<span class="absolute r-0 active">个人信息</span>
+		<span class="absolute r-1">标签选择</span>
+		<span class="absolute r-2">注册完成</span>
+	</div>
+	<div class="page-slide">
+		<div class="slide-conSelect">
+			<div class="uesr-name">
+				<span>名 字<font>*</font></span>
+				<input type="text" id="nick_name" placeholder="名字"/>
+
+			</div>
+		
+			<div class="user-xinxin">
+				<span>星 级<font>*</font></span>
+				<i><img src="images/xinxin_active.png"></i>
+				<i><img src="images/xinxin_active.png"></i>
+				<i><img src="images/xinxin_active.png"></i>
+				<i><img src="images/xinxin_active.png"></i>
+				<i><img src="images/xinxin_active.png"></i>
+			</div>
+			<div class="uesr-mide">
+				<span>手 机<font>*</font></span>
+				<input id="phone" type="text" placeholder="手机号码"/>
+				
+			</div>
+			<div class="uesr-code">
+				<span>验证码<font>*</font></span>
+				<input type="text" id="checkcode" placeholder="验证码"/>
+				<a id="sendvercode" href="javascript:void(0);">获取验证码</a>
+			</div>
+            <div class="code-tip" style="display: none;">验证码已发送，请注意查收，60秒后方可重新获得</div>
+			<div class="next-speet"><a href="javascript:void(0);">下一步</a></div>
+		</div>
+		<div class="slide-conSelect hy-con">
+			<div class="pop-bg"></div>
+			<h2>学习领域<span>（最擅长两个项目，仅能点选2项）</span></h2>
+			<div class="hy-select">
+				<div class="tab-info">
+					<div class="select-showCon"  id="learning-area">
+						
+					</div>
+					<div class="select-btn">
+						<span class="hy-btnSelect">选择擅长领域</span>
+					</div>
+					
+				</div>
+				<div class="tab-pop hy-tab-pop">
+					<span id="1000">会计基础</span>
+					<span id="1001">财经法规</span>
+					<span id="1002">初级电算化</span>
+					<span id="1003">手工账</span>
+					<span id="1004">电脑账</span>
+					<span id="1005">财务管理</span>
+					<a class="off-popBox" href="javascript:void(0);">确定选择</a>
+				</div>
+			</div>
+
+			<h2>工作领域<span>（最擅长两个项目，仅能点选2项）</span></h2>
+			<div class="kc-select">
+				<div class="tab-info">
+					<div class="select-showCon" id="working-area">
+						
+					</div>
+					<div class="select-btn" >
+						<span  class="kc-btnSelect">选择擅长领域</span>
+					</div>
+					
+				</div>
+				<div class="tab-pop kc-tab-pop">
+					<span id="2003">工业会计</span>
+					<span id="2004">酒店会计</span>
+					<span id="2005">餐饮会计</span>
+					<span id="2006">旅游会计</span>
+					<span id="2007">房地产会计</span>
+					<span id="2008">施工会计</span>
+					<span id="2009">物业会计</span>
+					<span id="2010">医院会计</span>
+					<span id="2011">其他</span>
+					<a class="off-popBox" href="javascript:void(0);">确定选择</a>
+				</div>
+			</div>
+			<div class="wc-speet"><a href="javascript:void(0);" id="submitdata" >提交信息</a></div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

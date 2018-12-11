@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallOrderSyncXDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	mall_order_sync_x.id AS id , 	mall_order_sync_x.nc_sign_code AS ncSignCode , 	mall_order_sync_x.user_mobile AS userMobile , 	mall_order_sync_x.user_name AS userName , 	mall_order_sync_x.order_no AS orderNo , 	mall_order_sync_x.zk_commodity_id AS zkCommodityId , 	mall_order_sync_x.err_type AS errType , 	mall_order_sync_x.state AS state , 	mall_order_sync_x.syn_time AS synTime , 	mall_order_sync_x.nc_sign_time AS ncSignTime , 	mall_order_sync_x.create_time AS createTime , 	mall_order_sync_x.json AS json 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from mall_order_sync_x as mall_order_sync_x
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.MallOrderSyncXEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.MallOrderSyncXEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MallOrderSyncXEntity">
+		insert into mall_order_sync_x
+		(
+				`id`, 				`nc_sign_code`, 				`user_mobile`, 				`user_name`, 				`order_no`, 				`zk_commodity_id`, 				`err_type`, 				`state`, 				`syn_time`, 				`nc_sign_time`, 				`create_time`, 				`json`		)
+		values
+		(
+												#{id}, 																			#{ncSignCode}, 																			#{userMobile}, 																			#{userName}, 																			#{orderNo}, 																			#{zkCommodityId}, 																			#{errType}, 																			#{state}, 																			#{synTime}, 																			#{ncSignTime}, 																			#{createTime}, 																			#{json}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.MallOrderSyncXEntity">
+		update mall_order_sync_x 
+		<set>
+			<if test="ncSignCode != null">`nc_sign_code` = #{ncSignCode}, </if>
+			<if test="userMobile != null">`user_mobile` = #{userMobile}, </if>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="zkCommodityId != null">`zk_commodity_id` = #{zkCommodityId}, </if>
+			<if test="errType != null">`err_type` = #{errType}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="synTime != null">`syn_time` = #{synTime}, </if>
+			<if test="ncSignTime != null">`nc_sign_time` = #{ncSignTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="json != null">`json` = #{json}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM mall_order_sync_x 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM mall_order_sync_x 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

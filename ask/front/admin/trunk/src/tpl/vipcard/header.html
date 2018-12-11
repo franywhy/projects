@@ -1,0 +1,18 @@
+<!--vip卡档案页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        卡片描述
+        <input type="text" name="memo" size="20" />
+      <!--   开始日期
+        <input id="begin_date" class="input" type="text" name="begin_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+         失效日期
+        <input id="end_date" class="input" type="text" name="end_date" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/加盟公司结算页头-->

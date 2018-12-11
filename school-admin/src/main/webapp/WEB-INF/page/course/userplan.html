@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>学员规划</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="show1">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("course:userplan:list"))
+			<table  class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">订单号</label></td>
+					<td><input type="text" class="form-control" v-model="qUserplan.orderNo" @keyup.enter="query" placeholder="订单号"></td>
+					<td><label for="name">手机号码</label></td>
+					<td><input type="text" class="form-control" v-model="qUserplan.mobile" @keyup.enter="query" placeholder="手机号码"></td>
+					<td><label for="name">学员昵称</label></td>
+					<td><input type="text" class="form-control" v-model="qUserplan.nickName" @keyup.enter="query" placeholder="学员昵称"></td>
+					<td><label for="name">班主任</label></td>
+					<td>
+						<select class="form-control" v-model="qUserplan.classTeacherId" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.classTeacherList" v-bind:value="option.userId">{{ option.nickName }}</option>
+						</select>
+					</td>
+				</tr>
+				<tr border="0">
+					<td><label for="name">省份</label></td>
+					<td>
+						<select class="form-control" v-model="qUserplan.areaId" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.areaList" v-bind:value="option.value">{{ option.name }}</option>
+						</select>
+					</td>
+					<td><label for="name">层次</label></td>
+					<td>
+						<select class="form-control" v-model="qUserplan.levelId" @keyup.enter="query">
+						<option value="">全部</option>
+							<option v-for="option in selectData.levelList" v-bind:value="option.levelId">{{ option.levelName }}</option>
+						</select>
+					</td>
+					<td><label for="name">专业</label></td>
+					<td>
+						<select class="form-control" v-model="qUserplan.professionId" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.professionList" v-bind:value="option.professionId">{{ option.professionName }}</option>
+						</select>
+					</td>
+					<td><label for="name">班型</label></td>
+					<td>
+						<select class="form-control" v-model="qUserplan.classTypeId" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.classTypeList" v-bind:value="option.value">{{ option.name }}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="name">可代替课程</label></td>
+					<td>
+						<select class="form-control"v-model="qUserplan.isRep" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.repList" v-bind:value="option.value">{{ option.name }}</option>
+						</select>
+					</td>
+					<td><label for="name">专业对口</label></td>
+					<td>
+						<select class="form-control" v-model="qUserplan.isMatch" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.matchList" v-bind:value="option.value">{{ option.name }}</option>
+						</select>
+					</td>
+					<td><label for="name">学员规划状态</label></td>
+					<td>
+						<select class="form-control" v-model="qUserplan.userplanStatus" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.userplanStatus" v-bind:value="option.value">{{ option.name }}</option>
+						</select>
+					</td>
+					<td><label for="name">部门</label></td>
+					<td><input type="text" class="form-control" v-model="qUserplan.deptNameList" readonly="readonly" placeholder="点击选择部门" @click="deptLayerShowQuery"></td>
+				</tr>
+			</table>
+			<a class="btn btn-default" @click="clearQueryUserplanParams">重置</a> 
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a> 
+			#end
+			#if($shiro.hasPermission("course:userplan:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("course:userplan:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("course:userplan:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			<!-- #if($shiro.hasPermission("course:userplan:updateChange"))
+			<a class="btn btn-primary" @click="updateChangeWin"><i class="fa fa-user"></i>&nbsp;转省转专业</a>
+			#end -->
+			#if($shiro.hasPermission("courseuserplanservice:list"))
+			<a class="btn btn-primary" @click="showService"><i class="fa fa-glass"></i>&nbsp;服务记录</a>
+			#end
+			#if($shiro.hasPermission("course:userplan:saveBatch"))
+			<a class="btn btn-primary" @click="showAddOrderBatch"><i class="fa fa-user-plus"></i>&nbsp;批量生成学员规划</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+	
+	<div v-show="show2" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display: none">
+				<div class="col-sm-2 control-label">主键</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="courseUserplan.userPlanId" placeholder="主键" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">订单号</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.orderNo" readonly="readonly" placeholder="订单号" />
+				</div>
+				<a class="btn btn-default" @click="selOrder" v-show="showOrderBtn">选择订单</a>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">订单PK</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.orderId" readonly="readonly" placeholder="订单PK" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-2 control-label">省份</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.areaName" readonly="readonly" placeholder="省份名称" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">班级</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.className" readonly="readonly" placeholder="班级名称" />
+					<input type="text" class="form-control" v-model="courseUserplan.classId" readonly="readonly" placeholder="班级ID" style="display: none"/>
+				</div>
+				<!-- <a class="btn btn-default" @click="updateSelClass" v-show="showClassBtn">选择班级</a> -->
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">班型</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.classTypeName" readonly="readonly" placeholder="班型名称" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">层次</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.levelName" readonly="readonly" placeholder="层次" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">手机号码</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.userMobile" readonly="readonly" placeholder="学员手机号码" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">学员</div>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="courseUserplan.userName" readonly="readonly" placeholder="学员" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">可代替课程</div>
+				<div class="col-sm-10">
+					<label class="radio-inline"><input type="radio" name="courseEq" value="0" v-model="courseUserplan.isRep" @change="reloadUserPlanDetail"  /> 学习</label> 
+					<label class="radio-inline"> <input type="radio" name="courseEq" value="1" v-model="courseUserplan.isRep" @change="reloadUserPlanDetail" /> 不学习</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">专业对口</div>
+				<div class="col-sm-10">
+					<label class="radio-inline"><input type="radio" name="isMatch" value="0" v-model="courseUserplan.isMatch" @change="reloadUserPlanDetail" /> 对口</label> 
+					<label class="radio-inline"> <input type="radio" name="isMatch" value="1" v-model="courseUserplan.isMatch" @change="reloadUserPlanDetail"/> 不对口</label>
+				</div>
+			</div>
+			<div class="form-group" >
+					<div class="col-sm-2 control-label">学员规划详情</div>
+					<div class="col-sm-10">
+					<div id="userplanDetails" style="display:none">
+					    #if($shiro.hasPermission("course:userplandetail:save"))
+						<a class="btn btn-primary" @click="iadd"><i class="fa fa-plus"></i>&nbsp;新增</a>
+						#end
+					    #if($shiro.hasPermission("course:userplandetail:delete"))
+					    <a class="btn btn-primary" @click="idel"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+					    #end
+					    </div>
+						<table id="detailGrid"></table>
+						<div id="detailGridPager"></div>
+					</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;
+				<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+			</div>
+			
+			
+			<!-- ---------------------------------ITEM 子表--------------------------------- -->
+
+			<!-- <div class="tab-pane col-sm-10 fade in active">
+				<table id="detailGrid"></table>
+				<div id="detailGridPager"></div>
+			</div> -->
+		</form>
+	</div>
+	<!-- 学员规划明细 -->
+	<div id="materialUserPlanLayer" style="display: none;">
+		<form class="form-horizontal">
+		<div class="form-group">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">省份</div>
+			   	<div class="col-sm-10">
+			   		<input type="text" class="form-control" v-model="detailItem.areaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerShowDetail">
+			    </div>
+			</div>
+
+		
+
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">课程</div>
+			   	<div class="col-sm-10">
+			   		<input type="text" class="form-control" v-model="detailItem.courseName" readonly="readonly" placeholder="点击选择课程" @click="courseLayerShowDetail">
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">类型</div>
+			   	<div class="col-sm-10">
+					<input type="radio" id="tid1" name="courseType" value="0" v-model="detailItem.courseType"><label for="tid1">正常</label><br/>
+					<input type="radio" id="tid2" name="courseType" value="1" v-model="detailItem.courseType"> <label for="tid2">被代替课程</label><br/>
+					<input type="radio" id="tid3" name="courseType" value="2" v-model="detailItem.courseType"> <label for="tid3">代替课程</label><br/>
+					<input type="radio" id="tid4" name="courseType" value="3" v-model="detailItem.courseType"> <label for="tid4">专业不对口课程</label>
+				</div>
+			</div>
+			
+		</div>
+		</form>
+			
+	</div>
+
+	<div  v-show="show2" class="form-group" style="width:100%;">
+		<table id="detailGrid"></table>
+		<div id="detailGridPager"></div>
+	</div>
+		
+
+	<!-- 订单列表 浮层-->
+	<div id="orderlayer" style="display: none;">
+		<!-- 订单查询条件 -->
+		<table  border="0">
+			<tr border="0">
+				<td class=""><label for="name">订单号</label></td>
+				<td >
+					<input type="text" class="form-control" v-model="qorder.orderNo" @keyup.enter="reloadJqGridOrder" placeholder="订单号">
+				</td>
+				
+				<td><label for="name">手机号码</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="qorder.userMobile" @keyup.enter="reloadJqGridOrder" placeholder="手机号码">
+				</td>
+				
+				<td><label for="name">来源</label></td>
+				<td>
+					<select class="form-control" placeholder="来源" v-model="qorder.sourceType">
+						<option value="">全部</option>
+						<option value="0">线上</option>
+						<option value="1">NC</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<!-- 按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="clearQueryOrderParams">清空</a> 
+			<a class="btn btn-default" @click="reloadJqGridOrder">查询</a> 
+		</div>
+		<!-- 订单grid -->
+		<table id="jqGridOrder"></table>
+	    <div id="jqGridPagerOrder"></div>
+	</div>
+		
+		<!-- 修改班级 浮层-->
+	<div id="classlayer" style="display: none;">
+		<!-- 班级查询条件 -->
+		<table  border="0">
+			<tr border="0">
+				<td><label for="name">班级名称</label></td>
+				<td >
+					<input type="text" class="form-control" v-model="qclass.className" @keyup.enter="reloadJqGridClass" placeholder="班级名称">
+				</td>
+				
+				<td><label for="name">班主任</label></td>
+				<td>
+					<select class="form-control" placeholder="班主任" v-model="qclass.classTeacherId" @keyup.enter="reloadJqGridClass">
+						<option value="">全部</option>
+						<option v-for="option in selectData.classTeacherList" v-bind:value="option.userId">{{ option.username }}</option>
+					</select>
+				</td>
+			</tr>
+			<tr border="0">	
+				<td><label for="name">专业</label></td>
+				<td>
+					<select class="form-control" placeholder="专业" v-model="qclass.professionId" @keyup.enter="reloadJqGridClass">
+						<option value="">全部</option>
+						<option v-for="option in selectData.professionList" v-bind:value="option.professionId">{{ option.professionName }}</option>
+					</select>
+				</td>
+				<td><label for="name">地区</label></td>
+				<td>
+					<select class="form-control" placeholder="地区" v-model="qclass.areaId" @keyup.enter="reloadJqGridClass">
+						<option value="">全部</option>
+						<option v-for="option in selectData.areaList" v-bind:value="option.value">{{ option.name }}</option>
+					</select>
+				</td>
+			</tr>
+			<tr border="0">
+				<td><label for="name">层次</label></td>
+				<td>
+					<select class="form-control"  placeholder="层次" v-model="qclass.levelId" @keyup.enter="reloadJqGridClass">
+					<option value="">全部</option>
+						<option v-for="option in selectData.levelList" v-bind:value="option.levelId">{{ option.levelName }}</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<!-- 按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="clearQueryClassParams">清空</a> 
+			<a class="btn btn-default" @click="reloadJqGridClass">查询</a> 
+		</div>
+		<!-- 订单grid -->
+		<table id="jqGridClass"></table>
+	    <div id="jqGridPagerClass"></div>
+	</div>
+		
+		<!-- 转省转专业  浮层-->
+	<div id="changelayer" style="display: none;">
+		<!-- 班级查询条件 -->
+		<table class="table table-condensed" border="0">
+			<tr>
+				<td><label for="name">原商品</label></td>
+				<td >
+					<input type="text" class="form-control" v-model="courseUserplanOldChange.commodityName"  placeholder="原商品" readonly="readonly">
+				</td>
+				
+				<td><label for="name">原省份</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanOldChange.areaName"  placeholder="原省份" readonly="readonly">
+				</td>
+				<!-- <td><label for="name">原班级</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanOldChange.className"  placeholder="原班级" readonly="readonly">
+				</td> -->
+				<td><label for="name">原班型</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanOldChange.classTypeName"  placeholder="原班型" readonly="readonly">
+				</td>
+				<td><label for="name">原层次</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanOldChange.levelName"  placeholder="原层次" readonly="readonly">
+				</td>
+				<td><label for="name">原专业</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanOldChange.professionName"  placeholder="原专业" readonly="readonly">
+				</td>
+			</tr>
+			<tr border="0">	
+				<!-- <td><label for="name">订单{{courseUserplanNewChange.orderId}}</label></td>
+				<td>
+					<select class="form-control" id="courseUserplanNewChangeOrderId">
+						<template v-for="option in change.orderChangeList">
+						<option :value="option.orderId" v-if="option.orderId == courseUserplanNewChange.orderId" selected>{{ option.orderNo+"|"+option.userName+"|"+option.commodityName }}</option>
+						<option :value="option.orderId" v-else>{{ option.orderNo+"|"+option.userName+"|"+option.commodityName }}</option>
+						</template>
+					</select>
+				</td>
+				<td><label for="name">商品</label></td>
+				<td>
+					<select class="form-control" v-model="courseUserplanNewChange.commodityId" >
+							<option v-for="option in selectData.commodityList" v-bind:value="option.id">{{ option.name + '|' + option.professionName + '|' + option.levelName + '|' + option.classTypeName}}</option>
+					</select>
+				</td>
+				<td><label for="name">省份</label></td>
+				<td>
+					<select class="form-control" id="courseUserplanNewChangeAreaId">
+						<template v-for="option in selectData.commodityAreaList">
+						<option :value="option.value" v-if="option.value == courseUserplanOldChange.areaId" selected>{{ option.text }}</option>
+						<option :value="option.value" v-else>{{ option.text }}</option>
+						</template>
+					</select>
+				</td> -->
+				<td><label for="name">新商品</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanNewChange.commodityName" @click="selectCommodity" readonly="readonly" placeholder="点击选择商品" />
+				</td>
+				<td><label for="name">新省份</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanNewChange.areaName" @click="selectArea" readonly="readonly" placeholder="点击选择省份" />
+				</td>
+				<td><label for="name">新班型</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanNewChange.classTypeName" readonly="readonly" placeholder="新班型" />
+				</td>
+				<td><label for="name">新层次</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanNewChange.levelName" readonly="readonly" placeholder="新层次" />
+				</td>
+				<td><label for="name">新专业</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanNewChange.professionName" readonly="readonly" placeholder="新专业" />
+				</td>
+			</tr>
+			<!-- <tr border="0">
+				<td><label for="name">班级</label></td>
+				<td>
+					<input type="text" class="form-control" v-model="courseUserplanNewChange.className"  readonly="readonly" placeholder="班级名称" />
+					<a class="btn btn-default" @click="updateChangeSelClass">选择班级</a>
+				</td>
+				<td><label for="name">学习代替课程</label></td>
+				<td>
+					<select class="form-control" v-model="courseUserplanNewChange.isRep">
+						<option v-for="option in selectData.repList" v-bind:value="option.value">{{ option.name }}</option>
+					</select>
+				</td>
+				<td><label for="name">专业对口</label></td>
+				<td>
+					<select class="form-control" v-model="courseUserplanNewChange.isMatch">
+						<option v-for="option in selectData.matchList" v-bind:value="option.value">{{ option.name }}</option>
+					</select>
+				</td>
+			</tr> -->
+		</table>
+	</div>
+	
+	<!-- 服务记录列表 -->
+	<div v-show="show3">
+			<div class="grid-btn">
+			#if($shiro.hasPermission("courseuserplanservice:save"))
+			<a class="btn btn-primary" @click="addService"><i class="fa fa-plus fa-pencil-square-o"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("courseuserplanservice:update"))
+			<a class="btn btn-primary" @click="updateService"><i class="fa fa-plus fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("courseuserplanservice:delete"))
+			<a class="btn btn-primary" @click="delService"><i class="fa fa-pencil-square-o"></i>&nbsp;删除</a>
+			#end
+			<a class="btn btn-default" @click="query"><i class="fa fa-pencil-square-o"></i>&nbsp;返回</a>
+		</div>
+	    <table id="jqGridService"></table>
+	    <div id="jqGridPagerService"></div>
+    </div>
+    
+   	<!--  服务记录 修改浮层-->
+	<div id="serviceLayer" style="display: none;">
+		<input type="text" class="form-control" v-model="serviceData.userplanServiceId" style="display: none">
+		<table class="table table-condensed" border="0">
+			<tr>
+				<td><label for="name">时间</label></td>
+				<td >
+					<input type="text" class="form-control" placeholder="时间" id="userplanServiceTime"  >
+				</td>
+				<td><label for="name">下次跟进</label></td>
+				<td >
+					<input type="text" class="form-control" placeholder="下次跟进时间" id="nextTime">
+				</td>
+				
+			</tr>
+			
+			<tr>
+				<td><label for="name">服务类型</label></td>
+				<td colspan="3">
+					<select class="form-control" v-model="serviceData.serviceTypeId" @change="serviceTypeChange">
+						<option v-for="option in selectData.serviceRecordList" v-bind:value="option.id" v-bind:title="option.serviceContent">{{ option.serviceType }}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="name">服务内容</label></td>
+				<td colspan="3">
+					<textarea rows="3" cols="20" class="form-control" v-model="serviceData.serviceTypeContent"  placeholder="服务内容"></textarea>
+				</td>
+			</tr>
+			
+			<tr>
+				<td><label for="name">服务反馈类型</label></td>
+				<td colspan="3">
+					<select class="form-control" v-model="serviceData.serviceFbId" @change="feedbackRecordChange">
+						<option v-for="option in selectData.feedbackRecordList" v-bind:value="option.id" v-bind:title="option.feedbackContent">{{ option.feedbackType }}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="name">服务反馈内容</label></td>
+				<td colspan="3">
+					<textarea rows="3" cols="20" class="form-control" v-model="serviceData.serviceFbContent"  placeholder="服务反馈内容"></textarea>
+				</td>
+			</tr>
+			
+			<tr>
+				<td><label for="name">备注</label></td>
+				<td colspan="3">
+					<textarea rows="3" cols="20" class="form-control" v-model="serviceData.remark"  placeholder="备注"></textarea>
+				</td>
+			</tr>
+		</table>
+	</div>
+    
+    
+	<!-- 按照商品-批量生成学员规划 -->
+    <div v-show="show4" class="panel panel-default">
+		<div class="panel-heading">批量生成学员规划</div>
+		<input type="text" class="form-control" v-model="mallOrderBatch.commodityName" readonly="readonly" placeholder="点击选择商品" @click="goodsInfoLayerShow">
+		<input type="text" class="form-control" v-model="mallClassBatch.className" readonly="readonly" placeholder="点击选择班级" @click="classLayerShow">
+		<div id="itemButton">
+			#if($shiro.hasPermission("course:userplan:saveBatch"))
+			<input type="button" class="btn btn-primary" @click="addOrderBatch" value="批量新增" /> &nbsp;&nbsp;
+			#end
+			<input type="button" class="btn btn-warning" @click="query" value="返回" />
+		</div>
+	</div>
+	
+</div>
+
+<script src="${rc.contextPath}/js/course/userplan.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/examScheduleLay.html")
+#parse("layer/areaLay.html")
+#parse("layer/courseLay.html")
+#parse("layer/goodsInfoLay.html")
+#parse("layer/areaGoodsLay.html")
+#parse("layer/deptLay.html")
+#parse("layer/deptQueryLay.html")
+#parse("layer/classLay.html")
+</body>
+</html>

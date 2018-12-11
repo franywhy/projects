@@ -1,0 +1,100 @@
+<div id="pushRulesLayDiv" style="display: none">
+	<br>
+	<div class="form-group" id="recommend-div" style="display: none">
+		<div class="col-sm-2 control-label">是否推荐</div>
+		<label class="radio-inline">
+			<input type="radio" name="recommend" onclick="isRecommendClick(0)"/> 否
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="recommend" onclick="isRecommendClick(1)"/> 是
+		</label>
+	</div>
+	<br><br>
+	<div class="form-group" id="visitor-div">
+		<div class="col-sm-2 control-label">游客可见</div>
+		<label class="radio-inline">
+			<input type="radio" name="visitor" onclick="isVisitorClick(false)"/> 否
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="visitor" onclick="isVisitorClick(true)"/> 是
+		</label>
+	</div>
+	<br><br>
+	<div class="form-group">
+		<div class="col-sm-2 control-label">推送规则</div>
+		<label class="radio-inline">
+			<input type="radio" name="rules" onclick="pushRulesClick('active')" /> 活跃用户
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="rules" onclick="pushRulesClick('cityTree')"/> 所属地区
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="rules" onclick="pushRulesClick('appLabelLayerShow')"/> 用户标签
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="rules" onclick="pushRulesClick('goodsInfoLayerShow')"/> 商品
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="rules" onclick="pushRulesClick('classplanLayerShow')"/> 排课
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="rules" onclick="pushRulesClick('classLayerShow')"/> 班级
+		</label>
+		<label id="staff-label" class="radio-inline">
+			<input type="radio" name="rules" onclick="pushRulesClick('teacher')"/> 员工端
+		</label>
+
+	</div>
+	<br><br>
+
+	<div class="form-group" style="display: none" id="cityTree-div">
+		<div class="col-sm-2 control-label">所属地区</div>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" style="cursor:pointer;" id="cityInput" readonly="readonly" placeholder="所属地区" onclick="cityTree()"/>
+		</div>
+	</div>
+	<div class="form-group" style="display: none" id="appLabelLayerShow-div">
+		<div class="col-sm-2 control-label">用户标签</div>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="labelInput" readonly="readonly" placeholder="点击选择标签" onclick="appLabelLayerShow()">
+		</div>
+	</div>
+	<div class="form-group" style="display: none" id="goodsInfoLayerShow-div">
+		<div class="col-sm-2 control-label">商品</div>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="goodsInfoInput" readonly="readonly" placeholder="点击选择商品" onclick="goodsInfoLayerShow()">
+		</div>
+	</div>
+	<div class="form-group" style="display: none" id="classplanLayerShow-div">
+		<div class="col-sm-2 control-label">排课</div>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="classplanInput" readonly="readonly" placeholder="点击选择排课" onclick="classplanLayerShow()">
+		</div>
+	</div>
+	<div class="form-group" style="display: none" id="classLayerShow-div">
+		<div class="col-sm-2 control-label">班级</div>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="classInput" readonly="readonly" placeholder="点击选择班级" onclick="classLayerShow()">
+		</div>
+	</div>
+	<br><br><br>
+
+	<div class="form-group">
+		<div class="col-sm-2 control-label">推送时间</div>
+		<div class="col-sm-10">
+			<input type="text" class="form-control datetimepicker" id="pushTimeInput" readonly="readonly" placeholder="点击选择推送时间">
+		</div>
+	</div>
+	<br><br><br>
+</div>
+
+<!-- 选择地区 -->
+<div id="cityLayer" style="display: none;padding:10px;">
+	<ul id="cityTree" class="ztree"></ul>
+</div>
+
+<script src="${rc.contextPath}/js/layer/pushRulesLay.js?_${date.systemTime}"></script>
+#parse("layer/appLabelMsLay.html")
+#parse("layer/goodsInfoMsLay.html")
+#parse("layer/classplanMsLay.html")
+#parse("layer/classMsLay.html")

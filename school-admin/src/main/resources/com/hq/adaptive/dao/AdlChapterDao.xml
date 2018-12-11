@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlChapterDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_chapter.chapter_id AS chapterId,
+		adl_chapter.chapter_name AS chapterName,
+		adl_chapter.chapter_no AS chapterNo,
+		adl_chapter.course_id AS courseId,
+		adl_chapter.update_time AS updateTime,
+		adl_chapter.create_time AS createTime,
+		adl_chapter.dr AS dr,
+		adl_chapter.order_num AS orderNum,
+		adl_chapter.sync_time AS syncTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE adl_chapter.dr = 0
+	</sql>
+	<sql id="base_and_parent">
+		AND adl_chapter.course_id = #{courseId}
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_chapter AS adl_chapter
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by chapter_id asc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.adaptive.entity.AdlChapterEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND chapter_id = #{chapterId}
+	</select>
+	<select id="queryObjectByName" resultType="com.hq.adaptive.entity.AdlChapterEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND adl_chapter.chapter_name = #{chapterName}
+		AND adl_chapter.course_id = #{courseId}
+	</select>
+
+	<select id="queryList" resultType="com.hq.adaptive.entity.AdlChapterEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_and_parent"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_and_parent"/>
+	</select>
+	 
+	<insert id="save" parameterType="com.hq.adaptive.entity.AdlChapterEntity" useGeneratedKeys="true" keyProperty="chapterId">
+		INSERT INTO adl_chapter
+		(
+			`chapter_name`, 
+			`chapter_no`, 
+			`course_id`, 
+			`dr`, 
+			`order_num`
+		)
+		values
+		(
+			#{chapterName}, 
+			#{chapterNo}, 
+			#{courseId}, 
+			#{dr}, 
+			#{orderNum}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.adaptive.entity.AdlChapterEntity">
+		UPDATE adl_chapter 
+		<set>
+			<if test="chapterName != null">`chapter_name` = #{chapterName}, </if>
+			<if test="chapterNo != null">`chapter_no` = #{chapterNo}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}</if>
+		</set>
+		WHERE chapter_id = #{chapterId}
+	</update>
+	
+	<update id="delete">
+		UPDATE adl_chapter set dr = 1 where chapter_id = #{chapterId}
+	</update>
+
+</mapper>

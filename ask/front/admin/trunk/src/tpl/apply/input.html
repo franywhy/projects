@@ -1,0 +1,121 @@
+<!--vip卡片档案
+<form name="inputForm">
+    <table width="100%">
+
+        <tr>
+            <td >等级</td>
+            <td>
+                <select name="main_type_id" class="input" id="main_type_id" style="width: 182px"></select>
+
+                <input type="hidden" class="input" id="id" name="id"/>
+            </td>
+            <td >金额</td>
+            <td>
+                <input name="card_url" class="input" id="card_url" type="text"  readonly/>
+                <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('card_url');" />
+            </td>
+        </tr>
+
+        <tr>
+            <td >模板类型</td>
+            <td>
+                <input name="price" type="number" class="input" id="price" type="text" />
+            </td>
+            <td>权重 </td>
+            <td>
+                <input name="month_num" type="number" class="input" id="month_num" type="text"  />
+            </td>
+        </tr>
+
+        <tr>
+            <td >数量 </td>
+            <td>
+                <input name="begin_date" class="input" id="begin_date" type="text"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+            </td>
+
+        </tr>
+
+
+    </table>
+</form>-->
+<!--/vip卡片档案-->
+
+
+
+<!--vip卡片档案-->
+<form name="inputForm">
+    <h5>主表信息录入</h5>
+    <table width="100%">
+
+        <tr>
+            <td >模板名称</td>
+            <td>
+                <input name="mainTemplateName"  class="input" id="mainTemplateName" type="text" />
+                <input type="hidden" class="input" id="_id" name="_id"/>
+            </td>
+            <td >总金额</td>
+            <td>
+                <input name="allMoney" type="number" class="input" id="allMoney" type="text" />
+            </td>
+        </tr>
+
+        <tr>
+            <td >年月份</td>
+            <td>
+                <input name="yearMonth"  class="input" id="yearMonth" type="text" />
+            </td>
+            <td>备注 </td>
+            <td>
+                <input name="remark" type="number" class="input" id="remark" type="text" value="请填写备注" />
+            </td>
+        </tr>
+
+    </table>
+
+
+
+    <p>
+
+    </p>
+
+    <h5>新增奖项明细</h5>
+
+   <table width="100%" id="bonus-detail-add-table">
+
+         <tr>
+             <td >等级</td>
+             <td>
+                 <input name="mlevel"  class="input" id="mlevel" type="text" />
+                 <input type="hidden" class="input" id="_id" name="_id"/>
+             </td>
+             <td >金额</td>
+             <td>
+                 <input name="mmoney" type="number" class="input" id="mmoney" type="text" />
+             </td>
+         </tr>
+
+         <tr>
+             <td >模板类型</td>
+             <td>
+                 <select name="mtemplate" class="input" id="mtemplate" style="width: 182px"><option value="0">红色模板</option><option value="1">蓝色模板</option></select>
+
+             </td>
+             <td>权重 </td>
+             <td>
+                 <input name="mweight" type="number" class="input" id="mweight" type="text" value="1" readonly="readonly"  />
+             </td>
+         </tr>
+         <tr>
+             <td >数量</td>
+             <td >
+                 <input name="quantity" type="number" class="input" id="quantity" type="text"  />
+             </td>
+         </tr>
+     </table>
+     <input type="button"  value="新增" onclick="Izb.controller.bonussetting.addDetail()">
+
+    <table id="bonus-detail"></table>
+
+ </form>
+ <!--/vip卡片档案-->
+

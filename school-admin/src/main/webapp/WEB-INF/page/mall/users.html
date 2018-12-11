@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>前台用户表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("mall:users:list"))
+			<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("mall:users:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("mall:users:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("mall:users:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("mall:users:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+			#end
+			#if($shiro.hasPermission("mall:users:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a>
+			#end
+			#if($shiro.hasPermission("mall:users:save"))
+			<a class="btn btn-primary" @click="restPsw"><i class="fa fa-plus"></i>&nbsp;重置密码</a>
+			#end
+			
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+			<table class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">登录账号:</label></td>
+					<td><input type="number" class="form-control" v-model.trim="q.mobile" @keyup.enter="query" placeholder="登录账号" ></td>
+					<td><label for="name">学员ID:</label></td>
+					<td><input type="number" class="form-control" v-model.trim="q.userId" @keyup.enter="query" placeholder="学员ID" ></td>
+					<td><label for="name">昵称:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.nickName" @keyup.enter="query" placeholder="昵称"></td>
+				</tr>
+				<!-- <tr border="0">
+					<td><label for="name">省份</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.areaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerShowQuery"></td>
+				</tr> -->
+			</table>
+
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">学员ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="users.userId" placeholder="学员ID"/>
+			    </div>
+		    </div>
+
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">登录账号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="users.mobile" placeholder="登录账号"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">登录密码</div>
+			   	<div class="col-sm-10">
+			      <input type="password" class="form-control" v-model.trim="users.password" placeholder="登录密码"/>
+			    </div>
+			</div>
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">手机号码</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="users.mobile" placeholder="手机号码"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">用户昵称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="users.nickName" placeholder="用户昵称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">头像</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="users.pic" placeholder="头像" readonly="readonly" onclick="hq.core.upload(null,'vm.users.pic');"/>
+<!-- 			      <input type="text" class="form-control" v-model.trim="users.pic" placeholder="头像" readonly="readonly" id="pic" onclick="hq.core.upload('pic');"/> -->
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">性别</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" v-model.trim="users.sex" style="width:150px">
+				        <option v-for="option in options" v-bind:value="option.value">
+    						{{ option.text }}
+  						</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">邮箱</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="users.email" placeholder="邮箱"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">是否禁用</div>
+			    <label class="radio-inline">
+				  <input type="radio" name="status" value="0" v-model.trim="users.status"/> 禁用
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="status" value="1" v-model.trim="users.status"/> 正常
+				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">备注</div>
+				<div class="col-sm-10">
+					<textarea class="form-control" v-model.trim="users.remake" style="width:371px;height:100px;" placeholder="备注信息不得超过50个字">
+               		</textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/users.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+</body>
+</html>

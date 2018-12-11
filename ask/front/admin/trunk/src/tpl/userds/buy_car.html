@@ -1,0 +1,32 @@
+<!--充值记录-->
+<table width="100%" class="listTable tablesorter">
+<thead>
+    <tr>
+    		<th class="longtime">交易时间</th> 
+            <%if(!params._id){%>
+            <th class="auto">用户Id</th>            
+            <th class="auto">昵称</th>
+            <%}%>  
+            <th class="auto">交易号</th>                     
+            <th class="auto">花费（星币）</th>
+			<!--<th class="auto">购买天数（天）</th>-->
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+            <%if(!params._id){%>
+            <td class="auto"><a href="javascript:Izb.controller.user.show('<%=data[i].session._id%>');"><%=data[i].session._id%></a></td>
+            <td class="auto"><%=data[i].session.nick_name%></td>
+            <%}%>
+			<td class="auto"><%=data[i]._id%></td>
+            <td class="auto"><%=data[i].cost || 0%></td>
+			<!--<td class="auto"><%=data[i].live || 0%></td>-->
+            <!--data[i].live 对应的ID-->
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+

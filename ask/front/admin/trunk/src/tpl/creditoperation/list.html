@@ -1,0 +1,29 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <th class="auto">说明</th>
+        <th width="600px">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr did="<%=data[i].id%>">
+            <td class="auto"><%=i+1 %></td>
+            <td class="auto"><%=data[i].name%></td>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+                 <button class="d-button" onclick="Izb.controller.<%=pty.key%>.start('<%=data[i].id%>','<%=data[i].attendanceBeginDate%>','<%=data[i].attendanceEndDate%>','<%=data[i].workBeginDate%>','<%=data[i].workEndDate%>','<%=data[i].examBeginDate%>','<%=data[i].examEndDate%>','<%=data[i].executeDate%>')">启动</button>
+                 <button class="d-button" onclick="Izb.controller.<%=pty.key%>.executed()">立即执行</button>
+                    <button class="d-button" onclick="Izb.controller.<%=pty.key%>.runprocess()">新的执行</button>
+                      <button class="d-button" onclick="Izb.controller.<%=pty.key%>.xfpercent()">生成学分完成率单</button>
+			 	<a class="d-button" href="#a=creditoperationlog&menu=creditoperation">运行日志</a>
+            </td>
+            <%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

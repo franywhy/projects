@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.answerapi.dao.AppConfigDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.hq.answerapi.entity.AppConfigEntity" id="appConfigMap">
+        <result property="id" column="id"/>
+        <result property="creator" column="creator"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="key" column="key"/>
+        <result property="value" column="value"/>
+        <result property="url" column="url"/>
+        <result property="version" column="version"/>
+        <result property="facility" column="facility"/>
+        <result property="dr" column="dr"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryValueByKey" resultType="java.lang.String">
+		select a.value from app_config a where a.key = #{value}
+	</select>
+
+	<select id="queryObject" resultType="com.hq.answerapi.entity.AppConfigEntity">
+		select * from app_config where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.hq.answerapi.entity.AppConfigEntity">
+		select * from app_config 
+		<where>
+            <if test="version !=null">
+                (version = 1001 or version = #{version}) and
+            </if>
+            
+            <if test="facility !=null">
+                (facility IS NULL or facility = #{facility}) and
+            </if>
+            <if test="dr !=null">
+                dr = #{dr}
+            </if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from app_config 
+	</select>
+
+	<select id="queryObjectByKey" resultType="com.hq.answerapi.entity.AppConfigEntity">
+		select * from app_config a where a.key = #{value}
+	</select>
+	 
+
+	
+
+</mapper>

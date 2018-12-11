@@ -1,0 +1,28 @@
+<table width="100%" class="listTable">
+<thead>
+    <tr>
+    		<th class="short">ID</th>   
+            <th >名称</th>
+        <th class="short">版本号</th>
+        <th class="short">大小</th>
+        <th class="longtime">更新时间</th>
+			<th class="action action100">管理</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td><%=data[i]._id%></td>   
+            <td><%=data[i].name%></td>
+            <td><%=data[i].ver%></td>
+            <td><%=data[i].size%></td>
+            <td><%=data[i].sj%></td>
+			<td class="action action100">
+
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">改</button>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>

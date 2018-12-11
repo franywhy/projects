@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>跨域回调</title>
+<script type="text/javascript">
+	 var fileInfo = window.document.location.href.split(";");
+	 var err_message='';
+	 var files = [];
+    var layer_index = getParameter(fileInfo[0],"layer_index");
+    var errorFile = getParameter(fileInfo[0],"errorFile");
+    if(errorFile){
+        err_message +="<span style='color: red;'>知识点编码不存在：</span> <br> " + errorFile;
+    }
+    var fail_file = '';
+     for(var i = 0; i < fileInfo.length - 1; i++){
+         var file = fileInfo[i];
+         var code = getParameter(file,"code");
+         var name = getParameter(file,"name");
+         if(code == 200){
+             var url = getParameter(file,"url");
+             files[i] = {
+                 fileName:name,
+                 fileUrl:url
+             };
+         }else{
+             fail_file += name+",";
+         }
+     }
+     if(fail_file){
+         err_message += "<br><span style='color: red;'>文件上传失败：</span><br>" + fail_file;
+     }
+    window.parent.vm.uploadKnowledgeFile(files,err_message,layer_index);
+     
+     function getParameter(locString,param) {
+    	    var rs = new RegExp("(^|)" + param + "=([^&]*)(&|$)", "gi").exec(locString), tmp;
+    	    if (tmp = rs) {
+    	        return tmp[2];
+    	    }
+    	    return "";
+    	}
+</script>
+
+</head>
+<body>
+上传回调页面
+</body>
+</html>

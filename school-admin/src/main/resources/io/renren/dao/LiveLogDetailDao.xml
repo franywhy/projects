@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.LiveLogDetailDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	live_log_detail.live_log_detail_id AS liveLogDetailId , 
+	live_log_detail.live_id AS liveId , 
+	live_log_detail.live_num AS liveNum , 
+	live_log_detail.user_id AS userId , 
+	live_log_detail.join_time AS joinTime , 
+	live_log_detail.leave_time AS leaveTime , 
+	live_log_detail.join_type AS joinType , 
+	live_log_detail.platform_code AS platformCode , 
+	live_log_detail.create_time AS createTime ,
+	live_log_detail.product_id AS productId 
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM live_log_detail AS live_log_detail
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  live_log_detail_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.LiveLogDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND live_log_detail_id = #{liveLogDetailId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.LiveLogDetailEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--查询直播记录明细数量-->
+ 	<select id="selectDetailCount" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<where>
+			<if test="liveId != null">
+				live_log_detail.live_id = #{liveId}
+			</if>
+			<if test="liveNum != null">
+				AND live_log_detail.live_num = #{liveNum}
+			</if>
+			<if test="userId != null">
+				AND live_log_detail.user_id = #{userId}
+			</if>
+			<if test="joinTime != null">
+				AND live_log_detail.join_time = #{joinTime}
+			</if>
+			<if test="leaveTime != null">
+				AND live_log_detail.leave_time = #{leaveTime}
+			</if>
+		</where>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.LiveLogDetailEntity" useGeneratedKeys="true" keyProperty="liveLogDetailId">
+	insert into live_log_detail
+	(
+	`live_id`, 
+	`live_num`, 
+	`user_id`, 
+	`join_time`, 
+	`leave_time`, 
+	`join_type`,
+	`platform_code`, 
+	`create_time` ,
+	`product_id` 
+	)
+	values
+	(
+	#{liveId}, 
+	#{liveNum}, 
+	#{userId}, 
+	#{joinTime}, 
+	#{leaveTime}, 
+	#{joinType},
+	#{platformCode}, 
+	#{createTime},
+	#{productId}
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.LiveLogDetailEntity">
+		update live_log_detail 
+		<set>
+			<if test="liveId != null">`live_id` = #{liveId}, </if>
+			<if test="liveNum != null">`live_num` = #{liveNum}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="joinTime != null">`join_time` = #{joinTime}, </if>
+			<if test="leaveTime != null">`leave_time` = #{leaveTime}, </if>
+			<if test="joinType != null">`join_type` = #{joinType}, </if>
+			<if test="platformCode != null">`platform_code` = #{platformCode}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		<include refid="base_where"/>
+		AND live_log_detail_id = #{liveLogDetailId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM live_log_detail 
+		<include refid="base_where"/>
+		AND live_log_detail_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM live_log_detail 
+		<include refid="base_where"/> 
+		AND live_log_detail_id IN 
+		<foreach item="liveLogDetailId" collection="ids" open="(" separator="," close=")">
+			#{liveLogDetailId}
+		</foreach>
+	</delete>
+</mapper>

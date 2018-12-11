@@ -1,0 +1,146 @@
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+
+server:
+    port: 8085
+    address: 0.0.0.0
+    session-timeout: 30
+    compression:
+        enabled: true
+    undertow:
+        access-log-dir: /logs/access/
+        access-log-enabled: false
+        access-log-pattern: common
+        max-post-size: 0
+        buffer-size: 131072
+        buffers-per-region:
+        direct-buffers: false
+        io-threads: 8
+        worker-threads: 128
+
+logging:
+    path: /logs
+    file: /logs/apicenter.log
+    level:
+       com:
+          elise:
+              apicenter:
+                   controller: ERROR
+                   config: ERROR
+                   interceptor: ERROR
+
+http:
+    timeout:
+        conn: 4000
+        request: 6000
+        socket: 4000
+    pool:
+        max-total: 30
+        route-total: 6
+    retry-count: 1
+    expect-continue-enable: true
+
+spring:
+    application:
+      name: service-learning-api     #服务ID
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mysql://172.16.2.253:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        password: iWUe#GJkXa1m
+        username: root
+        driver-class-name: com.mysql.jdbc.Driver
+        minimum-idle: 8
+        maximum-pool-size: 128
+        idle-timeout: 600000
+        connection-timeout: 30000
+        max-lifetime: 1800000
+    redis:
+        enabled: true
+        # 指定连接工厂使用的Database index，默认为: 0
+        database: 4
+        # 指定Redis server host，默认为: localhost
+        host: 172.16.2.253
+        # 指定redis服务端端口，默认: 6379
+        port: 6379
+        # 指定Redis server的密码
+        # password:
+        use-pool: true
+        pool:
+              # 指定连接池最大的活跃连接数，-1表示无限，默认为8
+              max-active: 16
+              # 指定当连接池耗尽时，新获取连接需要等待的最大时间，以毫秒单位，-1表示无限等待
+              max-wait: 5000
+              # 指定连接池最大的空闲连接数，-1表示无限，默认为8
+              min-idle: 16
+              # sentinel:
+                  # 指定redis server的名称
+                  # master:
+                  # 指定sentinel节点，逗号分隔，格式为host:port.
+                  # nodes:
+              # 指定连接超时时间，毫秒单位，默认为0
+              timeout: 10000
+
+local-info:
+    school-id: kuaiji
+    sso-host: http://172.16.3.1/service-sso-api #SSO系统的请求路径,区分业务线
+    #self-host: http://10.0.98.37:8085 #自适应系统的请求路径加入微服务
+    self-host: http://172.16.3.1/adaptive-learn-center #自适应系统的请求路径
+    msg-host: http://172.16.3.1/service-msg-api  #消息系统的请求路径
+    max-offset: 20
+    msg-max-offset: 10
+    gensee-webcast-url: http://{genseeDomain}/webcast/site/entry/join-
+    gensee-service-type: webcast
+    gensee-verify-aging: 30000
+    polyv-verify-url: http://183.63.120.222:8010/api/polyvOliveVerify
+    olive-replay-url: http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=
+    replay-url: http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=
+    top-content-pic: http://xx.xx.xx.jpg
+    customer-care-url: http://downt.ntalker.com/t2d/chat.php?siteid=kf_9005&settingid=wx_code&baseuri=http%3A%2F%2Fdl.ntalker.com%2Fjs%2Fxn6%2F
+    msg_system_host: http://172.16.3.1/service-msg-api      #消息系统地址
+    apph5-url: http://10.0.98.15:8083   #跳转到H5页面地址
+    itunes:             # iap 内购参数   0:沙盒测试         1:线上测试
+          apple:
+            config-param: 0
+
+
+swagger:
+    enable: false
+    title-name: API Center 接口文档
+    base-package: com.hq.learningapi.controller
+    author: Glenn
+    version: 1.0
+
+sso-info:
+    sso-userinfo-url: http://172.16.3.1/service-sso-api/inner/userInfo
+    sso-usertokendetail-url: http://172.16.3.1/service-sso-api/inner/userTokenDetail
+    sso-usermobileno-url: http://172.16.3.1/service-sso-api/inner/userMobileNo
+    sso-getbussinessid-url: http://172.16.3.1/service-sso-api/inner/getBussinessId
+
+# IP 白名单
+ip-white-list:
+    filter-switch: false
+    list:
+        - 8.8.8.8
+        - 0.0.0.0
+        - 127.0.0.1
+        - 0:0:0:0:0:0:0:1
+        - 177.77.83.149
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://admin:hqjymicro@172.16.3.0:8100/eureka/,http://admin:hqjymicro@172.16.3.0:8100/eureka/
+    enabled: true
+tiku:
+    homework-url: http://tikuapp.ljtest.hqjy.com/page/assess.html
+    parse-url: http://tikuappprep.ljtest.hqjy.com/page/assess_report.html
+
+mq:
+    host: http://172.16.2.247       #10.0.98.46
+    port: 5672
+    username: hquser
+    password: mon4498
+
+#推送到蓝鲸生成订单队列
+nc-sign-sync-common: nc.sign.sync.common

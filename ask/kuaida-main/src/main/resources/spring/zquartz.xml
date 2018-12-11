@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="true">
+
+	<!--Quartz -->
+
+	<!-- 集成方式：JobDetailFactoryBean，并且任务类需要继承QuartzJobBean -->
+	<!-- 定义jobDetail -->
+	
+	
+	 <bean id="jobDetail_3"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.CurrencySchedule"></property>
+
+	</bean>
+	
+	
+		 <bean id="jobDetail_4"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.MiddleCourseSchedule"></property>
+
+	</bean>
+	 <bean id="jobDetail_5"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.MiddleCourseUsersSchedule"></property>
+
+	</bean>
+	
+	<bean id="jobDetail_9"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.CountMiddleLiveSchedule"></property>
+
+	</bean>
+	
+	<bean id="jobDetail_10"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.WatchPlaybackDebris"></property>
+
+	</bean>
+	
+	<bean id="jobDetail_11"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.WatchPlaybackLog"></property>
+
+	</bean>
+	
+	<bean id="jobDetail_12"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.WatchPlaybackCount"></property>
+
+	</bean>
+	
+	
+	
+	
+	
+	
+	
+		
+	<bean id="cronTrigger_6"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_3" />
+		<!-- 每个10秒触发 -->
+		 <property name="cronExpression" value="0/60 * * * * ?"/>
+	</bean>
+
+    <!--中级职称-->
+	<bean id="cronTrigger_7"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_4" />
+		<!-- 每个10秒触发 -->
+		 <property name="cronExpression" value="0 */10 * * * ?"/>
+	</bean>
+	<!--中级职称考勤报表-->
+	<bean id="cronTrigger_8"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_5" />
+		<!-- 每天晚上23点触发 -->
+		 <property name="cronExpression" value="0 0 23 * * ?"/>
+	</bean>
+	
+	
+	<!--统计中级职称学员的观看直播数据-->
+	<bean id="cronTrigger_13"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_9" />
+		<!-- 每天晚上23点触发 -->
+		 <property name="cronExpression" value="0 0 23 * * ?"/>
+	</bean>
+	
+	<!--保存直播的录制件-->
+	<bean id="cronTrigger_14"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_10" />
+		<!-- 每天早上3点触发 -->
+		 <property name="cronExpression" value="0 0 03 * * ?"/>
+	</bean>
+	
+	<!--保存学员观看录播日志-->
+	<bean id="cronTrigger_15"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_11" />
+		<!-- 每天早上1点触发 -->
+		 <property name="cronExpression" value="0 0 01 * * ?"/>
+	</bean>
+	
+	<!--统计学员观看录播记录-->
+	<bean id="cronTrigger_16"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_12" />
+		<!-- 每天早上1点半触发 -->
+		 <property name="cronExpression" value="0 30 01 * * ?"/>
+	</bean>
+	
+	
+	<!-- 定义核心调度器 -->
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+			<ref bean="cronTrigger_6" />
+			<!--<ref bean="cronTrigger_7" />
+			<ref bean="cronTrigger_8" />
+			<ref bean="cronTrigger_13" />
+			-->
+			<ref bean="cronTrigger_14" />
+			<ref bean="cronTrigger_15" />
+			<ref bean="cronTrigger_16" />
+			</list>
+		</property>
+	</bean>
+</beans>

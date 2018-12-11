@@ -1,0 +1,509 @@
+/*--------------------------------------------------------------------
+----------------------------------------------------------------------
+ @Author's huangxuejie  xiaotianjia
+ @---Date 2015-06-10
+ @---When you need to customize the new public style, 
+     please write the name of the author, 
+     and the use of the annotation style
+ @---This style belongs to public
+ @---For each page please
+----------------------------------------------------------------------
+--------------------------------------------------------------------*/
+
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
+    margin: 0;
+    padding: 0;
+}
+*{
+    *font-family: "微软雅黑",arial,"Hiragino Sans GB","Microsoft Yahei","宋体",宋体,Tahoma,Arial,Helvetica,STHeiti;
+    _font-family: "微软雅黑",arial,"Hiragino Sans GB","Microsoft Yahei","宋体",宋体,Tahoma,Arial,Helvetica,STHeiti;
+}
+body, button, input, select, textarea{
+    font-family: arial,"Hiragino Sans GB","Microsoft Yahei","微软雅黑","宋体",宋体,Tahoma,Arial,Helvetica,STHeiti;
+    font-size: 14px;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+}
+em {
+    font-style: normal;
+}
+small {
+    font-size: 14px;
+}
+ul, ol {
+    list-style: outside none none;
+}
+a {
+    text-decoration: none;
+    outline: none
+}
+a:hover {
+    text-decoration: none;
+}
+legend {
+    color: #000;
+}
+fieldset, img {
+    border: 0 none;
+}
+button, input, select, textarea {
+    font-size: 100%;
+    margin: 0;
+    vertical-align: baseline;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+img {
+	height: auto;
+	vertical-align: middle;
+}
+textarea {
+    resize: vertical;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+    display: block;
+}
+html, button, input, select, textarea {
+    font-family: sans-serif;
+}
+a:focus {
+    outline: thin dotted;
+}
+a:active, a:hover {
+    outline: 0 none;
+}
+b, strong {
+    font-weight: bold;
+}
+button, input {
+    line-height: normal;
+}
+button, html input[type="button"], input[type="reset"], input[type="submit"] {
+    cursor: pointer;
+}
+button[disabled], html input[disabled] {
+    cursor: default;
+}
+input[type="checkbox"], input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+input[type="search"] {
+    box-sizing: content-box;
+}
+button::-moz-focus-inner, input::-moz-focus-inner {
+    border: 0 none;
+    padding: 0;
+}
+
+.clear{
+	clear: both;
+}
+.clearfix:after {
+  font-size: 0;
+}
+.clearfix:after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+.relative{
+	position: relative;
+}
+.absolute{
+	position: absolute;
+}
+.w1200{
+	width: 1200px;
+}
+.w1000{
+	width: 1000px;
+}
+.w-auto-Center{
+	margin: 0 auto;
+}
+
+/*----------------------------------------------------------------*/
+.head{
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	background-color: #f4f4f4;
+	position: relative;
+	z-index: 100;
+}
+.head .left-nav{
+	float: left;
+	_width:600px;
+	white-space: nowrap;
+	height: 100%;
+}
+.head .left-nav span{
+	display: inline-block;
+	float: left;
+	font-size: 16px;
+	padding: 0 8px;
+	vertical-align: middle;
+	color: #cfcfcf;
+	*margin-top: -2px;
+}
+.head .left-nav a{
+	display: inline-block;
+	float: left;
+	font-size: 14px;
+	color: #777777;
+
+}
+.head .left-nav a:hover{
+	color: #f08200;
+}
+.head .left-nav a dd{
+	width: 86px;
+	cursor: default;
+	color: #777777;
+	position: relative;
+	padding: 0 10px;
+	margin-left: -10px;
+	display: block;
+	float: left;
+	margin-top: 1px;
+	text-align: center;
+}
+.head .left-nav a dd i img{
+	width:66px;
+	height:66px;
+	
+}
+
+.head .left-nav a:hover dd{
+	cursor: default;
+	color: #777777;
+	position: relative;
+	padding: 0 10px;
+	border:1px solid #cccccc;
+	background-color: #ffffff;
+	margin-left: -11px;
+	margin-top: -1px;
+}
+.head .left-nav .head-nav-ewm{
+	display: block;
+	position: absolute;
+	left: -1px;
+	top: 35px;
+	padding: 0 20px;
+	padding-bottom: 10px;
+	border:1px solid #cccccc;
+	border-top: 0;
+	background-color: #ffffff;
+	display: none;
+}
+.head .left-nav a:hover .head-nav-ewm{
+	display: block;
+}
+.head .right-look{
+	float: right;
+	_width:400px;
+	font-size: 14px;
+	color: #01ad59;
+	cursor: pointer;
+}
+.head .right-look i{
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	background: url(../../images/icon/heard-jt-Icon.png) no-repeat 2px 5px;
+}
+
+
+
+
+/*---------------------------头部第二层----------------------------------------*/
+
+.header {
+	padding: 38px 0;
+	padding-bottom: 28px;
+	height: 40px;
+	position: relative;
+	z-index: 99;
+}
+.header *{
+
+}
+.header .left-nav{
+	float: left;
+	height: 40px;
+	padding-bottom: 15px;
+}
+.header .left-nav i{
+	display:block;
+	width: 170px;
+	float: left;
+	height: 40px;
+	padding-right: 10px;
+}
+.header .left-nav .nav-school-selcet .school-pinyin{
+	color: #b3b3b3;
+	font-size: 14px;
+	display: block;
+	padding-top: 2px;
+}
+.nav-school-selcet{
+	float: left;
+}
+.nav-school-selcet dd{
+	position: relative;
+}
+.nav-school-selcet dd .school-info{
+	white-space: nowrap;
+}
+
+.nav-school-selcet dd .school-info .school-name{
+	color: #555555;
+	font-size: 14px;
+}
+.nav-school-selcet dd .school-info .btn-select-school{
+	padding: 2px 5px;
+	background-color: #01ad59;
+	cursor: pointer;
+	color: #ffffff;
+	border-radius: 2px;
+}
+.nav-school-selcet dd .school-list{
+	width: 970px;
+	position: absolute;
+	left: -180px;
+	top: 50px;
+	border:1px solid #3abe7d;
+	padding: 10px 15px;
+	background-color: #f6f6f6;
+	display: none;
+
+}
+.nav-school-selcet dd .school-list i.school-list-jt{
+	background: url(../../images/icon/list-jt.png) no-repeat center center;
+	display: block;
+	width: 13px;
+	height: 15px;
+	position: absolute;
+	left: 270px;
+	top: -13px;
+}
+.nav-school-selcet dd .school-list dt{
+	width: 48%;
+	float: left;
+	padding: 5px 0;
+	padding-right: 2%;
+	padding-bottom: 10px;
+}
+.nav-school-selcet dd .school-list dt span{
+	color: #868686;
+	float:left;
+	display: block;
+	width: 60px;
+	font-size: 14px;
+}
+.nav-school-selcet dd .school-list dt a{
+	padding: 2px 8px;
+	border-radius: 3px;
+	white-space: nowrap;
+	font-size: 14px;
+	color: #868686;
+	font-weight:normal
+}
+.nav-school-selcet dd .school-list dt a:hover{
+	background-color: #01ad59;
+	color: #ffffff;
+}
+.nav-school-selcet dd .school-list dt div{
+	float: left;
+	width: 400px;
+}
+.nav-school-selcet dd .school-list h2{
+	font-size: 16px;
+	font-weight: 100;
+	color: #868686;
+	padding-top: 2px;
+}
+
+
+.header .right-tell{
+	float: right;
+}
+
+.header .right-tell{
+	padding-top: 18px;
+	overflow: hidden;
+	zoom: 1;
+	font-size: 14px;
+	color: #555555;
+}
+.header .right-tell b{
+	font-size: 18px;
+	color: #555555;
+}
+
+
+
+
+/*-----------------------footer 2015-06-10--------------------------*/
+footer{
+	width: 100%;
+	background-color: #f4f4f4;
+	/* margin-top: 40px; */
+}
+.footer .footer-AF-list{
+	width: 100%;
+	padding: 15px 0px;
+	border-bottom: 1px solid #e9e9e9;
+}
+.footer .footer-AF-list ul{
+	height: auto;
+}
+
+.footer .footer-AF-list ul li{
+	width: 155px;
+	height: auto;
+	float: left;
+}
+.footer .footer-AF-list ul li.last{
+	width: 70px;
+}
+.footer .footer-AF-list ul li i{
+	display:block;
+	width: 70px;
+	height: 50px;
+	background: url(../../images/icon/footerIcon.png) no-repeat;
+}
+.footer .footer-AF-list ul li strong{
+	display:block;
+	font-size: 18px;
+	width: 70px;
+	color: #000000;
+	font-weight: 100;
+	font-family: "微软雅黑";
+	white-space: nowrap;
+}
+.footer .footer-AF-list ul li a:hover strong{
+	color: #f08200;
+}
+.footer .footer-AF-list ul li a:hover i{
+	background-image: url(../../images/icon/footerIcon_hover.png);
+}
+.footer .footer-AF-list ul li i.icon1{background-position: 18px center;}
+.footer .footer-AF-list ul li i.icon2{background-position: -134px center;}
+.footer .footer-AF-list ul li i.icon3{background-position: -290px center;}
+.footer .footer-AF-list ul li i.icon4{background-position: -435px center;}
+.footer .footer-AF-list ul li i.icon5{background-position: -598px center;}
+.footer .footer-AF-list ul li i.icon6{background-position: -755px center;}
+.footer .footer-AF-list ul li i.icon7{background-position: -906px center;}
+
+.footer .footer-BF-list{
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #e9e9e9;
+}
+.footer .footer-BF-list ul li{
+	width: 200px;
+	float: left;
+}
+.footer .footer-BF-list ul li h3{
+	font-size: 18px;
+	font-weight: 100;
+	padding-bottom: 5px;
+}
+.footer .footer-BF-list ul li  dd{
+	width: 235px;
+	padding-right: 15px;
+	white-space: nowrap;
+	line-height: 22px;
+}
+.footer .footer-BF-list ul li  dd a{
+	font-size: 14px;
+	color: #777777;
+}
+.footer .footer-BF-list ul li  dd a:hover{
+	color: #f08200;
+
+}
+
+.footer-CF-copyright{
+	padding-bottom: 30px;
+	padding-top: 30px;
+}
+.footer-CF-copyright .footer-CF-herf{
+	text-align: center;
+}
+.footer-CF-copyright .footer-CF-herf span{
+	font-size: 14px;
+	color: #777777;
+}
+.footer-CF-copyright .footer-CF-herf a{
+	font-size: 14px;
+	color: #777777;
+	padding: 0 2px;
+
+}
+.footer-CF-copyright .footer-CF-herf a:hover{
+	color: #f08200;
+}
+.footer-CF-copyright p{
+	text-align: center;
+	font-size: 14px;
+	color: #777777;
+}
+
+
+/*--------------------------------------------------
+
+ You can customizable public setStyle, But you need indicate use and Date.
+
+---------------------------------------------------*/
+/*视频弹窗*/
+.video_box{
+	position:fixed;
+	top:150px;
+	z-index:9999;
+	display: none;}
+.video_box video{
+	width:800px;
+	height:450px}
+.video_box	.close_video{
+	background-color: #f5f5f5;
+	font-size:20px;
+	color: #333;
+	width: 800px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	cursor:pointer;
+	/* margin-left:740px; */
+	z-index:9999;
+	/* margin-right: 5px; */
+	position: relative;
+}
+.video_box	.close_video h1,.video_box	.close_video h2{
+	font-weight: normal;
+	font-size: 16px;
+	display: inline;
+}
+.video_box	.close_video h2{
+	 font-size: 30px;
+	 /* vertical-align: initial; */
+	 position: absolute;
+	 right: 20px;
+}
+.video_box	.close_video h1{
+	text-align: left;
+	  font-size: 18px;
+  font-weight: 400;
+  position: absolute;
+	color: #424242;
+	left: 20px;
+}
+.box_bg{
+	position: fixed;  z-index:9998; top: 0; left: 0;background: url(http://sandbox.runjs.cn/uploads/rs/390/vvqzmrls/gary_bg.png) center center repeat\9 !important;
+  background: #000;
+  opacity: 0.8;}

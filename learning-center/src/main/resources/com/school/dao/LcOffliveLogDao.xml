@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.dao.LcOffliveLogDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	lc_offlive_log.id AS id , 	lc_offlive_log.user_id AS userId , 	lc_offlive_log.video_id AS videoId , 	lc_offlive_log.look_start_time AS lookStartTime , 	lc_offlive_log.look_end_time AS lookEndTime , 	lc_offlive_log.is_offlive AS isOfflive , 	lc_offlive_log.video_start_time AS videoStartTime , 	lc_offlive_log.video_end_time AS videoEndTime , 	lc_offlive_log.video_total_time AS videoTotalTime 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE lc_offlive_log.school_id = #{schoolId} 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM lc_offlive_log AS lc_offlive_log
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="com.school.entity.LcOffliveLogEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="com.school.entity.LcOffliveLogEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="com.school.entity.LcOffliveLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into lc_offlive_log
+		(
+				`user_id`, 				`video_id`, 				`look_start_time`, 				`look_end_time`, 				`is_offlive`, 				`video_start_time`, 				`video_end_time`, 				`video_total_time`		)
+		values
+		(
+															#{userId}, 																			#{videoId}, 																			#{lookStartTime}, 																			#{lookEndTime}, 																			#{isOfflive}, 																			#{videoStartTime}, 																			#{videoEndTime}, 																			#{videoTotalTime}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="com.school.entity.LcOffliveLogEntity">
+		update lc_offlive_log 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="videoId != null">`video_id` = #{videoId}, </if>
+			<if test="lookStartTime != null">`look_start_time` = #{lookStartTime}, </if>
+			<if test="lookEndTime != null">`look_end_time` = #{lookEndTime}, </if>
+			<if test="isOfflive != null">`is_offlive` = #{isOfflive}, </if>
+			<if test="videoStartTime != null">`video_start_time` = #{videoStartTime}, </if>
+			<if test="videoEndTime != null">`video_end_time` = #{videoEndTime}, </if>
+			<if test="videoTotalTime != null">`video_total_time` = #{videoTotalTime}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM lc_offlive_log 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM lc_offlive_log 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+    <select id="queryUserIdByMobile" resultType="long">
+        SELECT
+            user_id
+        FROM
+            `users`
+        WHERE
+            mobile = #{userMobile}
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+<div id="registrationLayDiv" style="display: none">
+<!-- 报考档案查询条件 -->
+<table  border="0">
+	<tr class="row" >
+		<td class=""><label for="name">报考单号</label></td>
+		<td >
+			<input type="text" class="form-control" id="registrationNo" placeholder="请输入报考单号">
+		</td>
+		<!-- 按钮 -->
+		<td class="grid-btn">
+			<!-- <a class="btn btn-primary" @click="clearQueryOrderParams">清空</a>  -->
+			<a class="btn btn-default" onclick="registrationLay.reload();">查询</a> 
+		</td>
+	</tr>
+</table>
+<table id="registrationLay_jqGrid" ></table>
+<table id="registrationLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/registrationLay.js?_${date.systemTime}"></script>

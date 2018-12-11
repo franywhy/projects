@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.dao.UserstopDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		course_userstop.id AS id , 
+		course_userstop.userplan_id AS userplanId , 
+		course_userstop.start_time AS startTime ,
+		course_userstop.end_time AS endTime , 
+		course_userstop.stop_cause AS stopCause , 
+		course_userstop.user_id AS userId , 
+		course_userstop.remark AS remark , 
+		course_userstop.status AS status ,
+		course_userstop.create_person AS createPerson ,
+		course_userstop.creation_time AS creationTime ,
+		course_userstop.modify_person AS modifyPerson ,
+		course_userstop.modified_time AS modifiedTime
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM course_userstop AS course_userstop
+	</sql>
+	<!-- 通用关联查询 -->
+	<sql id="base_join">
+		LEFT JOIN course_userplan AS course_userplan ON course_userplan.user_plan_id = course_userstop.userplan_id
+		LEFT JOIN users AS users ON users.user_id = course_userstop.user_id
+		LEFT JOIN sys_user AS sys_user ON sys_user.user_id = course_userstop.modify_person
+	</sql>
+	<!-- 通用关联名字 -->
+	<sql id="base_join_name">
+		(select mall_goods_info.name from mall_goods_info as mall_goods_info where mall_goods_info.id = course_userplan.commodity_id) AS commodityName,
+		users.nick_name AS userName,
+		users.mobile AS mobile,
+		sys_user.username AS modifyName
+	</sql>		
+	
+	<select id="quserList" resultType = "com.school.pojo.UserstopPOJO">
+		select
+		<include refid="base_column"/>
+		,
+      	<include refid="base_join_name"/>
+		<include refid="base_from"/>
+		<include refid="base_join"/> 
+		where 
+			course_userstop.user_id = #{userId}
+			and course_userstop.product_id in
+			<foreach item="productId" collection="productIdList" open="(" separator="," close=")">
+	            #{productId}
+	        </foreach>
+	</select>
+	
+	<update id="update">
+	   update course_userstop set status = 1 where id = #{id}
+	</update>
+
+	<insert id="save" parameterType="com.school.entity.UserstopEntity" useGeneratedKeys="true" keyProperty="id">
+	    insert into course_userstop
+	    (
+	      `userplan_id`, 
+	      `start_time`, 
+	      `end_time`, 
+	      `stop_cause`,
+	      `user_id`, 
+	      `status`,
+	      `product_id`
+	    )
+	    values
+	    (
+	      #{userplanId}, 
+	      #{startTime}, 
+	      #{endTime},
+	      #{stopCause}, 
+	      #{userId}, 
+	      #{status},
+	      #{productId}
+	    )
+	</insert>
+	
+	<select id="queryClasstypeList" resultType = "map">
+		SELECT
+			course_userplan.user_plan_id AS userplanId,
+			mall_order.commodity_name AS commodityName
+		FROM
+			course_userplan AS course_userplan,
+			mall_order AS mall_order
+		WHERE
+			mall_order.order_id = course_userplan.order_id
+			and mall_order.product_id in
+			<foreach item="productId" collection="productIdList" open="(" separator="," close=")">
+	            #{productId}
+	        </foreach>
+			and mall_order.user_id = #{userId}
+			and mall_order.dr = 0
+			and course_userplan.dr = 0
+	</select>
+	<select id="queryProductId" resultType = "long">
+		select
+			product_id
+		from
+			sys_business_product
+		where
+			business_id = #{businessId}
+	</select>
+	<select id="queryProductIdByUserplanId" resultType = "long">
+		select product_id from course_userplan where user_plan_id = #{userplanId}
+	</select>
+</mapper>

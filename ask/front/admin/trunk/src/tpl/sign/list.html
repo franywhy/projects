@@ -1,0 +1,68 @@
+<!--签约申请列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+			<th class="longtime">申请时间</th>
+			<th class="longtime">签约时间</th>
+            <th class="num" style=" width:100px;">用户ID</th>            
+            <th class="short">昵称</th>
+            <th class="short">所属公司</th>
+            <%if(Izb.user.checkLimits('apply/show',Izb.enumList.menuType.all)){%>
+            <th class="short">真实姓名</th>			
+            <th class="short">联系QQ</th>			
+            <th class="short">身份证号码</th>
+            <th class="short">大类</th>
+            <th class="short">行业</th>
+            <th class="short">专业</th>
+            <th class="action action100">详细资料</th>
+			<%}%>
+             <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+             <th class="action action100">操作</th>
+             <%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+			<td class="longtime"><%=data[i].lastmodif?new Date(data[i].lastmodif).toLocaleString():"--"%></td>
+            <td class="num"><a href="javascript:Izb.controller.user.show('<%=data[i].xy_user_id%>')"><%=data[i].xy_user_id%></a></td>
+            <td class="short"><%=data[i].nick_name%></td>
+            <td class="short"><%=data[i].broker || '' %></td>            
+            <%if(Izb.user.checkLimits('apply/show',Izb.enumList.menuType.all)){%>
+            <td class="short"><%=data[i].real_name%></td>			
+            <td class="short"><%=data[i].qq%></td>
+            <td class="short"><%=data[i].sfz || "-"%></td>
+            <td class="short"><%=(data[i].mainTypeCode || "") + " " +(data[i].MainTypeName || "")  %></td>
+            <td class="short"><%=(data[i].industryCode || "") + " " +(data[i].industryName || "")    %></td>
+            <td class="short"><%=(data[i].professionalCode || "") + " " +(data[i].ProfessionalName || "")    %></td>
+			<td class="action"><button class="d-button" onclick="Izb.controller.<%=pty.key%>.show('<%=data[i]._id%>')">查看</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.sfzShow('<%=data[i]._id%>')">身份证</button></td>
+			<%}%>
+            
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+            
+			<%if(data[i].status==1){%>
+				未通过
+              
+			<%}%>
+			<%if(data[i].status==2){%>
+				 已通过
+                
+			<%}%>
+			<%if(data[i].status==3){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.setStatus('<%=data[i]._id%>', 2)">通过</button>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.setStatus('<%=data[i]._id%>', 1)">不通过</button>
+			<%}%>
+			<%if(data[i].status==4){%>
+				 解约
+			<%}%>
+			</td>
+            <%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/签约申请列表-->

@@ -1,0 +1,94 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="Chrome=1,IE=edge" />
+    <link rel="dns-prefetch" href="@adminDomain@" />
+    <link rel="dns-prefetch" href="@baseDomain@" />
+    <link rel="dns-prefetch" href="@appDomain@" />
+    <title>恒企在线－管理后台</title>
+    <link rel="stylesheet" href="@baseDomain@/base/styles/base.css" />
+    <link rel="stylesheet" href="@baseDomain@/base/scripts/ui/artDialog/skins/green.css" />
+    <link rel="stylesheet" href="/styles/manage.css" />
+    <link rel="stylesheet" href="/zTree_v3/css/zTreeStyle/zTreeStyle.css" />
+    <link rel="stylesheet" href="/styles/lib/bootstrap-3.1.1.min.css" />
+    <link rel="stylesheet" href="/editor/themes/simple/simple.css">
+    <link rel="stylesheet" href="/editor/themes/default/default.css">
+    <!--<link rel="stylesheet" href="/styles/lib/bootstrap-multiselect.css" />-->
+    <!--bootstrap-->
+    <!--<link rel="stylesheet" href="/scripts/bootstrap/bootstrap.min.css">-->
+    <link rel="stylesheet" href="/scripts/bootstrap/bootstrap-table.css">
+    <script src="/scripts/seed.js" data-page="main" data-version="2.0.0"></script>
+</head>
+
+<body>
+    <div id="header">
+        <div class="logo"></div>
+        <div id="hi">Hi, izhubo</div>
+        <div id="sysMsg"></div>
+    </div>
+    <div id="content">
+        <div id="aside"></div>
+        <div id="main">
+            <div id="appHeader"></div>
+            <div id="appContent"></div>
+        </div>
+    </div>
+    <div id="tips"></div>
+    <div class="scripts">
+        <script src="@baseDomain@/base/scripts/jquery.js"></script>
+        
+        <script src="@baseDomain@/base/scripts/util/standard.js"></script>
+        <script src="@baseDomain@/base/scripts/util/oo.js"></script>
+        <script src="@baseDomain@/base/scripts/util/util.js"></script>
+        <script src="@baseDomain@/base/scripts/util/baiduTemplate.js"></script>
+        <script src="@baseDomain@/base/scripts/util/query.js"></script>
+        <script src="@baseDomain@/base/scripts/util/history.js"></script>
+        <script src="@baseDomain@/base/scripts/util/json2.js"></script>
+        <script src="@baseDomain@/base/scripts/util/cookie.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/pager.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/tablesorter.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/tablesorter.js"></script>
+        <script src="@baseDomain@/base/scripts/util/validate.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/artDialog/jquery.artDialog.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/My97DatePicker/WdatePicker.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/uploadify/uploadify.js"></script>
+
+        <script src="@baseDomain@/base/pro-core/1.1.0/core.js"></script>
+        <script src="/scripts/ui.js"></script>
+        <script src="/scripts/common.js"></script>
+        <script src="/scripts/user.js"></script>
+        <script src="/scripts/controller.js"></script>
+        <script src="/scripts/module.js"></script>
+        <script src="/scripts/main.js"></script>
+        <script src="/scripts/lib/bootstrap-3.1.1.min.js"></script>
+        <script src="/ueditor/ueditor.config.js"></script>
+        <script src="/ueditor/ueditor.all.min.js"></script>
+        <script src="/ueditor/lang/zh-cn/zh-cn.js"></script>
+        <script src="/zTree_v3/js/jquery.ztree.all.min.js"></script>
+        <script src="/editor/kindeditor-min.js"></script>
+        <script src="/editor/lang/zh_CN.js"></script>
+        <!--<script src="/scripts/lib/bootstrap-multiselect.js"></script>-->
+        <!--bootstrap-->
+        <script type="text/javascript" src="/scripts/bootstrap/bootstrap-table.js"></script>
+        <script type="text/javascript" src="/scripts/bootstrap/bootstrap-table-zh-CN.min.js"></script>
+<script>
+    $(function() {
+        Izb.user.ready(function() {
+            Izb.main.init();
+        });
+        Izb.user.init();
+    });
+</script>
+</div>
+
+    <!-- 表单层 -->
+    <div id="choose_accept">
+        <img src="styles/images/loading1.gif" >
+    </div>
+    <!-- 遮盖层 -->
+    <div id="coverid"></div>
+</body>
+
+</html>

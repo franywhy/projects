@@ -1,0 +1,31 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th >_id</th>
+        <th >手机号</th>
+        <th >姓名</th>
+        <th >城市</th>
+        <th>校区</th>
+        <th >星级</th>
+        <th>申请时间</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr>
+        <td class="short"><%=data[i]._id%></td>
+        <td class="short"><%=data[i].username%></td>
+        <td class="short"><%=data[i].nickname%></td>
+        <td class="short"><%=data[i].city%></td>
+        <td class="short"><%=data[i].school%></td>
+        <td class="short"><%=data[i].star%></td>
+        <td class="short"><%=data[i].manage_info.timestamp%></td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

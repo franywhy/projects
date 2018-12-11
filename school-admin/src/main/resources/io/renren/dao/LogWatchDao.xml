@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.LogWatchDao">
+
+	<!--总数-->
+ 	<select id="queryCountMongodbLog" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		AND log_watch.m_id IS NOT NULL
+	</select>
+	<!--分页列表-->
+	<select id="queryListMongodbLog" resultType="io.renren.entity.LogWatchEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		AND log_watch.m_id IS NOT NULL
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	log_watch.log_watch_id AS logWatchId , 	log_watch.lv_id AS lvId , 	log_watch.user_id AS userId , 	log_watch.business_id AS businessId , 	log_watch.watch_duration AS watchDuration , 	log_watch.live_start_time AS liveStartTime , 	log_watch.live_end_time AS liveEndTime , 	log_watch.lv_duration AS lvDuration , 	log_watch.attend_30 AS attend30 , 	log_watch.version_code AS versionCode , 	log_watch.school_id AS schoolId , 	log_watch.m_id AS mId , 	log_watch.create_time AS createTime , 	log_watch.log_type AS logType 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM log_watch AS log_watch
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  log_watch.log_watch_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.LogWatchEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND log_watch_id = #{logWatchId}
+	</select>
+	<!-- 同步mongo数据是否存在 -->
+	<select id="queryExistCount" parameterType="string" resultType="int">
+	    SELECT COUNT(log_watch_id) FROM `log_watch` WHERE m_id=#{mId}
+	</select>
+	<!--根据LvID查询-->
+	<select id="queryByLvId" resultType="io.renren.entity.LogWatchEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND lv_id = #{lvId}
+		<if test="userId != null">
+		AND user_id = #{userId}
+		</if>
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.LogWatchEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.LogWatchEntity" useGeneratedKeys="true" keyProperty="logWatchId">
+		insert into log_watch
+		(
+				`lv_id`, 				`user_id`, 				`business_id`, 				`watch_duration`, 				`live_start_time`, 				`live_end_time`, 				`lv_duration`, 				`attend_30`, 				`version_code`, 				`school_id`, 				`m_id`, 				`create_time`, 				`log_type`		)
+		values
+		(
+															#{lvId}, 																			#{userId}, 																			#{businessId}, 																			#{watchDuration}, 																			#{liveStartTime}, 																			#{liveEndTime}, 																			#{lvDuration}, 																			#{attend30}, 																			#{versionCode}, 																			#{schoolId}, 																			#{mId}, 																			#{createTime}, 																			#{logType}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.LogWatchEntity">
+		update log_watch 
+		<set>
+			<if test="lvId != null">`lv_id` = #{lvId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="businessId != null">`business_id` = #{businessId}, </if>
+			<if test="watchDuration != null">`watch_duration` = #{watchDuration}, </if>
+			<if test="liveStartTime != null">`live_start_time` = #{liveStartTime}, </if>
+			<if test="liveEndTime != null">`live_end_time` = #{liveEndTime}, </if>
+			<if test="lvDuration != null">`lv_duration` = #{lvDuration}, </if>
+			<if test="attend30 != null">`attend_30` = #{attend30}, </if>
+			<if test="versionCode != null">`version_code` = #{versionCode}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="mId != null">`m_id` = #{mId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="logType != null">`log_type` = #{logType}</if>
+		</set>
+		<include refid="base_where"/>
+		AND log_watch_id = #{logWatchId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM log_watch 
+		<include refid="base_where"/>
+		AND log_watch_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM log_watch 
+		<include refid="base_where"/> 
+		AND log_watch_id IN 
+		<foreach item="logWatchId" collection="ids" open="(" separator="," close=")">
+			#{logWatchId}
+		</foreach>
+	</delete>
+</mapper>

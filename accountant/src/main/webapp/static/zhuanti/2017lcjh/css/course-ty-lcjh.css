@@ -1,0 +1,596 @@
+@media only screen and (min-width: 768px){
+	.slide-li-3 .slide-li-3-cont{
+		width:710px;
+		margin-left:460px;
+	}
+	.course-a.main-pad{
+		background-color: #f6f6f6;
+	}
+	.course-a .cont .t-h1{
+		height:auto;
+	}
+	.course-a .cont .t-h2{
+		
+	}
+	.course-a .cont .t-h4{
+		font-size: 24px;
+		text-align: center;
+	}
+	.course-d .bz-1{
+		background-color: #fff;
+	}
+	.course-d .bz-1 .bz-title{
+		color:#333;
+	}
+	.bz-title .t-h3{
+		font-size: 36px;
+	}
+	.bz-title{
+		margin-bottom:34px;
+	}
+	/*bz-1====================================*/
+	.bz-1 .bz-cont{
+		width:774px;
+		margin:0 auto;
+	}
+	.course-d .bz-cont{
+		margin-bottom:46px;
+	}
+	.bz-1 .bz-cont .box{
+		width:48%;
+	}
+	.bz-1 .bz-cont .box.box-1{
+		margin-right:4%;
+	}
+	.bz-1 .bz-cont .box .t-h1{
+		margin-bottom:18px;
+	}
+	.bz-1 .bz-cont .box .t-h1 img{
+		width:100%;
+	}
+	.bz-1 .bz-cont .box .t-h2{
+		font-weight: bold;
+		font-size: 18px;
+		margin-bottom:14px;
+	}
+	.bz-1 .bz-cont .box .t-h3{
+		font-size: 14px;
+		line-height: 22px;
+	}
+	/*bz-2==============================*/
+	.course-d .bz-2{
+		background-color: #f6f6f6;
+	}
+	.bz-2 .bz-cont .t-h1 img{
+		margin:0 auto;
+	}
+	.course-d .bz-2 .bz-cont{
+		margin-bottom:0;
+	}
+	/*bz-3==============================*/
+	.course-d .bz-3{
+		background:none;
+		background-color: #fff;
+	}
+	.bz-3 .bz-cont .t-h1 img{
+		margin:0 auto;
+	}
+	/*bz-4==============================*/
+	.course-d .bz-4{
+		background-color: #f9f7f7;
+	}
+	.bz-4 .bz-cont{
+		width:760px;
+		margin:0 auto;
+		margin-bottom:16px;
+	}
+	.bz-4 .bz-cont .box-out{
+		margin-right:-80px;
+	}
+	.bz-4 .box-out .box{
+		width:200px;
+		margin-right:80px;
+		text-align: center;
+		margin-bottom:30px;
+	}
+	.bz-4 .box-out .box .t-h1{
+		height:72px;
+	}
+	.bz-4 .box-out .box.box-1 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-1.png) no-repeat center 10px;
+	}
+	.bz-4 .box-out .box.box-2 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-2.png) no-repeat center 10px;
+	}
+	.bz-4 .box-out .box.box-3 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-3.png) no-repeat center 10px;
+	}
+	.bz-4 .box-out .box.box-4 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-4.png) no-repeat center 10px;
+	}
+	.bz-4 .box-out .box.box-5 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-5.png) no-repeat center 10px;
+	}
+	.bz-4 .box-out .box.box-6 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-6.png) no-repeat center 10px;
+	}
+	.bz-4 .box-out .box .t-h2{
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom:6px;
+	}
+	.bz-4 .box-out .box .t-h3{
+		font-size: 14px;
+		line-height: 22px;
+	}
+	/*bz-5==============================*/
+	.course-d .bz-5{
+		background-color: #fff;
+	}
+	.course-d .bz-5 .bz-cont{
+		/*margin-right:-45px;*/
+		margin-bottom:10px;
+	}
+	.course-d .bz-5 .bz-cont .box{
+		width:370px;
+		margin-right:45px;
+		margin-bottom:36px;
+	}
+	.course-d .bz-5 .bz-cont .box.box-3,.course-d .bz-5 .bz-cont .box.box-6{margin-right:0;}
+	.course-d .bz-5 .bz-cont .box .t-h1{
+		margin-bottom:16px;
+	}
+	.course-d .bz-5 .bz-cont .box .t-h1 img{
+		width:100%;
+	}
+	.course-d .bz-5 .bz-cont .box .t-h2{
+		font-size: 18px;
+		text-align: center;
+	}
+	/*.course-e==============================*/
+	.course-e{
+		background: none;
+		background-color: #f4f4f4;
+	}
+	.course-e .course-title .t-h1{
+		color:#333;
+	}
+	.course-e .cont{
+		margin-bottom:46px;
+		/*margin-right:-69px;*/
+	}
+	.course-e .cont .box{
+		float:left;
+		width:354px;
+		margin-right:69px;
+	}
+	.course-e .cont .box.box-3{margin-right:0;}
+	.course-e .cont .box .t-h1 img{
+		width:100%;
+	}
+	/*======================*/
+	.course-h{
+		background: none;
+		background-color: #f9f9f9;
+	}
+	.course-h .cont{
+		margin-bottom:46px;
+	}
+	.course-h .course-title{
+		color:#333;
+	}
+	.course-h .cont .t-h1{
+		text-align: center;
+		margin-bottom:14px;
+	}
+	.course-h .cont .t-h3{
+		text-align: center;
+		
+	}
+	.course-h .cont .t-h1 .t-i1{
+		font-size: 18px;
+	}
+	.course-h .cont .t-h1 .t-i1 .t-p1{
+		
+	}
+	.course-h .cont .t-h1 .t-i1 .t-p1 em{
+		font-size: 24px;
+		font-weight: bold;
+	}
+	.course-h .cont .t-h1 .t-i1 .t-p2{
+		
+	}
+	.course-h .cont .t-h1 .t-i-bar{
+		width:1px;
+		height:44px;
+		background-color: #888;
+		margin:0 38px;
+	}
+	.course-h .course-title .t-h1{
+		margin-bottom:0;
+	}
+	.course-h .cont .t-h2 img{
+		margin:0 auto;
+	}
+	.course-c .cont{
+		
+	}
+	.course-c .cont .box{
+		margin-bottom: 38px;
+	}
+	.course-c .cont .box .t-h{
+	    width:270px;
+	    margin-right:40px;
+	}
+	.course-c .cont .box .t-h.t-h4{
+		margin-right: 0;
+	}
+	.course-c .cont .box .t-h .t-p1{
+		margin-bottom: 20px;
+	}
+	.course-c .cont .box .t-h .t-p1 img{
+		width:100%;
+	}
+	.course-c .cont .box .t-h .t-p2{
+		font-size: 18px;
+		margin-bottom: 12px;
+		font-weight: bold;
+	}
+	.course-c .cont .box .t-h .t-p3{
+		font-size: 14px;
+		line-height: 22px;
+	}
+	/*====================*/
+	.course-dxsxx{
+		
+	}
+	.course-dxsxx .cont img{
+		margin:0 auto;
+	}
+	.course-dxsxx .cont{
+		margin-bottom: 38px;
+	}
+}
+@media only screen and (min-width: 320px) and (max-width: 768px) {
+	@media only screen and (min-width: 320px) and (max-width: 374px) {
+		.mainCon{font-size: 75%;}
+	}
+	@media only screen and (min-width: 375px) and (max-width: 413px) {
+		.mainCon{font-size: 85%;}
+	}
+	@media only screen and (min-width: 414px){
+		.mainCon{font-size: 95%;}
+	}
+	.header-v2,.footer,.float-nav-right,.black-bg,.fix-nav-show,.slide-banner,.course-a,.course-c,.course-d,.course-e,.course-h,.course-j,.header-top{
+		display: none;
+	}
+	.w1200,.w1000{
+		width:auto;
+	}
+	.h5-main1,.h5-main2,.h5-main3,.h5-main4,.h5-main5,.h5-main6,.h5-main7,.h5-main8,.h5-main9,.h5-main10,.h5-main11,.h5-main12{
+		display: block;
+	}
+	.t-pad{
+		padding-top:2em;
+		padding-bottom:2em;
+	}
+	.t-title{
+		text-align: center;
+		margin-bottom:2em;
+		padding:0 4%;
+	}
+	.t-title .t-h1{
+		font-size: 1.6em;
+	}
+	.t-title .t-h2{
+		font-size: 1.2em;
+	}
+	.t-title .t-h3{
+		font-size: 1em;
+	}
+	.t-title .t-h4{
+		font-size: 1.4em;
+	}
+	.t-btn{
+		width:54%;
+		margin:0 auto;
+		text-align: center;
+		background-color: #66bb6a;
+		line-height: 3.8em;
+		color:#fff;
+		-webkit-border-radius: 0.2em;
+	}
+	.t-btn:active{
+		opacity: 0.6;
+	}
+	.no-mar-bot{
+		margin-bottom: 0 !important;
+	}
+	.t-ys-bar{
+		width:30%;
+		margin:0 auto;
+		line-height: 2.4em;
+		color:#fff;
+		background-color: #333;
+		text-align: center;
+		margin-bottom:1.6em;
+	}
+	.t-ys-pad{
+	 	padding-bottom:2em;
+	}
+	/*=============================*/
+	.back-top{
+	    position: fixed;
+	    width: 3.2em;
+	    height: 3.2em;
+	    -webkit-border-radius: 0.2em;
+	    bottom: 9%;
+	    right: 3%;
+	    background-color: #66bb6a;
+	    z-index: 100;
+	    text-align: center;
+	    line-height: 3em;
+	    opacity: 0.6;
+	}
+	.back-top i{
+	    display: inline-block;
+	    font-size: 2em;
+	    color: #fff;
+	    -webkit-transform: scaleX(1.8);
+	}
+	/*==============================*/
+	.h5-main1 img{
+		width:100%;
+	}
+	.swiper-pagination-bullet{
+		background-color: #ccc;
+	}
+	.swiper-pagination-bullet-active{
+		background-color: #66bb6a;
+	}
+	.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
+		bottom:4px;
+	}
+	/*==================================*/
+	.h5-main2{
+		padding-left: 4%;
+		padding-right: 4%;
+		background-color: #f6f6f6;
+	}
+	.h5-main2 .t-title{
+	    padding: 0 2%;
+	}
+	.h5-main2 .t-cont{
+		text-align: center;
+		margin-bottom:2em;
+	}
+	.h5-main2 .t-cont .t-h1{
+		margin-bottom:1em;
+	}
+	.h5-main2 .t-cont .t-h1 img{
+		width: 100%;
+	}
+	.h5-main2 .t-cont .t-h2{
+		font-size: 1em;
+		margin-bottom:0.4em;
+	}
+	.h5-main2 .t-cont .t-h3{
+		font-size: 1.2em;
+	}
+	/*================================*/
+	.h5-main3{
+		padding-left: 4%;
+		padding-right: 4%;
+	}
+	.h5-main3 .t-title .t-h1{
+		margin-bottom:0.2em;
+	}
+	.h5-main3 .t-cont{
+		margin-bottom:1em;
+	}
+	.h5-main3 .t-cont .t-h1{
+		position: relative;
+		width:60%;
+		margin-left:26%;
+	}
+	.h5-main3 .t-cont .t-h1 img{
+		width:100%;
+	}
+	.h5-main3 .t-cont .t-h1 em{
+		position: absolute;
+		font-size: 3.6em;
+		color:#66bb6a;
+		top:22%;
+		right:47%;
+	}
+	/*================================*/
+	.h5-main4{
+		padding-left: 4%;
+		padding-right: 4%;
+		background-color: #f6f6f6;
+	}
+	.h5-main4 .t-title .t-h1{
+		margin-bottom:0.2em;
+	}
+	/*================================*/
+	.h5-main5 .t-cont{
+		padding: 0 10%;
+		margin-bottom: 2em;
+	}
+	.h5-main5 .t-cont .box{
+		margin-bottom: 2em;
+	}
+	.h5-main5 .t-cont .box .t-h1{
+		margin-bottom: 1em;
+	}
+	.h5-main5 .t-cont .box .t-h1 img{
+		width: 100%;
+	}
+	.h5-main5 .t-cont .box .t-h2{
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-bottom:0.4em;
+	}
+	.h5-main5 .t-cont .box .t-h3{
+		font-size: 1em;
+		line-height: 1.5;
+	}
+	/*===========================*/
+	.h5-main6{
+		background-color: #f6f6f6;
+	}
+	.h5-main6 .t-cont .t-h1{
+		padding:0 4%;
+	}
+	.h5-main6 .t-cont .t-h1 img{
+		width: 100%;
+	}
+	/*=============================*/
+	.h5-main7 .t-cont{
+		margin-bottom:2em;
+	}
+	.h5-main7 .t-cont .t-h1{
+		padding:0 4%;
+	}
+	.h5-main7 .t-cont .t-h1 img{
+		width: 100%;
+	}
+	/*==============================*/
+	.h5-main8{
+		background-color: #f6f6f6;
+	}
+	.h5-main8 .t-cont{
+		margin-bottom:2em;
+		padding:0 4%;
+	}
+	.h5-main8 .t-cont .box{
+		margin-bottom: 2em;
+		width:48%;
+		text-align: center;
+	}
+	.h5-main8 .t-cont .box:nth-of-type(odd){
+		float: left;
+	}
+	.h5-main8 .t-cont .box:nth-of-type(even){
+		float: right;
+	}
+	.h5-main8 .t-cont .box .t-h1{
+		height:2.6em;
+		margin-bottom:1em;
+	}
+	.h5-main8 .t-cont .box.box-1 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-1.png) no-repeat center 0;
+		-webkit-background-size: contain;
+	}
+	.h5-main8 .t-cont .box.box-2 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-2.png) no-repeat center 0;
+		-webkit-background-size: contain;
+	}
+	.h5-main8 .t-cont .box.box-3 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-3.png) no-repeat center 0;
+		-webkit-background-size: contain;
+	}
+	.h5-main8 .t-cont .box.box-4 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-4.png) no-repeat center 0;
+		-webkit-background-size: contain;
+	}
+	.h5-main8 .t-cont .box.box-5 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-5.png) no-repeat center 0;
+		-webkit-background-size: contain;
+	}
+	.h5-main8 .t-cont .box.box-6 .t-h1{
+		background: url(../images/taoye/taoye-lcjh/lcjh-ys4-img-6.png) no-repeat center 0;
+		-webkit-background-size: contain;
+	}
+	.h5-main8 .t-cont .box .t-h2{
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-bottom: 0.2em;
+	}
+	.h5-main8 .t-cont .box .t-h3{
+		font-size: 0.8em;
+		line-height: 1.5;
+	}
+	/*==================================*/
+	.h5-main9 .t-cont{
+		margin-bottom:2em;
+		padding:0 4%;
+	}
+	.h5-main9 .t-cont .box{
+		margin-bottom: 2em;
+		width:48%;
+		text-align: center;
+	}
+	.h5-main9 .t-cont .box:nth-of-type(odd){
+		float: left;
+	}
+	.h5-main9 .t-cont .box:nth-of-type(even){
+		float: right;
+	}
+	.h5-main9 .t-cont .box .t-h1{
+		margin-bottom: 1em;
+	}
+	.h5-main9 .t-cont .box .t-h1 img{
+		width: 100%;
+	}
+	/*=================================*/
+	.h5-main10{
+		background-color: #f6f6f6;
+	}
+	.h5-main10 .t-cont{
+		margin-bottom:2em;
+	}
+	.h5-main10 .t-cont .box{
+		width:70%;
+		margin:0 auto;
+		margin-bottom:1em;
+	}
+	.h5-main10 .t-cont .box img{
+		width:100%;
+	}
+	/*=======================================*/
+	.h5-main11{
+		background-color: #f9f9f9;
+	}
+	.h5-main11 .t-title{
+		margin-bottom:0.8em;
+	}
+	.h5-main11 .t-cont{
+		margin-bottom:2em;
+	}
+	.h5-main11 .t-cont .t-h1{
+		text-align: center;
+		margin-bottom:0.6em;
+	}
+	.h5-main11 .t-cont .t-h3
+	{
+	    text-align: center;
+	    margin-bottom:0.6em;
+	}
+	.h5-main11 .t-cont .t-h1 .t-i1{
+		font-size: 1em;
+	}
+	.h5-main11 .t-cont .t-h1 .t-i1 .t-p1{
+		
+	}
+	.h5-main11 .t-cont .t-h1 .t-i1 .t-p1 em{
+		font-size: 1.4em;
+		font-weight: bold;
+	}
+	.h5-main11 .t-cont .t-h1 .t-i1 .t-p2{
+		
+	}
+	.h5-main11 .t-cont .t-h1 .t-i-bar{
+		width:1px;
+		height:2em;
+		background-color: #888;
+		margin:0 2%;
+	}
+	.h5-main11 .t-cont .t-h2{
+		padding:0 4%;
+	}
+	.h5-main11 .t-cont .t-h2 img{
+		width:100%;
+	}
+	#doyoo_panel{display:none !important;}
+}

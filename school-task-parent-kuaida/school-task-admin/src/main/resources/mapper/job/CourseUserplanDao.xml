@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.CourseUserplanDao">
+    
+    <sql id="base_column">
+        course_userplan.class_type_id AS classTypeId,
+			mall_class_type.classtype_name AS classTypeName,
+			course_userplan.user_id AS userId,
+			users.nick_name AS nickName,
+			users.mobile AS mobile,
+			mall_class.class_id AS classId,
+			mall_class.class_name AS className,
+			mall_class.user_id AS classTeacherId,
+			sys_user.nick_name AS classTeacerNickName,
+			sys_user.username AS classTeacherAccount,
+			course_userplan.commodity_id AS goodId,
+			course_userplan.order_no AS orderNo,
+			course_userplan.ts,
+            ifnull(mall_order.only_one,1) as onlyOne
+    </sql>
+
+	<select id="queryKJClassMessage" resultType="map">
+		SELECT
+			<include refid="base_column"></include>
+		FROM
+			course_userplan AS course_userplan,
+			mall_class_type AS mall_class_type,
+			mall_order AS mall_order,
+			users AS users,
+			mall_class AS mall_class,
+			sys_user AS sys_user
+		WHERE
+			mall_order.order_id = course_userplan.order_id
+		AND users.user_id = course_userplan.user_id
+		AND mall_class.class_id = course_userplan.class_id
+		AND mall_class_type.classtype_id = course_userplan.class_type_id
+		AND sys_user.user_id = mall_class.user_id
+		AND course_userplan.ts &gt; #{ts}
+		AND course_userplan.dr = 0
+		AND mall_order.dr = 0
+		AND course_userplan.product_id IN (2, 3, 6, 7)
+	</select>
+	<select id="queryCodeListByCommodityId" resultType="string">
+		select course_tk_code from goods_coursetk where commodity_id = #{goodId}
+	</select>
+	<select id="queryUserplanObjectByOrderId" resultType="io.renren.modules.job.entity.CourseUserplanEntity">
+		select * from course_userplan where order_id = #{orderId} and dr = 0
+	</select>
+
+
+
+
+    <select id="queryClassMessageByProductId" resultType="map">
+		SELECT * FROM
+		(SELECT
+        (SELECT GROUP_CONCAT(tk.course_tk_code) FROM goods_coursetk tk WHERE tk.commodity_id = course_userplan.commodity_id) courseTkCode,
+        course_userplan.product_id as productId,
+        '1' AS `open`,
+        <include refid="base_column"></include>
+        FROM
+        course_userplan AS course_userplan,
+        mall_class_type AS mall_class_type,
+        mall_order AS mall_order,
+        users AS users,
+        mall_class AS mall_class,
+        sys_user AS sys_user
+        WHERE
+        mall_order.order_id = course_userplan.order_id
+        AND users.user_id = course_userplan.user_id
+        AND mall_class.class_id = course_userplan.class_id
+        AND mall_class_type.classtype_id = course_userplan.class_type_id
+        AND sys_user.user_id = mall_class.user_id
+		AND course_userplan.dr = 0
+        AND course_userplan.ts > #{ts}
+        AND mall_order.dr = 0) results
+		WHERE LENGTH(results.courseTkCode)>0
+    </select>
+</mapper>

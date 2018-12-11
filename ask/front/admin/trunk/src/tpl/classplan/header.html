@@ -1,0 +1,33 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        所属校区
+        <select id="nc_area_id" name="nc_area_id" >
+        </select>
+        上课时点
+        <input id="class_time" type="text" name="class_time" value="" size="20"  />
+        班级名称
+        <input id="name" type="text" name="name" value="" size="20"  />
+        课程科目
+        <select id="nc_course_id" name="nc_course_id" >
+        </select>
+        <br>
+        开班时间
+        <input id="sopen_time" type="text" name="sopen_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'sopen_time\')}'})"  />
+        到
+        <input id="eopen_time" type="text" name="eopen_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'eopen_time\')}'})" />
+
+        同步时间
+        <input id="ssyn_time" type="text" name="ssyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'ssyn_time\')}'})"  />
+        到
+        <input id="esyn_time" type="text" name="esyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'esyn_time\')}'})" />
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头--> 

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="true">
+
+	<!--Quartz -->
+
+	<!-- 集成方式：JobDetailFactoryBean，并且任务类需要继承QuartzJobBean -->
+	<!-- 定义jobDetail -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.PushMsgMainRemainSchedule"></property>
+
+	</bean>
+	
+	<bean id="jobDetail_1"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.PushMsgMainRemainSchedule"></property>
+
+	</bean>
+
+   <bean id="jobDetail_2"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.SchoolReportCreateSchedule"></property>
+
+	</bean>
+	
+	 <bean id="jobDetail_3"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.izhubo.schedule.OtherSchedule"></property>
+
+	</bean>
+	
+	 <bean id="jobDetail_4"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		
+		<property name="concurrent" value="false"/>
+		<property name="jobClass" value="com.izhubo.schedule.TimeSchedule"></property>
+
+	</bean>
+	
+	
+
+	<!-- 每天10点触发 题库提醒-->
+	<bean id="cronTrigger_1"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 每个10秒触发 -->
+		<property name="cronExpression" value="0 0 10 ? * *" />
+	</bean>
+
+<!-- 每天21点触发 题库提醒-->
+	<bean id="cronTrigger_2"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 每个10秒触发 -->
+		<property name="cronExpression" value="0 0 21 ? * *" />
+	</bean>
+	
+	<!-- 每天12点触发 使用会答提醒-->
+	<bean id="cronTrigger_3"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_1" />
+		<!-- 每个10秒触发 -->
+		<property name="cronExpression" value="0 0 12 ? * *" />
+	</bean>
+	
+	<!-- 每天20点触发  使用会答提醒-->
+	<bean id="cronTrigger_4"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_1" />
+		<!-- 每个10秒触发 -->
+		<property name="cronExpression" value="0 0 20 ? * *" />
+	</bean>
+	
+	
+		<!-- 每天凌晨5点生成数据-->
+	<bean id="cronTrigger_5"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_2" />
+		<!-- 每个10秒触发 -->
+		<property name="cronExpression" value="0 0 05 ? * *" />
+	</bean>
+	
+	
+		<!-- 测试数据-->
+	<bean id="cronTrigger_6"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_3" />
+		<!-- 每个10秒触发 -->
+		 <property name="cronExpression" value="0/60 * * * * ?"/>
+	</bean>
+
+	<bean id="cronTrigger_7"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail_4" />
+		<!-- 每个10秒触发 -->
+		 <property name="cronExpression" value="0/10 * * * * ?"/>
+	</bean>
+
+
+	<!-- 定义核心调度器 -->
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+
+				<ref bean="cronTrigger_5" />
+				
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+</beans>

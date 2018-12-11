@@ -1,0 +1,50 @@
+<!--查看用户信息-->
+
+<table class="showTable">
+    <tr>
+        <td width="60" style="text-align:right;">ID:</td>
+        <td><%=_id%></td>
+    </tr>
+    <tr>
+        <td style="text-align:right;">用户&nbsp;</br>账户:</td>
+        <td><%=bag%></td>
+    </tr>
+
+    <tr>
+        <td style="text-align:right;">用户&nbsp;</br>昵称:</td>
+        <td><%=nick_name%></td>
+    </tr>
+
+
+    <tr>
+        <td style="text-align:right;">用户&nbsp;</br>类型:</td>
+         <td><%=['','运营','老师','注册学员','客服人员','经纪人'][priv]%></td>
+    </tr>
+    <tr>
+        <td style="text-align:right;">注册&nbsp;</br>类型:</td>
+        <td>
+            <%var via=via||"default" ;%>
+            <%={"local":"本地用户","sina":"sina用户","qq":"qq用户","default":"未知"}[via]%></td>
+    </tr>
+
+    <tr>
+        <td style="text-align:right;">用户&nbsp;</br>状态:</td>
+        <td><%=status?"正常":"冻结"%></td>
+    </tr>
+
+    <tr>
+        <td style="text-align:right;">注册&nbsp;</br>时间:</td>
+        <td><%=new Date(timestamp).toLocaleString()%></td>
+    </tr>
+
+    <tr>
+        <td style="text-align:right;">唯一&nbsp;</br>标识:</td>
+        <td><%=tuid%> </td>
+    </tr>
+
+
+    <%if(params.key=='user'){%>
+      <td colspan="2" align="center"><strong><a href="#a=userds&_id=<%=_id%>&menu=user&tab=show">查看更多</a></strong></td>
+    <%}%>
+</table>
+<!--/查看用户信息-->

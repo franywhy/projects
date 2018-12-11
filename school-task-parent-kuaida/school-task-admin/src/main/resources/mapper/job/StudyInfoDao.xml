@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.StudyInfoDao">
+  
+	<select id="queryMaxDate" resultType="string">
+  		select 
+  			Max(modify_time) 
+  		from 
+  			study_info 
+  		where 
+  			dr = 0; 
+	</select>
+  
+  	<select id="queryVideoWatch" resultType="io.renren.modules.job.entity.StudyInfoEntity">
+  		SELECT
+		  a.user_id as userId,
+		  b.course_id as courseId,
+		  sum(a.full_dur) AS fullDur,
+		  sum(if(a.full_dur > a.watch_dur,a.watch_dur,a.full_dur )) AS watchDur,
+		  sum(a.video_dur) AS videoDur,
+		  sum(a.live_dur) AS liveDur
+		FROM
+		  log_gensee_watch a,
+		  course_classplan_lives b
+		WHERE 
+		  a.business_id = b.classplan_live_id 
+		  and a.ts > #{date}
+		  and a.full_dur > 0
+		GROUP BY 
+		  a.user_id,
+		  b.course_id
+		<if test="offset != null and limit != null">
+		  LIMIT #{offset},#{limit}
+		</if>
+  	</select>
+  	
+  	<select id="queryVideoWatchTotal" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			(
+				SELECT
+					count(1)
+				FROM
+					log_gensee_watch a,
+					course_classplan_lives b
+				WHERE
+					a.business_id = b.classplan_live_id
+					AND a.ts > #{date}
+					AND a.full_dur > 0
+				GROUP BY
+					a.user_id,
+					b.course_id
+			) a
+  	</select>
+  
+  	<select id="queryStudyInfos" parameterType="java.util.Set" resultType="io.renren.modules.job.entity.StudyInfoEntity">
+  		select 
+  			id,
+  			user_id userId,
+  			course_id courseId,
+  			full_dur fullDur,
+  			watch_dur watchDur,
+  			video_dur videoDur,
+  			live_dur liveDur
+  		from 
+  			study_info 
+  		where 
+  			1 = 1 and 
+  			user_id in
+  		<foreach collection="collection" item="item" open="(" close=")" separator="," >
+  			#{item}
+  		</foreach>
+  			
+  	</select>
+  	
+  	<insert id="insert">
+  		INSERT INTO `study_info` (
+  		`user_id`, 
+  		`course_id`, 
+  		`study_persents`, 
+  		`full_dur`, 
+  		`watch_dur`, 
+  		`video_dur`, 
+  		`live_dur`
+  		)
+		VALUES 
+		<foreach collection="list" item="item" separator="," >
+  			(
+  				#{item.userId},
+  				#{item.courseId},
+  				#{item.studyPersents},
+  				#{item.fullDur},
+  				#{item.watchDur},
+  				#{item.videoDur},
+  				#{item.liveDur}
+  			)
+  		</foreach>
+  	</insert>
+  	
+  	<update id="update">
+  		UPDATE study_info SET 
+  			study_persents = CASE id
+  			<foreach collection="list" item="item">
+				when #{item.id} THEN #{item.studyPersents} 
+			</foreach>
+			END,
+			full_Dur = CASE id
+  			<foreach collection="list" item="item">
+				when #{item.id} THEN #{item.fullDur} 
+			</foreach>
+			END,
+			watch_Dur = CASE id
+  			<foreach collection="list" item="item">
+				when #{item.id} THEN #{item.watchDur} 
+			</foreach>
+			END,
+			video_Dur = CASE id
+  			<foreach collection="list" item="item">
+				when #{item.id} THEN #{item.videoDur} 
+			</foreach>
+			END,
+			live_Dur = CASE id
+  			<foreach collection="list" item="item">
+				when #{item.id} THEN #{item.liveDur} 
+			</foreach>
+			END   
+		WHERE id IN 
+		<foreach collection="list" item="item" open="(" close=")" separator="," >
+			#{item.id}
+		</foreach>
+  	</update>
+</mapper>

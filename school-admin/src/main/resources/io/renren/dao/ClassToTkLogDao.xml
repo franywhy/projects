@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ClassToTkLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.ClassToTkLogEntity" id="classToTkLogMap">
+        <result property="id" column="id"/>
+        <result property="createtime" column="createTime"/>
+        <result property="userMobile" column="user_mobile"/>
+        <result property="userId" column="user_id"/>
+        <result property="goodId" column="good_id"/>
+        <result property="pushJson" column="push_json"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.ClassToTkLogEntity">
+		select * from class_to_tk_log where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.ClassToTkLogEntity">
+		select * from class_to_tk_log
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from class_to_tk_log 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.ClassToTkLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into class_to_tk_log
+		(
+			`createTime`, 
+			`user_mobile`, 
+			`user_id`, 
+			`good_id`, 
+			`push_json`, 
+			`remark`
+		)
+		values
+		(
+			#{createtime}, 
+			#{userMobile}, 
+			#{userId}, 
+			#{goodId}, 
+			#{pushJson}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.ClassToTkLogEntity">
+		update class_to_tk_log 
+		<set>
+			<if test="createtime != null">`createTime` = #{createtime}, </if>
+			<if test="userMobile != null">`user_mobile` = #{userMobile}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="goodId != null">`good_id` = #{goodId}, </if>
+			<if test="pushJson != null">`push_json` = #{pushJson}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from class_to_tk_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from class_to_tk_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

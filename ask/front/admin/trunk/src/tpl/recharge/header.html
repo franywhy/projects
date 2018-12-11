@@ -1,0 +1,24 @@
+<!--基础数据页头|选择起始日期到结束日期--> 
+<div class="tagArea">
+    <ul class="tagList">
+        <li class="<%=params.tab.indexOf('recharge')>-1? 'cur':''%>"><a href="#a=recharge&menu=recharge&tab=recharge-all"><i></i><span>充值统计</span></a></li>
+        
+        <%if(Izb.user.checkLimits('finance/pay_all_delta',Izb.enumList.menuType.all)){%>
+        <li class="<%=params.tab=='summary'? 'cur':''%>"><a href="#a=recharge&menu=recharge&tab=summary&stime=<%:u=Izb.ui.getFirstDay()%>"><i></i><span>充值概要</span></a></li>
+        <%}%>
+    </ul>
+    <div class="tag_r">
+        <input type="button" value="导出表格" class="d-button J_export" />
+<input type="button" value="返回" class="d-button J_back" />
+    </div>
+</div>
+<div class="searchForm">
+<form name="searchForm">
+选择日期
+<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+    到
+<input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+</form>
+</div>
+<!--/基础数据页头--> 

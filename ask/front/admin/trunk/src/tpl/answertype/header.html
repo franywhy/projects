@@ -1,0 +1,22 @@
+<!--答疑类型页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        类型编号
+        <input type="text" name="answer_type_code" size="20" />
+        类型名称
+        <input type="text" name="answer_type_name" size="20" />
+        关联信息
+        <select name="map_info">
+            <option selected="selected" value="">请选择</option>
+            <option value="0">课程相关</option>
+            <option value="1">课程无关</option>
+        </select>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/答疑类型页头-->

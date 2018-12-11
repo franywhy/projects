@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.CourseUserplanDetailDao">
+	<!-- 展示互动-安卓端-用户观看记录-获取排课信息 -->
+	<select id="getCourseClassPlanInfoGSync" resultType="map">
+		SELECT
+			course_classplan_lives.classplan_live_id AS classplanLiveId,
+			course_classplan_lives.classplan_id AS classplanId,
+			ABS(
+				(UNIX_TIMESTAMP(course_classplan_lives.start_time) * 1000) - #{startTime}
+			) AS MSA
+		FROM
+			course_classplan_lives AS course_classplan_lives
+		WHERE
+			course_classplan_lives.back_id = #{backId}
+		ORDER BY
+			MSA ASC
+		LIMIT 1
+	</select>
+	
+	<!-- 展示互动-安卓端-用户观看记录-获取排课信息 -->
+	<select id="getUserIdGSync" resultType="long">
+		SELECT
+			users.user_id AS userId
+		FROM
+			course_userplan_class_detail AS course_userplan_class_detail
+		JOIN course_userplan_detail as course_userplan_detail on course_userplan_detail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id
+		JOIN course_userplan as course_userplan on course_userplan.user_plan_id = course_userplan_detail.userplan_id
+		JOIN users as users on users.user_id = course_userplan.user_id
+		WHERE
+			course_userplan_class_detail.classplan_id = #{classplanId}
+		AND users.nick_name = #{userName}
+	</select>
+</mapper>

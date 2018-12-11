@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>流程指南</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+		    #if($shiro.hasPermission("courseguide:list"))
+		    <table class="table table-condensed" border="0">
+				<tr border="0">
+					<!-- <td><label for="name">商品 ID</label></td>
+					<td><input type="text" class="form-control" v-model="q.id" @keyup.enter="search" placeholder="商品ID"></td> -->
+					<td><label for="name">课程指南名称:</label></td>
+					<td><input type="text" class="form-control" v-model="q.guideName" @keyup.enter="search" placeholder="课程指南名称"></td>
+					<td><label for="name">层次:</label></td>
+					<td><input type="text" class="form-control" v-model="q.levelName" readonly="readonly" placeholder="点击选择层次" @click="levelLayerShowQuery"></td>
+					<td><label for="name">专业:</label></td>
+					<td><input type="text" class="form-control" v-model="q.professionName" readonly="readonly" placeholder="点击选择专业" @click="professionLayerShowQuery"></td>
+				</tr>
+				<tr border="0">
+					<td><label for="name">省份:</label></td>
+					<td><input type="text" class="form-control" v-model="q.areaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerShowQuery"></td>
+				</tr>
+			</table>
+		    <a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+		    <a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a>
+		    #end
+			#if($shiro.hasPermission("courseguide:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a class="btn btn-primary" @click="copyAdd"><i class="fa fa-plus"></i>&nbsp;复制新增</a>
+			#end
+			#if($shiro.hasPermission("courseguide:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("courseguide:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("courseguide:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+			#end
+			#if($shiro.hasPermission("courseguide:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+	    <table id="list1"></table>
+	    <div id="pager1"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+						<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseGuide.guideId" placeholder="主键"/>
+			    </div>
+		</div>
+								    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">专业</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseGuide.professionName" readonly="readonly" placeholder="点击选择专业"  @click="professionLayerShow"/ >
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">省份</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseGuide.areaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerShow"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">层次</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseGuide.levelName" readonly="readonly" placeholder="点击选择层次" @click="levelLayerShow"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseGuide.guideName" placeholder="名称"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">跳转地址(不选自动生成)</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseGuide.guideUrl" placeholder="跳转地址(不选自动生成)"/>
+			    </div>
+			</div>
+						<div class="form-group">
+			   	<div class="col-sm-2 control-label">排序</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseGuide.orderNum" placeholder="排序"/>
+			    </div>
+			     </div>
+					<div class="form-group">
+			   	<div class="col-sm-2 control-label">图片</div>
+			   	<div class="col-sm-10">
+			    <input type="text" class="form-control" v-model="courseGuide.guidePic" placeholder="图片" readonly="readonly" onclick="hq.core.upload(null,'vm.courseGuide.guidePic');"/>
+			    </div>
+			</div>						    			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">指南html内容</div>
+			    <div class="col-sm-10">
+			    <textarea id="editor_id" name="content" style="width:1000px;height:400px;" >
+			    request:${requestScope.message}
+                </textarea>
+                </div>
+			</div>			
+				<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+		</div>
+<script src="${rc.contextPath}/js/course/courseguide.js?_${date.systemTime}"></script>
+<!-- <script charset="utf-8" src="${rc.contextPath}/statics/editor/kindeditor.js"></script> -->
+<script charset="utf-8" src="${rc.contextPath}/statics/editor/kindeditor-all.js"></script>
+<script charset="utf-8" src="${rc.contextPath}/statics/editor/zh_CN.js"></script>
+<!-- <script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create('#editor_id');
+        });
+</script> -->
+<script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create("textarea[id='editor_id']",{
+                    resizeType : 1,
+                    allowPreviewEmoticons: false,
+                    allowImageUpload:true,//允许上传图片
+                    allowFileManager:true, //允许对上传图片进行管理
+                    uploadJson:'../courseguide/uploadCourseGuide', //上传图片的java代码，只不过放在jsp中
+                    /* fileManagerJson:'../../statics/editor/file_manager_json.jsp', */
+                    afterUpload: function(){this.sync();}, //图片上传后，将上传内容同步到textarea中
+                    afterBlur: function(){this.sync();}   ////失去焦点时，将上传内容同步到textarea中
+                    /* items : [
+                        'fontname','fontsize', '|','forecolor', 'hilitecolor','bold', 'italic','underline',
+                        'removeformat','|', 'justifyleft','justifycenter', 'justifyright','insertorderedlist',
+                        'insertunorderedlist','|', 'emoticons','link','media','|','image']    */
+                });
+        });
+</script>
+#parse("layer/levelAllLay.html")
+#parse("layer/professionAllLay.html")
+#parse("layer/areaAllLay.html")
+#parse("../../statics/plugins/upload/upload.html")
+</body>
+</html>

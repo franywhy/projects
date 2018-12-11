@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+	<bean primary="true" id="redisConnectionFactory"
+		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		  p:hostName="${redis.host}"
+		  p:port="${redis.port}"
+		  p:database="${redis.dbindex}"
+		  p:timeout="${redis.timeout}"/>
+	<bean id="mainRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+		  p:connectionFactory-ref="redisConnectionFactory" />
+	<!--admin-->
+	<bean id="adminRedisConnectionFactory"
+		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		  p:hostName="${admin.redis.host}"
+		  p:port="${admin.redis.port}"
+		  p:database="${admin.redis.dbindex}"
+		  p:timeout="${admin.redis.timeout}"/>
+	<bean id="adminRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
+		  p:connectionFactory-ref="adminRedisConnectionFactory" />
+	<!--<bean id="redisConnectionFactory"-->
+		  <!--class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"-->
+		  <!--p:hostName="${redis.host}"-->
+		  <!--p:port="${redis.port}"-->
+		  <!--p:database="${redis.dbindex}"-->
+		  <!--p:timeout="${redis.timeout}"/>-->
+	<!--<bean id="mainRedis" class="org.springframework.data.redis.core.StringRedisTemplate"-->
+		  <!--p:connectionFactory-ref="redisConnectionFactory" />-->
+
+	<!--<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+	</bean>-->
+
+	<bean id="jedisPoolConfig"
+		  class="redis.clients.jedis.JedisPoolConfig"
+		  p:maxTotal="${redis.pool.maxActive}"
+		  p:maxIdle="${redis.pool.maxIdle}"
+		  p:maxWaitMillis="${redis.pool.maxWait}"
+		  p:testOnBorrow="${redis.pool.testOnBorrow}"
+		  p:testOnReturn="${redis.pool.testOnReturn}" />
+
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+		<constructor-arg name="host" value="${redis.host}" />
+		<constructor-arg name="port" value="${redis.port}" type="int" />
+		<constructor-arg name="timeout" value="${redis.timeout}" type="int" />
+	</bean>
+
+	<!-- spring session start... -->
+	<!-- Put session into redis 1800秒 30分钟-->
+	<bean id="redisHttpSessionConfiguration" class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+		<property name="maxInactiveIntervalInSeconds" value="18000" />
+		<property name="cookieSerializer" ref="defaultCookieSerializer"/>
+
+	</bean>
+	
+	<!-- 设置Cookie domain 和 名称 -->
+    <bean id="defaultCookieSerializer" class="org.springframework.session.web.http.DefaultCookieSerializer">  
+        <!-- <property name="domainName" value="${session.domain}"/> -->
+        <property name="cookieName" value="SESSION"/>
+        <property name="cookiePath" value="/" />
+		<!-- <property name="domainNamePattern" value="^.+?\.(\w+\.[a-z]+)$"></property> -->
+    </bean>
+    <!-- spring session end -->
+
+	<bean id="courseAbnormalOrderNoKGS" class="com.school.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseAbnormalOrderNo"
+		  p:kgsRedis-ref="adminRedisTemplate"
+		  p:step="10"
+		  p:offset="100000"/>
+
+	<bean id="courseAbnormalFreeAssessmentNoKGS" class="com.school.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseAbnormalFreeAssessmentNo"
+		  p:kgsRedis-ref="adminRedisTemplate"
+		  p:step="10"
+		  p:offset="100000"/>
+	<bean id="courseAbnormallRegisterationPKKGS" class="com.school.rest.persistent.HighLowKGS"
+		  p:nameSpace="baoKaoNo"
+		  p:kgsRedis-ref="adminRedisTemplate"
+		  p:step="10"
+		  p:offset="100000"/>
+	<bean id="invoicesNumberKGS" class="com.school.rest.persistent.HighLowKGS"
+		  p:nameSpace="invoicesNumberKGS"
+		  p:kgsRedis-ref="adminRedisTemplate"
+		  p:step="10"
+		  p:offset="100000"/>
+</beans>

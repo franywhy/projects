@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.CourseClassplanLivesDao">
+	<!-- 根据回放id和回放类型,查询排课 -->
+	<select id="queryByBackId" parameterType="map" resultType="map">
+		SELECT classplan_live_id as classplanLiveId, start_time as startTime,  end_time as endTime, back_id as backId, back_type as backType
+		FROM course_classplan_lives
+		WHERE 1=1
+		<if test="backId != null">
+            AND back_id = #{backId}
+        </if>
+		<if test="backType != null">
+            AND back_type = #{backType}
+        </if>
+		<if test="classplanLiveId != null">
+            AND classplan_live_id = #{classplanLiveId}
+        </if>
+		LIMIT 1
+	</select>
+	<!-- 根据直播开始结束时,查询排课 -->
+	<select id="queryByDate" parameterType="map" resultType="map">
+		select
+		c.classplan_live_id as classplanLiveId,
+		l.gensee_live_id as liveId,
+		l.gensee_live_num as liveNum,
+		c.start_time as startTime,
+		c.end_time as endTime
+		from course_classplan_lives as c ,
+		course_classplan as cp,
+		mall_live_room as l
+		where c.liveroom_id = l.live_room_id
+		and cp.classplan_id = c.classplan_id
+		and cp.dr = 0
+		<![CDATA[and #{startTime} < c.start_time]]>
+		<![CDATA[and #{endTime} > c.end_time]]>
+	</select>
+
+	<select id="queryByClassPlanLiveId" parameterType="map" resultType="io.renren.modules.job.entity.CourseClassplanLivesEntity">
+		SELECT
+		classplan_live_id as classplanLiveId,
+		classplan_id as classplanId,
+		classplan_live_name as classplanLiveName,
+		classplan_live_time_detail as classplanLiveTimeDetail,
+		day_time as dayTime,
+		start_time as startTime,
+		end_time as endTime,
+		time_bucket as timeBucket,
+		liveroom_id as liveroomId,
+		studio_id as studioId,
+		back_url as backUrl,
+		back_id as backId,
+		back_type as backType,
+		video_id as videoId,
+		teacher_id as teacherId,
+		live_class_type_ids as liveClassTypeIds,
+		order_num as orderNum,
+		course_live_detail_id as courseLiveDetailId,
+		create_person as createPerson,
+		creation_time as creationTime,
+		modify_person as modifyPerson,
+		modified_time as modifiedTime,
+		school_id as schoolId,
+		course_id as courseId,
+		dr as dr,
+		file_url as fileUrl,
+		m_id as mId
+		FROM course_classplan_lives
+		WHERE classplan_live_id = #{classplanLiveId}
+		AND dr = #{dr}
+	</select>
+
+	<select id="queryCourseClassplanLivesByDate" parameterType="string" resultType="io.renren.modules.job.entity.CourseClassplanLivesEntity">
+		SELECT
+		*
+		FROM
+		course_classplan_lives
+		WHERE
+		dr = 0
+		<![CDATA[AND #{startTime}<start_time ]]>
+		<![CDATA[AND #{endTime}>end_time ]]>
+	</select>
+	<update id="updateBackUrlByClassplanliveId" parameterType="map">
+		UPDATE `course_classplan_lives` SET back_url=#{backUrl},back_id=#{backId} WHERE classplan_live_id=#{classplanLiveId}
+	</update>
+	
+	<select id="queryListByClassplanId" resultType="map">
+		SELECT
+			classplan_live_name AS coursecon,
+			start_time AS schooldate,
+			classplan_live_id AS coursearrangeid
+		FROM
+			course_classplan_lives
+		WHERE
+			dr = 0
+		  AND classplan_id = #{classplanId}
+        ORDER BY start_time
+	</select>
+</mapper>

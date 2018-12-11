@@ -1,0 +1,40 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">校区编号</th>
+        <th class="auto">校区名称</th>
+        <th class="auto">图片地址</th>
+        <th class="auto">创建用户</th>
+        <th class="longtime">创建时间</th>
+        <th class="auto">修改用户</th>
+        <th class="longtime">修改时间</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=data[i].sort %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto"><%=data[i].school_code %></td>
+            <td class="auto"><%=data[i].school_name %></td>
+            <td class="auto"><%=data[i].pic_url %></td>
+            <td class="auto"><%=data[i].create_user %></td>
+            <td class="longtime"><%=new Date(data[i].create_time).toLocaleString() %></td>
+            <td class="auto"><%=data[i].update_user %></td>
+            <td class="longtime"><%=new Date(data[i].update_time).toLocaleString()%></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

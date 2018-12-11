@@ -1,0 +1,22 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:80px;">校区编号</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+
+                <select class="select-sf" id="province_select"/>
+                <select class="select-sf" id="school_code" name="school_code"/>
+
+            </td>
+        </tr>
+        <tr>
+            <td style="width:80px;">图片地址</td>
+            <td>
+                <input class="input" type="text" name="pic_url" id="pic_url"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('pic_url', 'Posters');" />
+            </td>
+        </tr>
+
+    </table>
+</form>

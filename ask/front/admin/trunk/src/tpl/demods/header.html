@@ -1,0 +1,39 @@
+
+
+<!--通用应用头-->
+
+<div class="tagArea">
+    <ul class="tagList">
+        <li class="<%=params.tab=='duiwu'? 'cur':''%>"><a href="#a=<%=pty.key%>&_id=<%=params._id%>&tab=duiwu"><i></i><span>tab1</span></a></li>
+        <li class="<%=params.tab=='teams'? 'cur':''%>"><a href="#a=<%=pty.key%>&&_id=<%=params._id%>&tab=teams"><i></i><span>tab2</span></a></li>
+    </ul>
+    <div class="tag_r">
+        <input type="button" value="返回" class="d-button J_back" />
+    </div>
+</div>
+
+<!--<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span>
+</h2>-->
+
+<div class="searchForm">
+    <form name="searchForm">
+        <%if(params.tab=='list'){%>
+        用户ID
+        <input type="number" name="_id" size="10">
+        <%}%>
+
+        <%if(params.tab=="teams"){%>
+        teams
+        <%}%>
+
+        <input class="d-button J_search" type="button" value="查询" />
+        <input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头-->

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.NcAttendanceDao">
+
+	<resultMap type="io.renren.entity.NcAttendanceEntity" id="ncAttendanceResultMap">
+		<id property="courseCode" column="course_code" />
+		<id property="startChapter" column="start_chapter" />
+		<id property="startSection" column="start_section" />
+		<id property="endChapter" column="end_chapter" />
+		<id property="endSection" column="end_section" />
+		<id property="attendanceTime" column="attendance_time" />
+
+
+
+
+	</resultMap>
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		nc_attendance.id AS id ,
+		nc_attendance.course_code AS courseCode ,
+		nc_attendance.start_chapter AS startChapter ,
+		nc_attendance.start_section AS startSection ,
+		nc_attendance.end_chapter AS endChapter ,
+		nc_attendance.end_section AS endSection ,
+		nc_attendance.attendance_time AS attendanceTime ,
+
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where nc_attendance.id = #{id}
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from nc_attendance as nc_attendance
+	</sql>
+	<!-- <sql id="other_where"> <if test=" null != chapter and chapter.trim() 
+		!= ''"> and knowledge_point.chapter = #{chapter} </if> <if test=" null != 
+		verse and verse.trim() != ''"> and knowledge_point.verse = #{verse} </if> 
+		<if test=" null != name and name.trim() != ''"> and knowledge_point.name 
+		like concat('%',#{name},'%') </if> </sql> -->
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.NcAttendanceEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+
+	</select>
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="io.renren.entity.NcAttendanceEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<!-- <include refid="base_where" /> -->
+		<!-- <include refid="other_where" /> -->
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数 -->
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from" />
+		<!-- <include refid="base_where" /> -->
+		<!-- <include refid="other_where" /> -->
+	</select>
+
+
+
+	<!--新增 -->
+	<insert id="save" parameterType="io.renren.entity.NcAttendanceEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into nc_attendance
+		(
+		`course_code`, `start_chapter`,
+		`start_section`, `end_chapter`,
+		`end_section`, `attendance_time`,`class_plan_id`
+		)
+		values
+		(
+		#{item.courseCode} , #{item.startChapter},
+		#{item.startSection},
+		#{item.endChapter}, #{item.endSection}, #{item.attendanceTime},
+		#{item.classPlanId}
+		)
+	</insert>
+
+
+	<insert id="saveBatch" parameterType="java.util.List"
+		useGeneratedKeys="true">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into nc_attendance
+		(
+		`course_code`, `start_chapter`,
+		`start_section`,`end_chapter`,`end_section`,`attendance_time`,`class_plan_id`,`sync_time`
+		)values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.courseCode} , #{item.startChapter},
+			#{item.startSection}, #{item.endChapter}, #{item.endSection}, #{item.attendanceTime},
+			#{item.classPlanId}, #{item.syncTime}
+			)
+		</foreach>
+
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.NcAttendanceEntity">
+		update nc_attendance
+		<set>
+			<if test="name != null">`course_code` = #{courseCode}, </if>
+
+			<if test="createBy != null">`course_name` = #{courseName}, </if>
+			<if test="createTime != null">`charpter_code` = #{charpterCode}, </if>
+			<if test="updateBy != null">`charpter_name` = #{charpterName}, </if>
+			<if test="updateTime != null">`section_code` = #{sectionCode}, </if>
+			<if test="course != null">`section_name` = #{sectionName}, </if>
+			<if test="chapter != null">`is_delete` = #{isDelete}, </if>
+			<if test="verse != null">`is_use` = #{isUse},</if>
+
+		</set>
+		<!-- <include refid="base_where" /> -->
+		where id = #{id}
+	</update>
+
+	<!--删除 -->
+	<delete id="delete">
+		DELETE FROM nc_attendance
+
+		where id = #{id}
+	</delete>
+
+	<select id="getAttendanceInfo" resultType="map">
+
+		select b.*,kp.`name` as kpname,md.`name` as
+		mdname,md.question_bank_course,md.question_bank_chapter,md.question_bank_verse
+
+		from
+		(
+		select a.id as aid,a.attendance_time,a.class_plan_id
+		,nc.course_code,nc.course_name,nc.charpter_code,nc.charpter_name,nc.section_code,nc.section_name
+		from nc_courses nc
+		inner join (
+		select * from (
+		select a.id,a.attendance_time ,a.course_code ,a.class_plan_id,
+		(select c.chapter_idx from nc_courses c where c.course_code = a.course_code
+		and c.charpter_code = a.start_chapter and c.section_code =
+		a.start_section) as start_chapter_idx,
+		(select c.section_idx from nc_courses c where c.course_code = a.course_code
+		and c.charpter_code = a.start_chapter and c.section_code =
+		a.start_section) as start_section_idx,
+		(select c.chapter_idx from nc_courses c where c.course_code = a.course_code
+		and c.charpter_code = a.end_chapter and c.section_code =
+		a.end_section) as end_chapter_idx,
+		(select c.section_idx from nc_courses c where c.course_code = a.course_code
+		and c.charpter_code = a.end_chapter and c.section_code =
+		a.end_section) as end_section_idx
+
+		from (select * from nc_attendance where replace(start_chapter,' ','')<![CDATA[<>]]>'' 
+		<if test="null!=atime ">
+		 	and date_format(attendance_time,'%Y-%m-%d')=#{atime}
+		</if>
+		) a
+		)c
+		)a
+		on
+		(nc.chapter_idx =a.start_chapter_idx and nc.section_idx >=a.start_section_idx and
+		nc.course_code = a.course_code) 
+<![CDATA[or (nc.chapter_idx>a.start_chapter_idx and nc.chapter_idx<a.end_chapter_idx and nc.course_code = a.course_code) ]]>
+<![CDATA[or (nc.chapter_idx=a.end_chapter_idx and nc.section_idx<=a.end_section_idx and nc.course_code = a.course_code)  ]]>
+		order by chapter_idx,section_idx
+
+
+
+		)b
+		inner join knowledge_point kp on kp.course = b.course_code and kp.chapter =
+		b.charpter_code and kp.verse = b.section_code
+		inner join knowledge_point_material kpm on kpm.knowledge_point_id = kp.id
+		inner join material_detail md on md.id = kpm.material_id
+
+		order by aid
+
+
+
+	</select>
+
+</mapper>

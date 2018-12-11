@@ -1,0 +1,102 @@
+<!--消费统计列表-->
+<table width="100%" class="listTable">
+    <thead>
+    <tr>
+            <th class="longtime" rowspan="2">日期</th>
+            <th class="auto" colspan="3">礼物消费星币</th>
+            <th class="auto" colspan="3">点歌消费星币</th>
+            <th class="auto" colspan="3">广播消费星币</th>
+            <th class="auto" colspan="3">累计消费星币</th>
+			<th class="auto" rowspan="2">用户剩余星豆</th>
+            <th class="auto" rowspan="2">用户剩余金额</th>
+    </tr>
+    <tr>
+    	<th class="short">
+        总额（豆）
+        </th>
+        <th class="short">
+        人数（个）
+        </th>
+        <th class="short">
+        人均
+        </th>
+       <th class="short">
+        总额（豆）
+        </th>
+        <th class="short">
+        人数（个）
+        </th>
+        <th class="short">
+        人均
+        </th>
+        <th class="short">
+        总额（豆）
+        </th>
+        <th class="short">
+        人数（个）
+        </th>
+        <th class="short">
+        人均
+        </th>
+        <th class="short">
+        总额（豆）
+        </th>
+        <th class="short">
+        人数（个）
+        </th>
+         <th class="short">
+        人均
+        </th>
+    </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){
+        	var send_gift = data[i].send_gift,
+                song = data[i].song,
+                broadcast = data[i].broadcast,
+                user_cost = data[i].user_cost,
+                user_remain = data[i].user_remain;
+        %>
+        <tr>
+            <td class="longtime"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+            <%if(typeof send_gift=='object'){%>
+                <td class="auto"><%=send_gift.cost%></td>
+                <td class="auto"><%=send_gift.user%></td>
+                <td class="auto"><%=send_gift.user == 0 ? 0 : Math.round(send_gift.cost/send_gift.user)%></td>
+            <%}else{%>
+            	<td class="auto" colspan="3"><%=send_gift%></td>
+            <%}%>
+            <%if(typeof song=='object'){%>
+                <td class="auto"><%=song.cost%></td>
+                <td class="auto"><%=song.user%></td>
+                <td class="auto"><%=song.user == 0 ? 0 : Math.round(song.cost/song.user)%></td>
+            <%}else{%>
+            	<td class="auto" colspan="3"><%=song%></td>
+            <%}%>
+            <%if(typeof broadcast=='object'){%>
+                <td class="auto"><%=broadcast.cost%></td>
+                <td class="auto"><%=broadcast.user%></td>
+                <td class="auto"><%=broadcast.user == 0 ? 0 : Math.round(broadcast.cost/broadcast.user)%></td>
+            <%}else{%>
+            	<td class="auto" colspan="3"><%=broadcast%></td>
+            <%}%>
+            <%if(typeof user_cost=='object'){%>
+                <td class="auto"><%=user_cost.cost%></td>
+                <td class="auto"><%=user_cost.user%></td>
+                <td class="auto"><%=user_cost.user == 0 ? 0 : Math.round(user_cost.cost/user_cost.user)%></td>
+            <%}else{%>
+            	<td class="auto" colspan="3"><%=user_cost%></td>
+            <%}%>
+            <%if(typeof user_remain=='object'){%>
+                <td class="auto"><%=user_remain.bean%></td>
+                <td class="auto"><%=Izb.common.getMoney(user_remain.coin)%></td>
+            <%}else{%>
+            	<td class="auto"> - </td>
+                <td class="auto"><%=Izb.common.getMoney(user_remain)%></td>
+            <%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/消费统计列表-->

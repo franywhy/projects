@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.VideoInfoDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	video_info.video_info_id AS videoInfoId , 	video_info.video_id AS videoId , 	video_info.live_id AS liveId , 	video_info.business_id AS businessId , 	video_info.business_type AS businessType , 	video_info.start_time AS startTime , 	video_info.end_time AS endTime , 	video_info.video_duration AS videoDuration , 	video_info.url AS url , 	video_info.school_id AS schoolId , 	video_info.create_time AS createTime 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM video_info AS video_info
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  video_info_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.VideoInfoEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND video_info_id = #{videoInfoId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.VideoInfoEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.VideoInfoEntity" useGeneratedKeys="true" keyProperty="videoInfoId">
+		insert into video_info
+		(
+				`video_id`, 				`live_id`, 				`business_id`, 				`business_type`, 				`start_time`, 				`end_time`, 				`video_duration`, 				`url`, 				`school_id`, 				`create_time`		)
+		values
+		(
+															#{videoId}, 																			#{liveId}, 																			#{businessId}, 																			#{businessType}, 																			#{startTime}, 																			#{endTime}, 																			#{videoDuration}, 																			#{url}, 																			#{schoolId}, 																			#{createTime}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.VideoInfoEntity">
+		update video_info 
+		<set>
+			<if test="videoId != null">`video_id` = #{videoId}, </if>
+			<if test="liveId != null">`live_id` = #{liveId}, </if>
+			<if test="businessId != null">`business_id` = #{businessId}, </if>
+			<if test="businessType != null">`business_type` = #{businessType}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="videoDuration != null">`video_duration` = #{videoDuration}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		<include refid="base_where"/>
+		AND video_info_id = #{videoInfoId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM video_info 
+		<include refid="base_where"/>
+		AND video_info_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM video_info 
+		<include refid="base_where"/> 
+		AND video_info_id IN 
+		<foreach item="videoInfoId" collection="ids" open="(" separator="," close=")">
+			#{videoInfoId}
+		</foreach>
+	</delete>
+</mapper>

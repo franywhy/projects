@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseUserstopDao">
+	
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		course_userstop.id AS id , 
+		course_userstop.userplan_id AS userplanId , 
+		course_userstop.start_time AS startTime ,
+		course_userstop.end_time AS endTime , 
+		course_userstop.stop_cause AS stopCause , 
+		course_userstop.user_id AS userId , 
+		course_userstop.remark AS remark , 
+		course_userstop.status AS status ,
+		course_userstop.create_person AS createPerson ,
+		course_userstop.creation_time AS creationTime ,
+		course_userstop.modify_person AS modifyPerson ,
+		course_userstop.modified_time AS modifiedTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1 = 1 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM course_userstop AS course_userstop
+	</sql>
+	<!-- 通用关联查询 -->
+	<sql id="base_join">
+		LEFT JOIN course_userplan AS course_userplan ON course_userplan.user_plan_id = course_userstop.userplan_id
+		LEFT JOIN users AS users ON users.user_id = course_userstop.user_id
+		LEFT JOIN sys_user AS sys_user ON sys_user.user_id = course_userstop.modify_person
+	</sql>
+	<!-- 通用关联名字 -->
+	<sql id="base_join_name">
+		(select mall_goods_info.name from mall_goods_info as mall_goods_info where mall_goods_info.id = course_userplan.commodity_id) AS commodityName,
+		users.nick_name AS userName,
+		users.mobile AS mobile,
+		sys_user.nick_name AS modifyName
+	</sql>	
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseUserstopEntity">
+		select 
+      	<include refid="base_column"/>
+      	,
+      	<include refid="base_join_name"/>
+		<include refid="base_from"/>
+		<include refid="base_join"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseUserstopEntity">
+		select
+		<include refid="base_column"/>
+		,
+      	<include refid="base_join_name"/>
+		<include refid="base_from"/>
+		<include refid="base_join"/> 
+		<include refid="base_where"/>
+		<if test="userName != null and userName.trim() != ''">
+			and users.nick_name like concat('%',#{userName},'%')
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile = #{mobile}
+		</if>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/>
+		<include refid="base_join"/> 
+		<include refid="base_where"/>
+		<if test="userName != null and userName.trim() != ''">
+			and users.nick_name like concat('%',#{userName},'%')
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile = #{mobile}
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseUserstopEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into course_userstop
+		(
+			`userplan_id`, 
+			`start_time`, 
+			`end_time`, 
+			`stop_cause`, 
+			`user_id`,
+			`remark`, 
+			`status`,
+			`create_person`, 
+			`creation_time`, 
+			`modify_person`,
+			`modified_time` 
+		)
+		values
+		(
+			#{userplanId}, 
+			#{startTime}, 
+			#{endTime},
+			#{stopCause}, 
+			#{userId}, 
+			#{remark},
+			#{status}, 
+			#{createPerson},
+			#{creationTime}, 
+			#{modifyPerson},
+			#{modifiedTime} 
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseUserstopEntity">
+		update course_userstop 
+		<set>
+			<if test="userplanId != null">`userplan_id` = #{userplanId}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="stopCause != null">`stop_cause` = #{stopCause}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM course_userstop 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM course_userstop 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+</mapper>

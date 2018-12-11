@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>特殊情况-转专业</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<nav class="navbar navbar-default" role="navigation" style="margin-left: -30px">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li ><a href="malladjustarea.html">转省份</a></li>
+					<li class="active"><a href="malladjustprofession.html">转专业</a></li>
+					<li><a href="recordrefunds.html">退费</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<form class="form-inline" style="margin-top: 5px;">
+				<div class="form-group">
+					<label >存档相关申请:</label>
+					<select class="form-control" v-model="queryData.applystatus">
+						<option v-for="option in selectData.applystatusList" v-bind:value="option.value">{{ option.name }}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label >姓名:</label>
+					<input type="text" class="form-control" v-model="queryData.userName">
+				</div>
+				<div class="form-group">
+					<label >班主任:</label>
+					<input type="text" class="form-control" id="query-classTeacherName"  v-model.trim="queryData.classTeacherName" readonly="readonly" placeholder="选择班主任" @click="classTeacherLayerShow">
+				</div>
+				<a class="btn btn-default" @click="clearQueryData">重置</a>
+				<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+				<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+			</form>
+
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+</div>
+
+<script src="${rc.contextPath}/js/student/malladjustprofession.js?_${date.systemTime}"></script>
+#parse("layer/teacherLay.html")
+</body>
+</html>

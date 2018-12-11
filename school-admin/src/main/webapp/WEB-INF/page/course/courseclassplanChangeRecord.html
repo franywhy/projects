@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+<title>排课计划表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("course:courseclassplanChangeRecord:list"))
+			<a class="btn btn-default" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+
+			#if($shiro.hasPermission("course:courseclassplanChangeRecord:audited"))
+			<a class="btn btn-primary" @click="audit"><i class="fa fa-question-circle"></i>&nbsp;审核</a> 
+			#end
+			<a class="btn btn-primary" @click="changeRecodLook"><i class="fa fa-question-circle"></i>&nbsp;查看</a>
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model.trim="q.classplanName" @keyup.enter="query" placeholder="排课计划名称">
+			</div>
+			
+			
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">排课计划ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="courseClassplan.classplanId" placeholder="排课计划ID"/>
+			    </div>
+		    </div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">排课计划名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="classplanName" class="form-control" v-model.trim="courseClassplan.classplanName" placeholder="排课计划名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="productName" class="form-control" v-model.trim="courseClassplan.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">课程名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="courseName" class="form-control" v-model.trim="courseClassplan.courseName" readonly="readonly" placeholder="点击选择课程" @click="selectCourse"/>
+			    </div>
+			</div>
+			
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">时间说明</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="courseClassplan.classplanLiveDetail" placeholder="直播时间说明"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+				<div class="col-sm-2 control-label">时间说明</div>
+				<div class="col-sm-10">
+					<textarea class="form-control" id="classplanLiveDetail" v-model.trim="courseClassplan.classplanLiveDetail" style="width:371px;height:100px;" placeholder="直播时间说明不得超过100个字">
+               		</textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">资料库:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="meteriaName" class="form-control" v-model.trim="courseClassplan.materialName" readonly="readonly" placeholder="点击选择资料库"  @click="materialLayerShow"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">开课日期</div>
+			   	<div class="col-sm-10">
+                  <input type="text"  class="form-control courseClassplan-startTime" id="courseClassplanStartTime" readonly="readonly" placeholder="点击选择开课日期"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">上课时点</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="timetableName" class="form-control" v-model.trim="courseClassplan.timetableName" readonly="readonly" placeholder="点击选择上课时点" @click="selectTimetable"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播室</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="studioName" class="form-control" v-model.trim="courseClassplan.studioName" readonly="readonly" placeholder="点击选择直播室" @click="selectStudio"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间</div>
+			   	<div class="col-sm-10">
+			      	<input type="text" id="liveRoomName" class="form-control" v-model.trim="courseClassplan.liveRoomName" readonly="readonly" placeholder="点击选择直播间" @click="selLiveroom"/>
+			    </div>
+			    <!-- <a class="btn btn-default" @click="selLiveroom">直播间</a> -->
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">授课老师</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="teacherName" class="form-control" v-model.trim="courseClassplan.teacherName" readonly="readonly" placeholder="点击选择授课老师" @click="selectTeacher"/>
+			    </div>
+			</div>
+			<div class="form-group" id="ready_time">
+			   	<div class="col-sm-2 control-label">即将开始提前时间(min)</div>
+			   	<div class="col-sm-10">
+			      <input type="number" id="readyTime" class="form-control" v-model.trim="courseClassplan.readyTime" placeholder="即将开始提前时间(min)"/>
+			    </div>
+			</div>
+			<div class="form-group" id="close_time">
+			   	<div class="col-sm-2 control-label">进入直播间结束延后时间(min)</div>
+			   	<div class="col-sm-10">
+			      <input type="number" id="closeTime" class="form-control" v-model.trim="courseClassplan.closeTime" placeholder="进入直播间结束延后时间(min)"/>
+			    </div>
+			</div>
+				
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">状态</div>
+			   	<label class="radio-inline">
+				  <input type="radio" id="status1" name="status" value="0" v-model.trim="courseClassplan.status"/> 作废
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" id="status2" name="status" value="1" v-model.trim="courseClassplan.status"/> 正常
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" id="status3" name="status" value="2" v-model.trim="courseClassplan.status"/> 结课
+				</label>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">校验</div>
+			   	<div class="col-sm-10">
+			   	  <label class="checkbox-inline">
+			   	  	<input type="checkbox" id="checkType" v-model.trim="courseClassplan.checkType" checked ='checked'/>校验
+			   	  </label>
+			    </div>
+			</div>
+			
+			<div class="form-group" style="display: none;">
+			   	<div class="col-sm-2 control-label">是否公开课</div>
+			   	<label class="radio-inline">
+				  <input type="radio" name="is_open" value="1" v-model.trim="courseClassplan.isOpen"/> 是
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="is_open" value="0" v-model.trim="courseClassplan.isOpen"/> 否
+				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">备注</div>
+				<div class="col-sm-10">
+					<textarea class="form-control" id="remark" v-model.trim="courseClassplan.remark" style="width:371px;height:100px;" placeholder="备注信息不得超过50个字">
+               		</textarea>
+				</div>
+			</div>
+			<!-- ---------------------------------ITEM 子表--------------------------------- -->
+			<div class="form-group">
+				<div class="col-sm-2 control-label">排课计划详情</div>
+			    <div class="tab-pane col-sm-10 fade in active">
+			    	<div id="itemButton">
+					    <a id="initButton" class="btn btn-primary" @click="initItem"><i class="fa fa-plus"></i>&nbsp;加载</a>
+					    <a class="btn btn-primary" @click="checkItem"><i class="fa fa-plus"></i>&nbsp;校验</a>
+					    <a class="btn btn-primary" @click="iadd"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					    <a class="btn btn-primary" @click="iupdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+					    <a class="btn btn-primary" @click="idel"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			    	</div>
+				    <table id="detailGrid"></table>
+				    <div id="detailGridPager"></div>
+			    </div>
+			</div>
+			<div class="form-group" id="commitButton">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+			
+			<div class="form-group" id="auditButton">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="accept" value="通过" /> &nbsp;&nbsp;
+					<input type="button" class="btn btn-warning" @click="reject" value="未通过" />&nbsp;&nbsp;
+					<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+			</div>
+			<div class="form-group" id="unAuditButton">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="unAudit" value="待审核" />&nbsp;&nbsp;
+					<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+			</div>
+			<div class="form-group" id="lookButton">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+			</div>
+		</form>
+	</div>
+
+                               
+	
+	<div id="datetimepicker2Layer" style="display: none;">
+		<form class="form-horizontal">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">开始时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker2" id="datetimepicker2" placeholder="开始时间"/>
+			    </div>
+			</div>
+		</form>
+	</div>
+	
+	<!-- 临时新增子表一行 -->
+	<div id="liveLayer" style="display: none;">
+		<form class="form-horizontal">
+		<div class="form-group">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播课名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="detail.obj.classplanLiveName" placeholder="直播课名称"/>
+			    </div>
+			</div>
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">直播时间说明</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="detail.obj.classplanLiveTimeDetail" placeholder="直播时间说明"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">即将开始时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="detailReadyTime" readonly="readonly" placeholder="即将开始时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">开始时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="detailStartTime" readonly="readonly" placeholder="开始时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">结束时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="detailEndTime" readonly="readonly" placeholder="结束时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">进入直播结束时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="detailCloseTime" readonly="readonly" placeholder="进入直播结束时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">上课时段</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" v-model.trim="detail.obj.timeBucket">
+				       <option v-for="option in options" v-bind:value="option.value">  
+    						{{ option.text }}
+  						</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">是否考勤</div>
+				<div class="col-sm-10">
+					<select class="form-control" v-model.trim="detail.obj.attendance">
+						<option v-for="option in options1" v-bind:value="option.value">
+							{{ option.text }}
+						</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播室</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="detail.obj.studioName" readonly="readonly" placeholder="选择直播室" @click="selectStudioForDetail"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间</div>
+			   	<div class="col-sm-10">
+			      <!-- <select class="form-control" v-model.trim="detail.obj.liveroomId" style="width:150px">
+				      <option v-for="option in selData.liveRoomList" v-bind:value="option.liveRoomId">{{ option.liveRoomName }}</option>
+			      </select> -->
+			      <input type="text" class="form-control" v-model.trim="detail.obj.liveRoomName" readonly="readonly" placeholder="选择直播间" @click="selLiveroomForDetail"/>
+			    </div>
+			    <!-- <a class="btn btn-default" @click="selLiveroomForDetail">直播间</a> -->
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">回放地址</div>
+			   	<div class="col-sm-10">
+			      <!-- <input type="text" class="form-control" v-model.trim="detail.obj.backUrl" readonly="readonly" placeholder="回放地址"  @click="selectVideo"/> -->
+			      <input type="text" class="form-control" v-model.trim="detail.obj.backUrl" placeholder="回放地址" />
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">授课老师</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="detail.obj.teacherName" readonly="readonly" placeholder="选择授课老师" @click="selectTeacherForDetail"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">文件上传</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="detail.obj.fileUrl" placeholder="文件上传" readonly="readonly" onclick="hq.core.upload(null,'vm.detail.obj.fileUrl','上传文件');"/>
+			    </div>
+			</div>
+
+
+			<!--//app4.0.1注释掉字段-->
+			<div class="form-group">
+			<div class="col-sm-2 control-label">上期复习</div>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" v-model.trim="detail.obj.review" placeholder="文件上传" readonly="readonly" onclick="hq.core.upload(null,'vm.detail.obj.review','上期复习文件');"/>
+			</div>
+			</div>
+			<div class="form-group">
+			<div class="col-sm-2 control-label">本次预习</div>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" v-model.trim="detail.obj.prepare" placeholder="文件上传" readonly="readonly" onclick="hq.core.upload(null,'vm.detail.obj.prepare','本次预习文件');"/>
+			</div>
+			</div>
+			<div class="form-group">
+			<div class="col-sm-2 control-label">课堂资料</div>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" v-model.trim="detail.obj.courseware" placeholder="文件上传" readonly="readonly" onclick="hq.core.upload(null,'vm.detail.obj.courseware','课堂资料文件');"/>
+			</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">阶段</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="detail.obj.phaseName" readonly="readonly" placeholder="选择阶段" @click="selectPhaseForDetail"/>
+			    </div>
+			</div>
+
+			
+			<!-- <div class="form-group">
+				<div class="col-sm-2 control-label">练习阶段</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="detail.obj.practiceStageId" placeholder="练习阶段" />
+				</div>
+			</div>
+			 <div class="form-group">
+				<div class="col-sm-2 control-label">考试阶段</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="detail.obj.examStageId" placeholder="考试阶段" />
+				</div>
+			</div> -->
+			
+
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">班型权限</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" multiple="multiple" placeholder="班型权限" v-model.trim="detail.obj.liveClassTypeIds">
+					<option v-for="option in classTypeList" v-bind:value="option.value">{{ option.name }}</option>
+				  </select>
+			    </div>
+			</div>
+		</div>
+		</form>
+	</div>
+	
+	<!-- 课程列表 -->
+	<div id="courselayer" style="display: none;">
+			<!-- 订单查询条件 -->
+			<!-- <table  border="0">
+				<tr class="row" >
+					<td class=""><label for="name">订单号</label></td>
+					<td >
+						<input type="text" class="form-control" v-model="qorder.orderNo" @keyup.enter="reloadJqGridOrder" placeholder="订单号">
+					</td>
+					
+					<td><label for="name">手机号码</label></td>
+					<td>
+						<input type="text" class="form-control" v-model="qorder.userMobile" @keyup.enter="reloadJqGridOrder" placeholder="手机号码">
+					</td>
+					
+					<td><label for="name">来源</label></td>
+					<td>
+						<select class="form-control" placeholder="来源" v-model="qorder.sourceType">
+							<option value="">全部</option>
+							<option value="0">线上</option>
+							<option value="1">NC</option>
+						</select>
+					</td>
+				</tr>
+			</table> -->
+			<!-- 按钮 -->
+			<!-- <div class="grid-btn">
+				<a class="btn btn-primary" @click="clearQueryOrderParams">清空</a> 
+				<a class="btn btn-default" @click="reloadJqGridOrder">查询</a> 
+			</div> -->
+			<!-- 订单grid -->
+			<table id="jqGridCourse"></table>
+		    <div id="jqGridPagerCourse"></div>
+		</div>
+	<!-- 课程资料 -->
+	<div id="courseMaterialDiv" style="display: none;">
+		<div class="form-group">
+			   	<div class="col-sm-2 control-label">资料库:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="courseClassplan.materialName" readonly="readonly" placeholder="点击选择资料库"  @click="materialLayerShow"/ >
+			    </div>
+			</div>
+	</div>
+	
+</div>
+
+<script src="${rc.contextPath}/js/course/courseclassplanChangeRecord.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/liveroomLay.html")
+#parse("layer/courseLay.html")
+#parse("layer/teacherLay.html")
+#parse("layer/studioLay.html")
+#parse("layer/phaseLay.html")
+#parse("layer/timetableLay.html")
+#parse("layer/materialLay.html")
+#parse("layer/polyvVideoLay.html")
+#parse("layer/usersByclassplanLay.html")
+#parse("layer/productLay.html")
+</body>
+</html>

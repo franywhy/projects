@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MsgContentDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		msg_content.content_id AS contentId ,
+		msg_content.content_title AS contentTitle , 
+		msg_content.content_pic AS contentPic , 
+		msg_content.content_html AS contentHtml ,
+		msg_content.content_url AS contentUrl , 
+		msg_content.common_send AS commonSend , 
+		msg_content.top_send AS topSend , 
+		msg_content.push_send AS pushSend , 
+		msg_content.type AS type , 
+		msg_content.classplan_id AS classplanId , 
+		msg_content.classtype_ids AS classtypeIds ,
+		msg_content.send_type AS sendType , 
+		msg_content.timestamp AS timestamp , 
+		msg_content.create_person AS createPerson , 
+		msg_content.create_time AS createTime , 
+		msg_content.modify_person AS modifyPerson ,
+		msg_content.modify_time AS modifyTime , 
+		msg_content.school_id AS schoolId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from msg_content as msg_content
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.MsgContentEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND content_id = #{contentId}
+	</select>
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="io.renren.pojo.MsgContentPOJO">
+		select 
+      	<include refid="base_column"/>
+      	,
+		(select cu.username from sys_user cu where cu.user_id = msg_content.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = msg_content.modify_person) as modifiedName,
+		(select cc.classplan_name from course_classplan cc where cc.classplan_id = msg_content.classplan_id) as classplanName
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND content_id = #{contentId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.MsgContentEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="io.renren.pojo.MsgContentPOJO">
+		select
+		<include refid="base_column"/>
+		,
+		(select cu.username from sys_user cu where cu.user_id = msg_content.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = msg_content.modify_person) as modifiedName,
+		(select cc.classplan_name from course_classplan cc where cc.classplan_id = msg_content.classplan_id) as classplanName
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="contentTitle != null and contentTitle.trim() != ''">
+			and `content_title` like concat('%',#{contentTitle},'%') 
+		</if>
+		order by contentId desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="contentTitle != null and contentTitle.trim() != ''">
+			and `content_title` like concat('%',#{contentTitle},'%') 
+		</if>
+	</select>
+		<select id="checkClassType" resultType="int">
+		select count(1)  from  msg_content msg_content where  msg_content.classtype_ids  like concat('%',#{classtypeId},'%')
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MsgContentEntity" useGeneratedKeys="true" keyProperty="contentId">
+		insert into msg_content
+		(
+			`content_id`, 
+			`content_title`, 
+			`content_pic`, 
+			`content_html`,
+			`content_url`, 
+			`common_send`,
+			`top_send`, 
+			`push_send`, 
+			`type`, 
+			`classplan_id`, 
+			`classtype_ids`,
+			`send_type`, 
+			`timestamp`, 
+			`create_person`, 
+			`create_time`,
+			`modify_person`, 
+			`modify_time`, 
+			`school_id` 
+		)
+		values
+		(
+			#{contentId}, 
+			#{contentTitle}, 
+			#{contentPic}, 
+			#{contentHtml}, 
+			#{contentUrl}, 
+			#{commonSend},
+			#{topSend}, 
+			#{pushSend}, 
+			#{type}, 
+			#{classplanId}, 
+			#{classtypeIds},
+			#{sendType}, 
+			#{timestamp}, 
+			#{createPerson}, 
+			#{createTime},
+			#{modifyPerson}, 
+			#{modifyTime}, 
+			#{schoolId} 
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.MsgContentEntity">
+		update msg_content 
+		<set>
+			<if test="contentTitle != null">`content_title` = #{contentTitle}, </if>
+			<if test="contentPic != null">`content_pic` = #{contentPic}, </if>
+			<if test="contentHtml != null">`content_html` = #{contentHtml}, </if>
+			<if test="contentUrl != null">`content_url` = #{contentUrl}, </if>
+			<if test="commonSend != null">`common_send` = #{commonSend}, </if>
+			<if test="topSend != null">`top_send` = #{topSend}, </if>
+			<if test="pushSend != null">`push_send` = #{pushSend}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+			<if test="classtypeIds != null">`classtype_ids` = #{classtypeIds}, </if>
+			<if test="sendType != null">`send_type` = #{sendType}, </if>
+			<if test="timestamp != null">`timestamp` = #{timestamp}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND content_id = #{contentId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM msg_content 
+		<include refid="base_where"/>
+		AND content_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM msg_content 
+		<include refid="base_where"/> 
+		AND content_id IN 
+		<foreach item="contentId" collection="ids" open="(" separator="," close=")">
+			#{contentId}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,18 @@
+package ${package}.dao;
+
+import ${package}.entity.${className}Entity;
+import java.util.Map;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public interface ${className}Dao extends BaseMDao<${className}Entity> {
+	/**
+	 * 批量更新状态
+	 */
+	int updateBatch(Map<String, Object> map);
+}

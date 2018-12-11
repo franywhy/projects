@@ -1,0 +1,40 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th width="200px">班级编号</th>
+			<th class="auto">班级名称</th>
+			<th class="auto">学习建议</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        		<th class="action action100">操作</th>
+        	<%}%>
+			<!-- <th class="action action150">操作</th> -->
+		</tr>
+	</thead>
+	<tbody>
+		
+		<!--<tr>
+		<td  name="subject" class="auto_edit" rowspan="4">fdfgfd</td>	
+		</tr>-->
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr did="<%=data[i].id%>">
+			<td class="auto"><%=i+1 %></td>
+			<!--<td  align="center" name="nc_class_id"><%=data[i].nc_class_id%></td>-->
+			<td  align="center" name="class_name"><%=data[i].class_name%></td>
+			<td  align="center" name="class_code"><%=data[i].class_code%></td>
+			<td align="center" name="learning_tip"><%=data[i].learning_tip%></td>
+			<td>
+			<button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i].id%>')">删</button>
+			<button class="d-button" onClick="Izb.controller.<%=pty.key%>.editTip('<%=data[i].id%>','<%=data[i].learning_tip%>')">改</button>
+			</td>
+			<!-- <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit(<%=data[i]._id%>)">更新</button>
+                <%}%>
+			</td> -->
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

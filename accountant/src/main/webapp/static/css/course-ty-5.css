@@ -1,0 +1,42 @@
+.taoye-5 .course-o .cont-1{
+	background-image: url(../images/taoye/taoye-zk-fx/course-ty-zk-fx-fenxi-bg-1.jpg);
+}
+.taoye-5 .course-o .cont-2{
+	background-image: url(../images/taoye/taoye-zk-fx/course-ty-zk-fx-fenxi-bg-2.jpg);
+}
+.taoye-5 .course-o .cont-3{
+	background-image: url(../images/taoye/taoye-zk-fx/course-ty-zk-fx-fenxi-bg-3.jpg);
+}
+/*==============*/
+.taoye-5 .course-d .bz-1{
+	background-image: url(../images/taoye/taoye-zk-fx/course-ty-zk-fx-table-bg.jpg);
+}
+.taoye-5 .course-d .bz-1 table .t-b4,.course-d .bz-1 table tr{
+	border-color: #fff;
+}
+/*=================*/
+.taoye-5.taoye-2 .course-sc{
+	background-image: url(../images/taoye/taoye-zk-fx/course-ty-zk-fx-shoucai-bg-1.jpg);
+}
+/*==========*/
+.taoye-5.taoye-3 .course-i{
+	background-image: url(../images/taoye/taoye-zk-fx/course-ty-zk-fx-nvli-bg-1.jpg);
+}
+.taoye-5.taoye-3 .course-i .course-title{
+	color:#333;
+}
+.taoye-5 .course-o .cont .box .t-h2 .fenzhi{
+	background-image: url(../images/taoye/taoye-zk-fx/course-ty-zk-fx-fenzhi-1.png);
+}
+.taoye-5 .course-o .cont .box .t-h2 .fenzhi .t-p-1 em{
+	color:#28abc7;
+}
+.taoye-5 .course-o .cont .box .t-h2 .fenzhi .t-p-2 em{
+	color:#fd8829;
+}
+.taoye-5 .course-o .cont .box .t-h2 .fenzhi .t-p-3 em{
+	color:#944193;
+}
+.taoye-5 .course-o .cont .box .t-h2 .fenzhi .t-p-4 em{
+	color:#e44c3f;
+}

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallExamScheduleDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = m.product_id
+	</sql>
+	
+	<select id="queryObject" resultType="io.renren.entity.MallExamScheduleEntity">
+		select * from mall_exam_schedule where id = #{value}
+	</select>
+	
+	<select id="queryPojoObject" resultType="io.renren.pojo.examschedule.ExamSchedulePOJO">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.create_person) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modify_person) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_exam_schedule m 
+			<include refid="join"/>
+		where id = #{id} and dr = 0 
+		<where>
+			<if test="productId != null and productId > 0">
+				m.product_id = #{productId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryList" resultType="io.renren.entity.MallExamScheduleEntity">
+		select * from mall_exam_schedule where status = 1 and dr = 0
+		<if test="productId != null and productId > 0">
+			AND product_id = #{productId}
+		</if>
+        <if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryPojoList" resultType="io.renren.pojo.examschedule.ExamSchedulePOJO">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.create_person) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modify_person) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_exam_schedule m 
+			<include refid="join"/>
+		where dr = 0  
+		<if test="scheduleName != null and scheduleName.trim() != ''">
+			and m.schedule_name like concat('%',#{scheduleName},'%') 
+		</if>
+		<if test="productName != null and productName.trim() != ''">
+			and sys_product.product_name like concat('%',#{productName},'%') 
+		</if>
+		<if test="productId != null and productId > 0">
+			AND m.product_id = #{productId}
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryPojoList1" resultType="io.renren.pojo.examschedule.ExamSchedulePOJO">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.create_person) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modify_person) as modifiedName,
+			(select sys_product.product_name from sys_product AS sys_product where sys_product.product_id = m.product_id) as productName
+		from mall_exam_schedule m where dr = 0 and status = 1
+		<if test="scheduleName != null and scheduleName.trim() != ''">
+			and m.`schedule_name` like concat('%',#{scheduleName},'%') 
+		</if>
+		<if test="productId != null and productId > 0">
+			AND m.product_id = #{productId}
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from mall_exam_schedule m 
+			<include refid="join"/>
+		where m.dr = 0
+		<if test="scheduleName != null and scheduleName.trim() != ''">
+			and m.schedule_name like concat('%',#{scheduleName},'%') 
+		</if>
+		<if test="productName != null and productName.trim() != ''">
+			and sys_product.product_name like concat('%',#{productName},'%') 
+		</if>
+		<if test="productId != null and productId > 0">
+			AND m.product_id = #{productId}
+		</if>
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MallExamScheduleEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_exam_schedule
+		(
+			`schedule_name`, 
+			`schedule_date`, 
+			`create_person`, 
+			`modify_person`, 
+			`create_time`, 
+			`modify_time`, 
+			`comments`, 
+			`school_id`,
+			`status`,
+			`product_id`,
+			`dr`
+		)
+		values
+		(
+			#{scheduleName}, 
+			#{scheduleDate}, 
+			#{createPerson}, 
+			#{modifyPerson}, 
+			#{createTime}, 
+			#{modifyTime}, 
+			#{comments},
+			#{schoolId}, 
+			#{status},
+			#{productId},
+			#{dr}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.MallExamScheduleEntity">
+		update mall_exam_schedule 
+		<set>
+			<if test="scheduleName != null">`schedule_name` = #{scheduleName}, </if>
+			<if test="scheduleDate != null">`schedule_date` = #{scheduleDate}, </if>
+			<if test="modifyPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="comments != null">`comments` = #{comments}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateBatch">
+	   update mall_exam_schedule set status = #{status} where id in
+	   <foreach item="id" collection="list" open="(" separator="," close=")">
+	   	#{id}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from mall_exam_schedule where id = #{value}
+	</delete>
+	
+	<update id="deleteBatch">
+		update mall_exam_schedule 
+		<set>
+			dr = 1 
+		</set> 
+		where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+	   		#{id}
+		</foreach>
+	</update>
+
+
+	<select id="queryPojoByParam" resultType="io.renren.entity.MallExamScheduleEntity">
+		select
+			m.*
+		from
+			mall_exam_schedule as m
+		where
+			dr = 0
+		<if test="productId != null and productId > 0">
+			AND m.product_id = #{productId}
+		</if>
+		<if test="scheduleDate != null">
+			AND m.schedule_date = #{scheduleDate}
+		</if>
+		<if test="scheduleName != null">
+			AND m.schedule_name = #{scheduleName}
+		</if>
+
+	</select>
+
+</mapper>

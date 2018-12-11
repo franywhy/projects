@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallExpCertificateDao">
+
+	<select id="queryObject" resultType="io.renren.entity.MallExpCertificateEntity">
+		select me.*,(select name from sys_dept sd where sd.dept_id = me.school) as schoolName  from mall_exp_certificate   me where me.id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.MallExpCertificateEntity">
+		select me.*,(select name from sys_dept sd where sd.dept_id = me.school) as schoolName  from mall_exp_certificate   me
+		
+		<where>
+		 	<if test="name != null">AND me.`name` like concat('%',#{name},'%') </if>
+		 	<if test="card != null">AND me.`card` like concat('%',#{card},'%') </if>
+		 	<if test="course != null">AND me.`course` like concat('%',#{course},'%') </if>
+		 	<if test="school != null and school > 0">AND me.`school`=#{school} </if>
+		 	<if test="sendStatus != null and sendStatus >= 0">AND me.`send_status`=#{sendStatus} </if>
+		 	<if test="type != null and type >= 0">AND me.`type`=#{type} </if>
+		 	
+		 	<if test="schoolIdList != null and schoolIdList.size() > 0">AND me.`school` IN
+                <foreach item="school" collection="schoolIdList" open="(" separator="," close=")">
+                    #{school}
+                </foreach>
+            </if>
+            <if test="type != null and type >= 0">AND me.`type`=#{type} </if>
+
+		 	<if test="schoolIdList != null and schoolIdList.size() > 0">AND me.`school` IN
+                <foreach item="school" collection="schoolIdList" open="(" separator="," close=")">
+                    #{school}
+                </foreach>
+            </if>
+            <if test="type != null and type >= 0">AND me.`type`=#{type} </if>
+
+		</where>
+		order by me.creation_time desc
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from mall_exp_certificate  me
+		<where>
+		 	<if test="name != null">AND me.`name` like concat('%',#{name},'%') </if>
+		 	<if test="card != null">AND me.`card` like concat('%',#{card},'%') </if>
+		 	<if test="course != null">AND me.`course` like concat('%',#{course},'%') </if>
+		 	<if test="school != null and school > 0 ">AND me.`school`=#{school} </if>
+		 	<if test="sendStatus != null and sendStatus >= 0">AND me.`send_status`=#{sendStatus} </if>
+		 	<if test="type != null and type >= 0">AND me.`type`=#{type} </if>
+            <if test="schoolIdList != null and schoolIdList.size() > 0">AND me.`school` IN
+                <foreach item="school" collection="schoolIdList" open="(" separator="," close=")">
+                    #{school}
+                </foreach>
+            </if>
+            <if test="schoolIdList != null and schoolIdList.size() > 0">AND me.`school` IN
+                <foreach item="school" collection="schoolIdList" open="(" separator="," close=")">
+                    #{school}
+                </foreach>
+            </if>
+            <if test="type != null and type >= 0">AND me.`type`=#{type} </if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MallExpCertificateEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_exp_certificate
+		(
+			`name`, 
+			`card`, 
+			`read_date`, 
+			`end_date`, 
+			`course`, 
+			`exp`, 
+			`cert_no`, 
+			`send_date`, 
+			`school`, 
+			`send_status`, 
+			`course_remark`, 
+			`status`, 
+			`school_id`, 
+			`create_person`, 
+			`creation_time`, 
+			`modify_person`, 
+			`mobile`,
+			`modified_time`,
+			`type`,
+			user_id
+		)
+		values
+		(
+			#{name}, 
+			#{card}, 
+			#{readDate}, 
+			#{endDate}, 
+			#{course}, 
+			#{exp}, 
+			#{certNo}, 
+			#{sendDate}, 
+			#{school}, 
+			#{sendStatus}, 
+			#{courseRemark}, 
+			#{status}, 
+			#{schoolId}, 
+			#{createPerson}, 
+			#{creationTime}, 
+			#{modifyPerson}, 
+			#{mobile},
+			#{modifiedTime},
+			#{type},
+			#{userId}
+		)
+	</insert>
+	
+	<insert id="batchSave" parameterType="io.renren.entity.MallExpCertificateEntity" >
+		insert into mall_exp_certificate
+		(
+			`name`, 
+			`card`, 
+			`read_date`, 
+			`end_date`, 
+			`course`, 
+			`exp`, 
+			`cert_no`, 
+			`send_date`, 
+			`school`, 
+			`send_status`, 
+			`course_remark`, 
+			`status`, 
+			`school_id`, 
+			`create_person`, 
+			`creation_time`, 
+			`modify_person`, 
+			`mobile`,
+			`modified_time`,
+			`type`,
+            user_id
+		)
+		values
+		<foreach collection="list" item="exp" index="index" separator="," >
+		(
+			#{exp.name}, 
+			#{exp.card}, 
+			#{exp.readDate}, 
+			#{exp.endDate}, 
+			#{exp.course}, 
+			#{exp.exp}, 
+			#{exp.certNo}, 
+			#{exp.sendDate}, 
+			#{exp.school}, 
+			#{exp.sendStatus}, 
+			#{exp.courseRemark}, 
+			#{exp.status}, 
+			#{exp.schoolId}, 
+			#{exp.createPerson}, 
+			#{exp.creationTime}, 
+			#{exp.modifyPerson}, 
+			#{exp.mobile},
+			#{exp.modifiedTime},
+			#{exp.type},
+            #{exp.userId}
+		)
+		</foreach>
+	</insert>
+	
+	 
+	<update id="update" parameterType="io.renren.entity.MallExpCertificateEntity">
+		update mall_exp_certificate 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="card != null">`card` = #{card}, </if>
+			<if test="readDate != null">`read_date` = #{readDate}, </if>
+			<if test="endDate != null">`end_date` = #{endDate}, </if>
+			<if test="course != null">`course` = #{course}, </if>
+			<if test="exp != null">`exp` = #{exp}, </if>
+			<if test="certNo != null">`cert_no` = #{certNo}, </if>
+			<if test="sendDate != null">`send_date` = #{sendDate}, </if>
+			<if test="school != null">`school` = #{school}, </if>
+			<if test="sendStatus != null">`send_status` = #{sendStatus}, </if>
+			<if test="courseRemark != null">`course_remark` = #{courseRemark}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime},</if>
+			<if test="userId != null">`user_id` = #{userId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from mall_exp_certificate where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from mall_exp_certificate where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<delete id="updateStatus">
+		update mall_exp_certificate set send_status=2 where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

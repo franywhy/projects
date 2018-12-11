@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>辉煌计划</title>
+  <link rel="stylesheet" href="http://www.hqjy.com/static/zhuanti/xdkj/v9kj_new/css/base.css">
+  <!--头部和尾部样式引入-->
+  <link rel="stylesheet" type="text/css" href="http://www.hqjy.com/static/css/common/headerAfooter.css">
+  <!--侧边栏样式-->
+  <link rel="stylesheet" type="text/css" href="http://www.hqjy.com/static/css/common/com.css">
+  <!--登录注册样式-->
+  <link rel="stylesheet" href="http://www.hqjy.com/static/css/loginNew.css" />
+  <!-- 主体样式 -->
+  <link rel="stylesheet" href="//img.hengqijiaoyu.cn/web/hhjh/css/hhjh.css">
+  <!-- jq -->
+  <script src="http://img.hengqijiaoyu.cn/html/common/js/jquery.js"></script>
+  <script src="http://www.hqjy.com/static/head/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+  <!--引入头部js-->
+  <script type="text/javascript" src="http://www.hqjy.com/static/head/js/hqjyhead.js"></script>
+  <!-- 主体 -->
+  <div class="hhjh" id="school-app">
+    <!--导航栏-->
+    <div class="c-top">
+      <div class="w1200">
+        <div class="c-l left">辉煌计划</div>
+        <div class="c-r btn right" onclick="NTKF_kf()">电话咨询</div>
+      </div>
+    </div>
+    <div class="banner bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/banner.jpg">
+      <div class="w1200">
+        <div class="video-box">
+          <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="516" height="289" poster="//img.hengqijiaoyu.cn/web/hhjh/images/iMac.jpg"
+            data-setup="{}">
+            <source src="http://img.hengqijiaoyu.cn/video/hhjh/hhjh.mp4" type="video/mp4">
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+      </div>
+    </div>
+    <div class="p1 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p1.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p2 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p2.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p3 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p3.jpg">
+      <div class="w1200">
+        <div class="tab">
+          <dl class="tab-nav">
+            <dt class="d1">财务主管</dt>
+            <dt class="d2">财务经理</dt>
+            <dt class="d3 act">财务总监</dt>
+          </dl>
+          <dl class="tab-box">
+            <dt class="none">
+              <img src="//img.hengqijiaoyu.cn/web/hhjh/images/p3-tab1.png" alt="">
+            </dt>
+            <dt class="none">
+              <img src="//img.hengqijiaoyu.cn/web/hhjh/images/p3-tab2.png" alt="">
+            </dt>
+            <dt class="">
+              <img src="//img.hengqijiaoyu.cn/web/hhjh/images/p3-tab3.png" alt="">
+            </dt>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="p4 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p4.jpg">
+      <div class="w1200">
+        <div class="c-btn" onclick="NTKF_kf()">详情请点击查询</div>
+      </div>
+    </div> -->
+    <div class="p5 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p5.png">
+      <div class="w1200"></div>
+    </div>
+    <div class="p6 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p6.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p7 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p7.jpg">
+      <div class="w1200"></div>
+    </div>
+    <div class="p8 mw1200">
+      <div class="w1200">
+        <div class="box">
+          <img class="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAMAAABG8BK2AAACjlBMVEUAAAAxmek0ne0vluYym+sqkd83ofIqkd8ymuowmekojtw0ne4xmuk4ofMojtwsk+IwmOc4ovMqkN85o/Qsk+I2oPE6pfY5pPY5pPU6pfc7pfcnjdoojtwsk+I5pPY1nu83ofI1n+86pPY2oPEojtwojt07pvcxmekskuEnjdo4ovM5o/U3ofIoj903oPEtlOMsk+I2oPAuluU5pPYznO05o/UtleQxmek4ovMtlOMym+snjdsxmuoznOwqkN85o/U1nu8tlOM1n+8znO0vl+YwmOcymuork+E1nu8tlOQojtwpkN4ymuonjds1n+8qkd83ofIwmOc6pfcym+snjdsym+svl+cwmOg3ofIxmegojt0qkd86pPY3ofIslOM6pfYnjdsnjdsym+sqkd8rk+I5o/QojtwpkN4ojtwvl+csk+I2oPE5pPUqkN4ymussk+Injtw6pfc6pfc5o/UtlOM1nu84o/QqkN82oPIpkN44ovQtleQ0ne02ofEtleQ0ne0uleQojtwtleQ5o/Q3ofIojtwslOI5o/U1n+80ne06pfYtleQzm+srkuA7pfc1n+8uleUznOw2oPE5o/Qwmek2ofE0ne0vmOc0ne0qkd80ne05o/UtlOIzne0wmOc5pPQnjdsvl+Y5o/Qpj90xmegnjds3ofEnjds6pfc3ofIuleQrkeAslOI1nu8ojtswl+csk+Evl+Y0nOwym+orkd86pPU5o/UnjNoskuEym+sojtswmOg1nu4skuEym+o6pfY4ovM0ne0vl+YuleQ5pPUtlOM6pfY4ovM3oPEym+snjdoxmuoqkd81nu8znOwwl+crkuAsk+I2n/Aojtwpj90njds7pfcwmOg2oPA0ne4pI6uFAAAAwnRSTlMA/v4CHBMTDgMFGxUH0a5iTzMuLCYP/fn08NnZ0ayqjntzYmJhUh0M/Pvz6Obl397aq6Wjg4F0W1lXVkg/NTMnHxgRCf78+vn18/Py8fDv6eTf3t7e2dnRy8nItbCwsK2rp6KXj46OhoOCgoBzc2xaWVROSkpGPz8vKyP9+vn48fHw7+3r6uTe2dPS0c/Px8fGxLm1r66sq6ioo52alJSSkoyHe3h2al1cUkc8Nyf38fDr6enXzMfEwLWinJh7enhtSjwO4scAAAW1SURBVFjDnZb1V9tQFMdv2lJaYDDGhgwY22AuDBtsgw2Zu7u7u7u7u7u7uyZpklJLFfbf7CaFjT6a0O7zS8/Ju+dzkvve/faBCpuyFsSmdRns8Qzpkha7IGsThE9E1qx9bgmPjFVixKW4iHAc2l6xHbxewoKI4oDpa7UhSgwPUiu9kmVf7MKVvaMiASKjeq9YnD5ClHB2izOEYumVWilZ0u41IVeaLDsmOpFujxuURM2sRMvg+bUO0jR3kAlJ16lb2gxDy7CFESq9X7zbZGJ291CRxNxESYc5pIQUXd3CMMz1GMX1D2gZ+wQa5Ek2Q9MnIxTakoqWWZEQApG5NE2P1wW1jEXLPQiR7n1px6ggnohUbMtKCJke/RyO8dHkU+NktLSBMGjcr4qaZCQeSnv0AMKikKKo68R5wTN3B8LkLkVZega0d1ilNxbCRXvWYhlat80zK71jIyFsysdYzJ/qTCPO4gb4D4rNZnPjvy+X6vV+Vi03XrK+DTpFs83mcbW5sdLr3VWmqlkmRdacIDkTPdRuLwQ/aV73QlBlspRXztwgK/l2+yGtvzNe92D1oa5oL1lMpsX1l/Q7NJpfIDHL7Z4PqmwQxfZxO00M07j+WoZGc1Ge1udud1N1zQJMYHg6iKFfRQPJM41tYDP8zXK7JzdwzLKdpiMAa/vS9IX6qydstkz8iXW7lzUwzNiWbPxdRDuqioGklc12DsCwy+1R/6aYbhi+26XTM6GKmqCt91U213ADNHF7uoAqc9HC0NLslFAWnEWSkS7XRsjyeGaqWuJkCy1v0myL+SiQ5LhcmTDf41FNiBVbZAt9C5DS/mb7OrKiZXV1BkzxeNqoZa7Jb3FM8M+QXXOeLHlULUyDNI+1t6IkMh0lsqWKkvehRKPZqieK4gWhEXSxWqMU43a/3+JAC5UvPzpks90nqnSC0BmGWK0KgdU0vfaDHBRu0ZsKuRE212mirp0gdAS8tgSVlM1pH2Axm5cDstHl2taOKBV4XkGz6eoAZ62lym+xv24GyHBBIPYqhkdNsI96OgVjgbRoNBmAnBaElkRW8HxHGGEVo8hcaC9ZmLoWO1psmvW4eEPgpwWWl/J8ZzgmiuSGf/xrccgWs99ic3XW4STyfCNiw6UnU0SRPH4DnERzayyu6kbN4CfP7iGOH8+egbmi+I3QBLH8li14zkpbsmxSYDk+mQdxophOaLKJ5p66lr8kI6erIAjYzE4smxhY3oJlW0MTp3M/OUeBluXgZ/OSvTzPIgeIoGDZjWB46XQSsWWYHrBFJf/Oa0EyWrgWAdV9WDbFADDdaepOhu/yUf0mLRpa09yvdVY2T2W5pPiA4qUsO9UfSychGKXfj8pbNLC87tOEVW0Dy95ja6Qw2G4yKYRx2VZ5i1qBCn0S2WR5SnJNzC2FmsvyRnc1qmjmsay/V2sZZpDCn2+JZBGEKxWKFn0yy60BmSMMs0ih6oR05gR+oqKmgOMOa2tSm6F3RgevKpItfCclS3QKxxXV7u94ms5VuB91lU5uXoKSJo/jmhughsc03bc4eF1814n3m4ES6xM5bjX85QLe3LE4XMpHc9yZuuH+wuE4qw3Xop3BcSkBh7EQR+huuJofHOd7GPjoC0VRheFZHqLlCnn7mERR/RuHY1mdxPmOx9Q7AeMslv49Q7esSvL5mgc5bboxGAytQrUsTfT5RmN7g3jG4dX9YrtQJO3yOHyXtgpjdgpjakxxw5b1o9FyXK94y7sm5dTlMnVJdB6HlhsxKiU98dL9e3i+XrlCX5CCkpRVoIruPCaVbWCGwjAmzEvm0DKjLTTEuoNSVrkmtupTLy+XvuMQX/M1EALGzIP4D4lBMzJnSVG8rgKM5ZvjiwpadGI5ieatjaHO3Jpp2wQJXoatAR2JU1eHNcH6zJy9pKVTi9Z6CBttQubtc406J7NJew4cnnG7dYLKe/wBAy3qObs+SMYAAAAASUVORK5CYII=" alt="">
+          <dl class="text">
+            <dt>报名须知</dt>
+            <dd>1、参加辉煌计划学员必须要有大专以上学历，或已报大专在读中。</dd>
+            <dd>2、参加辉煌计划的财务总监项目学员需有在职工作经验。</dd>
+            <dd>3、学员需签订
+              <a href="javascript:;">《辉煌计划报名表》</a>。附件《初、中级、卓越级、CFO、CMA课表》。</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="p9 bg mw1200 bg-lazy" data-original="//img.hengqijiaoyu.cn/web/hhjh/images/p9.jpg">
+      <div class="w1200">
+        <div class="shangji-box">
+          <div class="tit">获取辉煌计划课程资料</div>
+          <form class="sj">
+            <div class="xz-xq school none">
+              <select class="border-box s1" @change="queryCampuses" name="province" v-model="parentNcCode">
+                <option class="tc" v-for="option in provinceses" v-bind:value="option.code">{{ option.name }}</option>
+              </select>
+              <select class="ml5 campus s2" name="school_area">
+                <option v-for="option in campuses" v-bind:value="option.name">{{ option.name }}</option>
+              </select>
+            </div>
+            <div class="input-msg">
+              <input class="name" type="text" name="name" value="请输入您的姓名" onfocus="if(value=='请输入您的姓名'){value=''}" onblur="if(value==''){value='请输入您的姓名'}">
+              <input class="phone" class="ml5" type="text" name="mobil" value="请输入预约手机号" onfocus="if(value=='请输入预约手机号'){value=''}" onblur="if(value==''){value='请输入预约手机号'}">
+            </div>
+            <div class="c-btn" id="sqty-btn">申请体验名额</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--引入尾部js-->
+  <script type="text/javascript" src="http://www.hqjy.com/static/head/js/foot.js"></script>
+</body>
+
+</html>
+
+<script src="http://www.hqjy.com/static/head/js/createLoginBox.js"></script>
+<script src="http://www.hqjy.com/static/head/js/hqzx-login.js"></script>
+<script src="http://img.hengqijiaoyu.cn/html/common/js/jquery.lazyload.min.js"></script>
+<!-- <script src="http://img.hengqijiaoyu.cn/html/common/vue.min.js"></script> -->
+<!-- <script src="http://img.hengqijiaoyu.cn/html/common/vue_common.js"></script> -->
+<!--video兼容插件-->
+<link href="http://img.hengqijiaoyu.cn/video/css/video-js.css" rel="stylesheet">
+<script src="http://img.hengqijiaoyu.cn/video/js/video.min.js"></script>
+<style>
+  .vjs-paused .vjs-big-play-button,
+  .vjs-paused.vjs-has-started .vjs-big-play-button {
+    display: none;
+  }
+</style>
+<script>
+  videojs('my-video').ready(function () {
+    this.play();
+  });
+</script>
+<!--video兼容插件end-->
+<script src="//img.hengqijiaoyu.cn/web/static/js/util.js"></script>
+<script src="//img.hengqijiaoyu.cn/web/hhjh/js/hhjh.js"></script>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.PayOrderDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	pay_order.id AS id , 	pay_order.order_no AS orderNo ,pay_order.terrace AS terrace, 	pay_order.order_name AS orderName , 	pay_order.state AS state , 	pay_order.create_time AS createTime , 	pay_order.trade_no AS tradeNo , 	pay_order.trade_money AS tradeMoney , 	pay_order.pay_mode AS payMode , 	pay_order.create_order_ip AS createOrderIp , 	pay_order.alipay_ip AS alipayIp , 	pay_order.goods_pic AS goodsPic , 	pay_order.param AS param , 	pay_order.order_timestamp AS orderTimestamp , 	pay_order.order_pay_succeed_time AS orderPaySucceedTime , 	pay_order.alipay_return_code AS alipayReturnErrorCode , 	pay_order.pay_order_no AS payOrderNo 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM pay_order AS pay_order
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.PayOrderEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND pay_order_no = #{payOrderNo}
+	</select>
+	<!-- 判断订单是否支付成功 -->
+	<select id="judgeOrderPaySucceed" parameterType="io.renren.entity.PayOrderEntity" resultType="io.renren.entity.PayOrderEntity">
+	     SELECT * FROM `pay_order` WHERE order_no=#{orderNo} AND state=0 AND terrace=#{terrace} and pay_order_no=#{payOrderNo}
+	</select>
+	
+	<!-- 判断微信订单是否支付成功 -->
+	<select id="judgeWeiXinOrderPaySucceed" parameterType="io.renren.entity.PayOrderEntity" resultType="int">
+	     SELECT COUNT(id) FROM `pay_order` WHERE pay_order_no=#{payOrderNo} AND state=0 AND trade_no=#{tradeNo}
+	</select>
+	<!-- 判断微信订单是否存在-->
+	<select id="payOrderExist" parameterType="string" resultType="int">
+	     SELECT COUNT(id) FROM `pay_order` WHERE order_no=#{orderNo}
+	</select>
+	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.PayOrderEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into pay_order
+		(
+				`order_no`, 	`terrace`, 			`order_name`, 				`state`, 				`create_time`, 				`trade_no`, 				`trade_money`, 				`pay_mode`, 				`create_order_ip`, 				`alipay_ip`, 				`goods_pic`, 				`param`, 				`order_timestamp`, 				`order_pay_succeed_time`, 				`alipay_return_code`, 				`pay_order_no`		)
+		values
+		(
+															#{orderNo}, 	#{terrace}		,																#{orderName}, 																			#{state}, 																			#{createTime}, 																			#{tradeNo}, 																			#{tradeMoney}, 																			#{payMode}, 																			#{createOrderIp}, 																			#{alipayIp}, 																			#{goodsPic}, 																			#{param}, 																			#{orderTimestamp}, 																			#{orderPaySucceedTime}, 																			#{alipayReturnErrorCode}, 																			#{payOrderNo}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.PayOrderEntity">
+		update pay_order 
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="orderName != null">`order_name` = #{orderName}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="tradeNo != null">`trade_no` = #{tradeNo}, </if>
+			<if test="tradeMoney != null">`trade_money` = #{tradeMoney}, </if>
+			<if test="payMode != null">`pay_mode` = #{payMode}, </if>
+			<if test="createOrderIp != null">`create_order_ip` = #{createOrderIp}, </if>
+			<if test="alipayIp != null">`alipay_ip` = #{alipayIp}, </if>
+			<if test="goodsPic != null">`goods_pic` = #{goodsPic}, </if>
+			<if test="param != null">`param` = #{param}, </if>
+			<if test="orderTimestamp != null">`order_timestamp` = #{orderTimestamp}, </if>
+			<if test="orderPaySucceedTime != null">`order_pay_succeed_time` = #{orderPaySucceedTime}, </if>
+			<if test="alipayReturnErrorCode != null">`alipay_return_code` = #{alipayReturnErrorCode}, </if>
+			<if test="payOrderNo != null">`pay_order_no` = #{payOrderNo}</if>
+		</set>
+		<include refid="base_where"/>
+		AND pay_order_no = #{payOrderNo}
+	</update>
+	
+</mapper>

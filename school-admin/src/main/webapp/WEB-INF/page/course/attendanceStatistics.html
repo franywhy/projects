@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>考勤统计</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("attendanceStatistics:attendance"))
+			<table  class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">排课计划:</label></td>
+					<td><input type="text" class="form-control" v-model="q.classplanName" readonly="readonly" placeholder="点击选择排课" @click="classplanLayerShow"></td>
+					<td><label for="name">省份:</label></td>
+					<td><input type="text" class="form-control" v-model="q.areaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerShow"></td>
+					<td><label for="name">报读专业:</label></td>
+					<td><input type="text" class="form-control" v-model="q.professionName" readonly="readonly" placeholder="点击选择专业" @click="professionLayerShow"></td>
+				</tr>
+				<tr border="0">
+					<td><label for="name">班型:</label></td>
+					<td><input type="text" class="form-control" v-model="q.classTypeName" readonly="readonly" placeholder="点击选择班型" @click="classTypeLayerShow"></td>
+					<td><label for="name">班级:</label></td>
+					<td><input type="text" class="form-control" v-model="q.className" readonly="readonly" placeholder="点击选择班级" @click="classLayerShow"></td>
+					<td><label for="name">班主任:</label></td>
+					<td>
+						<select class="form-control" v-model="q.classTeacherId" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.classTeacherList" v-bind:value="option.userId">{{ option.nickName }}</option>
+						</select>
+					</td>
+				</tr>
+				<tr border="0">
+					<td><label for="name">手机号码:</label></td>
+					<td><input type="text" class="form-control" v-model="q.mobile" placeholder="手机号码"></td>
+					
+				</tr>
+			</table>
+			<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+			<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+			<a class="btn btn-primary" @click="detailsList"><i class="fa fa-th-list"></i>&nbsp;考勤详情</a>
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/course/attendanceStatistics.js?_${date.systemTime}"></script>
+#parse("layer/classplanLay.html")
+#parse("layer/areaLay.html")
+#parse("layer/professionLay.html")
+#parse("layer/classTypeLay.html")
+#parse("layer/classLay.html")
+#parse("layer/attendanceDetailsLay.html")
+</body>
+</html>

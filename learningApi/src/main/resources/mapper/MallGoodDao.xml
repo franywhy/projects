@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.MallGoodDao">
+
+    <select id="queryGoodId" resultType="long">
+        SELECT mall_good_id FROM adaptive_goods WHERE  dr = 0 AND is_iap_good = 1
+    </select>
+
+    <select id="getMallGoodList" resultType="com.hq.learningapi.pojo.MallGoodPOJO">
+        SELECT
+            id AS goodId,
+            NAME AS goodName,
+            nc_id AS ncId,
+            present_price AS price,
+            origin_path AS picture
+        FROM
+            mall_goods_info
+        WHERE
+            dr = 0
+        AND id IN
+        <foreach item="goodId" collection="goodIdList" open="(" separator="," close=")" >
+           #{goodId}
+        </foreach>
+    </select>
+
+
+    <select id="getMallGoodDetail" resultType="com.hq.learningapi.pojo.MallGoodDetailPOJO">
+        SELECT
+            id AS goodId,
+            NAME AS goodName,
+            nc_id AS ncId,
+            present_price AS price,
+            origin_path AS picture,
+            good_recomment AS goodRecomment,
+            suitable_user AS suitableUser
+        FROM
+            mall_goods_info
+        WHERE
+            dr = 0
+        AND id = #{goodId}
+    </select>
+
+    <select id="isExistOrder" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            mall_order
+        WHERE
+            dr = 0
+        AND user_id = #{userId}
+        AND commodity_id = #{goodId}
+    </select>
+
+</mapper>

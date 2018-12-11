@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningcenter.school.dao.MallLiveRoomDao">
+
+	<select id="queryByLiveRoomId" resultType="com.hq.learningcenter.school.entity.MallLiveRoomEntity">
+		select * 
+		from course_classplan_lives
+		join mall_live_room on course_classplan_lives.liveroom_id = mall_live_room.live_room_id
+		where course_classplan_lives.classplan_live_id =  #{classplanLiveId}
+	</select>
+</mapper>

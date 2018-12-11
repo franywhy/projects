@@ -1,0 +1,14 @@
+
+<!--奇迹设置|历史奇迹-->
+<div class="tagArea">
+	<ul class="tagList">
+		<li class="cur"><a href="#a=miraclegift&tab=show"><i></i><span>奇迹设置</span></a></li>
+		<li class="<%=pty.key=="historymiracle"? "cur":""%>"><a href="/miracle.html" target="_blank"><i></i><span>历史奇迹</span></a></li>
+	</ul>
+	<div class="tag_r">
+	<%if(Izb.user.checkLimits('sys/save_special_gifts',Izb.enumList.menuType.all)){%>
+   	 <input type="button" class="d-button d-state-highlight J_update" onclick="Izb.controller.<%=pty.key%>.edit('model');" value="设置" />
+    <%}%>
+	</div>
+</div>
+<!--/奇迹设置|历史奇迹-->

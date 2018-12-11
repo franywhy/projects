@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.TimetableDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = t.product_id
+	</sql>
+	<select id="findTimetableList" resultType="io.renren.entity.TimetableEntity">
+		select * from timetable where status = 1
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryObject" resultType="io.renren.entity.TimetableEntity">
+		select 
+			t.*, 
+			<include refid="join_productName"/>
+		from timetable t 
+			<include refid="join"/>
+		where number = #{value}
+	</select>
+	
+	<select id="queryPojoObject" resultType="io.renren.pojo.timetable.TimeTablePOJO">
+		select 
+			t.*,
+			(select cu.username from sys_user cu where cu.user_id = t.create_person) as creationName,
+			(select mu.username from sys_user mu where mu.user_id = t.update_person) as modifiedName,
+			<include refid="join_productName"/>
+		from timetable t 
+			<include refid="join"/>
+		where number = #{number}
+	</select>
+
+	<select id="queryPojoList" resultType="io.renren.pojo.timetable.TimeTablePOJO">
+		select 
+			t.*,
+			(select cu.username from sys_user cu where cu.user_id = t.create_person) as creationName,
+			(select mu.username from sys_user mu where mu.user_id = t.update_person) as modifiedName,
+			<include refid="join_productName"/>
+		from timetable t 
+			<include refid="join"/>
+		where 1=1
+		<if test="name != null and name.trim() != ''">
+			and t.name like concat('%',#{name},'%') 
+		</if>
+		<if test="productName != null and productName.trim() != ''">
+			and sys_product.product_name like concat('%',#{productName},'%') 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 查询status=1的上课时点列表 -->
+	<select id="queryPojoList1" resultType="io.renren.pojo.timetable.TimeTablePOJO">
+		select 
+		t.*,
+		(select cu.username from sys_user cu where cu.user_id = t.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = t.update_person) as modifiedName
+		from timetable t where status = 1
+		<if test="name != null and name.trim() != ''">
+			and `name` like concat('%',#{name},'%') 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from timetable t
+			<include refid="join"/>
+		where 1=1
+		<if test="name != null and name.trim() != ''">
+			and t.name like concat('%',#{name},'%') 
+		</if>
+		<if test="productName != null and productName.trim() != ''">
+			and sys_product.product_name like concat('%',#{productName},'%') 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 查询status=1的上课时点列表总数 -->
+	<select id="queryTotal1" resultType="int">
+		select count(1) from timetable where status = 1
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.TimetableEntity" useGeneratedKeys="true" keyProperty="number">
+		insert into timetable
+		(
+			`name`, 
+			`create_time`, 
+			`update_time`, 
+			`create_person`, 
+			`update_person`, 
+			`comments`, 
+			`status`,
+			`school_id`,
+			`product_id`
+		)
+		values
+		(
+			#{name}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{createPerson}, 
+			#{updatePerson}, 
+			#{comments}, 
+			#{status},
+			#{schoolId},
+			#{productId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.TimetableEntity">
+		update timetable 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="updatePerson != null">`update_person` = #{updatePerson}, </if>
+			<if test="comments != null">`comments` = #{comments}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		where number = #{number}
+	</update>
+	<update id="updateBatch">
+	   update timetable set status = #{status} where number in
+	   <foreach item="number" collection="list" open="(" separator="," close=")">
+	   	#{number}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from timetable where number = #{value}
+	</delete>
+	
+	
+	<delete id="deleteBatch">
+		delete from timetable where number in 
+		<foreach item="number" collection="array" open="(" separator="," close=")">
+			#{number}
+		</foreach>
+	</delete>
+
+</mapper>

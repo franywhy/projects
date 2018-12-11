@@ -1,0 +1,24 @@
+<!--学员就业登记页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        订单编号
+        <input type="text" name="bill_code" size="20" />
+        就业老师
+        <select name="teacher_id" id="teacher_id">
+            <option value="" selected>所有</option>
+        </select>
+        结算状态
+        <select name="statement_state" id="statement_state">
+            <option value="" selected>所有</option>
+            <option value="true" >已结算</option>
+            <option value="false" >未结算</option>
+        </select>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/学员就业登记页头-->

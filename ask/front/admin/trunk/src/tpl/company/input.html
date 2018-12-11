@@ -1,0 +1,94 @@
+<!--公司档案输入-->
+<form name="inputForm">
+    <input name="_id" hidden="hidden"/>
+    <table style="height:180px;">
+        <tr>
+        <td>
+            通讯地址<span class="red">*</span>:
+        </td>
+        <td colspan="3">
+           <input class="input" type="text" name="address" value="" size="63" required/>
+        </td>
+        </tr>
+        <tr>
+        <tr><td>
+            公司图片<span class="red">*</span>:
+        </td>
+            <td colspan="5">
+                <input class="input" name="pic_url" id="pic_url" type="text" value="" size="63" readonly required />
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('pic_url', 'Posters');" />
+            </td>
+        </tr>
+         <td>
+              公司名称<span class="red">*</span>:
+        </td>
+         <td colspan="3">
+             <input class="input" name="company_name" type="text"  value="" size="63" required/>
+        </td>
+            <td>
+                类型<span class="red">*</span>:
+            </td>
+        <td>
+            <select name="company_type" class="input"  style="width:150px" data-options="required:true">
+                <option value="0" selected>平台</option>
+                <option value="1">公司</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            公司URL:
+        </td>
+        <td colspan="3">
+            <input class="input" name="company_url" type="url"  value="" size="63"  />
+        </td>
+        <td>
+            联系人<span class="red">*</span>:
+        </td>
+        <td>
+            <input class="input" name="contact" type="text"  value="" size="20" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            电子邮箱<span class="red">*</span>:
+        </td>
+        <td>
+            <input class="input" name="email" type="email"  value="" size="20"  required/>
+        </td>
+        <td>
+            法人身份证号码<span class="red">*</span>:
+        </td>
+        <td>
+            <input class="input" name="legal_code" type="idcard"  value="" size="20" maxlength="18" required/>
+        </td>
+        <td>
+            法人代表名称:
+        </td>
+        <td>
+            <input class="input" name="legal_name" type="text"  value="" size="20"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            电话<span class="red">*</span>:
+        </td>
+        <td>
+            <input class="input" name="phone" type="phone"  value="" size="20" maxlength="11" required/>
+        </td>
+        <td>
+            传真:
+        </td>
+        <td>
+            <input class="input" name="fax" type="text"  value="" size="20"/>
+        </td>
+        <td>
+            邮编:
+        </td>
+        <td>
+            <input class="input" name="zip_code" type="text"  value="" size="20" />
+        </td>
+     </tr>
+    </table>
+</form>
+<!--/公司档案输入-->

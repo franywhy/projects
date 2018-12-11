@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.courses.dao.CsConfigDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="commone_column">
+		cs_config.id AS id,
+		cs_config.cname AS cname,
+		cs_config.cvalue AS cvalue,
+		cs_config.remark AS remark
+	</sql>
+	<sql id="base_column">
+		cs_config.id AS id,
+		cs_config.ckey AS ckey,
+		cs_config.cname AS cname,
+		cs_config.cvalue AS cvalue,
+		cs_config.order_num AS orderNum,
+		cs_config.status AS status,
+		cs_config.remark AS remark,
+		cs_config.update_time AS updateTime,
+		cs_config.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1	
+		<if test="ckey != null and ckey.trim() != ''">
+			AND cs_config.ckey = #{ckey}
+		</if>
+		<if test="cvalue != null">
+			AND cs_config.cvalue = #{cvalue}
+		</if>
+		<if test="cname != null and cname.trim() != '' ">
+			AND cs_config.cname = #{cname}
+		</if>
+	</sql>
+	<sql id="base_where_list">
+		AND cs_config.`status` = 1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM cs_config AS cs_config
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by order_num asc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.courses.pojo.CsConfigPOJO">
+		SELECT
+			cs_config.id AS id,
+			cs_config.cname AS cname,
+			cs_config.cvalue AS cvalue,
+			cs_config.remark AS remark
+		FROM cs_config AS cs_config
+		WHERE 1=1	
+			AND cs_config.ckey = #{ckey}
+			AND cs_config.cvalue = #{cvalue}
+		Limit 1
+	</select>
+	
+	<select id="queryNameByValue" resultType="string">
+		SELECT
+			cs_config.cvalue AS cvalue
+		FROM cs_config AS cs_config
+		WHERE 1=1	
+			AND cs_config.ckey = #{ckey}
+			AND cs_config.cname = #{cname}
+		Limit 1
+	</select>
+
+	<select id="queryList" parameterType="com.hq.courses.pojo.query.CsConfigQuery" resultType="com.hq.courses.pojo.CsConfigPOJO">
+		SELECT
+		<include refid="commone_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_where_list"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="com.hq.courses.pojo.query.CsConfigQuery"  resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_where_list"/>
+	</select>
+	 
+
+</mapper>

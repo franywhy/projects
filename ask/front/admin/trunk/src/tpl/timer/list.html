@@ -1,0 +1,27 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">说明</th>
+        <th class="auto">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <td class="auto"><%=data[i].name %></td>
+
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.timerM('<%=data[i].name%>' , '<%=data[i].url%>' , <%=data[i].isAsyn%>)">启动</button>
+            </td>
+            <%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

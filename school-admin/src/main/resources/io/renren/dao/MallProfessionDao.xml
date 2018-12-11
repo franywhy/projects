@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallProfessionDao">
+
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		mall_profession.profession_id AS professionId , 
+		mall_profession.profession_name AS professionName , 
+		mall_profession.dr AS dr ,
+		mall_profession.course_pic AS coursePic,
+		mall_profession.audition_url AS auditionUrl,
+		mall_profession.create_person AS createPerson ,
+		mall_profession.creation_time AS creationTime ,
+		mall_profession.modify_person AS modifyPerson ,
+		mall_profession.modified_time AS modifiedTime ,
+		mall_profession.school_id AS schoolId , 
+		mall_profession.status AS status ,
+		mall_profession.order_num AS orderNum,
+		mall_profession.pic AS pic ,
+		mall_profession.brand_pic AS brandPic ,
+		mall_profession.app_pic AS appPic ,
+		mall_profession.remark AS remark,
+		mall_profession.product_id AS productId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where mall_profession.dr=0
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from mall_profession as mall_profession
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order_by">
+		order by mall_profession.order_num desc
+	</sql>
+	
+	<!-- join product_name_column -->
+	<sql id="product_name_column">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- join sys_product -->
+	<sql id="join_sys_product">
+		JOIN sys_product as sys_product ON sys_product.product_id = mall_profession.product_id
+	</sql>
+	
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.MallProfessionEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND profession_id = #{professionId}
+	</select>
+    <!--查询m_id  -->
+    <select id="queryMID" resultType="io.renren.entity.MallProfessionEntity">
+          SELECT profession_id FROM `mall_profession` WHERE m_id=#{type}
+    </select>
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="map">
+		select
+		<include refid="base_column" />
+		,
+		(select cu.username from sys_user cu where cu.user_id = mall_profession.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = mall_profession.modify_person) as modifiedName
+		,
+		<include refid="product_name_column" />
+		<include refid="base_from" />
+		<include refid="join_sys_product" />
+		<include refid="base_where" />
+		<if test="professionName != null and professionName.trim() != ''">
+			AND `profession_name` like concat('%', #{professionName}, '%')
+		</if>
+		<include refid="base_order_by" />
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 查询status=1 && dr = 0 的专业 -->
+	<select id="queryList1" resultType="map">
+		select
+		<include refid="base_column" />
+		,
+		(select cu.username from sys_user cu where cu.user_id = mall_profession.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = mall_profession.modify_person) as modifiedName
+		,
+		<include refid="product_name_column" />
+		<include refid="base_from" />
+		<include refid="join_sys_product" />
+		<include refid="base_where" />
+			AND mall_profession.status = 1
+		<if test="professionName != null and professionName.trim() != ''">
+			AND `profession_name` like concat('%', #{professionName}, '%')
+		</if>
+		<include refid="base_order_by" />
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数 -->
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from" />
+		<include refid="base_where" />
+		<if test="professionName != null and professionName.trim() != ''">
+			AND `profession_name` like concat('%', #{professionName}, '%')
+		</if>
+	</select>
+	<!--新增 -->
+	<insert id="save" parameterType="io.renren.entity.MallProfessionEntity"
+		useGeneratedKeys="true" keyProperty="professionId">
+		insert into mall_profession
+		(
+		   `profession_name`, 
+		   `dr`, 
+		   `create_person`, 
+		   `creation_time`,
+		   `modify_person`, 
+		   `modified_time`, 
+		   `school_id`, 
+		   `status`,
+		   `order_num`,
+		   `pic`,
+		   `brand_pic`, 
+		   `app_pic`,
+		   `remark`,
+		   `course_pic`,
+		   `audition_url`,
+		   `product_id`
+		)
+		values
+		(
+		   #{professionName}, 
+		   0, 
+		   #{createPerson}, 
+		   #{creationTime},
+		   #{modifyPerson}, 
+		   #{modifiedTime}, 
+		   #{schoolId}, 
+		   #{status},
+		   #{orderNum},
+		   #{pic},
+		   #{brandPic},
+		   #{appPic},
+		   #{remark},
+		   #{coursePic},
+		   #{auditionUrl},
+		   #{productId}
+		)
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.MallProfessionEntity">
+		update mall_profession
+		<set>
+			<if test="professionName != null">`profession_name` = #{professionName}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="brandPic != null">`brand_pic` = #{brandPic}, </if>
+			<if test="appPic != null">`app_pic` = #{appPic}, </if>
+			<if test="remark != null">`remark` = #{remark},</if>
+			<if test="coursePic != null">`course_pic` = #{coursePic},</if>
+			<if test="auditionUrl != null">`audition_url` = #{auditionUrl},</if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		<include refid="base_where" />
+		AND profession_id = #{professionId}
+	</update>
+
+	<!--删除 -->
+	<update id="delete" parameterType="io.renren.entity.MallProfessionEntity">
+		UPDATE mall_profession
+		<set> dr = 1 </set>
+		<include refid="base_where" />
+		AND profession_id = #{professionId}
+	</update>
+   <!--  <delete id="deleteClassType">
+    delete from mall_profession  where profession_id = #{professionId}
+    </delete> -->
+	<!--批量删除 -->
+	<update id="deleteBatch" parameterType="io.renren.entity.MallProfessionEntity">
+		UPDATE mall_profession
+		<set> dr = 1 </set>
+		<include refid="base_where" />
+		AND profession_id IN
+		<foreach item="professionId" collection="ids" open="("
+			separator="," close=")">
+			#{professionId}
+		</foreach>
+	</update>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+	   update mall_profession set status = #{status} where profession_id in
+	   <foreach item="professionId" collection="list" open="(" separator="," close=")">
+	   	#{professionId}
+	   </foreach>
+	</update>
+	<select id="queryObjectById" resultType="io.renren.entity.MallProfessionEntity">
+		 select * from mall_profession where profession_id = #{professionId} and dr = 0
+	</select>
+</mapper>

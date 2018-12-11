@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.GenerateReportDao">
+	<select id="queryClassplanIdList" resultType="String">
+		SELECT DISTINCT course_classplan.classplan_id
+		FROM course_classplan
+		JOIN course_classplan_lives ON course_classplan.classplan_id = course_classplan_lives.classplan_id
+		WHERE course_classplan.dr = 0
+		AND course_classplan_lives.dr = 0
+		AND course_classplan_lives.start_time &gt; #{startDate}
+		AND course_classplan_lives.start_time &lt; #{endDate}
+	</select>
+	
+	<select id="queryTeacherByClassplan" resultType="Long">
+		SELECT DISTINCT course_classplan_lives.teacher_id as teacherId 
+		FROM course_classplan_lives 
+		WHERE course_classplan_lives.dr = 0
+		AND course_classplan_lives.classplan_id = #{classplanId}
+		AND course_classplan_lives.start_time &gt; #{startDate}
+		AND course_classplan_lives.start_time &lt; #{endDate}
+	</select>
+	
+	<select id="queryUserplanByClassplan" resultType="io.renren.entity.CourseUserplanEntity">
+		SELECT DISTINCT course_userplan.*
+		FROM course_userplan
+		JOIN course_userplan_detail ON course_userplan.user_plan_id = course_userplan_detail.userplan_id
+		JOIN course_userplan_class_detail ON course_userplan_detail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id
+		WHERE course_userplan.dr = 0
+		AND course_userplan_detail.dr = 0
+		AND course_userplan_class_detail.dr = 0
+		AND course_userplan_class_detail.classplan_id = #{classplanId}
+	</select>
+	
+	<select id="queryAttendPer" resultType="io.renren.entity.AttendReportEntity">
+		SELECT course_classplan_lives.teacher_id as teacherId,
+		AVG((CASE WHEN log_gensee_watch.live_dur/log_gensee_watch.full_dur > 1 THEN 1 
+				  ELSE log_gensee_watch.live_dur/log_gensee_watch.full_dur END)) as livePer,
+		AVG(log_gensee_watch.attend_per) as attendPer
+		FROM log_gensee_watch
+		JOIN course_classplan_lives ON log_gensee_watch.business_id = course_classplan_lives.classplan_live_id
+		WHERE log_gensee_watch.user_id = #{userId}
+		AND course_classplan_lives.dr = 0
+		AND course_classplan_lives.classplan_id = #{classplanId}
+		AND course_classplan_lives.start_time &gt; #{startDate}
+		AND course_classplan_lives.start_time &lt; #{endDate}
+		AND course_classplan_lives.teacher_id = #{teacherId}
+		GROUP BY course_classplan_lives.classplan_id,course_classplan_lives.teacher_id
+	</select>
+	
+	<insert id="saveWeekReport" parameterType="io.renren.entity.AttendReportEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `attend_week_report` (
+			`user_id`,
+			`class_id`,
+			`area_id`,
+			`profession_id`,
+			`level_id`,
+			`goods_id`,
+			`class_type_id`,
+			`classplan_id`,
+			`teacher_id`,
+			`live_per`,
+			`attend_per`,
+			`create_time`
+		)
+		VALUES
+		(
+			#{userId},
+			#{classId},
+			#{areaId},
+			#{professionId},
+			#{levelId},
+			#{goodsId},
+			#{classTypeId},
+			#{classplanId},
+			#{teacherId},
+			#{livePer},
+			#{attendPer},
+			#{createTime}
+		)
+	</insert>
+	
+	<insert id="saveMonthReport" parameterType="io.renren.entity.AttendReportEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `attend_month_report` (
+			`user_id`,
+			`class_id`,
+			`area_id`,
+			`profession_id`,
+			`level_id`,
+			`goods_id`,
+			`class_type_id`,
+			`classplan_id`,
+			`teacher_id`,
+			`live_per`,
+			`attend_per`,
+			`create_time`
+		)
+		VALUES
+		(
+			#{userId},
+			#{classId},
+			#{areaId},
+			#{professionId},
+			#{levelId},
+			#{goodsId},
+			#{classTypeId},
+			#{classplanId},
+			#{teacherId},
+			#{livePer},
+			#{attendPer},
+			#{createTime}
+		)
+	</insert>
+</mapper>

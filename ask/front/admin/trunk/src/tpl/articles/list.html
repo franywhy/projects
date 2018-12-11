@@ -1,0 +1,38 @@
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th >序号</th>
+        <th >标题</th>
+        <th >类型</th>
+        <th >作者</th>
+        <th >图片</th>
+
+        <th >地址</th>
+        <th >修改时间</th>
+        <th >操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){ var d = data[i]; %>
+    <tr>
+
+        <td  class="short"><%=(i+1)%></td>
+        <td class="auto"><%=d.article_title%></td>
+        <td class="auto"><%=d.article_type_name%></td>
+        <td class="auto"><%=d.article_author%></td>
+        <td class="pic"><img src="<%=d.article_pic %>" onclick="javascript:window.open('<%=d.article_pic%>')" style="height:50px;"></td>
+
+        <td class="auto"><%=d.article_url%></td>
+        <td class="longtime"><%=new Date(d.timestamp).toLocaleString()%></td>
+        <td  class="action action150">
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详细</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+            <%}%>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>

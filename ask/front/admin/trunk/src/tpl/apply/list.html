@@ -1,0 +1,65 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th >申请人ID</th>
+        <th >呢称</th>
+        <th >真实姓名</th>
+        <th >支付宝账号</th>
+        <th>申请单流水号</th>
+
+        <th >修改时间</th>
+        <th >创建时间</th>
+        <th >状态</th>
+        <th >信息</th>
+        <th >提交申请单月份</th>
+
+        <th >申请金额</th>
+
+        <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        <th class="action action100">操作</th>
+        <%}%>
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr>
+        <td class="short"><%=data[i].userId%></td>
+        <td class="short"><%=data[i].nickName%></td>
+        <td class="short"><%=data[i].realName%></td>
+        <td class="short"><%=data[i].alipayAccount%></td>
+        <td  class="auto"><%=data[i].applyFlowId %></td>
+
+        <td  class="auto"><%=new Date(data[i].updateTime).toLocaleString()%></td>
+        <td  class="auto"><%=new Date(data[i].createTime).toLocaleString()%></td>
+        <td  class="short"><%=(data[i].applyState==0) ? "申请中" :((data[i].applyState==1) ?"已作废" : "结算成功" )%></td>
+        <td  class="auto"><%=new Date(data[i].applyYearMonth).toLocaleString()%></td>
+        <td  class="auto"><%=data[i].errMemo || "-"  %></td>
+
+        <td  class="auto"><%=data[i].applyMoney  %></td>
+
+
+        <td class="short">
+            <%if(data[i].applyState==0){%>
+            <button class="d-button" onClick="Izb.controller.<%=pty.key%>.cancle('<%=data[i].id%>')">打回申请</button>
+            <% } %>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+
+
+    <tfoot >
+        <tr>
+            <td class="short"  style="color:red">当前页合计：</td>
+            <td  colspan="100"  style="color:red; font-weight:bold;"  align="right" id="page_sum_money">0</td>
+        </tr>
+        <tr>
+            <td class="short"  style="color:red">合计：</td>
+            <td   colspan="100"  style="color:red ;font-weight:bold;" align="right" id="sum_money">0</td>
+        </tr>
+    </tfoot>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

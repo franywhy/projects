@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.AppBannerDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	    app_banner.id AS id , 
+	    app_banner.name AS name ,
+	    app_banner.pic AS pic ,
+	    app_banner.level_id AS levelId ,
+	    app_banner.profession_id AS professionId , 
+	    app_banner.status AS status,
+	    app_banner.order_num AS orderNum , 
+	    app_banner.school_id AS schoolId ,
+	    app_banner.create_time AS createTime , 
+	    app_banner.modify_person AS modifyPerson ,
+	    app_banner.modify_time AS modifyTime ,
+	    app_banner.create_person AS createPerson
+    </sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	from app_banner as app_banner
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="io.renren.pojo.AppBannerPOJO">
+		select 
+      	<include refid="base_column"/>
+      	,
+      	(select cu.username from sys_user cu where cu.user_id = app_banner.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = app_banner.modify_person) as modifiedName,
+		(select mp.profession_name from mall_profession mp where mp.profession_id = app_banner.profession_id) as professionName,
+		(select ml.level_name from mall_level ml where ml.level_id = app_banner.level_id) as levelName
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND app_banner.id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="io.renren.pojo.AppBannerPOJO">
+		select
+		<include refid="base_column"/>
+		,
+		(select cu.username from sys_user cu where cu.user_id = app_banner.create_person) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = app_banner.modify_person) as modifiedName,
+		(select mp.profession_name from mall_profession mp where mp.profession_id = app_banner.profession_id) as professionName,
+		(select ml.level_name from mall_level ml where ml.level_id = app_banner.level_id) as levelName
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="name != null and name.trim() != ''">
+			AND `name` like concat('%',#{name},'%') 
+		</if>
+		<if test="levelId != null and levelId > 0">
+			AND app_banner.level_id = #{levelId} 
+		</if>
+		<if test="professionId != null and professionId > 0">
+			AND app_banner.profession_id = #{professionId} 
+		</if>
+		order by professionId desc, levelId desc, orderNum desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="checkProfession" resultType="int">
+		select count(1) from app_banner app_banner where app_banner.profession_id=#{professionId}
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="name != null and name.trim() != ''">
+			AND `name` like concat('%',#{name},'%') 
+		</if>
+		<if test="levelId != null and levelId > 0">
+			AND app_banner.level_id = #{levelId} 
+		</if>
+		<if test="professionId != null and professionId > 0">
+			AND app_banner.profession_id = #{professionId} 
+		</if>
+	</select>
+	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.AppBannerEntity" useGeneratedKeys="true" keyProperty="id">
+	    insert into app_banner
+	    (
+	      `name`, 
+	      `pic`, 
+	      `level_id`, 
+	      `profession_id`,
+	      `status`, 
+	      `order_num`,
+	      `school_id`, 
+	      `create_time`, 
+	      `modify_person`,
+	      `modify_time`,
+	      `create_person` 
+	    )
+	    values
+	    (
+	      #{name}, 
+	      #{pic}, 
+	      #{levelId},
+	      #{professionId}, 
+	      #{status}, 
+	      #{orderNum},
+	      #{schoolId}, 
+	      #{createTime},
+	      #{modifyPerson}, 
+	      #{modifyTime},
+	      #{createPerson} 
+	    )
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.AppBannerEntity">
+		update app_banner 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="levelId != null">`level_id` = #{levelId}, </if>
+			<if test="professionId != null">`profession_id` = #{professionId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM app_banner 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM app_banner 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+	   update app_banner set status = #{status} where id in
+	   <foreach item="id" collection="list" open="(" separator="," close=")">
+	   	#{id}
+		</foreach>
+	</update>
+</mapper>

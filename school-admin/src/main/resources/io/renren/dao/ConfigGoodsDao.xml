@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ConfigGoodsDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	config_goods.id AS id , 	config_goods.good_id AS goodId , 	config_goods.good_nc_id AS goodNcId , 	config_goods.ts AS ts , 	config_goods.dr AS dr 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE config_goods.school_id = #{schoolId} AND config_goods.dr=0 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM config_goods AS config_goods
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.ConfigGoodsEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.ConfigGoodsEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+ 	<select id="queryNumByGoodId" resultType="int">
+		select SQL_CACHE count(1) 
+		from config_goods
+		where good_nc_id = #{goodNcId} and dr = 0
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.ConfigGoodsEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into config_goods
+		(
+				`good_id`, 				`good_nc_id`, 				`ts`, 				`dr`		)
+		values
+		(
+															#{goodId}, 																			#{goodNcId}, 																			#{ts}, 																			0									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.ConfigGoodsEntity">
+		update config_goods 
+		<set>
+			<if test="goodId != null">`good_id` = #{goodId}, </if>
+			<if test="goodNcId != null">`good_nc_id` = #{goodNcId}, </if>
+			<if test="ts != null">`ts` = #{ts}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.ConfigGoodsEntity">
+		UPDATE config_goods 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.ConfigGoodsEntity">
+		UPDATE config_goods 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

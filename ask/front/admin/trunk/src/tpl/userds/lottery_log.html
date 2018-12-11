@@ -1,0 +1,33 @@
+<!--中奖记录-->				
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="longtime">时间</th>
+        <th class="auto">用户Id</th>
+        <th class="auto">昵称</th>
+        <th class="auto">主播ID</th>
+        <th class="auto">花费星币</th>
+        <th class="auto">获得星币</th>
+        <th class="auto">中奖礼物</th>
+        <th class="auto">活动类型</th>
+        <th class="auto">备注</th>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+        <tr>
+            <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+            <td class="auto"><a href="javascript:Izb.controller.user.show('<%=data[i].user_id%>');"><%=data[i].user_id%></a></td>
+            <td class="auto"><%=data[i].nick_name%></td>
+            <td class="auto"><%=data[i].star_id||"--"%></td>
+            <td class="auto"><%=data[i].cost_coin||0%></td>
+            <td class="auto"><%=data[i].award_coin||0%></td>
+            <td class="auto"><%=Izb.controller.userds.prizeCollection[data[i].award_name]||data[i].award_name %></td>
+            <td class="auto"><%=data[i].active_name%></td>
+            <td class="auto"><%=data[i].remark%></td>
+            
+        </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>

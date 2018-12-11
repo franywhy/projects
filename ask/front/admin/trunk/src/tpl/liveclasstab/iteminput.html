@@ -1,0 +1,54 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:60px;">名称</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input name="live_class_id" type="hidden" value="<%=params.live_class_id%>"/>
+                <input class="input" type="text" name="name" id="name" value="" data-options="required:true"/>
+            </td>
+            <td style="width:60px;">教师名称</td>
+            <td>
+                <input class="input" type="text" name="teacher_name" id="teacher_name" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">PC直播地址</td>
+            <td>
+                <input class="input" type="text" name="pc_live_param" id="pc_live_param" value="" data-options="required:true"/>
+            </td>
+            <td style="width:60px;">PC回放地址</td>
+            <td>
+                <input class="input" type="text" name="pc_playback_param" id="pc_playback_param" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">APP直播地址</td>
+            <td>
+                <input class="input" type="text" name="app_live_param" id="app_live_param" value="" data-options="required:true"/>
+            </td>
+            <td style="width:60px;">APP录播地址</td>
+            <td>
+                <input class="input" type="text" name="app_playback_param" id="app_playback_param" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">开始时间</td>
+            <td>
+                <input id="start_time" type="text" name="start_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+            </td>
+            <td style="width:60px;">结束时间</td>
+            <td>
+                <input id="end_time" type="text" name="end_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">说明</td>
+            <td>
+                <input class="input" type="text" name="content" id="content" value="" data-options="required:true"/>
+            </td>
+        </tr>
+
+
+    </table>
+</form>

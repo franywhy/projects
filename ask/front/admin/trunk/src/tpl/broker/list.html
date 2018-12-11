@@ -1,0 +1,50 @@
+<!--用户信息列表-->
+
+<table width="100%" class="listTable tablesorter">
+    <thead>
+        <tr>
+            <th class="longNum">ID</th>
+            <th class="icon">头像</th>
+            <th class="title">昵称</th>
+            <th class="num">星币<br />
+                余额</th>
+            <th class="num">星豆<br />
+                余额</th>
+            <th class="auto">旗下主播总数(人)</th>
+            <th class="auto">旗下主播累计收入(星豆)</th>
+            <th class="auto">代理充值总额(元)</th>
+            <th class="auto">签约时间</th>
+            <th class="action action250">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%for(var i=0;i<data.length;i++){
+		%>
+        <tr>
+            <td class="num"><a href="#a=userds&_id=<%=data[i]._id%>&menu=user&tab=show"><%=data[i]._id%></a></td>
+            <td class="icon"><img height="32px" width="32px"  src="<%=data[i].pic%>" alt="<%=data[i].nick_name%>" /></td>
+            <td class="title"><%=data[i].nick_name%></td>
+            <td class="num"><%=data[i].finance && data[i].finance.coin_count ? data[i].finance.coin_count : 0%></td>
+            <td class="num"><%=data[i].finance && data[i].finance.bean_count ? data[i].finance.bean_count : 0%></td>
+            <td class="auto"><%=data[i].broker&&data[i].broker.star_total || 0%></td>
+            <td class="auto"><%=data[i].broker&&data[i].broker.bean_total || 0 %></td>
+            <td class="auto"><%=data[i].broker&&data[i].broker.cny_total || 0%></td>
+            <td class="longtime"><%=new Date(data[i].broker&&data[i].broker.timestamp).toLocaleString()%></td>            
+            <td class="action">
+                <%if(Izb.user.checkLimits("user/broker_show",Izb.enumList.menuType.list)){%>
+                <button class="d-button" onclick="location.hash='#a=brokerds&_id=<%=data[i]._id%>'">详情</button>
+                <%}%>
+                <%if(Izb.user.checkLimits("star",Izb.enumList.menuType.list)){%>
+                <a class="d-button" href="#a=star&star.broker=<%=data[i]._id%>">旗下主播</a>
+                <%}%>
+                <%if(Izb.user.checkLimits("user/gm",Izb.enumList.menuType.list)){%>
+                <button class="d-button" onclick="Izb.controller.user.setPriv('<%=data[i]._id%>',3)">解约</button>
+                <%}%>
+            </td>
+            
+        </tr>
+        <%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

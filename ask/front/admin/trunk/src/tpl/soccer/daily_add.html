@@ -1,0 +1,35 @@
+<form name="inputForm">
+    <table width="100%">
+        <tr>
+            <td align="right">类型: </td>
+            <td>
+                <select name="cat" id="type_select"  class="input" >
+                    <option value="1">胜负平</option>
+                    <option value="2">胜负</option>
+                </select>
+            </td>
+        </tr>
+           <tr>
+            <td align="right">日期: </td>
+              <td>  <input type="text" name="date" value="" size="20" readonly="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="input" />
+            <td>
+       </td>
+        </tr>
+        <tr>
+            <td align="right">球队A: </td>
+            <td>
+                <input name="teamA" class="input" id="j-teamA" type="text" readonly="readonly"/>
+				<input type="button" class="d-button" value="选择球队" onclick="Izb.controller.soccer.selectTeams($('#j-teamA'), 1)" />
+
+            </td>
+        </tr>
+        <tr>
+            <td align="right">球队B: </td>
+            <td>
+                <input name="teamB" class="input" id="j-teamB" type="text" readonly="readonly"/>
+				<input type="button" class="d-button" value="选择球队" onclick="Izb.controller.soccer.selectTeams($('#j-teamB'), 1);" />
+
+            </td>
+        </tr>
+    </table>
+</form>

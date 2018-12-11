@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.MallExpcertificateDao">
+    <select id="queryExpcertificateByMobile" resultType="com.hq.learningcenter.school.entity.MallExpcertificateEntity">
+        SELECT * FROM `mall_exp_certificate` WHERE status = 1 and user_id =#{userId} ORDER BY exp desc LIMIT 1;
+    </select>
+    <select id="queryExpcertificateByIDCard" resultType="com.hq.learningcenter.school.entity.MallExpcertificateEntity">
+        SELECT * FROM `mall_exp_certificate` WHERE status = 1 AND name =#{userName} AND card = #{IDCard} ORDER BY exp desc LIMIT 1;
+    </select>
+</mapper>

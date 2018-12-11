@@ -1,0 +1,113 @@
+
+service-name: service-msg-api-dev
+spring:
+  application:
+    name: service-msg-api-dev     #服务ID
+    ip: 10.0.98.89
+    port: 8092
+eureka:
+  instance:
+    ipAddress: 10.0.98.89
+    preferIpAddress: true
+druid:
+  type: com.alibaba.druid.pool.DruidDataSource
+  master-count: 2
+  slave-count: 2
+  mapperMXLLoc: classpath:mybatis/mapper/*.xml
+  #pojoPackage: com.kerry.model
+  configLocations: classpath:mybatis/mybatis-config.xml
+  master-01:
+
+    url: jdbc:mysql://10.0.98.89:3306/msg?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=true&&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    initial-size: 3
+    min-idle: 1
+    max-active: 20
+    test-on-borrow: true
+#  master-02:
+#    url: jdbc:mysql://10.0.98.39:3306/msg_centre?characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&useSSL=true
+#    driver-class-name: com.mysql.jdbc.Driver
+#    username: root
+#    password: MyNewPass4!
+#    initial-size: 5
+#    min-idle: 1
+#    max-active: 100
+#    test-on-borrow: true
+#  slave-01:
+#    url: jdbc:mysql://10.0.98.39:3306/msg_centre?characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&useSSL=true
+#    driver-class-name: com.mysql.jdbc.Driver
+#    username: root
+#    password: MyNewPass4!
+#    initial-size: 5
+#    min-idle: 1
+#    max-active: 100
+#    test-on-borrow: true
+#    validation-timeout: 5
+#    connection-timeout: 3
+#    continue-on-error: true
+#    acquireRetryAttempts: 0
+#    removeAbandoned: true
+#    removeAbandonedTimeout: 5
+#  slave-02:
+#    url: jdbc:mysql://10.0.33.224:3309/test?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&useSSL=true
+#    driver-class-name: com.mysql.jdbc.Driver
+#    username: bao
+#    password: bao
+#    initial-size: 5
+#    min-idle: 1
+#    max-active: 100
+#    test-on-borrow: true
+#    validation-timeout: 5
+#    connection-timeout: 3
+#    continue-on-error: true
+#    acquireRetryAttempts: 0
+#    removeAbandoned: true
+#    removeAbandonedTimeout: 5
+
+ip:
+  urls: localhost,10.0.98.89
+  filterSwitch: false
+
+redis:
+  hostName:  10.0.98.89 #10.0.98.39 #
+  port: 6379  #6379
+  maxIdle: 1500
+  password:
+  maxTotal: 1500
+  maxWaitMillis: 10
+  testOnBorrow: false
+  index: 0
+  indexMsg: 1
+  indexWait: 2
+  indexChannel: 3
+  topic:
+    wait: __keyevent@2__:expired
+    msg: __keyevent@1__:expired
+mq:
+  hostName: 10.0.98.89
+  port: 5674
+  userName: guest
+  pwd: Hailong123
+  virtualHost: /
+  confirms: true
+xinge:
+  android:
+    accessid: 2100275758
+    secretkey: f5a12b9343c0447143eda816f83c74c9
+  ios:
+    accessid: 2200275759
+    secretkey: 076df362039d2bbfd655b73a37eb6f15
+  iosenv: 2
+  enable: false
+common:
+  group: common
+queues:
+  test: msg_test_wait
+is-sync: true
+
+
+
+
+

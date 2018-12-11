@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>学员考勤报表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<table class="table table-condensed" border="0">
+				<tr>
+					<td>
+						<!-- 授课老师 -->
+						<div class="col-md-2">
+							<input type="text" class="form-control" v-model="q.teacherName" readonly="readonly" placeholder="选择授课老师" @click="teacherLayerShow">
+						</div>
+						<!-- 排课 -->
+						<div class="col-md-2">
+							<input type="text" class="form-control" v-model="q.classplanName" readonly="readonly" placeholder="选择排课" @click="classplanLayerShow">
+						</div>
+						<!-- 状态 -->
+						<div class="col-md-2" hidden>
+							<input type="text" class="form-control" v-model="q.statusName" readonly="readonly" placeholder="选择状态" @click="studentStatusLayerShow">
+						</div>
+						<!-- 报表 -->
+						<div class="col-md-1">
+							<select class="form-control" v-model="q.reportType">
+								<option value="0">所有报表</option>
+								<option value="1">周度报表</option>
+								<option value="2">月度报表</option>
+							</select>
+						</div>
+						<!-- 时间 -->
+						<div class="col-md-3">
+							<input type="text" class="datetimepicker_start" readonly="readonly"  @keyup.enter="query" placeholder="开始时间">
+							-
+							<input type="text" class="datetimepicker_end" readonly="readonly" @keyup.enter="query" placeholder="结束时间">
+						</div>
+						<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+						<a class="btn btn-default" @click="clearQuery"><i class="fa fa-repeat"></i>&nbsp;重置</a>
+						<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;"><i class="glyphicon glyphicon glyphicon-export"></i>&nbsp;导出</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+</div>
+<script src="${rc.contextPath}/js/logAtten/attendClassplan.js?_${date.systemTime}"></script>
+#parse("layer/classplanLay.html")
+#parse("layer/teacherLay.html")
+#parse("layer/studentStatusLay.html")
+</body>
+</html>

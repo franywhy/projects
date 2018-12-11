@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SchoolReportDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.SchoolReportEntity" id="schoolReportMap">
+        <result property="id" column="id"/>
+        <result property="classTeacherId" column="class_teacher_id"/>
+        <result property="classTeacherName" column="class_teacher_name"/>
+        <result property="learningNum" column="learning_num"/>
+        <result property="pauseNum" column="pause_num"/>
+        <result property="abandonNum" column="abandon_num"/>
+        <result property="exemptNum" column="exempt_num"/>
+        <result property="nonContactNum" column="non_contact_num"/>
+        <result property="othersNum" column="others_num"/>
+        <result property="totalNums" column="total_nums"/>
+        <result property="manageNum" column="manage_num"/>
+        <result property="watchDuration" column="watch_duration"/>
+        <result property="fullDuration" column="full_duration"/>
+        <result property="complianceRates" column="compliance_rates"/>
+        <result property="passRates" column="pass_rates"/>
+        <result property="introduceMoney" column="introduce_money"/>
+        <result property="refundNum" column="refund_num"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="dr" column="dr"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.SchoolReportEntity">
+		select * from school_report where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.SchoolReportEntity">
+		select * from school_report
+        WHERE dr = 0
+        <if test="classTeacherId != 0">AND class_teacher_id = #{classTeacherId}</if>
+        <if test="reportType != null">AND  `type` = #{reportType}</if>
+        AND DATE_FORMAT(create_time,'%Y-%m-%d')  =  #{createDate}
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from school_report
+        WHERE dr = 0
+        <if test="classTeacherId != 0">AND class_teacher_id = #{classTeacherId}</if>
+        <if test="reportType != null">AND `type` = #{reportType}</if>
+        AND DATE_FORMAT(create_time,'%Y-%m-%d')  =  #{createDate}
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.SchoolReportEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into school_report
+		(
+			`class_teacher_id`, 
+			`class_teacher_name`, 
+			`learning_num`, 
+			`pause_num`, 
+			`abandon_num`, 
+			`exempt_num`, 
+			`non_contact_num`, 
+			`others_num`, 
+			`total_nums`, 
+			`manage_num`, 
+			`watch_duration`, 
+			`full_duration`, 
+			`compliance_rates`, 
+			`pass_rates`, 
+			`introduce_money`, 
+			`refund_num`, 
+			`start_date`, 
+			`end_date`, 
+			`create_time`, 
+			`dr`,
+			`type`
+		)
+		values
+		(
+			#{classTeacherId}, 
+			#{classTeacherName}, 
+			#{learningNum}, 
+			#{pauseNum}, 
+			#{abandonNum}, 
+			#{exemptNum}, 
+			#{nonContactNum}, 
+			#{othersNum}, 
+			#{totalNums}, 
+			#{manageNum}, 
+			#{watchDuration}, 
+			#{fullDuration}, 
+			#{complianceRates}, 
+			#{passRates}, 
+			#{introduceMoney}, 
+			#{refundNum}, 
+			#{startDate}, 
+			#{endDate}, 
+			#{createTime}, 
+			#{dr},
+			#{type}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.SchoolReportEntity">
+		update school_report 
+		<set>
+			<if test="classTeacherId != null">`class_teacher_id` = #{classTeacherId}, </if>
+			<if test="classTeacherName != null">`class_teacher_name` = #{classTeacherName}, </if>
+			<if test="learningNum != null">`learning_num` = #{learningNum}, </if>
+			<if test="pauseNum != null">`pause_num` = #{pauseNum}, </if>
+			<if test="abandonNum != null">`abandon_num` = #{abandonNum}, </if>
+			<if test="exemptNum != null">`exempt_num` = #{exemptNum}, </if>
+			<if test="nonContactNum != null">`non_contact_num` = #{nonContactNum}, </if>
+			<if test="othersNum != null">`others_num` = #{othersNum}, </if>
+			<if test="totalNums != null">`total_nums` = #{totalNums}, </if>
+			<if test="manageNum != null">`manage_num` = #{manageNum}, </if>
+			<if test="watchDuration != null">`watch_duration` = #{watchDuration}, </if>
+			<if test="fullDuration != null">`full_duration` = #{fullDuration}, </if>
+			<if test="complianceRates != null">`compliance_rates` = #{complianceRates}, </if>
+			<if test="passRates != null">`pass_rates` = #{passRates}, </if>
+			<if test="introduceMoney != null">`introduce_money` = #{introduceMoney}, </if>
+			<if test="refundNum != null">`refund_num` = #{refundNum}, </if>
+			<if test="startDate != null">`start_date` = #{startDate}, </if>
+			<if test="endDate != null">`end_date` = #{endDate}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from school_report where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from school_report where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+    <select id="getDetailsByDate" resultType="io.renren.entity.SchoolReportEntity">
+        SELECT
+            class_teacher_id  as classTeacherId,
+            class_teacher_name as classTeacherName,
+            COUNT(1) as totalNums,
+            SUM(CASE learning_status WHEN -1 THEN 1 ELSE 0 END) othersNum,
+            SUM(CASE learning_status WHEN 0 THEN 1 ELSE 0 END) learningNum,
+            SUM(CASE learning_status WHEN 1 THEN 1 ELSE 0 END) pauseNum,
+            SUM(CASE learning_status WHEN 2 THEN 1 ELSE 0 END) nonContactNum,
+            SUM(CASE learning_status WHEN 3 THEN 1 ELSE 0 END) abandonNum,
+            SUM(CASE learning_status WHEN 4 THEN 1 ELSE 0 END) exemptNum,
+            IFNULL(SUM(watch_duration),0) as watchDuration,
+            IFNULL(SUM(full_duration),0) as fullDuration
+        FROM
+            school_report_detail
+        WHERE `start_date` = #{startDate}
+              AND `end_date` = #{endDate}
+              AND `type` = #{type}
+            GROUP BY class_teacher_id,classTeacherName
+    </select>
+</mapper>

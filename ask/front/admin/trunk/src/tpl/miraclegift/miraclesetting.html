@@ -1,0 +1,39 @@
+<table class="showTable">	
+	<tr>
+        <td width="100" style="text-align:right;">奇迹时间：</td>
+        <td><%data.stime/=1000;data.etime/=1000;var seconds=data.stime%3600,hours=(data.stime-seconds)/3600,minuts=(seconds/60)|0;%>
+        <%=hours%>:<%=(minuts < 10 ? "0" + minuts : minuts)%>--<%seconds=data.etime%3600,hours=(data.etime-seconds)/3600,minuts=(seconds/60)|0;%><%=hours%>:<%=(minuts < 10 ? "0" + minuts : minuts)%></td>
+    </tr>
+	<tr>
+        <td style="text-align:right;">奖励设置：</td>
+        <td><%=data.ratio*1000/10%>%</td>
+    </tr>
+    <tr>
+        <td style="text-align:right; vertical-align:top;">礼物池：</td>
+        <td>
+        <table width="100%" class="listTable tablesorter" id="miraclegift">
+		<thead>
+			<tr>
+				<th class="num">编号</th>
+				<th class="name">礼物名称</th>
+				<th class="price">价格</th>     
+				<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<th class="action action150">操作</th>
+				<%}%>
+			</tr>
+		</thead>
+		<tbody>
+			<%var seeds = data.seeds;%>
+			<%for(var i=0,len=seeds.length;i<len;i++){%>
+			<tr>
+				<td class="num"><%=seeds[i]._id%></td>
+				<td class="name"><%=seeds[i].name%></td>
+				<td class="price"><%=seeds[i].coin_price%></td>
+				<td class="action"><a href="javascript:void 0" onclick="Izb.controller.miraclegift.removeMiracle(<%=seeds[i]._id%>,this)">删除</a></td>
+			</tr>
+			<%}%>
+		</tbody>
+	</table>
+        </td>
+    </tr>    
+</table>

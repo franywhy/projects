@@ -1,0 +1,52 @@
+<!--海报输入--> 
+<form name="inputForm">
+    <table width="100%">
+        <tr>
+            <td align="right">标题</td>
+            <td><input type="text" class="input" id="title" name="title" value="" required/></td>
+        </tr>
+         <tr>
+            <td align="right">类型</td>
+            <td>
+                <select class="input" id="posterType" name="type">
+                    <option value="0">海报</option>
+                    <option value="1">预设功能1</option>
+                    <option value="2">预设功能2</option>
+                    <option value="3">预设功能3</option>
+                    <option value="4">预设功能4</option>
+                    <option value="5">预设功能5</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td align="right">链接</td>
+            <td><input type="url" class="input" name="click_url" id="click_url" value="" size="50"  /></td>
+        </tr>
+        <tr>
+            <td align="right">排序 </td>
+            <td><input name="order" class="input " type="text" value="0" id="order" size="5" />
+                <select name="status" class="input" data-options="required:true">
+                    <option value="true" selected>上线</option>
+                    <option value="false">下线</option>
+                </select></td>
+        </tr>
+        <%if(params.type=="5"){%>
+        <tr>
+            <td align="right">小图片</td>
+            <td>
+                <input name="small_pic_url" class="input" id="small_pic_url" type="text" size="50" />
+                <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('small_pic_url', 'Posters');" /></td>
+        </tr>
+        <%}%>
+        <tr>
+            <td align="right">图片</td>
+            <td><input id="_id" class="input" type="hidden" name="_id" value="0" />
+                <input name="pic_url" class="input" id="pic_url" type="text" size="50" />
+                <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('pic_url', 'Posters');" /></td>
+        </tr>
+        <tr>
+            <td align="right">背景图片</td>
+            <td><input type="text" class="input" id="back_ground_color" name="back_ground_color" value="" required/></td>
+        </tr>
+    </table>
+</form>
+<!--/海报输入--> 

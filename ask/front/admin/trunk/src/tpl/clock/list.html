@@ -1,0 +1,30 @@
+<!--任务列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+            <th>ID</th>
+        <th>图片</th>
+        <th>状态</th>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action100">操作</th>
+			<%}%>
+       </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<td><%=data[i]._id%></td>            
+            <td><img  height="50px" src="<%=data[i].pic%>" alt="<%=data[i]._id%>" /></td>
+            <td><%-data[i].status?"已上线":'<span class="red">已下线</span>'%></td>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit( '<%=data[i]._id%>' )">改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del( '<%=data[i]._id%>' )">删</button>
+			</td>
+			<%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/任务列表-->

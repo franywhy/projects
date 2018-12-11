@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport
+      http://logback.qos.ch/translator/
+-->
+<configuration>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %p [%c] - &lt;%m&gt;%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${webapp.star}/../logs/admin-${jetty.port}.log</File>
+        <encoder>
+            <pattern>%d %p [%c] - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${webapp.star}/../logs/admin-${jetty.port}-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <logger name="com.izhubo.web.PayController" level="DEBUG"/>
+    <logger name="com.izhubo.web.spring" level="INFO"/>
+    <logger name="com.izhubo.web" level="${log.web.level}"/>
+    <root level="INFO">
+        <appender-ref ref="${log.target}"/>
+    </root>
+</configuration>

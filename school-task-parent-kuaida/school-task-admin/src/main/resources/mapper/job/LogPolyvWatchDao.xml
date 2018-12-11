@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.LogPolyvWatchDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	log_polyv_watch.log_watch_id AS logWatchId , 	log_polyv_watch.record_id AS recordId , 	log_polyv_watch.course_id AS courseId , 	log_polyv_watch.user_id AS userId , 	log_polyv_watch.vid AS vid , 	log_polyv_watch.play_duration AS playDuration , 	log_polyv_watch.full_duration AS fullDuration , 	log_polyv_watch.attent_per AS attentPer , 	log_polyv_watch.create_time AS createTime , 	log_polyv_watch.ts AS ts 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM log_polyv_watch AS log_polyv_watch
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  log_watch_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.modules.job.entity.LogPolyvWatchEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND log_watch_id = #{logWatchId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.modules.job.entity.LogPolyvWatchEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.modules.job.entity.LogPolyvWatchEntity" useGeneratedKeys="true" keyProperty="logWatchId">
+		insert into log_polyv_watch
+		(
+		  `record_id`,`course_id`,`user_id`,`vid`,`play_duration`, `full_duration`,`attent_per`,`create_time`,`ts`
+		)
+		values
+		(
+		#{recordId}, #{courseId}, #{userId},#{vid}, #{playDuration},#{fullDuration},#{attentPer},#{createTime}, #{ts}
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.modules.job.entity.LogPolyvWatchEntity">
+		update log_polyv_watch 
+		<set>
+			<if test="recordId != null">`record_id` = #{recordId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="vid != null">`vid` = #{vid}, </if>
+			<if test="playDuration != null">`play_duration` = #{playDuration}, </if>
+			<if test="fullDuration != null">`full_duration` = #{fullDuration}, </if>
+			<if test="attentPer != null">`attent_per` = #{attentPer}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="ts != null">`ts` = #{ts}</if>
+		</set>
+		<include refid="base_where"/>
+		AND log_watch_id = #{logWatchId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM log_polyv_watch 
+		<include refid="base_where"/>
+		AND log_watch_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM log_polyv_watch 
+		<include refid="base_where"/> 
+		AND log_watch_id IN 
+		<foreach item="logWatchId" collection="ids" open="(" separator="," close=")">
+			#{logWatchId}
+		</foreach>
+	</delete>
+
+    <select id="queryObjectByUserId" resultType="io.renren.modules.job.entity.LogPolyvWatchEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND user_id = #{userId}
+        AND record_id = #{recordId}
+    </select>
+</mapper>

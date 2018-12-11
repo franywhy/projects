@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>会答红包设置</title>
+#parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+		<div class="grid-btn">
+			<table  class="table table-condensed" border="0">
+				
+				<tr border="0">
+					<!--<td><label for="name" >标签:</label></td>-->
+					<td><input type="text" class="form-control" v-model="q.labelName" style="width:200px" placeholder="请输入标签"></td>
+				</tr>
+			</table>
+					<a class="btn btn-default" @click="clearQuery">
+					<i class="fa fa-search"></i>&nbsp;重置</a>
+					<a class="btn btn-primary" @click="query">
+					<i class="fa fa-search"></i>&nbsp;查询</a>
+					<a class="btn btn-primary" @click="add">
+					<i class="fa fa-plus"></i>&nbsp;新增</a>
+					<a class="btn btn-primary" @click="update">
+					<i class="fa fa-plus"></i>&nbsp;修改</a>
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-2 control-label">标签名称</div>
+					<div class="col-sm-10">
+						<input type="text" id="id.labelNames" class="form-control" v-model="a.laberNames" readonly="readonly" placeholder="标签名称" @click="topicsFirstLaberLayerShowQuery"/>
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<div class="col-sm-2 control-label">满意红包</div>
+					<!--<div class="col-sm-10">-->
+						<input type="number" v-model="a.minMoney" placeholder="输入金额" oninput="if(value.length>3){value=value.slice(0,3)}else if(value>99){value=value.slice(0,2)}" />
+						至
+						<input type="number" v-model="a.maxMoney" placeholder="输入金额" oninput="if(value.length>3){value=value.slice(0,3)}else if(value>99){value=value.slice(0,2)}" />
+					<!--</div>-->
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">很满意红包</div>
+					<!--<div class="col-sm-10">-->
+						<input type="number" v-model="a.veryMinMoney" placeholder="输入金额" oninput="if(value.length>3){value=value.slice(0,3)}else if(value>99){value=value.slice(0,2)}" />
+						至
+						<input type="number" v-model="a.veryMaxMoney" placeholder="输入金额" oninput="if(value.length>3){value=value.slice(0,3)}else if(value>99){value=value.slice(0,2)}" />
+					<!--</div>-->
+				</div>
+
+				<div class="form-group" id="div.modifyReasono">
+					<div class="col-sm-2 control-label">修改原因</div>
+					<div class="col-sm-10">
+						<textarea type="text" maxlength="100" id="id.modifyReason" class="form-control" v-model.trim="a.modifyReason" placeholder="请输入修改原因" ></textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div >注：确认修改红包金额将立即生效,请谨慎填写</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+				<div class="form-group" id="table.record">
+					<div class="col-sm-2 control-label">修改历史记录</div>
+					<div class="tab-pane col-sm-10 fade in active">
+					<table id="jqGridDetail"></table>
+					<div id="jqGridDetailPager"></div>
+					</div>
+				</div>
+
+				
+
+
+			</form>
+		</div>
+	</div>
+
+
+
+	<script	src="${rc.contextPath}/js/manage/bonusSettings.js?_${date.systemTime}"></script>
+	#parse("layer/topicsFirstLaberLay.html")
+</body>
+</html>

@@ -1,0 +1,30 @@
+<form name="inputForm">
+    <table width="100%">
+        <tr>
+            <td align="right">
+                <%if(type==1){%>
+                选择前三名：
+                <%}else{%>
+                选择<%=count%>强球队:
+                <%}%>
+            </td>
+            <td >
+
+                <input type="hidden" name="type" value="" />
+
+                <%if(type==1){%>
+                第一名：<input name="team1" class="input" id="j-team1" type="text" readonly="readonly"/>
+				<input type="button" class="d-button" value="选择球队" onclick="Izb.controller.soccer.selectTeams($('#j-team1'), 1)" /><br />
+                第二名：<input name="team2" class="input" id="j-team2" type="text" readonly="readonly"/>
+				<input type="button" class="d-button" value="选择球队" onclick="Izb.controller.soccer.selectTeams($('#j-team2'), 1)" /><br />
+                第三名：<input name="team3" class="input" id="j-team3" type="text" readonly="readonly"/>
+				<input type="button" class="d-button" value="选择球队" onclick="Izb.controller.soccer.selectTeams($('#j-team3'), 1)" /><br />
+
+                <%}else{%>
+                <input type="text" id="j-teams" name="teams" value="" style="width:250px;" readonly="readonly" />
+				<input type="button" class="d-button" value="选择球队" onclick="Izb.controller.soccer.selectTeams($('#j-teams'), <%=count%>);" />
+                <%}%>
+            </td>
+        </tr>
+    </table>
+</form>

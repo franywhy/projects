@@ -1,0 +1,73 @@
+@charset"utf-8";
+ .ui-tips-i, .ui-tips-icon, .ui-tips-r,.ui-tips-l {
+    display:inline-block;
+    height:54px;
+    line-height:54px;
+    font-weight:bold;
+    font-size:14px;
+    color:#606060;
+    background-image:url("tips.png");
+    _background-image:url("tips-ie6.png");
+    background-repeat:no-repeat;
+    background-position: 9999px;
+}
+.ui-tips {
+    width:100%;
+    position:fixed;
+    _position:absolute;    
+    top:46%;
+    left:0;
+    text-align:center;
+    z-index:65533;
+}
+.ui-tips-i {    
+    background-position:0 -54px;
+    background-repeat:repeat-x;
+    padding:0 15px 0 50px;
+    margin:0 auto;
+    position:relative;
+}
+.ui-tips-text{ }
+.ui-tips-l {
+    background-position:left top;
+    position:absolute;
+    left:-6px;
+    top:0;
+    width:6px;
+}
+.ui-tips-r {
+    background-position:right top;
+    position:absolute;
+    right:-6px;
+    top:0;
+    width:6px;
+}
+
+.ui-tips-icon{
+    left:0;
+    top:0;
+    width:45px;
+    position:absolute;
+}
+
+.ui-tips-text .ui-tips-i{
+    padding-left:20px;
+}
+.ui-tips-succeed  .ui-tips-icon{
+    background-position:6px -108px;
+    
+}
+.ui-tips-error  .ui-tips-icon {
+    background-position:6px -162px;
+    position:absolute;
+}
+.ui-tips-info  .ui-tips-icon {
+    background-position:6px -216px;    
+}
+.ui-tips-loading .ui-tips-i{
+    padding-left:32px;
+}
+.ui-tips-loading  .ui-tips-icon {
+    width: 32px;
+    background:url(loading.gif) no-repeat center;
+}

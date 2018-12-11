@@ -1,0 +1,54 @@
+<!--账号管理列表-->
+<form name="inputForm">
+<table width="100%">
+
+    <tr>
+        <td >班级名称</td>
+        <td>
+            <input class="input" name="nc_id" type="hidden" value=""  required/>
+            <%if(data[0]){%>
+            <input name="class_name"  class="input" id="class_name" type="text"  value="<%=data[0].class_name%>" disabled required/>
+            <%}else{%>
+            <input name="class_name"  class="input" type="text"  value="" disabled required/>
+            <%}%>
+        </td>
+    </tr>
+
+
+</table>
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">学员报名号</th>
+        <th class="auto">学员名称</th>
+        <th class="auto">电话</th>
+        <th class="auto">学历</th>
+        <th class="auto">报读班型</th>
+        <th class="auto">入课时间</th>
+        <th class="auto">职务</th>
+        <th class="auto">备注</th>
+        <th class="auto">同步时间</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <td class="auto"><%=data[i].sing_code %></td>
+            <td class="auto"><%=data[i].name%></td>
+            <td class="auto"><%=data[i].telephone %></td>
+            <td class="auto"><%=data[i].education %></td>
+            <td class="auto"><%=data[i].class_type %></td>
+            <td class="longtime"><%=new Date(data[i].into_class_time).toLocaleString()%></td>
+            <td class="auto"><%=data[i].duty %></td>
+            <td class="auto"><%=data[i].remark %></td>
+            <td class="longtime"><%=new Date(data[i].syn_time).toLocaleString()%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+</form>
+<!--/账号管理列表-->

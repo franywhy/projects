@@ -1,0 +1,29 @@
+<!--注册&收益汇总-->
+
+<table width="100%" class="listTable tablesorter">
+    <thead>
+        <tr>            
+            <th class="short">注册人数</th>
+            <th class="short">付费人数</th>
+            <th class="short">付费额(元)</th>
+            <th class="short">人均付费(元)</th>
+        </tr>
+    </thead>
+    <tbody>
+    	<%if(data){
+        var reg_user = data.reg_user||0,
+        	pay_user = data.pay_user||0,
+            pay_cny = Izb.common.getRMB(data.pay_cny),
+            avg = Izb.common.getRMB(pay_user==0 ? 0 : (pay_cny/pay_user));
+        %>
+        <tr>
+            <td class="short"><%=reg_user%></td>
+            <td class="short"><%=pay_user%></td>
+            <td class="short"><%=pay_cny%></td>
+            <td class="short"><%=avg%></td>
+        </tr>
+        <%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/注册&收益汇总-->

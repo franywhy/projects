@@ -1,0 +1,37 @@
+<!--专业档案列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+         <tr>
+            <th class="num"> 频道编号</th>
+            <!--<th class="num">所属一级分类</th>-->
+            <th class="num">频道名称</th>
+            <th class="num">上级编码</th>
+            <th class="num">专业编号</th>
+            <th class="num">专业名称</th>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="short">操作</th>
+            <%}%>
+        </tr>
+	</thead>
+
+	<tbody>
+	    <%for(var i=0;i< data.length; i++){%>
+        <tr>
+          <!--  <td class="num"><%=data[i].mainType_Id%></td>-->
+            <td class="short"><%=data[i].main_type_code%></td>
+            <td class="short"><%=data[i].main_type_name%></td>
+            <td class="short"><%=data[i].parent_id%></td>
+            <td class="short"><%=data[i].professional_code%></td>
+            <td class="short"><%=data[i].professional_name%></td>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <td class="action">
+                    <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">改</button>
+                    <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删</button>
+                </td>
+            <%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/专业档案列表-->

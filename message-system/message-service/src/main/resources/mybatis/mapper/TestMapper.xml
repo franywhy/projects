@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hqjy.msg.mapper.TestMapper">
+
+ 	<select id="selectAll" resultType="Map">
+		select * from test
+	</select>
+
+	<select id="tableExist" resultType="int">
+		SELECT count(1)  FROM information_schema.TABLES WHERE table_name =#{tableName};
+	</select>
+
+	<select id="createTable">
+		CREATE TABLE ${newTableName} LIKE ${oldTableName};
+	</select>
+
+
+	
+
+
+	
+	<insert id="batchSave" parameterType="com.hqjy.msg.model.MsgMessageDetail" >
+		insert into ${tableName} (`code`,`rec_by`,`send_time`,`create_time`,`message`,`is_read`,`row_id`)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+		(#{item.code},#{item.recBy},#{item.sendTime},now(),#{item.message},#{item.isRead},#{item.rowId})
+		</foreach>
+	</insert>
+	<select id="getMsgDetail" resultType="com.hqjy.msg.model.MsgMessageDetail">
+		select * from ${tableName}
+		<where>
+
+			<if test="null!=map.user_id">
+				AND rec_by = #{map.user_id}
+			</if>
+
+			<if test="null!=map.user_id">
+				AND code = #{map.code}
+			</if>
+
+		</where>
+		limit 0,1
+	</select>
+
+	<select id="isExistMsgDetail" resultType="int">
+		select count(1) from ${tableName}
+		<where>
+
+			<if test="null!=map.user_id">
+				AND rec_by = #{map.user_id}
+			</if>
+
+			<if test="null!=map.user_id">
+				AND code = #{map.code}
+			</if>
+
+		</where>
+	</select>
+	<update id="updateMsgDetailReaded" >
+		update ${tableName}
+		set is_read = 1
+		where rec_by = #{user_id} and code=#{code}
+	</update>
+
+	<update id="batchUpdateMsgDetailReaded" >
+		<foreach collection="lists" item="item" index="index"  separator=";" >
+
+			UPDATE ${item.table_name} SET is_read=1 WHERE rec_by=#{item.user_id} AND `code`=#{item.code}
+
+		</foreach>
+
+	</update>
+
+
+
+	<select id="getDetailsByUserAndTimes" resultType="com.hqjy.msg.model.MsgMessageDetail">
+
+		select * from (
+
+		<foreach collection="tables" item="item" index="index"  separator=" union all" >
+
+				select * from ${item}
+
+		</foreach>
+
+		) a
+		<where>
+
+			<if test="null!=user_id">
+				AND rec_by = #{user_id}
+			</if>
+		</where>
+	</select>
+
+
+</mapper>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallAreaDao">
+	
+		<!-- 通用查询表头 -->
+	<sql id="base_column">
+		mall_area.area_id AS areaId , 
+		mall_area.area_name AS areaName ,
+		mall_area.status AS status , 
+		mall_area.create_time AS createTime ,
+		mall_area.modify_time AS modifyTime , 
+		mall_area.create_person AS createPerson , 
+		mall_area.modify_person AS modifyPerson ,
+		mall_area.school_id AS schoolId , 
+		mall_area.nc_id AS ncId ,
+		mall_area.nc_code AS ncCode 	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from mall_area as mall_area
+	</sql>
+	
+	
+	<select id="findAreaList" resultType="io.renren.entity.MallAreaEntity">
+		select 	
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		where status = 1
+	</select>
+	            
+	<select id="queryAreaIdList" resultType="string" parameterType="io.renren.mongo.entity.AreaEntity">
+		SELECT area_id FROM `mall_area` WHERE nc_id IN(#{xj},#{gd},#{yn},#{sc},#{cq},#{gs}, #{hb},#{hn})
+	</select>
+	
+	<select id="queryObject" resultType="io.renren.entity.MallAreaEntity">
+		select 
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		where area_id = #{value}
+	</select>
+
+	<select id="querySelectionList" resultType="io.renren.pojo.SelectionItem">
+		select area_id value, area_name name from mall_area where status = 1
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.MallAreaEntity">
+		select 
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/> 
+		<if test="areaName!=null and areaName.trim()!=''">
+			AND `area_name` like concat('%',#{areaName},'%') 
+		</if>
+	 	<if test="ncId!=null and ncId.trim()!=''">
+		   AND `nc_id` like concat('%',#{ncId},'%') 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="findAreaGoodsList" resultType="io.renren.entity.MallAreaEntity">
+		SELECT DISTINCT( a.`area_name`),a.`area_id`  FROM `mall_goods_details`de ,`mall_area` a WHERE de.`mall_area_id` =a.`area_id` AND de.`mall_goods_id`=#{goodsId}
+	</select>
+
+    <select id="queryAreaId" resultType="int">
+		SELECT DISTINCT(mall_area_id) as areaId FROM `mall_goods_details` WHERE mall_area_id= (SELECT area_id FROM `mall_area` WHERE nc_id=#{ncProvinceId}) AND mall_goods_id=(SELECT id FROM `mall_goods_info` WHERE nc_id=#{ncCommodityId})
+	</select>
+   
+    <select id="queryAreaIdByZKAreaId" resultType="int">
+		SELECT DISTINCT(mall_area_id) as areaId 
+		FROM `mall_goods_details` 
+		WHERE mall_area_id= #{areaId}
+		AND mall_goods_id = #{goodId}
+	</select>
+
+	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/> 
+		<if test="areaName!=null and areaName!=''">
+		   and mall_area.area_name=#{areaName}	
+		</if>
+	 	<if test="ncId!=null and ncId!=''">
+		   and mall_area.nc_id=#{ncId}	
+		</if>
+	</select>
+    <!--查询报名省份是否存在-->
+    <select id="getAreaIdByprovinceNane" resultType="long">
+		select mall_area.area_id from mall_area mall_area where mall_area.area_name = #{provinceNane}
+	</select>
+	 <select id="countAreaIdByprovinceNane" resultType="int">
+		select count(mall_area.area_id) from mall_area mall_area where mall_area.area_name = #{provinceNane}
+	</select>
+    <!--查询报考省份是否存在-->
+    <select id="getAreaIdByExamProvinceName" resultType="long">
+		select mall_area.area_id from mall_area mall_area where mall_area.area_name = #{examProvinceName}
+	</select>
+	 <select id="countAreaIdByExamProvinceName" resultType="int">
+		select count(mall_area.area_id) from mall_area mall_area where mall_area.area_name = #{examProvinceName}
+	</select>
+
+	<insert id="save" parameterType="io.renren.entity.MallAreaEntity"
+		useGeneratedKeys="true" keyProperty="areaId">
+		insert into mall_area
+		(
+		`area_name`,
+		`nc_id`,
+		`nc_code`,
+		`status`,
+		`create_time`,
+		`modify_time`,
+		`create_person`,
+		`modify_person`,
+		`school_id`
+		)
+		values
+		(
+		#{areaName},
+		#{ncId},
+		#{ncCode},
+		#{status},
+		#{createTime},
+		#{modifyTime},
+		#{createPerson},
+		#{modifyPerson},
+		#{schoolId}
+		)
+	</insert>
+
+	<update id="update" parameterType="io.renren.entity.MallAreaEntity">
+		update mall_area
+		<set>
+			<if test="areaName != null">`area_name` = #{areaName}, </if>
+			<if test="ncId != null">`nc_id` = #{ncId}, </if>
+			<if test="ncCode != null">`nc_code` = #{ncCode}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+		</set>
+		where area_id = #{areaId}
+	</update>
+	<update id="updateBatch">
+		update mall_area set status = #{status} where area_id in
+		<foreach item="areaId" collection="list" open="(" separator=","
+			close=")">
+			#{areaId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from mall_area where area_id = #{value}
+	</delete>
+
+
+	<delete id="deleteBatch">
+		delete from mall_area where area_id in
+		<foreach item="areaId" collection="array" open="(" separator=","
+			close=")">
+			#{areaId}
+		</foreach>
+	</delete>
+	<select id="queryAreaIdByName" resultType="long">
+		select mall_area.area_id from mall_area mall_area where mall_area.area_name = #{areaName}
+	</select>
+
+</mapper>

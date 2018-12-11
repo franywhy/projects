@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>用户注册</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,target-densitydpi=[dpi-value|device-dpi|high-dpi|medium-dpi|low-dpi],user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/isIe.js"></script>
+<script type="text/javascript" src="register_kd.js"></script>
+</head>
+
+<script>
+//声明_czc对象:
+	var _czc = _czc || [];
+	//绑定siteid，请用您的siteid替换下方"XXXXXXXX"部分
+	_czc.push(["_setAccount", "1253015962"]);
+</script>
+
+
+
+<style type="text/css">
+	*{
+		padding:0;
+		margin:0;
+	}
+	body{
+		position:relative;
+		font-size:62.8%;
+		height:100%;
+	}
+	.banren{
+		width:100%;
+	}
+	.banren img{
+		width:100%;
+		vertical-align:middle;
+	}
+	.forme{
+		width:92%;
+		padding:0 4%;
+		padding-top: 8%;
+	}
+	.forme .user-phone {
+		width:98%;
+		position:relative;
+	}
+	.forme .user-phone input{
+		width:90%;
+		padding-left:10%;
+		height:30px;
+		line-height:30px;
+		border:1px solid #cccccc;
+		border-radius:5px;
+	}
+	.forme .user-phone .icon{
+		width:5%;
+		height:auto;
+		position:absolute;
+		left:2%;
+		top:7px;
+	}
+	.forme .user-code {
+		width:100%;
+		position:relative;
+		overflow:hidden;
+		margin-top:4%;
+	}
+	.forme .user-code input{
+		width:59%;
+		height:30px;
+		line-height:30px;
+		border:1px solid #cccccc;
+		border-radius:5px;
+		float:left;
+		padding-left:1%;
+	}
+	.forme .user-code span{
+		display:inline-block;
+		width:36%;
+		height:34px;
+		line-height:34px;
+		background-color:#25b6ed;
+		color:#ffffff;
+		float:left;
+		margin-left:2%;
+		border-radius:5px;
+		text-align:center;
+		font-size:1.2em;
+	}
+	.forme .user-code span.active{
+		background-color:#aeaeae;
+	}
+	.forme .user-password {
+		width:98%;
+		position:relative;
+		margin-top:4%;
+	}
+	.forme .user-password input{
+		width:90%;
+		padding-left:10%;
+		height:30px;
+		line-height:30px;
+		border:1px solid #cccccc;
+		border-radius:5px;
+	}
+	.forme .user-password .icon{
+		width:6%;
+		height:auto;
+		position:absolute;
+		left:2%;
+		top:7px;
+	}
+
+	.forme .user-name {
+		width:98%;
+		position:relative;
+		margin-top:4%;
+	}
+	.forme .user-name input{
+		width:90%;
+		padding-left:10%;
+		height:30px;
+		line-height:30px;
+		border:1px solid #cccccc;
+		border-radius:5px;
+	}
+	.forme .user-name .icon{
+		width:6%;
+		height:auto;
+		position:absolute;
+		left:2%;
+		top:7px;
+	}
+	.btn-tijiao{
+		width:92%;
+		padding:3% 0;
+		background-color:#25b6ed;
+		color:#ffffff;
+		font-size:1.4em;
+		margin-top:4%;
+		text-align:center;
+		left: 4%;
+		bottom:8%;
+		border-radius:5px;
+		margin:0 auto;
+		margin-top:10%;
+	}
+	.code-tip{
+		position:absolute;
+		width:70%;
+		left:10%;
+		height:20%;
+		background-color: #ffffff;
+		border-radius:10px;
+		top:35%;
+		font-size:1.8em;
+		
+		border:1px solid #cccccc;
+		-moz-box-shadow:10px 10px 5px #555555;
+		-webkit-box-shadow:10px 10px 5px #555555;
+		box-shadow:10px 10px 5px #555555;
+		display:none;
+
+		padding: 5%;
+	}
+/* 	.bg-tip{
+	position:absolute;
+	width:100%;
+	height:100%;
+	left:0;
+	top:0;
+	background-color:#000000;
+	opacity:0.8;
+} */
+</style>
+<body id="body">
+	<div class="banren"><img src="images/top.jpg"></div>
+	<div class="forme">
+		<div class="user-phone">
+			<input type="text" placeholder="手机号">
+			<img class="icon" src="images/icon_phone.jpg">
+		</div>
+		<div class="user-code">
+			<input type="text" placeholder="手机验证码" class="j_security">
+			<span class="btn-getCode ">获取验证码</span>
+		</div>
+		<div class="user-password">
+			<input type="password" placeholder="密码至少6位，含有字母数字">
+			<img class="icon" src="images/user-pwd-Icon.png">
+		</div>
+		<div class="user-name">
+			<input type="text" placeholder="昵称最多4个汉字">
+			<img class="icon" src="images/user-name-Icon.png">
+		</div>
+	</div>
+	<div class="bg-tip"></div>
+	<div class="code-tip">验证码已发送，请注意查收，60秒后方可重新获得</div>
+	<div class="btn-tijiao">确定提交</div>
+	
+
+</body>
+
+
+	<div style="display:none">
+		<script src="http://s95.cnzz.com/z_stat.php?id=1253015962&web_id=1253015962" language="JavaScript"></script>
+	</div>
+</html>

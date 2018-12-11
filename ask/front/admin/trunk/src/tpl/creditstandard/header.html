@@ -1,0 +1,15 @@
+    <form name="searchForm">
+    	
+	             科目编码
+	 	<input name="subject_code"  class="input" id="subject_code" type="text" />
+		科目名称
+	    <input name="subject_name"  class="input" id="subject_name" type="text" />
+	 	
+
+       <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+	</br>
+	<button class="d-button" onclick="Izb.controller.<%=pty.key%>.update()">保存</button>
+	<input type="button" class="d-button d-state-highlight J_add" value="添加科目" />
+	<input type="button" value="导出表格" class="d-button J_export">
+

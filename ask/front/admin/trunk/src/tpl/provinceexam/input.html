@@ -1,0 +1,26 @@
+<form name="inputForm">
+    <input name="_id" type="hidden" value=""/>
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td>省份</td>
+            <td>
+                <select class="select" id="code" name="code" required/>
+            </td>
+            <td>类型</td>
+            <td>
+                <select class="input" id="type" name="type" required>
+                    <option value="0">会计从业考试</option>
+                    <option value="1">初级会计师考试</option>
+                    <option value="2">中级会计师考试</option>
+                    <option value="3">注册会计师</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>地址</td>
+            <td colspan="3">
+                <input class="input" type="text" name="url" style="width: 300px;" id="url" required/>
+            </td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseExamRecordDetailDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_exam_record_detail.exam_record_detail_id AS examRecordDetailId , 	course_exam_record_detail.exam_record_id AS examRecordId , 	course_exam_record_detail.userplan_detail_id AS userplanDetailId , 	course_exam_record_detail.remark AS remark , 	course_exam_record_detail.dr AS dr , 	course_exam_record_detail.school_id AS schoolId , 	course_exam_record_detail.course_id AS courseId , 	course_exam_record_detail.area_id AS areaId , 	course_exam_record_detail.user_id AS userId 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where course_exam_record_detail.dr=0
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_exam_record_detail as course_exam_record_detail
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseExamRecordDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND exam_record_detail_id = #{examRecordDetailId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseExamRecordDetailEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页列表-->
+	<select id="queryAll" resultType="map">
+		select
+		<include refid="base_column"/>
+		, u.nick_name as userName, u.mobile as userMobile, c.course_name as courseName, ma.area_name as areaName, ma2.area_name as examareaName
+		<include refid="base_from"/>
+		, courses as c , mall_area as ma , users as u , mall_area as ma2
+		where course_exam_record_detail.course_id = c.course_id and course_exam_record_detail.area_id = ma.area_id  and course_exam_record_detail.examarea_id = ma2.area_id and course_exam_record_detail.user_id = u.user_id
+		and course_exam_record_detail.exam_record_id = #{examRecordId} and course_exam_record_detail.dr=0
+        <if test="userName != null and userName.trim() != ''">
+              AND u.nick_name like concat('%',#{userName},'%')
+        </if>
+        <if test="mobile != null and mobile.trim() != ''">
+              AND u.mobile = #{mobile}
+        </if>
+        <if test="examareaId > 0  ">
+              AND ma2.area_id = #{examareaId}
+        </if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	<!--条件分页总数-->
+ 	<select id="queryTotal2" resultType="int">
+		select count(1)
+		<include refid="base_from"/>
+        , courses as c , mall_area as ma , users as u , mall_area as ma2
+        where course_exam_record_detail.course_id = c.course_id and course_exam_record_detail.area_id = ma.area_id  and course_exam_record_detail.examarea_id = ma2.area_id and course_exam_record_detail.user_id = u.user_id
+        and course_exam_record_detail.exam_record_id = #{examRecordId} and course_exam_record_detail.dr=0
+        <if test="userName != null and userName.trim() != ''">
+            AND u.nick_name like concat('%',#{userName},'%')
+        </if>
+        <if test="mobile != null and mobile.trim() != ''">
+            AND u.mobile = #{mobile}
+        </if>
+        <if test="examareaId > 0 ">
+            AND ma2.area_id = #{examareaId}
+        </if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseExamRecordDetailEntity" useGeneratedKeys="true" keyProperty="examRecordDetailId">
+		insert into course_exam_record_detail
+		(
+				`exam_record_id`, 				
+				`userplan_detail_id`, 				
+				`remark`, 				
+				`dr`, 				
+				`school_id`, 				
+				`course_id`, 				
+				`area_id`, 				
+				`examarea_id`,
+				`user_id`		)
+		values
+		(
+				#{examRecordId}, 																											
+			    #{userplanDetailId}, 																			
+			    #{remark}, 																			
+			    0, 																			
+			    #{schoolId}, 																			
+			    #{courseId}, 																			
+			    #{areaId}, 																			
+			    #{examareaId},
+			    #{userId}
+			    )
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseExamRecordDetailEntity">
+		update course_exam_record_detail 
+		<set>
+			<if test="examRecordId != null">`exam_record_id` = #{examRecordId}, </if>
+			<if test="userplanDetailId != null">`userplan_detail_id` = #{userplanDetailId}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="areaId != null">`area_id` = #{areaId}, </if>
+			<if test="examareaId != null">`examarea_id` = #{examareaId}, </if>
+			<if test="userId != null">`user_id` = #{userId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND exam_record_detail_id = #{examRecordDetailId}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.CourseExamRecordDetailEntity">
+		UPDATE course_exam_record_detail 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND exam_record_detail_id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.CourseExamRecordDetailEntity">
+		UPDATE course_exam_record_detail 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND exam_record_detail_id IN 
+		<foreach item="examRecordDetailId" collection="ids" open="(" separator="," close=")">
+			#{examRecordDetailId}
+		</foreach>
+	</update>
+	
+	<!--根据主表ID批量删除-->
+	<update id="deleteDetailBatch" parameterType="io.renren.entity.CourseExamRecordDetailEntity">
+		UPDATE course_exam_record_detail 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND exam_record_id IN 
+		<foreach item="examRecordId" collection="ids" open="(" separator="," close=")">
+			#{examRecordId}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除不等于参数项的行 -->
+	<delete id="deleteBatchNotIn">
+		UPDATE course_exam_record_detail 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		<if test="courseExamRecordDetailIds != null and courseExamRecordDetailIds.size() > 0 ">
+			and exam_record_id = #{examRecordId} and exam_record_detail_id not in 
+			<foreach item="item" collection="courseExamRecordDetailIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</delete>
+</mapper>

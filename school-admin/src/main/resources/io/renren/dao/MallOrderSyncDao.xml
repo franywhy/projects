@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallOrderSyncDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	mall_order_sync.id AS id , 	mall_order_sync.create_time AS createTime , 	mall_order_sync.nc_id AS ncId , 	mall_order_sync.nc_create_time AS ncCreateTime , 	mall_order_sync.school_id AS schoolId , 	mall_order_sync.nc_class_type_id AS ncClassTypeId , 	mall_order_sync.nc_json AS ncJson , 	mall_order_sync.dr AS dr , 	mall_order_sync.err_type AS errType 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where mall_order_sync.dr=0 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from mall_order_sync as mall_order_sync
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.MallOrderSyncEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.MallOrderSyncEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MallOrderSyncEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_order_sync
+		(
+				`create_time`, `mobile`, `nc_code`, `state` ,`syn_time`, 				`nc_id`, 				`nc_create_time`, 				`school_id`, 				`nc_class_type_id`, 				`nc_json`, 				`dr`, 				`err_type`		)
+		values
+		(
+															#{createTime}, #{mobile}, #{ncCode}, #{state},#{synTime},																			#{ncId}, 																			#{ncCreateTime}, 																			#{schoolId}, 																			#{ncClassTypeId}, 																			#{ncJson}, 																			0, 																			#{errType}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.MallOrderSyncEntity">
+		update mall_order_sync 
+		<set>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="ncId != null">`nc_id` = #{ncId}, </if>
+			<if test="ncCreateTime != null">`nc_create_time` = #{ncCreateTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="ncClassTypeId != null">`nc_class_type_id` = #{ncClassTypeId}, </if>
+			<if test="ncJson != null">`nc_json` = #{ncJson}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="errType != null">`err_type` = #{errType}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.MallOrderSyncEntity">
+		UPDATE mall_order_sync 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.MallOrderSyncEntity">
+		UPDATE mall_order_sync 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

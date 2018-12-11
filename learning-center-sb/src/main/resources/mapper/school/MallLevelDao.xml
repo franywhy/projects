@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningcenter.school.dao.MallLevelDao">
+
+	<select id="queryName" resultType="String">
+		select ml.level_name
+		from course_userplan cu
+ 		join mall_level ml
+ 		on ml.level_id = cu.level_id
+		where user_id = #{userId}
+		and cu.dr = #{dr} 
+		and cu.`status` = #{status}
+		and cu.order_id= #{orderId}
+	</select>
+
+</mapper>

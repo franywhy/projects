@@ -1,0 +1,63 @@
+<!--海报输入--> 
+<form name="inputForm">
+
+    
+
+    <table width="100%">
+        <tr>
+            <td align="right">ID</td>
+            <td><input type="text" class="input"  name="_id" value="" data-options="required:true"/></td>
+        </tr>
+        <tr>
+            <td align="right">图片</td>
+            <td><input type="text" class="input"  size="40" name="pic" id="pic" value=""/>
+                <input type="button" class="d-button uploadify" value="上传图片"  data-type="pic" data-for="pic" data-size="1"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">其他图片</td>
+            <td>
+                <input type="hidden" class="input" size="40" name="pics" id="pics" value=""/>
+                <input type="button" class="d-button uploadify" value="上传其他图片"  data-type="pics" data-for="pics" data-size="10"/>
+                <ul id="pics-view" data-for="pics" class="upload-view">
+                    <%
+                    var data=data||null;
+                    for(var i=0;data&&data.pics&&i<data.pics.length;i++){var item=data.pics[i];%>
+                       
+                        <li data-url="<%=item%>"><a href="<%=item%>" target="_blank"><%=item%></a><a href="javascript:;" class="d-button upload-delete">删除</a></li>
+                        <%}%>
+<!--<li data-url="' + data.url + '"><a href="' + result.data.download_domain + data.url + '" target="_blank">' + data.url + '</a><a href="javascript:;" class="d-button upload-delete">删除</a></li>-->
+                    
+                </ul>
+
+
+            </td>
+        </tr>
+        <tr>
+            <td align="right">铃声</td>
+            <td>
+                <input type="hidden" class="input"  size="40" name="clocks" id="clocks" value=""/>
+                <input type="button" class="d-button uploadify" value="上传铃声" data-type="clocks" data-for="clocks" data-size="10"/>
+                <ul id="clocks-view" data-for="clocks" class="upload-view">
+                    <%
+                    for(var i=0;data&&data.clocks&&i<data.clocks.length;i++){var item=data.clocks[i];%>
+                       
+                        <li data-url="<%=item%>"><a href="<%=item%>" target="_blank"><%=item%></a><a href="javascript:;" class="d-button upload-delete">删除</a></li>
+                        <%}%>
+                    <!--<li data-url="http://showclock.b0.upaiyun.com/clock/1230/7c25827f2777fa83c4275c265d534459.mp3"><a href="http://showclock.b0.upaiyun.com/clock/1230/7c25827f2777fa83c4275c265d534459.mp3" target="_blank">http://showclock.b0.upaiyun.com/clock/1230/7c25827f2777fa83c4275c265d534459.mp3</a><a href="javascript:;" class="upload-delete">删除</a></li>-->
+                </ul>
+            </td>
+        </tr>
+        
+        <tr>
+            <td align="right">是否发送</td>
+            <td>
+                <select class="input" id="send" name="status">
+                    <option value="true">上线</option>
+                    <option value="false">下线</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</form>
+<!--/海报输入--> 

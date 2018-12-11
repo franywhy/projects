@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>资料库类型</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("coursematerialtype:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("coursematerialtype:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("coursematerialtype:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("coursematerialtype:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+			#end
+			#if($shiro.hasPermission("coursematerialtype:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+						<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.materialTypeId" placeholder="主键"/>
+			    </div>
+		</div>
+								    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">资料库PK</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.materialId" placeholder="资料库PK"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.materialTypeName" placeholder="名称"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">创建用户</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.createPerson" placeholder="创建用户"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">创建时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.creationTime" placeholder="创建时间"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">最近修改用户</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.modifyPerson" placeholder="最近修改用户"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">最近修改日期</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.modifiedTime" placeholder="最近修改日期"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">平台PK</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.schoolId" placeholder="平台PK"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">排序</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialType.orderNum" placeholder="排序"/>
+			    </div>
+			</div>
+										<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/sys/coursematerialtype.js?_${date.systemTime}"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+
+
+
+
+ <SCRIPT LANGUAGE="JavaScript">
+function monthnow(){
+ var now   = new Date();
+ var monthn = now.getMonth()+1;
+ var str="";
+ if (monthn>=10){
+str=monthn;
+ }else {
+str="0"+monthn;
+ }
+ var yearn  = now.getFullYear();
+ window.location.href="winnNamelist.jsp?getMonth="+monthn+"&getYear="+yearn;
+}
+</script>
+
+
+<div class="searchForm">
+    <form name="searchForm">
+    	  大区
+        <input type="text" name="largeAreaName" size="20" />
+                         校区
+        <input type="text" name="orgName" size="20" />
+                当前月份
+        <input type="text" name="dbilldate" size="20"  value=" "  readonly onClick="WdatePicker({dateFmt:'yyyy-MM'})" />
+
+
+
+                  报名月份
+        <input id="beginSignDate" type="text" name="beginSignDate" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM'})" />
+    	到
+        <input id="endSignDate" type="text" name="endSignDate" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM'})" />  
+ 
+
+     
+ 
+       <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    <!--    <input type="button"   value="查询月完成率2"   onclick="Izb.controller.<%=pty.key%>.showPermon()"  /> -->
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="查看月目标完成率" />
+		<%}%>
+       <input type="button" value="导出表格" class="d-button J_export">
+    </form>
+</div>

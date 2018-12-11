@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>消息表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">  
+		<div class="grid-btn">
+			#if($shiro.hasPermission("msgcontent:list"))
+			<div class="form-group col-sm-4">
+				<input type="text" class="form-control" v-model="q.contentTitle" @keyup.enter="query" placeholder="标题">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("msgcontent:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("msgcontent:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("msgcontent:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			<!-- #if($shiro.hasPermission("msgcontent:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+			#end
+			#if($shiro.hasPermission("msgcontent:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+			#end -->
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="msgContent.contentId" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">标题</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="msgContent.contentTitle" placeholder="标题字数不得少于10个字或者大于100个字"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">封面</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="msgContent.contentPic" placeholder="封面" readonly="readonly" onclick="hq.core.upload(null,'vm.msgContent.contentPic');"/>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">跳转地址(不填系统默认访问文章内容)</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="msgContent.contentUrl" placeholder="不填系统默认访问文章内容"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">站内消息</div>
+			   	<div class="col-sm-10">
+			      <label class="checkbox-inline">
+			      	<input type="checkbox" v-model="msgContent.commonSend" value="1" onclick="return false" />发送
+			      </label> 
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">弹窗消息</div>
+			   	<div class="col-sm-10">
+			   	  <label class="checkbox-inline">
+			   	  	<input type="checkbox" v-model="msgContent.topSend" value="1" />发送
+			   	  </label>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">推送消息</div>
+			   	<div class="col-sm-10">
+			   	  <label class="checkbox-inline">
+			   	  	<input type="checkbox" v-model="msgContent.pushSend" value="1" />发送
+			   	  </label>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">通知对象</div>
+			   	<div class="col-sm-10">
+			      <label class="radio-inline">
+				  	<input type="radio" name="type" value="0" v-model="msgContent.type"/> 全员
+				  </label>
+				  <label class="radio-inline">
+				  	<input type="radio" name="type" value="1" v-model="msgContent.type"/> 排课
+				  </label>
+			    </div>
+			</div>
+			<div class="form-group" v-show="msgContent.type == 1">
+			   	<div class="col-sm-2 control-label">排课</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="msgContent.classplanName" readonly="readonly" placeholder="排课" @click="selectClassplan"/>
+			    </div>
+			</div>
+			<div class="form-group" v-show="msgContent.type == 1">
+			   	<div class="col-sm-2 control-label">班型</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" multiple="multiple" placeholder="班型" v-model="msgContent.classtypeIdArray">
+					<option v-for="option in classTypeList" v-bind:value="option.value">{{ option.name }}</option>
+				  </select>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">发送方式</div>
+			   	<div class="col-sm-10">
+			      <label class="radio-inline">
+				  	<input type="radio" name="sendType" value="0" v-model="msgContent.sendType"/> 暂不发送
+				  </label>
+				  <label class="radio-inline">
+				  	<input type="radio" name="sendType" value="1" v-model="msgContent.sendType"/> 立即发送
+				  </label>
+				  <label class="radio-inline">
+				  	<input type="radio" name="sendType" value="2" v-model="msgContent.sendType"/> 定时发送
+				  </label>
+			    </div>
+			</div>
+			<div class="form-group" v-show="msgContent.sendType == 2">
+			   	<div class="col-sm-2 control-label">发送时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control datetimepicker" id="sendTime" readonly="readonly" placeholder="发送时间"/>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">文章</div>
+			    <div class="col-sm-10">
+			    <textarea id="editor_id" v-model="msgContent.contentHtml" style="width:1000px;height:400px;" >
+                </textarea>
+                </div>
+			</div>
+			<div class="form-group" id="commitButton">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+			<div class="form-group" id="backButton">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/msg/msgcontent.js?_${date.systemTime}"></script>
+<script charset="utf-8" src="/statics/editor/kindeditor.js"></script>
+<script charset="utf-8" src="/statics/editor/zh_CN.js"></script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/classplanLay.html")
+<!-- <script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create('#editor_id');
+        });
+</script> -->
+<script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create("textarea[id='editor_id']",{
+                    resizeType : 1,
+                    allowPreviewEmoticons: false,
+                    allowImageUpload:true,//允许上传图片
+                    allowFileManager:true, //允许对上传图片进行管理
+                    uploadJson:'../courseguide/uploadCourseGuide', //上传图片的java代码，只不过放在jsp中
+                    /* fileManagerJson:'../../statics/editor/file_manager_json.jsp', */
+                    afterUpload: function(){this.sync();}, //图片上传后，将上传内容同步到textarea中
+                    afterBlur: function(){this.sync();},   ////失去焦点时，将上传内容同步到textarea中
+                    /* items : [
+                        'fontname','fontsize', '|','forecolor', 'hilitecolor','bold', 'italic','underline',
+                        'removeformat','|', 'justifyleft','justifycenter', 'justifyright','insertorderedlist',
+                        'insertunorderedlist','|', 'emoticons','link','media','|','image']   */ 
+                });
+        });
+</script>
+</body>
+</html>

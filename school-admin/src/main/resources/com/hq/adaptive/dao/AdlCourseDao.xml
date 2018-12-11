@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlCourseDao">
+
+	<sql id="join">
+		LEFT JOIN hq_school.sys_product  ON sys_product.product_id = adl_course.product_id
+	</sql>
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_course.course_id AS courseId,
+		adl_course.course_name AS courseName,
+		adl_course.course_no AS courseNo,
+		adl_course.dr AS dr,
+		adl_course.product_id AS productId,
+		adl_course.dept_id AS deptId,
+		adl_course.dept_id AS deptId,
+		adl_course.update_time AS updateTime,
+		adl_course.create_time AS createTime,
+		adl_course.sync_time AS syncTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE dr = 0
+	</sql>
+	<sql id="select_query">
+		<if test="courseId != null and courseId > 0">
+			AND adl_course.`course_id` = #{courseId}
+		</if>
+		<if test="courseName != null and courseName.trim() != ''">
+			AND adl_course.`course_name` like concat('%', #{courseName}, '%')
+		</if>
+		<if test="courseNo != null and courseNo.trim() != ''">
+			AND adl_course.`course_no` like concat('%', #{courseNo}, '%')
+		</if>
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_course AS adl_course
+		<include refid="join"/>
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by course_id desc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.adaptive.entity.AdlCourseEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND course_id = #{courseId}
+	</select>
+
+	<select id="queryList"  parameterType="com.hq.adaptive.pojo.query.AdlCourseQuery" resultType="com.hq.adaptive.entity.AdlCourseEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="select_query"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="com.hq.adaptive.pojo.query.AdlCourseQuery" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="select_query"/>
+	</select>
+	 
+</mapper>

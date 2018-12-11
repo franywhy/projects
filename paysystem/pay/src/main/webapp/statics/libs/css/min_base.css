@@ -1,0 +1,75 @@
+@charset "utf-8";
+/* CSS Document */
+/*通用样式*/
+	body{
+
+	font-family: arial,"Hiragino Sans GB","Microsoft Yahei","微软雅黑","宋体",Tahoma,Arial,Helvetica,STHeiti;
+	margin:0px}
+	body, dd, dl, dt, form, h1, h2, h3, h4, h5, h6, li, ol, p, ul {
+	  margin: 0;
+	  padding: 0;
+	  font-weight:normal
+	}
+	a{
+		cursor:pointer}
+	a:link {
+		text-decoration: none;
+	}
+	a:visited {
+		text-decoration: none;
+	}
+	a:hover {
+		text-decoration: none;
+	}
+	a:active {
+		text-decoration: none;
+	}
+	.w-auto-Center {
+  		margin: 0 auto;}
+	.text_center{
+		text-align:center}
+	.clear{
+		clear:both}
+	img{
+		border:none}
+	body button{
+		outline:none;
+		cursor:pointer}
+	.mainCon{
+		position:relative
+	}
+	select{
+	-webkit-appearance: none;
+}
+.clearfix:after {
+  font-size: 0;
+}
+.clearfix:after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+
+/*返回顶部*/
+.mainCon{
+position:relative;}
+.mainCon #back-to-top{
+    background: url(/images/dream_student/dream_page/top.png) right center no-repeat;
+  height: 50px;
+  width: 50px;
+  position: fixed;
+    bottom: 15%;
+  right: 0;}
+  /**/
+   @media screen and (min-width:320px){
+.mainCon{
+		font-size:88.88%}
+}
+  @media screen and (min-width:360px){
+.mainCon{
+		font-size:100%}
+}
+@media screen and (min-width:376px){
+.mainCon{
+		font-size:110%}
+}

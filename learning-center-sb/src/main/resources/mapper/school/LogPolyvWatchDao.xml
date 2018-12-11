@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.LogPolyvWatchDao">
+
+	<select id="queryObject" resultType="com.hq.learningcenter.school.pojo.LogPolyvWatchPOJO">
+		select 
+			log_watch_id logWatchId,
+			record_id recordId,
+			course_id courseId,
+			user_id userId,
+			vid vid,
+			play_duration playDuration,
+			full_duration fullDuration,
+			attent_per attentPer,
+			create_time createTime,
+			ts ts
+		from 
+			log_polyv_watch 
+		where 1 = 1
+			<if test="userId != null and userId != ''">
+				and user_id = #{userId}
+			</if>
+			<if test="recordId != null and recordId != ''">
+				and record_id = #{recordId}
+			</if>
+	</select>
+	
+</mapper>

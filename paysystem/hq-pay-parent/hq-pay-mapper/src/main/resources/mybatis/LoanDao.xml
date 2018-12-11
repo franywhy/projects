@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hqjy.pay.mapper.LoanDao">
+
+	<insert id="saveLoan" keyProperty="id" useGeneratedKeys="true">
+		insert into pay_loan (orderNo, orderName, tradeMoney, orderTimestamp, terrace, courseMajor, educLevel,
+			classTypeName, coursePrice, discount, overpayMoney, discountMoney, paidMoney, otherData)
+			values (#{orderNo}, #{orderName}, #{tradeMoney}, #{orderTimestamp}, #{terrace}, #{courseMajor}, #{educLevel},
+			#{classTypeName}, #{coursePrice}, #{discount}, #{overpayMoney}, #{discountMoney}, #{paidMoney}, #{otherDataStr})
+	</insert>
+
+	<select id="getLoan" resultType="com.hqjy.pay.LoanEntity">
+		select id, orderNo, orderName, tradeMoney, orderTimestamp, terrace, courseMajor, educLevel,
+			classTypeName, coursePrice, discount, overpayMoney, discountMoney, paidMoney, otherData as otherDataStr
+			from pay_loan where id = #{id}
+	</select>
+
+</mapper>

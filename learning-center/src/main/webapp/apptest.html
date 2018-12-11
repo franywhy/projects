@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="/resources/css/apptest.css">
+    <script type="text/javascript" src="/resources/SchJS/image/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/resources/SchJS/image/ajaxfileupload.js"></script>
+    <script language="javascript" type="text/javascript">
+        function GetUri(arg, type, code, name,msg) {
+            if (arg.value != null && arg.value != '') {
+                ajaxFileUpload(type, code, name,msg);
+            }
+        }
+       
+        function ajaxFileUpload(type, code, name, msg) {
+            $("#" + msg).html("正在导入...");
+            $.ajaxFileUpload({
+                url: "/excel/importFile?code=" + code + "&type=" + type,
+                type: 'post',
+                secureuri: false, //一般设置为false
+                fileElementId: name, // 上传文件的id、name属性名
+                dataType: 'content', //返回值类型 一般设置为json
+                success: function (data, status) {
+                    $("#" + msg).html("导入完成");
+                },
+                error: function (data, status, e) {
+                    alert("1");
+                }
+            });
+        }
+        
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div id="Div1">
+        <div class="mainBox" style="height: auto!important; height: 500px; min-height: 500px;">
+            <!--<h3>北京</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    <tr>
+                        <th align="left">报税</th>
+                        <th align="left">出纳</th>
+                        <th align="left">小规模</th>
+                    </tr>
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload1" onchange="return GetUri(this,1, 'A001', 'upload1','msg_upload1');" /><span id="msg_upload1" style="color: #ff0000"></span></td>
+                        <td><input type="file" class="inpFlie" name="file" id="upload4" onchange="return GetUri(this,4, 'A002', 'upload4','msg_upload4');" /><span id="msg_upload4" style="color: #ff0000"></span></td>
+                        <td><input type="file" class="inpFlie" name="file" id="upload7" onchange="return GetUri(this,7, 'A003', 'upload7','msg_upload7');" /><span id="msg_upload7" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>广东</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    <tr>
+                        <th align="left">报税</th>
+                        <th align="left">出纳</th>
+                        <th align="left">小规模</th>
+                    </tr>
+                   <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload2" onchange="return GetUri(this,2, 'A001', 'upload2','msg_upload2');" /><span id="msg_upload2" style="color: #ff0000"></span></td>
+                        <td><input type="file" class="inpFlie" name="file" id="upload5" onchange="return GetUri(this,5, 'A002', 'upload5','msg_upload5');" /><span id="msg_upload5" style="color: #ff0000"></span></td>
+                        <td><input type="file" class="inpFlie" name="file" id="upload8" onchange="return GetUri(this,8, 'A003', 'upload8','msg_upload8');" /><span id="msg_upload8" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>上海</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    <tr>
+                        <th align="left">报税</th>
+                        <th align="left">出纳</th>
+                        <th align="left">小规模</th>
+                    </tr>
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload3" onchange="return GetUri(this,3, 'A001', 'upload3','msg_upload3');" /><span id="msg_upload3" style="color: #ff0000"></span></td>
+                        <td><input type="file" class="inpFlie" name="file" id="upload6" onchange="return GetUri(this,6, 'A002', 'upload6','msg_upload6');" /><span id="msg_upload6" style="color: #ff0000"></span></td>
+                        <td><input type="file" class="inpFlie" name="file" id="upload9" onchange="return GetUri(this,9, 'A003', 'upload9','msg_upload9');" /><span id="msg_upload9" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>-->
+
+
+            <h3>开通云财贸权限名单</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload10" onchange="return GetUri(this,99, 'B001', 'upload10','msg_upload10');" /><span id="msg_upload10" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>开通出纳权限名单</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload11" onchange="return GetUri(this,100, 'A002', 'upload11','msg_upload11');" /><span id="msg_upload11" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>开通小规模权限名单</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload12" onchange="return GetUri(this,101, 'A003', 'upload12','msg_upload12');" /><span id="msg_upload12" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+              <!--<h3>开通税务软件名单-广东</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload13" onchange="return GetUri(this,102, 'A001', 'upload13','msg_upload13');" /><span id="msg_upload13" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+               <h3>开通税务软件名单-上海</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload14" onchange="return GetUri(this,103, 'A001', 'upload14','msg_upload14');" /><span id="msg_upload14" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+               <h3>开通税务软件名单-北京</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload15" onchange="return GetUri(this,104, 'A001', 'upload15','msg_upload15');" /><span id="msg_upload15" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>-->
+
+
+                <h3>开通税务软件名单-全国</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="file" class="inpFlie" name="file" id="upload16" onchange="return GetUri(this,105, 'A001', 'upload16','msg_upload16');" /><span id="msg_upload16" style="color: #ff0000"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>开通中级题库-全国</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+
+                <tr>
+                    <td><input type="file" class="inpFlie" name="file" id="upload17" onchange="return GetUri(this,106, 'A004', 'upload17','msg_upload17');" /><span id="msg_upload17" style="color: #ff0000"></span></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3>开通初级题库-全国</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                <tr>
+                    <td><input type="file" class="inpFlie" name="file" id="upload18" onchange="return GetUri(this,107, 'A005', 'upload18','msg_upload18');" /><span id="msg_upload18" style="color: #ff0000"></span></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3>开通CPA-全国</h3>
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tbody>
+                <tr>
+                    <td><input type="file" class="inpFlie" name="file" id="upload19" onchange="return GetUri(this,108, 'A006', 'upload19','msg_upload19');" /><span id="msg_upload19" style="color: #ff0000"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </form>
+</body>
+</html>

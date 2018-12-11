@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseExamTimeDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_exam_time.id AS id , 	
+	course_exam_time.exam_time AS examTime , 	
+	course_exam_time.remark AS remark , 	
+	course_exam_time.create_person AS createPerson , 	
+	course_exam_time.creation_time AS creationTime , 	
+	course_exam_time.modify_person AS modifyPerson , 	
+	course_exam_time.modified_time AS modifiedTime , 	
+	course_exam_time.school_id AS schoolId 	
+	</sql>
+	<!-- 通用查询表头 -->
+	<sql id="other_column">
+	(select cu.username from sys_user cu where cu.user_id = course_exam_time.create_person) as creationName,
+	(select mu.username from sys_user mu where mu.user_id = course_exam_time.modify_person) as modifiedName,
+	 (DATEDIFF(course_exam_time.exam_time,SYSDATE())) as countDays
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1	
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_exam_time as course_exam_time
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseExamTimeEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseExamTimeEntity">
+		select
+		<include refid="base_column"/>,
+		<include refid="other_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseExamTimeEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into course_exam_time
+		(
+				`exam_time`, 				`remark`, 				`create_person`, 				`creation_time`, 				`modify_person`, 				`modified_time`, 				`school_id`		)
+		values
+		(
+															#{examTime}, 																			#{remark}, 																			#{createPerson}, 																			#{creationTime}, 																			#{modifyPerson}, 																			#{modifiedTime}, 																			#{schoolId}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseExamTimeEntity">
+		update course_exam_time 
+		<set>
+			<if test="examTime != null">`exam_time` = #{examTime}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM course_exam_time 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM course_exam_time 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,63 @@
+<!--首日登录--> 
+<% var data = [{_id:1},{_id:2},{_id:3},{_id:4},{_id:5},{_id:6}]%>
+<table width="100%" class="listTable">
+ 	<thead>
+ 	<tr>
+			<th class="short" rowspan="2">渠道名称</th>
+			<th class="short" rowspan="2">激活量</th>
+			<th class="short" colspan="2">登录1分钟</th>
+			<th class="short" colspan="2">登录5分钟</th>
+			<th class="short" colspan="2">登录15分钟</th>
+			<th class="short" colspan="2">登录30分钟</th>
+			<th class="short" colspan="2">登录120分钟</th>	
+    </tr>
+ 	<tr>
+		<th>数</th>
+		<th>率</th>
+		<th>数</th>
+		<th>率</th>
+		<th>数</th>
+		<th>率</th>
+		<th>数</th>
+		<th>率</th>
+		<th>数</th>
+		<th>率</th>
+	</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short"><%=data[i]._id%></td>
+        </tr>
+		<%}%>
+    </tbody>
+	<tfooter>		
+        <tr>
+			<th class="short">总计</th>
+            <th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+			<th class="short">0</th>
+        </tr>
+    </tfooter>
+</table>
+<div class="appPager"></div>
+<!--/首日登录--> 

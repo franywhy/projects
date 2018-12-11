@@ -1,0 +1,75 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">课次</th>
+        <th class="auto">NC名称</th>
+        <th class="auto">展示名称</th>
+        <th class="auto">编码</th>
+        <th class="auto">商品名称</th>
+        <th class="auto">商品编码</th>
+        <th class="auto">属性</th>
+        <!--<th class="auto">是否赠送</th>-->
+        <th class="auto">时长</th>
+        <th class="auto">URL参数</th>
+        <th class="auto">是否有试听</th>
+        <th class="auto">练习参数</th>
+        <th class="auto">是否上线</th>
+        <th class="longtime">同步时间</th>
+        <th class="longtime">修改时间</th>
+        <th class="auto">备注</th>
+        <th class="action action150">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr>
+        <td class="auto"><%=i+1 %></td>
+        <!--<td class="auto"><%=data[i]._id %></td>-->
+        <td class="auto"><%=data[i].sort %></td>
+        <td class="auto"><%=data[i].nc_name %></td>
+        <td class="auto"><%=data[i].show_name %></td>
+        <td class="auto"><%=data[i].course_code %></td>
+        <td class="auto"><%=data[i].name %></td>
+        <td class="auto"><%=data[i].code %></td>
+        <td class="auto"><%=data[i].course_property %></td>
+        <td class="auto"><%=data[i].duration %></td>
+        <td class="auto"><%=data[i].url_params %></td>
+        <td class="auto">
+            <%if(data[i].is_audition){%>
+            <%if(data[i].is_audition==0){%>
+            否
+            <%}%>
+            <%if(data[i].is_audition==1){%>
+            是
+            <%}}else{%>
+            否
+            <%}%>
+        </td>
+        <td class="auto"><%=data[i].test_params %></td>
+        <td class="auto">
+            <%if(data[i].is_online){%>
+            <%if(data[i].is_online==0){%>
+            否
+            <%}%>
+            <%if(data[i].is_online==1){%>
+            是
+            <%}}else{%>
+            否
+            <%}%>
+        </td>
+        <td class="longtime"><%=new Date(data[i].syn_time).toLocaleString()%></td>
+        <td class="longtime"><%=new Date(data[i].update_time).toLocaleString()%></td>
+        <td class="auto"><%=data[i].remark %></td>
+        <td  class="action action150">
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <button class="d-button" onclick="Izb.controller.commoditystab.courseedit('<%=data[i]._id%>')">修改</button>
+            <%}%>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
+<!--/账号管理列表-->

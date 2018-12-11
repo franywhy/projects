@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlKnowledgeDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_knowledge.knowledge_id AS knowledgeId,
+		adl_knowledge.knowledge_name AS knowledgeName,
+		adl_knowledge.knowledge_no AS knowledgeNo,
+		adl_knowledge.key_point AS keyPoint,
+		adl_knowledge.level_name AS levelName,
+		adl_knowledge.status AS status,
+		adl_knowledge.section_id AS sectionId,
+		adl_knowledge.question_name AS questionName,
+		adl_knowledge.course_id AS courseId,
+		adl_knowledge.update_time AS updateTime,
+		adl_knowledge.create_time AS createTime,
+		adl_knowledge.dr AS dr,
+		adl_knowledge.sync_time AS syncTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE adl_knowledge.dr = 0
+		<if test="courseId != null and courseId > 0">
+			AND adl_knowledge.course_id = #{courseId}
+		</if>
+		<if test="sectionId != null and sectionId > 0">
+			AND adl_knowledge.section_id = #{sectionId}
+		</if>
+		<if test="knowledgeName != null and knowledgeName.trim() != ''">
+			AND adl_knowledge.knowledge_name like concat('%',#{knowledgeName},'%') 
+		</if>
+		<if test="knowledgeNo != null and knowledgeNo.trim() != ''">
+			AND adl_knowledge.knowledge_no like concat('%',#{knowledgeNo},'%') 
+		</if>
+		<if test="keyPoint != null">
+			AND adl_knowledge.key_point = #{keyPoint}
+		</if>
+		<if test="levelName != null">
+			AND adl_knowledge.level_name  = #{levelName}
+		</if>
+		<if test="chapterId != null and chapterId &gt; 0">
+			AND adl_knowledge.section_id IN (
+				SELECT adl_section.section_id
+				  FROM adl_section AS adl_section
+				 WHERE adl_section.chapter_id = #{chapterId}
+			)
+		</if>
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_knowledge AS adl_knowledge
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by knowledge_id desc
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="queryObject" resultType="com.hq.adaptive.entity.AdlKnowledgeEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		WHERE adl_knowledge.knowledge_id = #{knowledgeId}
+	</select>
+	<select id="queryObjectByName" resultType="com.hq.adaptive.entity.AdlKnowledgeEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		WHERE adl_knowledge.knowledge_name = #{knowledgeName}
+		AND adl_knowledge.course_id = #{courseId}
+		AND adl_knowledge.dr = 0
+	</select>
+
+	
+	<select id="queryList" parameterType="com.hq.adaptive.pojo.query.AdlKnowledgeQuery" resultType="com.hq.adaptive.entity.AdlKnowledgeEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="com.hq.adaptive.pojo.query.AdlKnowledgeQuery"  resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	
+ 	<select id="queryCountByName" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		WHERE adl_knowledge.dr = 0
+		<if test="knowledgeId != null">
+			AND adl_knowledge.knowledge_id &lt;&gt; #{knowledgeId}
+		</if>
+		AND adl_knowledge.knowledge_name = #{knowledgeName}
+		AND adl_knowledge.course_id = #{courseId}
+	</select>
+	 
+	<select id="queryKnowledgeIdByNo" resultType="Long">
+		SELECT
+			knowledge_id as knowledgeId
+		<include refid="base_from"/>
+		WHERE adl_knowledge.knowledge_no = #{knowledgeNo}
+		<if test="courseId != null">
+			AND adl_knowledge.course_id = #{courseId}
+		</if>
+		LIMIT 1
+	</select>
+	<select id="queryObjectbyPoJO" parameterType="com.hq.adaptive.pojo.AdlKnowledgePOJO"  resultType="com.hq.adaptive.pojo.AdlKnowledgePOJO">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+
+</mapper>

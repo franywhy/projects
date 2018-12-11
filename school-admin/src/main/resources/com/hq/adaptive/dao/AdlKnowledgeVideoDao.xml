@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlKnowledgeVideoDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_knowledge_video.video_id AS videoId,
+		adl_knowledge_video.knowledge_id AS knowledgeId,
+		adl_knowledge_video.polyv_vid AS polyvVid,
+		adl_knowledge_video.polyv_name AS polyvName,
+		adl_knowledge_video.polyv_duration_s AS polyvDurationS,
+		adl_knowledge_video.polyv_duration AS polyvDuration,
+		adl_knowledge_video.screen_shot AS screenShot,
+		adl_knowledge_video.update_time AS updateTime,
+		adl_knowledge_video.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_knowledge_video AS adl_knowledge_video
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by video_id desc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.adaptive.pojo.AdlKnowledgeVideoPOJO">
+		SELECT 
+			adl_knowledge_video.video_id AS videoId,
+			adl_knowledge_video.knowledge_id AS knowledgeId,
+			adl_knowledge_video.polyv_vid AS polyvVid,
+			adl_knowledge_video.polyv_name AS polyvName,
+			adl_knowledge_video.polyv_duration_s AS polyvDurationS,
+			adl_knowledge_video.polyv_duration AS polyvDuration,
+			adl_knowledge_video.screen_shot AS screenShot
+		FROM adl_knowledge_video AS adl_knowledge_video
+		WHERE adl_knowledge_video.knowledge_id = #{knowledgeId}
+		LIMIT 1
+	</select>
+	
+	
+	<select id="queryKnowledgeId" resultType="Long">
+		SELECT 
+			adl_knowledge_video.knowledge_id AS knowledgeId
+		<include refid="base_from"/>
+		WHERE adl_knowledge_video.knowledge_id = #{knowledgeId}
+		LIMIT 0,1
+	</select>
+
+	<insert id="save" parameterType="com.hq.adaptive.entity.AdlKnowledgeVideoEntity" useGeneratedKeys="true" keyProperty="videoId">
+		INSERT INTO adl_knowledge_video
+		(
+			`knowledge_id`, 
+			`polyv_vid`, 
+			`polyv_name`, 
+			`polyv_duration_s`, 
+			`polyv_duration`, 
+			`screen_shot`
+		)
+		values
+		(
+			#{knowledgeId}, 
+			#{polyvVid}, 
+			#{polyvName}, 
+			#{polyvDurationS}, 
+			#{polyvDuration}, 
+			#{screenShot}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.adaptive.entity.AdlKnowledgeVideoEntity">
+		UPDATE adl_knowledge_video 
+		<set>
+			<if test="knowledgeId != null">`knowledge_id` = #{knowledgeId}, </if>
+			<if test="polyvVid != null">`polyv_vid` = #{polyvVid}, </if>
+			<if test="polyvName != null">`polyv_name` = #{polyvName}, </if>
+			<if test="polyvDurationS != null">`polyv_duration_s` = #{polyvDurationS}, </if>
+			<if test="polyvDuration != null">`polyv_duration` = #{polyvDuration}, </if>
+			<if test="screenShot != null">`screen_shot` = #{screenShot} </if>
+		</set>
+		WHERE video_id = #{videoId}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM adl_knowledge_video where knowledge_id = #{knowledgeId}
+	</delete>
+
+</mapper>

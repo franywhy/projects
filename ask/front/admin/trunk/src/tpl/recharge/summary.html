@@ -1,0 +1,83 @@
+<div class="autoTable">
+
+<table  class="listTable ">
+    <thead>
+        <tr>
+            <th colspan="2" rowspan="2">总计</th>
+
+            <th colspan="6">PC</th>
+            <th colspan="6">手机</th>
+            <th colspan="6">渠道</th>
+        </tr>
+        <tr>
+            <th class="time" colspan="3">全部</th>
+            <th class="time" colspan="3">新增</th>
+            <th class="time" colspan="3">全部</th>
+            <th class="time" colspan="3">新增</th>
+            <th class="time" colspan="3">全部</th>
+            <th class="time" colspan="3">新增</th>
+        </tr>
+        <tr>
+            <th class="short">金额</th>
+            <th class="short">人数</th>
+
+            <th class="short">金额</th>
+            <th class="short">人数</th>
+            <th class="short">人均</th>
+            <th class="short">金额</th>
+            <th class="short">人数</th>
+            <th class="short">人均</th>
+
+            <th class="short">金额</th>
+            <th class="short">人数</th>
+            <th class="short">人均</th>
+            <th class="short">金额</th>
+            <th class="short">人数</th>
+            <th class="short">人均</th>
+
+            <th class="short">金额</th>
+            <th class="short">人数</th>
+            <th class="short">人均</th>
+            <th class="short">金额</th>
+            <th class="short">人数</th>
+            <th class="short">人均</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%	
+        	var pc = data.pc;
+            var moblie = data.moblie; 
+            var qd = data.qd; 
+        %>
+        <tr>
+            <td class="short"><%=Izb.common.getRMB((pc['all'].cny || 0) +(moblie['all'].cny || 0)+(qd['all'].cny || 0))%></td>
+            <td class="short"><%=(pc['all'].user || 0) +(moblie['all'].user || 0)+(qd['all'].user || 0)%></td>
+
+            <td class="short"><%=pc['all'].cny || 0 %></td>
+            <td class="short"><%=pc['all'].user || 0 %></td>
+            <td class="auto"><%=pc['all'].user ? Izb.common.getRMB(pc['all'].cny/pc['all'].user) : 0 %></td>
+           
+            <td class="short"><%=pc['delta'].cny || 0 %></td>
+            <td class="short"><%=pc['delta'].user || 0 %></td>
+            <td class="auto"><%=pc['delta'].user ? Izb.common.getRMB(pc['delta'].cny/pc['delta'].user) : 0 %></td>
+            
+            <td class="short"><%=moblie['all'].cny || 0 %></td>
+            <td class="short"><%=moblie['all'].user || 0 %></td>
+            <td class="auto"><%=moblie['all'].user ? Izb.common.getRMB(moblie['all'].cny/moblie['all'].user) : 0 %></td>
+           
+            <td class="short"><%=moblie['delta'].cny || 0 %></td>
+            <td class="short"><%=moblie['delta'].user || 0 %></td>
+            <td class="auto"><%=moblie['delta'].user ? Izb.common.getRMB(moblie['delta'].cny/moblie['delta'].user) : 0 %></td>
+
+            <td class="short"><%=qd['all'].cny || 0 %></td>
+            <td class="short"><%=qd['all'].user || 0 %></td>
+            <td class="auto"><%=qd['all'].user ? Izb.common.getRMB(qd['all'].cny/qd['all'].user) : 0 %></td>
+           
+            <td class="short"><%=qd['delta'].cny || 0 %></td>
+            <td class="short"><%=qd['delta'].user || 0 %></td>
+            <td class="auto"><%=qd['delta'].user ? Izb.common.getRMB(qd['delta'].cny/qd['delta'].user) : 0 %></td>
+        </tr>
+    </tbody>
+</table>
+    </div>
+<div class="appPager"></div>

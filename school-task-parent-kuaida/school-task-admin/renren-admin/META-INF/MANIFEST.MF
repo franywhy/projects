@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Implementation-Title: renren-admin
+Implementation-Version: 3.2.0
+Built-By: Administrator
+Implementation-Vendor-Id: io.renren
+Spring-Boot-Version: 2.0.1.RELEASE
+Main-Class: org.springframework.boot.loader.JarLauncher
+Start-Class: io.renren.AdminApplication
+Spring-Boot-Classes: BOOT-INF/classes/
+Spring-Boot-Lib: BOOT-INF/lib/
+Created-By: Apache Maven 3.2.3
+Build-Jdk: 1.8.0_25
+Implementation-URL: http://www.renren.io/renren-admin
+

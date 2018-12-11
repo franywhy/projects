@@ -1,0 +1,14 @@
+
+<!--礼物列表头|礼物分类列表头-->
+<div class="tagArea">
+	<ul class="tagList">
+		<li class="<%=pty.key=="gift"? "cur":""%>"><a href="#a=gift"><i></i><span>礼物管理</span></a></li>
+		<li class="<%=pty.key=="giftcat"? "cur":""%>"><a href="#a=giftcat"><i></i><span>分类管理</span></a></li>
+	</ul>
+	<div class="tag_r"><%if(Izb.user.checkLimits('gift',Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>"   />
+	<%}%><input type="button" value="导出表格" class="d-button J_export" />
+<input type="button" value="返回" class="d-button J_back" />
+	</div>
+</div>
+<!--/礼物列表头|礼物分类列表头-->

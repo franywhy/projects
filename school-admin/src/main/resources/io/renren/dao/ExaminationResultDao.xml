@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ExaminationResultDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	examination_result.id AS id , 	examination_result.registration_id AS registrationId , 	examination_result.user_Id AS userId , 	examination_result.score AS score , 	examination_result.img AS img , 	examination_result.exam_type AS examType , 	examination_result.create_time AS createTime , 	examination_result.class_id AS classId 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE examination_result.school_id = #{schoolId} 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM examination_result AS examination_result
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.ExaminationResultEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.pojo.ExaminationResultPOJO">
+	SELECT
+		re.id AS registrationId,
+		exam.id as examId,
+		exam.score as score,
+		exam.img as img, 
+		exam.exam_type as examType,
+		re.registration_no AS registrationNo,
+		re.order_no AS orderNo,
+		cType.classtype_name AS classtypeName,
+		courses.course_name AS courseName,
+		areabd.area_name AS bdAreaName,
+		areabk.area_name AS bkAreaName,
+		p.profession_name AS professionName,
+		le.level_name AS levelName,
+		class.class_name AS className,
+		sysuser.nick_name AS sysUserName,
+		u.nick_name AS nickName,
+		u.mobile AS mobile,
+		exc.schedule_name AS scheduleName,
+		exc.schedule_date AS scheduleDate,
+		pro.product_name AS productName,
+		re.registration_number AS registrationNumber,
+		re.registration_time AS registrationTime,
+		re.`status` STATUS,
+		u.user_id as userId,
+		u.nick_name as nickName
+	FROM
+		course_abnormal_registration AS re
+			LEFT JOIN examination_result as exam ON exam.registration_id = re.id and exam.dr = 0
+			LEFT JOIN course_userplan AS course_userplan ON re.user_plan_id = course_userplan.user_plan_id
+			-- LEFT JOIN mall_order AS ord ON course_userplan.order_id = ord.order_id
+			LEFT JOIN courses AS courses ON re.course_id = courses.course_id
+			LEFT JOIN sys_product AS pro ON re.product_id = pro.product_id
+			LEFT JOIN mall_class AS class ON course_userplan.class_id = class.class_id
+			LEFT JOIN mall_area AS areabd ON course_userplan.area_id = areabd.area_id
+			LEFT JOIN mall_profession AS p ON p.profession_id = course_userplan.profession_id
+			LEFT JOIN users AS u ON course_userplan.user_id = u.user_id
+			LEFT JOIN mall_level AS le ON le.level_id = course_userplan.level_id
+			LEFT JOIN mall_class_type AS cType ON course_userplan.class_type_id = cType.classtype_id
+			LEFT JOIN mall_area AS areabk ON re.bk_area_id = areabk.area_id
+			LEFT JOIN sys_user AS sysuser ON sysuser.user_id = class.user_id
+			LEFT JOIN mall_exam_schedule AS exc ON exc.id = re.exam_schedule_id
+	WHERE
+		re.dr = 0 and re.status = 2 
+		AND course_userplan.dr = 0
+		<if test="userId != null">
+				AND u.user_id =#{userId}
+		</if>
+		<if test="nickName != null">
+				AND u.nick_name like CONCAT('%',#{nickName},'%') 
+		</if>
+		<if test="mobile != null">
+				AND u.mobile =#{mobile}
+		</if>
+		<if test="examType != null">
+				AND exam.exam_type =#{examType}
+		</if>
+		<if test="registrationNo != null">
+				AND re.registration_no =#{registrationNo}
+		</if>
+		<if test="id != null">
+				AND re.id =#{id}
+		</if>
+		<if test="courseId != null">
+				AND courses.course_id =#{courseId}
+		</if>
+		
+		
+		
+		<if test="sysUserId != null">
+				AND sysuser.user_id =#{sysUserId}
+		</if>
+			ORDER BY re.id DESC
+	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+	
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+			FROM
+		course_abnormal_registration AS re
+			LEFT JOIN examination_result as exam ON exam.registration_id = re.id and exam.dr = 0
+			LEFT JOIN course_userplan AS course_userplan ON re.user_plan_id = course_userplan.user_plan_id
+			-- LEFT JOIN mall_order AS ord ON course_userplan.order_id = ord.order_id
+			LEFT JOIN courses AS courses ON re.course_id = courses.course_id
+			LEFT JOIN sys_product AS pro ON re.product_id = pro.product_id
+			LEFT JOIN mall_class AS class ON course_userplan.class_id = class.class_id
+			LEFT JOIN mall_area AS areabd ON course_userplan.area_id = areabd.area_id
+			LEFT JOIN mall_profession AS p ON p.profession_id = course_userplan.profession_id
+			LEFT JOIN users AS u ON course_userplan.user_id = u.user_id
+			LEFT JOIN mall_level AS le ON le.level_id = course_userplan.level_id
+			LEFT JOIN mall_class_type AS cType ON course_userplan.class_type_id = cType.classtype_id
+			LEFT JOIN mall_area AS areabk ON re.bk_area_id = areabk.area_id
+			LEFT JOIN sys_user AS sysuser ON sysuser.user_id = class.user_id
+			LEFT JOIN mall_exam_schedule AS exc ON exc.id = re.exam_schedule_id
+	WHERE
+		re.dr = 0 and re.status = 2 
+		AND course_userplan.dr = 0
+		<if test="userId != null">
+				AND u.user_id =#{userId}
+		</if>
+		<if test="nickName != null">
+				AND u.nick_name like CONCAT('%',#{nickName},'%') 
+		</if>
+		<if test="mobile != null">
+				AND u.mobile =#{mobile}
+		</if>
+		<if test="examType != null">
+				AND exam.exam_type =#{examType}
+		</if>
+		<if test="registrationNo != null">
+				AND re.registration_no =#{registrationNo}
+		</if>
+		<if test="id != null">
+				AND re.id =#{id}
+		</if>
+		<if test="courseId != null">
+				AND courses.course_id =#{courseId}
+		</if>
+		
+		<if test="sysUserId != null">
+				AND sysuser.user_id =#{sysUserId}
+		</if>
+			ORDER BY re.id DESC
+		 
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.ExaminationResultEntity">
+		insert into examination_result
+		(
+			`id`,`registration_id`,`user_Id`,`score`,`img`,`exam_type`,`create_time`,`creater`)
+		values
+		(
+			#{id},#{registrationId},#{userId},#{score},#{img}, #{examType},#{createTime},#{creater}
+		)
+	</insert>
+	
+	<select id="getRegistrationNum" resultType="int">
+		select count(*)
+		 from 
+		course_abnormal_registration a left join course_abnormal_registration b
+	        on a.order_no=b.order_no
+	        and a.course_id=b.course_id
+	        and a.user_plan_id=b.user_plan_id
+	        and a.dr=0
+	        and a.status=2
+        where 1 =1
+        <if test="registrationId != null">
+			AND b.id =#{registrationId}
+		</if>
+		
+	</select>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.ExaminationResultEntity">
+		update examination_result 
+		<set>
+			<if test="registrationId != null">`registration_id` = #{registrationId}, </if>
+			<if test="userId != null">`user_Id` = #{userId}, </if>
+			<if test="score != null">`score` = #{score}, </if>
+			<if test="img != null">`img` = #{img}, </if>
+		</set>
+		where 1 = 1
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM examination_result 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		update examination_result 
+			set dr = 1 
+		where 1 = 1  
+		AND registration_id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

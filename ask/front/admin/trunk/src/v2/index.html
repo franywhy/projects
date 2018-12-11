@@ -1,0 +1,64 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="Chrome=1,IE=edge" />
+    <link rel="dns-prefetch" href="@adminDomain@" />
+    <link rel="dns-prefetch" href="@baseDomain@" />
+    <link rel="dns-prefetch" href="@appDomain@" />
+    <title>恒企在线－管理后台</title>
+    <link rel="stylesheet" href="@baseDomain@/base/scripts/ui/artDialog/skins/green.css" />
+    <link rel="stylesheet" href="/styles/login.css" />
+    <script src="/scripts/seed.js" data-page="login" data-version="VERSION"></script>
+</head>
+
+<body>
+    <div id="login">
+        <h1><a href="http://www.izhubo.com/" title="恒企在线" target="_blank">恒企在线</a>
+        </h1>
+        <form>
+            <div id="tips"></div>
+            <p>
+                <label>用户名
+                    <br />
+                    <input type="text" id="uid" class="input" value="" size="20" tabindex="1" />
+                </label>
+            </p>
+            <p>
+                <label>密码
+                    <br />
+                    <input type="password" id="pwd" class="input" value="" size="20" tabindex="2" />
+                </label>
+            </p>
+            <p>
+                <label>验证码
+                    <br>
+                    <input type="text" id="auth_code" class="input" style="width:120px" value="" size="10" tabindex="3">
+                    <img id="authcodeImg" width="120" height="36" title="点击更换" style="cursor: pointer" />
+                </label>
+            </p>
+            <p style="float:right;">
+                <input type="button" id="btnLogin" class="d-button d-state-highlight" value="登 录" />
+            </p>
+        </form>
+    </div>
+    <div class="scripts">
+        <script src="@baseDomain@/base/scripts/--/jquery.js,util/oo.js,util/util.js,util/json2.js,util/query.js,util/cookie.js,ui/artDialog/jquery.artDialog.js"></script>
+        <script src="@baseDomain@/pro-core/1.0.0/core.js"></script>
+        <script src="/scripts/ui.js"></script>
+        <script src="/scripts/common.js"></script>
+        <script src="/scripts/login.js"></script>
+        <script src="/scripts/main.js"></script>
+        <script>
+        Izb.login.init({
+            actionSession: '/session',
+            actionLogin: '/login',
+            redirectUrl: 'main.html?' + new Date().getTime()
+        });
+        </script>
+    </div>
+</body>
+
+
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title> #parse("sys/header.html")
+<style type="text/css">
+.s_select{
+	width: 100px; 
+	border: 1px solid #ccc; 
+    padding: 7px 0px;
+    border-radius: 3px; /*css3属性IE不支持*/
+    padding-left:5px;
+}
+.s_input{
+	width: 32%; 
+	border: 1px solid #ccc; 
+    padding: 7px 0px;
+    border-radius: 3px; /*css3属性IE不支持*/
+    padding-left:5px;
+    background:#eee;
+}
+.form-horizontal{
+	width: 80% !important;
+}
+.materialShow{
+width: 90% !important;
+}
+/* .isRel{
+display: none;
+} */
+</style>
+
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				 
+					名称&nbsp;<input type="text" style="width: 130px;height:32px;border-radius: 3px;"
+						v-model="q.name" @keyup.enter="query"
+						placeholder="资料名称">
+						&nbsp;类型&nbsp;&nbsp;
+						<select class="s_select" v-model="q.property" >
+							    <option value="">全部</option>
+				       			<option v-for="option in propertys"  v-bind:value="option.v">{{ option.t }}</option>
+			            </select>
+						 
+						&nbsp;属性&nbsp;&nbsp;
+						<select class="s_select" v-model="q.type" >
+								<option value="">全部</option>
+				       			<option v-for="option in types"  v-bind:value="option.v">{{ option.t }}</option>
+			            </select>
+						&nbsp;是否关联&nbsp;&nbsp;
+						<select  v-model="q.isRelevance"  class="s_select">
+							<option value="">全部</option>
+							<option value="是">是</option>
+							<option value="否">否</option>
+						</select>
+						&nbsp;排序&nbsp;&nbsp;
+						<select id="s_time" class="s_select">
+							<option value="">全部</option>
+							<option value="create_time">创新时间</option>
+							<option value="update_time">更新时间</option>
+						</select>
+		        &nbsp;&nbsp;
+				<a class='btn btn-primary' @click="query"><i class='fa fa-search'></i>&nbsp;查看</a>
+		 
+			</div>
+			<div grid-btn>
+				 
+				#if($shiro.hasPermission("materialdetail:save")) <a
+					class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				#end #if($shiro.hasPermission("materialdetail:update")) <a
+					class="btn btn-primary" @click="update"><i
+					class="fa fa-pencil-square-o"></i>&nbsp;编辑</a> #end
+				#if($shiro.hasPermission("materialdetail:delete")) <a
+					class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				#end #if($shiro.hasPermission("materialdetail:resume")) <a
+					class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+				#end #if($shiro.hasPermission("materialdetail:pause")) <a
+					class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+				#end
+			</div>
+			<br/>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+		<div v-show="!showList" class="panel panel-default">
+			<div id="i_title" class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+			    <div>
+					<h4>&nbsp;<strong>关联资料</strong></h4>
+				</div>
+				
+				<div class="form-group" style="display: none">
+					<div class="col-sm-2 control-label">资料ID</div>
+					<div class="col-sm-9">
+						<input type="text" class="form-control"
+							v-model="materialDetail.id" placeholder="资料ID" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">资料名称</div>
+					<div class="col-sm-9" >
+						<input type="text" class="form-control" style="width:90% !important" id="s_name"
+							v-model="materialDetail.name" placeholder="资料名称" />
+					</div>
+				</div>
+				<div id="typeDivAdd">
+					<div class="form-group" >
+						<div class="col-sm-2 control-label">类型</div>
+						<div class="col-sm-9">
+				            <select  class="form-control"  id="select_type"  style="width:90% !important" > <!-- 为了防止资源加载不完整，这里不才用 v-for -->
+								<option value="VIDEO">视频</option>
+								<option value="LIVE">直播</option>
+								<option value="QUESTIONBANK">题库</option>
+								<option value="TRAINING">实训</option>
+								<option value="FILE" >文件</option>
+								<option value="FACETOFACE">面授</option>
+								<option value="OTHER">其他</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+			<div  id="typeDivUdate">
+				<div class="form-group">
+					<div class="col-sm-2 control-label" >类型</div>
+					<div class="col-sm-9">
+						<select class="form-control" v-model="materialDetail.type"  style="width:90% !important"  >
+				       			<option v-for="option in types"  v-bind:value="option.v">{{ option.t }}</option>
+			            </select>
+					</div>
+				</div>
+		 </div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">属性</div>
+					<div class="col-sm-9">
+						<select class="form-control" v-model="materialDetail.property"  style="width:90% !important" >
+				       			<option v-for="option in propertys" v-bind:value="option.v">{{ option.t }}</option>
+			            </select>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">视频地址/直播间</div>
+					<div class="col-sm-9">
+						<input type="text" class="form-control"  style="width:90% !important" 
+							v-model="materialDetail.vedioAddr" placeholder="视频地址/直播间" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">回放地址</div>
+					<div class="col-sm-9">
+						<input type="text" class="form-control"   style="width:90% !important" 
+							v-model="materialDetail.returnAddr" placeholder="回放地址" />
+					</div>
+				</div>
+			 
+				<div   class="form-group">
+					<div class="col-sm-2 control-label">题库关联</div>
+					<div class="col-sm-5">
+					    <select id="qbCourseSelect" class="s_select" style="width:300px;">
+				 					
+			 			</select>
+					</div> 
+					<div class="col-sm-4">
+						 <select id="qbChapterSelect" class="s_select" style="width:300px;">
+				 					
+			 			</select>
+					</div>
+				</div>
+				 
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<div class="col-sm-5">
+						<!-- <input type="text" class="form-control"
+							v-model="materialDetail.questionBankVerse" placeholder="题库节" /> -->
+						 <select id="qbVerseSelect" class="s_select" style="width:300px;">
+				 					
+			 			</select>
+					</div>
+					<div class="col-sm-4">
+						<!-- <input type="text" class="form-control"
+							v-model="materialDetail.questionBankKnowledge"
+							placeholder="题库知识点" /> -->
+						<select id="s_type"  class="form-control">
+							<option value="BEFORECLASS">长期股权投资</option>
+							<option value="MIDDLECLASS">短期股权投资</option>
+ 						</select>
+					</div>
+				</div>
+			<div id="isRelId2" style="">	 
+				<div class="form-group" >
+					<div class="col-sm-2 control-label">已关联知识点</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" v-model="materialDetail.id" placeholder="库"  readonly="readonly"/>
+					</div>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" v-model="materialDetail.chapterName" placeholder="章"  readonly="readonly"/>
+					</div>
+				</div>
+				
+				<div class="form-group" >
+					<div class="col-sm-2 control-label"></div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" v-model="materialDetail.verseName" placeholder="节"  readonly="readonly"/>
+					</div>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" v-model="materialDetail.courseName" placeholder="知识点"  readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+				<div>
+					<h4>&nbsp;<strong>推送设置</strong></h4>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">推送内容</div>
+					<div class="col-sm-9">
+				    <textarea v-model="materialDetail.pushContent"   style="width:90%;height:100px;" placeholder="推送内容"></textarea>
+	                </div>
+				</div>
+			<div style="display: none">
+				<!-- <div class="form-group">
+				   	<div class="col-sm-2 control-label">推送类型</div>
+				   	<label class="radio-inline">
+					 &nbsp;&nbsp;&nbsp;<input type="radio" name="push_type" value="0" v-model="materialDetail.pushType" id="pushtype"/> 一次&nbsp;&nbsp;&nbsp;推送时间&nbsp;
+					  <input type="text"  class="once_datetimepicker" 
+								id="once_pushtime" placeholder="推送时间"  style="width:160px"/>
+					</label>
+				</div>
+				
+				<div class="form-group">
+				    <div class="col-sm-2 control-label"></div>
+					<label class="radio-inline">
+					&nbsp;&nbsp;&nbsp;<input type="radio" name="push_type" value="1" v-model="materialDetail.pushType"/> 每日&nbsp;&nbsp;&nbsp;推送时间&nbsp;
+						  <input type="text" class="everyday_datetimepicker"  
+								id="everyday_pushtime" placeholder="推送时间"  style="width:160px"/>
+						</label>
+				</div> -->
+			</div>		
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;
+				<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+			</div>
+			</form>
+		</div>
+	</div>
+	
+	
+	<!-- 浮层子模块 -->
+	
+	<div id="materialInfoShowLayer" style="display: none;">
+		<form class="form-horizontal  materialShow">
+			
+				<div>
+					<h4>&nbsp;<strong>关联资料</strong></h4>
+				</div>
+				
+				<div class="form-group" style="display: none">
+					<div class="col-sm-2 control-label">资料ID</div>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="objId" v-model="showMaterialObj.id" placeholder="资料ID" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">资料名称</div>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="objName" v-model="showMaterialObj.name" placeholder="资料名称" readonly="readonly" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">类型</div>
+							&nbsp;&nbsp;&nbsp;&nbsp;<input type="text"  class="s_input"  id="objType" v-model="showMaterialObj.type" placeholder="类型" readonly="readonly"/>
+					 &nbsp;&nbsp;&nbsp;&nbsp;
+					属性
+					  &nbsp;&nbsp;
+						<input class="s_input" type="text"   id="objProperty" v-model="showMaterialObj.property" placeholder="属性" readonly="readonly"/>
+					 
+				</div>
+				 
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">视频地址/直播间</div>
+					<div class="col-sm-9">
+						<input type="text" class="form-control"   id="objVedioAddr" v-model="showMaterialObj.vedioAddr" placeholder="视频地址/直播间"  readonly="readonly"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">回放地址</div>
+					<div class="col-sm-9">
+						<input type="text" class="form-control"  id="objReturnAddr" v-model="showMaterialObj.returnAddr" placeholder="回放地址" readonly="readonly" />
+					</div>
+				</div>
+			 
+				<div   class="form-group">
+					<div class="col-sm-2 control-label">题库关联</div>
+					<div class="col-sm-5">
+					    <input type="text" class="form-control"  id ="qbCourseName" v-model="showMaterialObj.qbCourseName"  readonly="readonly" />
+					</div> 
+					<div class="col-sm-4">
+						 <input type="text" class="form-control" id ="qbChapterName"  v-model="showMaterialObj.qbChapterName"  readonly="readonly" />
+					</div>
+				</div>
+				 
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<div class="col-sm-5">
+						<!-- <input type="text" class="form-control" v-model="materialDetail.questionBankVerse" placeholder="题库节" /> -->
+						 <input type="text" class="form-control" id ="qbVerseName" v-model="showMaterialObj.qbVerseName"  readonly="readonly" />
+					</div>
+					<div class="col-sm-4">
+						<!-- <input type="text" class="form-control"
+							v-model="materialDetail.questionBankKnowledge"
+							placeholder="题库知识点" /> -->
+						<select id="s_type"  
+							class="form-control">
+							<option value="BEFORECLASS">长期股权投资</option>
+							<option value="MIDDLECLASS">短期股权投资</option>
+ 						</select>
+					</div>
+				</div>
+			<div id="isRelId" style="">
+				<div   class="form-group" >
+					<div class="col-sm-2 control-label">已关联知识点</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" v-model="showMaterialObj.courseName" id="courseName" placeholder="课" readonly="readonly" />
+					</div>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" v-model="showMaterialObj.chapterName"  id="chapterName"  placeholder="章" readonly="readonly" />
+						 
+					</div>
+				</div>
+				
+				<div    class="form-group" >
+					<div class="col-sm-2 control-label"></div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" v-model="showMaterialObj.verseName" id="verseName" placeholder="节" readonly="readonly" />
+					 
+					</div>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" v-model="showMaterialObj.kpName"  id="kpName" placeholder="知识点" readonly="readonly" />
+					</div>
+				</div>
+			</div>	
+				
+				<div>
+					<h4>&nbsp;<strong>推送设置</strong></h4>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">推送内容</div>
+					 
+					<div class="col-sm-9">
+				    <textarea v-model="showMaterialObj.pushContent"  id="objPushContent" style="width:100%;height:100px;" readonly="readonly"></textarea>
+	                </div>
+				</div>
+			<div style="display: none">
+				<!-- <div class="form-group">
+				   	<div class="col-sm-2 control-label">推送类型</div>
+				   	<label class="radio-inline">
+					  <input type="radio" name="push_type"   id="vonce_PushType" value="0" v-model="showMaterialObj.pushType"  readonly="readonly"/> 一次&nbsp;&nbsp;&nbsp;推送时间&nbsp;
+					  &nbsp;&nbsp;&nbsp;<input type="radio" name="vpush_type"  value="0"  id="vonce_PushType"   readonly="readonly"/> 一次&nbsp;&nbsp;&nbsp;推送时间&nbsp;
+					  <input type="text"  id="vonce_pushtime" placeholder="推送时间"  style="width:160px" readonly="readonly"/>
+					</label>
+				</div>
+				
+				<div class="form-group">
+				    <div class="col-sm-2 control-label"></div>
+					<label class="radio-inline">
+						  &nbsp;&nbsp;&nbsp;<input type="radio" name="vpush_type"  value="1" id="veveryday_PushType"   readonly="readonly"/> 每日&nbsp;&nbsp;&nbsp;推送时间&nbsp;
+						  <input type="text" class="everyday_datetimepicker"  
+								id="everyday_pushtime"  v-model="showMaterialObj.pushTime"  placeholder="推送时间"  style="width:160px" readonly="readonly"/>
+						 <input type="text"  id="veveryday_pushtime"  placeholder="推送时间"  style="width:160px" readonly="readonly"/>
+					</label>
+				</div> -->
+			</div>	
+		</form>
+	</div>
+
+	<script src="${rc.contextPath}/js/kbm/materialdetail.js?_${date.systemTime}"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.AppBannerDao">
+
+	<select id="queryList" resultType="com.hq.learningapi.entity.AppBannerEntity">
+		select 	`name`,pic
+		from app_banner
+		where level_id = #{levelId}
+		and profession_id = #{professionId}
+		and status = #{status}
+		and school_id = #{schoolId}
+		order by order_num desc
+	</select>
+
+
+</mapper>

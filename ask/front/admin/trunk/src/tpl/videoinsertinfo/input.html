@@ -1,0 +1,56 @@
+<!--视屏插入档案-->
+<form name="inputForm">
+    <div class="tagArea">
+        <ul class="tagList">
+            <li class="tab-nav"><a><span>视频插入档案</span></a></li>
+            <li class="tab-nav-action"><a><span>视频插入详细</span></a></li>
+        </ul>
+    </div>
+    <div id="tabs-body" class="tabs-body">
+        <div style="display:block">
+            <table width="100%" >
+                <tr>
+                    <td >课程</td>
+                    <td>
+                        <input name="_id" type="hidden">
+                        <select style="width: 182px" class="input" id="course_id"  name="course_id" onchange="Izb.controller.videoinsertinfo.setChapter(this.options[this.options.selectedIndex].value)" ></select>
+                    </td>
+                    <td >章节</td>
+                    <td>
+                        <select style="width: 182px" class="input"  id="chapter_id" name="chapter_id" onchange="Izb.controller.videoinsertinfo.setCourseWare(this.options[this.options.selectedIndex].value)"></select>
+                    </td>
+                    <td >课件</td>
+                    <td>
+                        <select style="width: 182px" class="input"  id="courseware_id" name="courseware_id"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td >插入时间点</td>
+                    <td>
+                        <input name="insert_time" class="input" id="begin_date" type="text"  readonly onClick="WdatePicker({dateFmt:'mm:ss'})" />
+                    </td>
+                    <td>是否使用</td>
+                    <td>
+                        <select style="width: 182px" class="input" name="is_use">
+                            <option value="true">是</option>
+                            <option value="false">否</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="display:none">
+            <div  id="video_insert_detail">
+
+
+            </div>
+            <input type="button" class="d-button" value="添加" onClick="Izb.controller.videoinsertinfo.addInsertVedioDetail();" />
+        </div>
+    </div>
+
+
+
+
+
+</form>
+<!--/视屏插入档案-->

@@ -1,0 +1,29 @@
+
+    <!--公司档案列表-->
+    <table width="100%" class="listTable tablesorter">
+        <thead>
+        <tr>
+            <th class="short">大区</th>
+            <th class="short">校区总人数</th>
+            <th class="short">潜在人数</th>
+            <th class="short">成交人数</th>
+            <th class="auto">暂停人数</th>
+            <th class="auto">注册会答用户数</th>
+            <th class="auto">占比</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for(var i=0; i< data.length; i++){ %>
+        <tr>
+            <td class="auto"><%=data[i]._id.area_name%></td>
+            <td class="auto"><%=data[i].count%></td>
+            <td class="auto"><%=data[i].qz_count%></td>
+            <td class="auto"><%=data[i].cj_count%></td>
+            <td class="auto"><%=data[i].zt_count%></td>
+            <td class="auto"><%=data[i].hy_count%></td>
+            <td class="auto"></td>
+        </tr>
+        <%}%>
+        </tbody>
+    </table>
+    <div class="appPager"></div>

@@ -1,0 +1,49 @@
+<!--任务列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+            <th class="icon">图标</th>			
+            <th class="title">标题</th>
+			<th class="order">排序</th>
+			<th class="short">编号</th>
+			<th class="short">类型</th>
+            <th class="short">星币数</th>
+            <th class="pic">快照地址</th>    
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action action100">操作</th>
+			<%}%>
+       </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<td class="icon"><img width="32px" height="32px" src="<%=data[i].icon_url%>" alt="<%=data[i]._id%>" /></td>            
+            <td class="title"><%=data[i].title%></td>
+			<td class="order"><%=data[i].order%></td>
+			<td class="short"><%=data[i]._id%></td>
+			<td class="short">
+			<%if(data[i].type){%>
+			<%for(var typeList = ['','PC','手机'],j=0;j<data[i].type.length;j++){%>
+				<%=typeList[data[i].type[j]]%>
+				<%=(j!=data[i].type.length-1) ? ',':''%>
+			<%}%>	
+			<%}%>
+			</td>
+            <td class="short"><%=data[i].coin_count%></td>
+            <td class="pic">
+			<%if(data[i].pic_url){%>
+				<img width="260px" height="128px" src="<%=data[i].pic_url%>" />
+			<%}%>
+			</td>
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit( '<%=data[i]._id%>' )">改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del( '<%=data[i]._id%>' )">删</button>
+			</td>
+			<%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/任务列表-->

@@ -1,0 +1,34 @@
+<!--通用列表--> 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="short">发送用户ID</th>
+        <th class="short">接收用户ID</th>
+        <th class="short">房间ID</th>
+        <th class="title">消息内容</th>
+        <th class="longtime">时间</th>
+
+		<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        <th class="action action100">操作</th>
+		<%}%>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+        <td><%=data[i].from_id%></td>
+        <td><%=data[i].to_id%></td>
+        <td><%=data[i].room_id%></td>
+        <td><%=data[i].msg%></td>
+        <td><%=data[i].timestamp ? new Date(data[i].timestamp).toLocaleString() : data[i].createTime %></td>
+		<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        <td class="action action100">
+            <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删</button>
+		</td>
+		<%}%>
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>
+<!--/通用列表-->

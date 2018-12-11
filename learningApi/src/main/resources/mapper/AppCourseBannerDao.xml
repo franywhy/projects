@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.AppCourseBannerDao">
+	<select id="queryProductIdListByBisinessId" resultType="long">
+		select
+			product_id
+		from
+			sys_business_product
+		where
+			business_id = #{businessId}
+	</select>
+	
+	<select id="queryBannerList" resultType="map">
+		select
+			id as id,
+			title as title,
+			pic as pic,
+			url as url,
+			order_num as orderNum
+		from
+			app_course_banner
+		where
+			dr = 0
+        <if test="productIdList.size() > 0">
+            and product_id in
+			<foreach item="productId" collection="productIdList" open="(" separator="," close=")">
+	            #{productId}
+	        </foreach>
+        </if>
+	        order by order_num asc
+             LIMIT 4
+	</select>
+	
+</mapper>

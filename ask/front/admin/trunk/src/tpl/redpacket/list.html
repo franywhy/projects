@@ -1,0 +1,45 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+            <th >注册时间</th>
+            <th >用户名</th>
+
+
+
+
+			<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+           <!-- <th class="action action100">操作</th>-->
+			<%}%>
+        </tr>
+	</thead>
+
+    <tbody>
+
+    </tbody>
+    <%for(var i=0 , ldata = data.list;i<ldata.length;i++){%>
+    <tr>
+        <td  class="auto"><%=ldata[i].optime%></td>
+        <td class="short"><%=ldata[i].apply_money%></td>
+
+
+        <!--<td class="short">
+
+        </td>-->
+    </tr>
+    <%}%>
+    <tfoot >
+    <tr>
+        <td class="short"  style="color:red">当前页合计：</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=data.page_sum.apply_money%>  &nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+
+    <tr>
+        <td class="short" style="color:red">合计：</td>
+        <td style="color:red; font-weight:bold;" align="right"><%=data.sum || 0 %>  &nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    </tfoot>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

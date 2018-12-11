@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.CourseClassplanLivesDao">
+
+	<select id="queryObject" resultType="com.hq.learningapi.entity.CourseClassplanLivesEntity">
+		select * from course_classplan_lives where classplan_live_id=#{classplanLiveId}
+	</select>
+	
+	
+		<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.hq.learningapi.entity.CourseClassplanLivesEntity" id="courseClassplanLivesMap">
+        <result property="classplanLiveId" column="classplan_live_id"/>
+        <result property="classplanId" column="classplan_id"/>
+        <result property="classplanLiveName" column="classplan_live_name"/>
+        <result property="classplanLiveTimeDetail" column="classplan_live_time_detail"/>
+        <result property="dayTime" column="day_time"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="readyTime" column="ready_time"/>
+        <result property="closeTime" column="close_time"/>
+        <result property="timeBucket" column="time_bucket"/>
+        <result property="liveroomId" column="liveroom_id"/>
+        <result property="studioId" column="studio_id"/>
+        <result property="backUrl" column="back_url"/>
+        <result property="backId" column="back_id"/>
+        <result property="backType" column="back_type"/>
+        <result property="videoId" column="video_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="liveClassTypeIds" column="live_class_type_ids"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="courseLiveDetailId" column="course_live_detail_id"/>
+        <result property="createPerson" column="create_person"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="modifyPerson" column="modify_person"/>
+        <result property="modifiedTime" column="modified_time"/>
+        <result property="schoolId" column="school_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="dr" column="dr"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="mId" column="m_id"/>
+        <result property="reviewUrl" column="review_url"/>
+        <result property="prepareUrl" column="prepare_url"/>
+        <result property="coursewareUrl" column="courseware_url"/>
+        <result property="homeworkUrl" column="homework_url"/>
+        <result property="practiceStageId" column="practice_stage_id"/>
+        <result property="examStageId" column="exam_stage_id"/>
+        <result property="phaseName" column="phase_name"/>
+    </resultMap>
+
+	<select id="queryClassPlanLiveListByCourseId" resultType="com.hq.learningapi.entity.CourseClassplanLivesEntity">
+		select * from course_classplan_lives where course_id=#{courseId} AND dr=0 order by start_time
+	</select>
+
+	<select id="queryList" resultType="com.hq.learningapi.entity.CourseClassplanLivesEntity">
+		select * from course_classplan_lives
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by classplan_live_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from course_classplan_lives 
+	</select>
+	 
+	<insert id="save" parameterType="com.hq.learningapi.entity.CourseClassplanLivesEntity">
+		insert into course_classplan_lives
+		(
+			`classplan_live_id`, 
+			`classplan_id`, 
+			`classplan_live_name`, 
+			`classplan_live_time_detail`, 
+			`day_time`, 
+			`start_time`, 
+			`end_time`, 
+			`ready_time`, 
+			`close_time`, 
+			`time_bucket`, 
+			`liveroom_id`, 
+			`studio_id`, 
+			`back_url`, 
+			`back_id`, 
+			`back_type`, 
+			`video_id`, 
+			`teacher_id`, 
+			`live_class_type_ids`, 
+			`order_num`, 
+			`course_live_detail_id`, 
+			`create_person`, 
+			`creation_time`, 
+			`modify_person`, 
+			`modified_time`, 
+			`school_id`, 
+			`course_id`, 
+			`dr`, 
+			`file_url`, 
+			`m_id`, 
+			`review_url`, 
+			`prepare_url`, 
+			`courseware_url`, 
+			`homework_url`, 
+			`practice_stage_id`, 
+			`exam_stage_id`, 
+			`phase_name`
+		)
+		values
+		(
+			#{classplanLiveId}, 
+			#{classplanId}, 
+			#{classplanLiveName}, 
+			#{classplanLiveTimeDetail}, 
+			#{dayTime}, 
+			#{startTime}, 
+			#{endTime}, 
+			#{readyTime}, 
+			#{closeTime}, 
+			#{timeBucket}, 
+			#{liveroomId}, 
+			#{studioId}, 
+			#{backUrl}, 
+			#{backId}, 
+			#{backType}, 
+			#{videoId}, 
+			#{teacherId}, 
+			#{liveClassTypeIds}, 
+			#{orderNum}, 
+			#{courseLiveDetailId}, 
+			#{createPerson}, 
+			#{creationTime}, 
+			#{modifyPerson}, 
+			#{modifiedTime}, 
+			#{schoolId}, 
+			#{courseId}, 
+			0, 
+			#{fileUrl}, 
+			#{mId}, 
+			#{reviewUrl}, 
+			#{prepareUrl}, 
+			#{coursewareUrl}, 
+			#{homeworkUrl}, 
+			#{practiceStageId}, 
+			#{examStageId}, 
+			#{phaseName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.learningapi.entity.CourseClassplanLivesEntity">
+		update course_classplan_lives 
+		<set>
+			<if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+			<if test="classplanLiveName != null">`classplan_live_name` = #{classplanLiveName}, </if>
+			<if test="classplanLiveTimeDetail != null">`classplan_live_time_detail` = #{classplanLiveTimeDetail}, </if>
+			<if test="dayTime != null">`day_time` = #{dayTime}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="readyTime != null">`ready_time` = #{readyTime}, </if>
+			<if test="closeTime != null">`close_time` = #{closeTime}, </if>
+			<if test="timeBucket != null">`time_bucket` = #{timeBucket}, </if>
+			<if test="liveroomId != null">`liveroom_id` = #{liveroomId}, </if>
+			<if test="studioId != null">`studio_id` = #{studioId}, </if>
+			<if test="backUrl != null">`back_url` = #{backUrl}, </if>
+			<if test="backId != null">`back_id` = #{backId}, </if>
+			<if test="backType != null">`back_type` = #{backType}, </if>
+			<if test="videoId != null">`video_id` = #{videoId}, </if>
+			<if test="teacherId != null">`teacher_id` = #{teacherId}, </if>
+			<if test="liveClassTypeIds != null">`live_class_type_ids` = #{liveClassTypeIds}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="courseLiveDetailId != null">`course_live_detail_id` = #{courseLiveDetailId}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="fileUrl != null">`file_url` = #{fileUrl}, </if>
+			<if test="mId != null">`m_id` = #{mId}, </if>
+			<if test="reviewUrl != null">`review_url` = #{reviewUrl}, </if>
+			<if test="prepareUrl != null">`prepare_url` = #{prepareUrl}, </if>
+			<if test="coursewareUrl != null">`courseware_url` = #{coursewareUrl}, </if>
+			<if test="homeworkUrl != null">`homework_url` = #{homeworkUrl}, </if>
+			<if test="practiceStageId != null">`practice_stage_id` = #{practiceStageId}, </if>
+			<if test="examStageId != null">`exam_stage_id` = #{examStageId}, </if>
+			<if test="phaseName != null">`phase_name` = #{phaseName}</if>
+		</set>
+		where classplan_live_id = #{classplanLiveId}
+	</update>
+	
+
+</mapper>

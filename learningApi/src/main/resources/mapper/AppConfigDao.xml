@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.AppConfigDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.hq.learningapi.entity.AppConfigEntity" id="appConfigMap">
+        <result property="id" column="id"/>
+        <result property="creator" column="creator"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="key" column="key"/>
+        <result property="value" column="value"/>
+        <result property="url" column="url"/>
+        <result property="version" column="version"/>
+        <result property="facility" column="facility"/>
+        <result property="dr" column="dr"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryValueByKey" resultType="java.lang.String">
+		select a.value from app_config a where a.key = #{value}
+	</select>
+
+	<select id="queryObject" resultType="com.hq.learningapi.entity.AppConfigEntity">
+		select * from app_config where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.hq.learningapi.entity.AppConfigEntity">
+		select * from app_config 
+		<where>
+            <if test="version !=null">
+                (version = 0 or version = #{version}) and
+            </if>
+            
+            <if test="facility !=null">
+                (facility IS NULL or facility = #{facility}) and
+            </if>
+            <if test="dr !=null">
+                dr = #{dr}
+            </if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from app_config 
+	</select>
+	 
+	<insert id="save" parameterType="com.hq.learningapi.entity.AppConfigEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into app_config
+		(
+			`creator`, 
+			`creation_time`, 
+			`key`, 
+			`value`, 
+			`url`, 
+			`version`, 
+			`facility`, 
+			`dr`, 
+			`remark`
+		)
+		values
+		(
+			#{creator}, 
+			#{creationTime}, 
+			#{key}, 
+			#{value}, 
+			#{url}, 
+			#{version}, 
+			#{facility}, 
+			0, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.learningapi.entity.AppConfigEntity">
+		update app_config 
+		<set>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="key != null">`key` = #{key}, </if>
+			<if test="value != null">`value` = #{value}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="facility != null">`facility` = #{facility}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+
+</mapper>

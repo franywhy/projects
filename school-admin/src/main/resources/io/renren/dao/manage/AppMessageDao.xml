@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.dao.manage.AppMessageDao" >
+  
+  <!-- 关联产品表字段 -->
+  <sql id="join_productName">
+    sys_product.product_name AS productName
+  </sql>
+  <!-- 关联产品表 -->
+  <sql id="join">
+    LEFT JOIN sys_product AS sys_product ON sys_product.product_id = app_message.product_id
+  </sql>
+  <!-- 通用查询条件 -->
+  <sql id="base_where">
+    where 1=1
+  </sql>
+  <!-- 通用from -->
+  <sql id="base_from">
+    from app_message as app_message
+  </sql>
+  
+  <sql id="base_column" >
+    app_message.message_id AS messageId,
+    app_message.title AS title,
+    app_message.pic AS pic,
+    app_message.content_html AS contentHtml,
+    app_message.content_url AS contentUrl,
+    app_message.create_person AS createPerson,
+    app_message.create_time AS createTime,
+    app_message.modify_person AS modifyPerson,
+    app_message.modify_time AS modifyTime,
+    app_message.product_id AS productId,
+    app_message.school_id AS schoolId,
+    app_message.push_status AS pushStatus,
+    app_message.push_time AS pushTime,
+    app_message.push_msg_id AS pushMsgId,
+    app_message.dr AS dr
+  </sql>
+
+  <!--根据ID查询-->
+  <select id="queryMsgMap" resultType="java.util.Map">
+    select
+    message_id AS messageId,
+    title AS title,
+    pic AS pic,
+    content_html AS contentHtml,
+    content_url AS contentUrl,
+    push_msg_id AS pushMsgId
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND message_id = #{messageId}
+  </select>
+
+  <!--根据ID查询-->
+  <select id="queryPojoObject" resultType="io.renren.pojo.manage.AppMessagePOJO">
+    select
+    <include refid="base_column"/>
+    ,
+    (select cu.username from sys_user cu where cu.user_id = app_message.create_person) as creationName,
+    (select mu.username from sys_user mu where mu.user_id = app_message.modify_person) as modifiedName,
+    <include refid="join_productName"/>
+    <include refid="base_from"/>
+    <include refid="join"/>
+    <include refid="base_where"/>
+    AND message_id = #{messageId}
+  </select>
+
+  <!--分页列表-->
+  <select id="queryPojoList" resultType="io.renren.pojo.manage.AppMessagePOJO">
+    select
+    <include refid="base_column"/>
+    ,
+    (select cu.username from sys_user cu where cu.user_id = app_message.create_person) as creationName,
+    (select mu.username from sys_user mu where mu.user_id = app_message.modify_person) as modifiedName,
+    <include refid="join_productName"/>
+    <include refid="base_from"/>
+    <include refid="join"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="title != null and title.trim() != ''">
+      and `title` like concat('%',#{title},'%')
+    </if>
+    order by create_time desc
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <!--分页总数-->
+  <select id="queryTotal" resultType="int">
+    select count(1)
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="title != null and title.trim() != ''">
+      and `title` like concat('%',#{title},'%')
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="io.renren.entity.manage.AppMessage" >
+    insert into app_message (message_id, title, pic, 
+      content_html, content_url, create_person, 
+      create_time, modify_person, modify_time, 
+      product_id, school_id, push_status, 
+      push_time, push_msg_id, dr
+      )
+    values (#{messageId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, 
+      #{contentHtml,jdbcType=VARCHAR}, #{contentUrl,jdbcType=VARCHAR}, #{createPerson,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyPerson,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{productId,jdbcType=BIGINT}, #{schoolId,jdbcType=VARCHAR}, #{pushStatus,jdbcType=TINYINT}, 
+      #{pushTime,jdbcType=TIMESTAMP}, #{pushMsgId,jdbcType=VARCHAR}, #{dr,jdbcType=TINYINT}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="io.renren.entity.manage.AppMessage" >
+    update app_message
+    set title = #{title,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      content_html = #{contentHtml,jdbcType=VARCHAR},
+      content_url = #{contentUrl,jdbcType=VARCHAR},
+      create_person = #{createPerson,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_person = #{modifyPerson,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      product_id = #{productId,jdbcType=BIGINT},
+      school_id = #{schoolId,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=TINYINT},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      push_msg_id = #{pushMsgId,jdbcType=VARCHAR},
+      dr = #{dr,jdbcType=TINYINT}
+    where message_id = #{messageId,jdbcType=BIGINT}
+  </update>
+
+  <!--批量删除-->
+  <update id="deleteBatch">
+    update app_message set dr = 1 where message_id in
+    <foreach item="messageId" collection="list" open="(" separator="," close=")">
+      #{messageId}
+    </foreach>
+  </update>
+
+  <!-- 更新推送状态 -->
+  <update id="updatePushStatus">
+    update app_message set push_status = #{pushStatus}, push_time = #{pushTime}, push_msg_id = #{pushMsgId}
+    where message_id = #{messageId}
+  </update>
+
+    <select id="queryCountByPushTime" resultType="string">
+        SELECT push_time FROM app_message WHERE  push_time  BETWEEN #{startTime} AND #{endTime}  ORDER BY push_time desc limit 1
+    </select>
+</mapper>

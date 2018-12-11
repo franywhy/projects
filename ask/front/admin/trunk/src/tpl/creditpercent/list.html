@@ -1,0 +1,54 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th class="auto">大区</th>
+			<th class="auto">校区</th> 
+			<th class="auto">年月</th>
+			<th class="auto">应修学分</th>
+			<th class="auto">已修学分</th>		 
+			<th class="auto">学分完成率</th>
+			<th class="auto">目标完成率</th>
+            <th class="auto">是否达标</th>
+              <th class="auto">操作</th>
+
+  
+		</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr did="<%=data[i].id%>">
+			<td class="auto"><%=i+1 %></td>
+			<td class="auto" name="largeAreaName"><%=data[i].largeAreaName%></td>
+			<td class="auto" name="orgName"><%=data[i].orgName%></td> 
+			<td class="auto" name="months"><%=data[i].months%></td>
+			<td class="auto" name="claimScore"><%=data[i].claimScore%></td>
+			<td class="auto" name="totalscore"><%=data[i].totalscore%></td>
+			 
+			<td class="auto" name="xfPercent"><%=data[i].xfPercent%></td>
+			<td class="auto" name="mbpercent"><%=data[i].mbpercent%></td>
+			<td class="auto" name="remark"><%=data[i].remark%></td>
+
+
+ 
+
+
+
+			 <td class="action">
+			 	 
+ <!-- orgName,xfPercent,mbpercent,remark,orgid,dbilldate,months,pid  -->
+
+			 	 <button class="d-button" onclick="Izb.controller.<%=pty.key%>.details(
+			 	 '<%=data[i].orgName%>','<%=data[i].xfPercent%>',
+			 	 '<%=data[i].mbpercent%>','<%=data[i].remark%>','<%=data[i].orgId%>',
+			 	 '<%=data[i].dbilldate%>','<%=data[i].months%>','<%=data[i].pid%>'
+			 	 )">详情</button>
+            </td>
+
+
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

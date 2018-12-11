@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>班级-商品-部门对照表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<div class="form-group">
+			    #if($shiro.hasPermission("classgoodsdepts:list"))
+			    <table class="table table-condensed" border="0">
+					<tr border="0">
+						<td><label for="name">班级名称:</label></td>
+						<td><input type="text" class="form-control" v-model="q.className" @keyup.enter="query" placeholder="班级名称"></td>
+						<td><label for="name">班主任:</label></td>
+						<td><input type="text" class="form-control" v-model="q.teacherName" @keyup.enter="query" placeholder="班主任"></td>
+						<td><label for="name">商品名称:</label></td>
+						<td><input type="text" class="form-control" v-model="q.goodName" @keyup.enter="query" placeholder="商品名称"></td>
+						<td><label for="name">校区名称:</label></td>
+						<td><input type="text" class="form-control" v-model="q.deptName" @keyup.enter="query" placeholder="校区名称"></td>
+					</tr>
+				</table>
+				<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+				#end
+				#if($shiro.hasPermission("classgoodsdepts:save"))
+				<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				#end
+				#if($shiro.hasPermission("classgoodsdepts:update"))
+				<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+				#end
+				#if($shiro.hasPermission("classgoodsdepts:delete"))
+				<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				#end
+			</div>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="classGoodsDepts.id" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">班级名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="classGoodsDepts.className" readonly="readonly" placeholder="点击选择班级" @click="selectClass"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">商品</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="classGoodsDepts.goodName" readonly="readonly" placeholder="点击选择商品" @click="selectGood"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">部门</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="classGoodsDepts.deptName" readonly="readonly" placeholder="点击选择部门" @click="selectDept"/>
+			    </div>
+			</div>
+										    			
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/classgoodsdepts.js?_${date.systemTime}"></script>
+#parse("layer/classLay.html")
+#parse("layer/goodsInfoLay.html")
+#parse("layer/deptLay.html")
+</body>
+</html>

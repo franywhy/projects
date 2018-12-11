@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.learningapi.dao.HeadlineDao" >
+
+  <sql id="base_column" >
+    headline.headline_id AS headlineId,
+    headline.title AS title,
+    headline.subtitle AS subtitle,
+    headline.card_banner_url AS cardBannerUrl,
+    card_banner_type AS cardBannerType,
+    headline.content_type AS contentType,
+    headline.voice_title AS voiceTitle,
+    headline.content_html AS contentHtml,
+    headline.content_url AS contentUrl,
+    headline.labels AS labels,
+    headline.read_number AS readNumber,
+    headline.comment_number AS commentNumber,
+    headline.push_time AS pushTime,
+    headline.card_banner_type AS cardBannerType,
+    headline.content_total_time AS contentTotalTime,
+    headline.creation_time AS creationTime,
+    headline.app_status AS appStatus
+  </sql>
+  <!-- 通用查询条件 -->
+  <sql id="base_where">
+    where 1=1
+  </sql>
+  <!-- 通用from -->
+  <sql id="base_from">
+    from headline as headline
+  </sql>
+
+  <!--根据ID查询-->
+  <select id="queryPojoObject" resultType="com.hq.learningapi.pojo.HeadlinePOJO">
+    select
+    <include refid="base_column"/>
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND headline.headline_id = #{headlineId}
+  </select>
+
+  <!-- 新增阅读数 -->
+  <update id="addReadNumber">
+    update headline set read_number = read_number + 1
+    where headline_id = #{headlineId}
+  </update>
+
+  <!-- 新增评论数 -->
+  <update id="addCommentNumber">
+    update headline set comment_number = comment_number + 1
+    where headline_id = #{headlineId}
+  </update>
+
+  <!--分页列表-->
+  <select id="queryPojoList" resultType="com.hq.learningapi.pojo.HeadlinePOJO">
+    select
+    <include refid="base_column"/>
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    and headline.school_id = #{schoolId}
+    and headline.dr = 0
+    and headline.app_status = 1
+    and headline.headline_id in
+    (
+      select distinct mc.message_id from channel_message mc
+      where mc.message_type = 2
+      and mc.channel_id in
+      <foreach collection="list" item="channel" index="index" separator="," >
+        (#{channel})
+      </foreach>
+    )
+    order by creation_time desc
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <select id="queryMapList" resultType="java.util.Map">
+    select
+    <include refid="base_column"/>
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    and headline.dr = 0
+    <if test="productIdList.size() > 0">
+      and headline.product_id in
+      <foreach item="productId" collection="productIdList" open="(" separator="," close=")">
+        #{productId}
+      </foreach>
+    </if>
+    order by creation_time DESC
+    <if test="page_num != null and page_size != null">
+      limit #{page_num}, #{page_size}
+    </if>
+  </select>
+
+</mapper>

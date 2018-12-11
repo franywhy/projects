@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlKnowledgeFileDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_knowledge_file.file_id AS fileId,
+		adl_knowledge_file.knowledge_id AS knowledgeId,
+		adl_knowledge_file.file_name AS fileName,
+		adl_knowledge_file.file_url AS fileUrl,
+		adl_knowledge_file.update_time AS updateTime,
+		adl_knowledge_file.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_knowledge_file AS adl_knowledge_file
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by file_id desc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.adaptive.pojo.AdlKnowledgeFilePOJO">
+		SELECT
+			adl_knowledge_file.file_id AS fileId,
+			adl_knowledge_file.knowledge_id AS knowledgeId,
+			adl_knowledge_file.file_name AS fileName,
+			adl_knowledge_file.file_url AS fileUrl
+		FROM adl_knowledge_file AS adl_knowledge_file
+		WHERE adl_knowledge_file.knowledge_id = #{knowledgeId}
+		LIMIT 1
+	</select>
+
+	 
+	<insert id="save" parameterType="com.hq.adaptive.entity.AdlKnowledgeFileEntity" useGeneratedKeys="true" keyProperty="fileId">
+		INSERT INTO adl_knowledge_file
+		(
+			`knowledge_id`, 
+			`file_name`, 
+			`file_url`
+		)
+		values
+		(
+			#{knowledgeId}, 
+			#{fileName}, 
+			#{fileUrl}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.adaptive.entity.AdlKnowledgeFileEntity">
+		UPDATE adl_knowledge_file 
+		<set>
+			<if test="knowledgeId != null">`knowledge_id` = #{knowledgeId}, </if>
+			<if test="fileName != null">`file_name` = #{fileName}, </if>
+			<if test="fileUrl != null">`file_url` = #{fileUrl} </if>
+		</set>
+		WHERE file_id = #{fileId}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM adl_knowledge_file where knowledge_id = #{knowledgeId}
+	</delete>
+
+</mapper>

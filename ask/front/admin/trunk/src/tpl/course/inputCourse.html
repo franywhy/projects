@@ -1,0 +1,135 @@
+<style>
+    .tabs {
+        float:left;
+      //  background-image: url(themes/images/nav_bg.jpg);
+        width:100%;
+    }
+    .tabs ul
+    {
+        list-style: none outside none;
+        margin: 0;
+        padding: 0;
+    }
+    .tabs ul li
+    {
+        float: left;
+        line-height: 24px;
+        margin: 0;
+        padding: 2px 20px 0 15px;
+    }
+    .tab-nav{
+       // background: url(themes/images/manage_r2_c14.jpg) no-repeat;
+        cursor:pointer;
+    }
+    .tab-nav-action{
+      //  background: url(themes/images/manage_r2_c13.jpg) no-repeat;
+        cursor:pointer;
+    }
+    .tabs-body
+    {
+        border-bottom: 1px solid #B4C9C6;
+        border-left: 1px solid #B4C9C6;
+        border-right: 1px solid #B4C9C6;
+        float: left;
+        padding: 5px 0 0;
+        width: 100%;
+    }
+    .tabs-body div
+    {
+        //padding:10px;
+    }
+</style>
+
+<form name="inputForm">
+
+    <div class="tabs">
+        <ul id="tabs">
+            <li class="tab-nav">课程档案</li>
+            <li class="tab-nav-action">课程章节</li>
+            <li class="tab-nav">课程价格</li>
+            <li class="tab-nav">答疑老师</li>
+            <li class="tab-nav">相关课程</li>
+        </ul>
+    </div>
+    <div id="tabs-body" class="tabs-body">
+            <div style="display:block">
+                <table width="100%">
+                    <tr>
+                        <td align="right">课程名称</td>
+                        <td>
+                            <input type="hi" class="input" id="course_name" name="course_name" value="" required/>
+                        </td>
+                        <td align="right">课程课时</td>
+                        <td>
+                            <input type="text" class="input" id="class_hour" name="class_hour" value="" required/>
+                        </td>
+                        <td align="right">
+                            课程图片
+                        </td>
+                        <td colspan="2">
+                            <input type="text" class="input" id="course_url" name="course_url" value="" required/>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right">公司</td>
+                        <td><select type="text" class="input" id="company_id" name="company_id" value="" required></select></td>
+                        <td align="right">课件</td>
+                        <td><input type="text" class="input" id="courseware_id" name="courseware_id" value="" required/></td>
+                        <td align="right">行业</td>
+                        <td><input type="text" class="input" id="indusetry_id" name="indusetry_id" value="" required/></td>
+                    </tr>
+                    <tr>
+                        <td align="right">专业</td>
+                        <td><input type="text" class="input" id="professional_id" name="professional_id" value="" required/></td>
+                        <td align="right">咨询直播间</td>
+                        <td><input type="text" class="input" id="rooms_id" name="rooms_id" value="" required/></td>
+                        <td align="right">所属讲师</td>
+                        <td><select type="text" class="input" id="course_teacher_id" name="teacher_id" value="" required></select></td>
+                    </tr>
+                    <tr>
+                        <td>课程简介</td>
+                        <td > <textarea id="courseware_introduction" name="courseware_introduction" class="input" rows="3" cols="36" style="resize: none; " required></textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="display:none">
+                <!--章节-->
+
+                    <table ID="addChapter">
+                       <!-- <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;章节名称</td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;章节简介 </td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;考试网参数 </td>
+                        </tr>-->
+                    </table>
+                    <input type="button" class="d-button" value="+" onClick="Izb.controller.course.addCourseChapter();" />
+            </div>
+            <div style="display:none">
+
+                    <table ID="addPrice">
+                       <!-- <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价格</td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;商品类型 </td>
+                        </tr>-->
+                    </table>
+
+                <input type="button" class="d-button" value="+" onClick="Izb.controller.course.addCoursePrice();" />
+            </div>
+            <div style="display:none">
+                        <table ID="addCourseTeaceher">
+                          <!--  <tr>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答疑名称</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;对应老师</td>
+                            </tr>-->
+                        </table>
+
+                    <input type="button" class="d-button" value="+" onClick="Izb.controller.course.addCourseTeacher();" />
+
+            </div>
+            <div style="display:none">
+                555555555555555
+            </div>
+    </div>
+</form>
+

@@ -1,0 +1,85 @@
+package com.hq.answerapi.pojo;
+
+/**
+ * Created by Glenn on 2017/4/22 0022.
+ * @author hq
+ */
+public class UserInfoPOJO {
+
+    private String avatar;
+    private String nickName;
+    private String email;
+    private Integer gender;
+    private Integer uid;
+    private Integer mongoUid;
+    private String mobileNo;
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public Integer getMongoUid() {
+        return mongoUid;
+    }
+
+    public void setMongoUid(Integer mongoUid) {
+        this.mongoUid = mongoUid;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfoPOJO{" +
+                "avatar='" + avatar + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", email='" + email + '\'' +
+                ", gender=" + gender + '\'' +
+                ", uid=" + uid + '\'' +
+                ", mongoUid=" + mongoUid + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
+                '}';
+    }
+}

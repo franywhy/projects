@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseLiveDetailsDao">
+	
+	<!-- 查询课程子表根据课程ID查询 -->
+	<select id="queryListByCouresId" resultType="io.renren.entity.CourseLiveDetailsEntity">
+		select * from course_live_details where course_id = #{courseId} order by order_num asc
+	</select>
+
+	<select id="queryObject" resultType="io.renren.entity.CourseLiveDetailsEntity">
+		select * from course_live_details where live_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.CourseLiveDetailsEntity">
+		select * from course_live_details 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 查询所有 -->
+	<select id="queryAll" parameterType="map" resultType="io.renren.entity.CourseLiveDetailsEntity">
+		select * from course_live_details where course_id = #{courseId} order by order_num asc
+	</select>
+	<!-- 分页查询 -->
+	<select id="queryPageList" parameterType="map" resultType="io.renren.entity.CourseLiveDetailsEntity">
+		select * from course_live_details where course_id = #{courseId} order by order_num asc , live_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryPageTotal" parameterType="map" resultType="int">
+		select count(1) from course_live_details where course_id = #{courseId}
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from course_live_details 
+	</select>
+	 <select id="checkClassType" resultType="int">
+		select count(1) from course_live_details course_live_details where course_live_details.live_class_type_ids like concat('%',#{classtypeId},'%') 
+	</select>
+	<insert id="save" parameterType="io.renren.entity.CourseLiveDetailsEntity" useGeneratedKeys="true" keyProperty="liveId">
+		insert into course_live_details
+		(
+			`live_name`, 
+			`live_class_type_ids`, 
+			`school_id`, 
+			`course_id`,
+			`order_num`,
+			`review_url`,
+			`prepare_url`,
+			`courseware_url`,
+			`practice_stage_id`,
+			`exam_stage_id`,
+			`exam_stage_name`,
+			`review_name`,
+			`prepare_name`,
+			`courseware_name`
+		)
+		values
+		(
+			#{liveName}, 
+			#{liveClassTypeIds}, 
+			#{schoolId}, 
+			#{courseId},
+			#{orderNum},
+			#{reviewUrl},
+			#{prepareUrl},
+			#{coursewareUrl},
+			#{practiceStageId},
+			#{examStageId},
+			#{examStageName},
+			#{reviewName},
+			#{prepareName},
+			#{coursewareName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.CourseLiveDetailsEntity">
+		update course_live_details 
+		<set>
+			<if test="liveName != null">`live_name` = #{liveName}, </if>
+			<if test="liveClassTypeIds != null">`live_class_type_ids` = #{liveClassTypeIds}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId},</if>
+			<if test="orderNum != null">`order_num` = #{orderNum},</if>
+			<if test="reviewUrl != null">`review_url` = #{reviewUrl},</if>
+			<if test="prepareUrl != null">`prepare_url` = #{prepareUrl},</if>
+			<if test="coursewareUrl != null">`courseware_url` = #{coursewareUrl},</if>
+			<if test="practiceStageId != null">`practice_stage_id` = #{practiceStageId},</if>
+			<if test="examStageId != null">`exam_stage_id` = #{examStageId},</if>
+			<if test="examStageName != null">`exam_stage_name` = #{examStageName}, </if>
+			<if test="reviewName != null">`review_name` = #{reviewName},</if>
+			<if test="prepareName != null">`prepare_name` = #{prepareName},</if>
+			<if test="coursewareName != null">`courseware_name` = #{coursewareName}</if>
+		</set>
+		where live_id = #{liveId}
+	</update>
+	<update id="updateBatch">
+	   update course_live_details set status = #{status} where live_id in
+	   <foreach item="liveId" collection="list" open="(" separator="," close=")">
+	   	#{liveId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from course_live_details where live_id = #{value}
+	</delete>
+	
+	
+	<delete id="deleteBatch">
+		delete from course_live_details where live_id in 
+		<foreach item="liveId" collection="array" open="(" separator="," close=")">
+			#{liveId}
+		</foreach>
+	</delete>
+	<delete id="deleteBatchNotIn">
+		delete from course_live_details where course_id = #{courseId} 
+		<if test="liveIds != null and liveIds.size() > 0 ">
+			and live_id not in 
+			<foreach item="item" collection="liveIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+	</delete>
+
+</mapper>

@@ -1,0 +1,74 @@
+body{
+	font-size: 0.16rem;
+	padding:0 0.35rem;
+	
+}
+.pay-state-yes{
+	background-color: #f3f2f0;
+	font-size:0.3rem;
+	height:0.9rem;
+	line-height: 0.9rem;
+	color:#15b305;
+	margin:0 -0.35rem;
+}
+.pay-state-yes img{
+	width:0.44rem;
+	float:left;
+	margin-top:0.23rem;
+	margin-right:0.14rem;
+	margin-left:0.35rem;
+}
+.pay-state-show{
+	text-align: center;
+	font-size: 0.6rem;
+	height:2.0rem;
+	line-height: 2.0rem;
+	border-bottom:1px solid #eaeaea;
+}
+.pay-state-infor{
+	color:#b1b6b8;
+	font-size: 0.28rem;
+	padding-top:0.26rem;
+}
+.pay-state-infor-item{
+	overflow: hidden;
+}
+.pay-state-infor-item p{
+	height:0.5rem;
+	line-height: 0.5rem;
+}
+.pay-state-infor-item p:nth-child(1){
+	float:left;
+}
+.pay-state-infor-item p:nth-child(2){
+	float:right;	
+}
+.pay-state-p{
+	letter-spacing: 0.54rem;
+}
+.pay-state-no{
+	height:1.88rem;
+	line-height: 1.88rem;
+	font-size: 0.3rem;
+	color:#2f2f2f;
+	border-bottom:1px solid #eaeaea;
+	text-indent: 0.3rem;
+}
+.pay-state-no img{
+	width:0.53rem;
+	float:left;
+	margin-top:0.675rem;
+	margin-left:1.1rem;
+}
+.pay-state-btn{
+	width:2.9rem;
+	line-height: 0.7rem;
+	background: #ff6801;
+	font-size: 0.3rem;
+	text-align: center;
+	color:#fff;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	margin:0 auto;
+	margin-top:1.0rem;
+}

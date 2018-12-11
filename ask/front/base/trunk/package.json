@@ -1,0 +1,24 @@
+{
+    "name": "base",
+    "version": "2.0.0",
+    "description": "畅想2.0基础库",
+    "keywords": ["jquery", "base"],
+    "appid":"1101168695",
+    "baseDomain":"lib.kjcity.com",
+    "adminDomain":"ttadmin.app1101168695.twsapp.com",
+    "apiDomain":"ttapi.app1101168695.twsapp.com",
+    
+    "assetDomain":"asset.xuelxuew.com",
+    "imgDomain":"img.xuelxuew.com",
+    "rootDomain":"www.xuelxuew.com",
+    "chatDomain":"ttwsshowd.app1101168695.twsapp.com",
+    "usDomain":"ttus.app1101168695.twsapp.com",
+    "mDomain":"ttm.app1101168695.twsapp.com",
+    
+    
+    "author": "wubinjie <wubinjie@ak.cc>",
+    "repository": {
+        "type": "git",
+        "url": "git@gitweb.izhubo.com:lib/base.git"
+    }
+}

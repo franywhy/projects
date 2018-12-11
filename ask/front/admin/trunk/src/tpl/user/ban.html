@@ -1,0 +1,36 @@
+<!--公告输入-->
+
+<form name="inputForm">
+    <table width="100%" border="0">
+        <tr>
+            <td width="80" align="right"><input name="_id" type="hidden"   value="<%=_id%>" />昵称:</td>
+            <td> 
+                <input name="nick_name" type="text" value="<%=nick_name%>" class="input" readonly  /></td>
+        </tr>
+        <tr>
+            <td align="right">封杀时间:</td>
+            <td><input name="hour" type="number" class="input" value="10000" />
+                小时 </td>
+        </tr>
+        <tr>
+            <td align="right">封杀类型:</td>
+            <td>
+            &nbsp;
+            <select id="sltClient" class="select">            	
+                <%if(login.uid){%>
+                <option data-name="uid" value="<%=login.uid%>">uid(<%=login.uid%>)</option>
+                <%}%>
+                <%if(login.ip){%>
+            	<option data-name="ip" value="<%=login.ip%>">ip(<%=login.ip%>)</option>
+                <%}%>
+            </select>
+            </td>
+        </tr>
+         <tr>
+            <td align="right">备注:</td>
+            <td><input name="comment" type="text" class="input" value="" />
+            </td>
+        </tr>
+    </table>
+</form>
+<!--/公告输入-->

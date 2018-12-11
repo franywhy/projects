@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>资料库明细 </title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div id="timeShow" class="panel-heading"></div>
+	<div v-show="showList">
+		<div class="grid-btn">
+		    #if($shiro.hasPermission("coursematerialdetail:list"))
+		    <a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+		    <a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a>
+		    #end
+			#if($shiro.hasPermission("coursematerialdetail:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("coursematerialdetail:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("coursematerialdetail:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			<!-- #if($shiro.hasPermission("coursematerialdetail:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+			#end
+			#if($shiro.hasPermission("coursematerialdetail:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+			#end -->
+		</div>
+		<table class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">资料库明细名:</label></td>
+					<td><input type="text" class="form-control" v-model="q.detailName" @keyup.enter="search" placeholder="资料库明细名"></td>
+					<td><label for="name">资料库名:</label></td>
+					<td><input type="text" class="form-control" v-model="q.materialName" readonly="readonly" placeholder="资料库名" @click="materialLayerShowQuery"></td>
+					<td><label for="name">资料库类型名:</label></td>
+					<td><input type="text" class="form-control" v-model="q.materialTypeName" readonly="readonly" placeholder="资料库类型名" @click="materialTypeLayerShowQuery"></td>
+				</tr>
+				<!-- <tr border="0">
+					<td><label for="name">省份</label></td>
+					<td><input type="text" class="form-control" v-model="q.areaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerShowQuery"></td>
+				</tr> -->
+			</table>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.detailId" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.detailName" placeholder="名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+			    </div>
+			</div>
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">资料库ID:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.materialId"/>
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">资料库:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.materialName" readonly="readonly" placeholder="点击选择资料库"  @click="materialLayerShow"/ >
+			    </div>
+			</div>
+						<div class="form-group">
+			   	<div class="col-sm-2 control-label">资料库类型:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.materialTypeName" readonly="readonly" placeholder="点击选择资料库类型"  @click="materialTypeLayerShow"/ >
+			    </div>
+			</div>
+			<!-- <div class="form-group">			    		    		
+			   	<div class="col-sm-2 control-label">地址(不填自动生成)</div>
+			   	<div class="col-sm-10">
+			   	<input type="text" class="form-control" v-model="courseMaterialDetail.url" placeholder="地址(不填自动生成)"/> 
+			   	<a class="btn btn-default" onclick="hq.core.upload(null,'courseMaterialDetail.url','上传文件');">选择地址</a>
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.url" placeholder="地址(不填自动生成)"/>
+			      <input type="text" class="form-control" v-model="courseMaterialDetail.url" readonly="readonly" placeholder="上传地址" onclick="hq.core.upload(null,'courseMaterialDetail.url','上传文件');"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">地址(不填自动生成)</div>
+			   	<div class="col-sm-6">
+			   	 <input type="text" class="form-control" v-model="courseMaterialDetail.url" placeholder="地址(不填自动生成)"/>
+			     <!--  <input type="text" class="form-control" v-model="courseMaterialDetail.url" placeholder="文件上传" readonly="readonly" onclick="hq.core.upload(null,'vm.courseMaterialDetail.url','上传文件');"/> -->
+			    </div>
+			    <a class="btn btn-default" onclick="hq.core.upload(null,'vm.courseMaterialDetail.url','上传文件');">选择地址</a>
+			</div>
+			<div class="form-group">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">排序</div>
+			   	<div class="col-sm-10">
+			   		<input type="text" class="form-control" v-model="courseMaterialDetail.orderNum"  placeholder="排序" >
+			    </div>
+			</div>
+		</div>
+								    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">指南html内容</div>
+			    <div class="col-sm-10">
+			    <textarea id="editor_id_material" name="content" style="width:1000px;height:400px;" >
+                </textarea>
+                </div>
+			</div>			
+			
+										<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	
+	</div>
+	
+</div>
+<script src="${rc.contextPath}/js/course/coursematerialdetail.js?_${date.systemTime}"></script>
+<script charset="utf-8" src="${rc.contextPath}/statics/editor/kindeditor.js"></script>
+<script charset="utf-8" src="${rc.contextPath}/statics/editor/zh_CN.js"></script>
+
+<script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create("textarea[id='editor_id_material']",{
+                    resizeType : 1,
+                    allowPreviewEmoticons: false,
+                    allowImageUpload:true,//允许上传图片
+                    allowFileManager:true, //允许对上传图片进行管理
+                    uploadJson:'../courseguide/uploadCourseGuide', //上传图片的java代码，只不过放在jsp中
+                    /* fileManagerJson:'../../statics/editor/file_manager_json.jsp', */
+                    afterUpload: function(){this.sync();}, //图片上传后，将上传内容同步到textarea中
+                    afterBlur: function(){this.sync();},   ////失去焦点时，将上传内容同步到textarea中
+                    items : [
+                        'fontname','fontsize', '|','forecolor', 'hilitecolor','bold', 'italic','underline',
+                        'removeformat','|', 'justifyleft','justifycenter', 'justifyright','insertorderedlist',
+                        'insertunorderedlist','|', 'emoticons','link','media','|','image']   
+                });
+        });
+</script>
+<script language="javascript">
+     var t = null;
+    t = setTimeout(time,1000);//开始执行
+    function time()
+    {
+       clearTimeout(t);//清除定时器
+       document.getElementById("timeShow").innerHTML =  new Date().getFullYear() + '-'+(new Date().getMonth()+1 < 10 ? '0' + (new Date().getMonth()+1) : new Date().getMonth()+1) + '-' + new Date().getDate() + ' ' + new Date().getHours() + ':'+ new Date().getMinutes() + ':' +(new Date().getSeconds() < 10 ? '0' + (new Date().getSeconds()) : new Date().getSeconds());
+       t = setTimeout(time,1000); //设定定时器，循环执行             
+    } 
+  </script>
+#parse("../../statics/plugins/upload/upload.html")
+#parse("layer/materialLay.html")
+#parse("layer/materialTypeLay.html")
+#parse("layer/productLay.html")
+</body>
+</html>

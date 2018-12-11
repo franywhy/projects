@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>校区管理档案</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("sysschool:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.schoolName" @keyup.enter="query" placeholder="校区名称">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("sysschool:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("sysschool:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysSchool.id" placeholder=""/>
+			    </div>
+		    </div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">校区名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysSchool.name" readonly="true" placeholder="校区名称"/>
+			    </div>
+			</div>
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">图片</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysSchool.pic" placeholder="图片"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">图片</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysSchool.pic" placeholder="图片" readonly="readonly" onclick="hq.core.upload(null,'vm.sysSchool.pic');"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">电话号码</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysSchool.telephone" readonly="true" placeholder="电话号码"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">详细地址</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysSchool.address"  readonly="true" placeholder="详细地址"/>
+			    </div>
+			</div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">经度</div>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" v-model="sysSchool.longitude"  placeholder="经度,如:113.264360"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">纬度</div>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" v-model="sysSchool.latitude"  placeholder="纬度,如:23.129080"/>
+                </div>
+            </div>
+			
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/sys/school.js?_${date.systemTime}"></script>
+#parse("../../statics/plugins/upload/upload.html")
+</body>
+</html>

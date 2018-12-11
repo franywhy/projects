@@ -1,0 +1,13 @@
+<!--系统消息-->
+<form name="inputForm">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消息:
+    <input name="msg" class="input" type="text" value="" size="80"/> <span class="red">*</span> <br /><br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;链接:
+    <input type="text" class="input" name="url" value="" size="50" /><br /><br />
+	开始时间：
+	<input type="text" class="input" name="time" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+	每<input type="text" class="input" name="frequency" value="30" size="5" />秒发布一次，
+	一共发布<input type="text" class="input" name="count" value="1" size="2" />次
+</form>
+<br />
+<!--/系统消息-->

@@ -1,0 +1,154 @@
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+service-name: service-userInfo-api
+spring.application.index: ${random.uuid} # this ensures that our applicationId is unique
+## 刷新时，关闭安全验证
+management.security.enabled: false
+## 开启消息跟踪
+spring.cloud.bus.trace.enabled: true
+server:
+    port: 8082
+    address: 0.0.0.0
+    session-timeout: 30
+    compression:
+        enabled: true
+    undertow:
+            access-log-dir: /logs/access/
+            access-log-enabled: false
+            access-log-pattern: common
+            buffer-size: 131072
+            buffers-per-region:
+            direct-buffers: false
+            io-threads: 4
+            worker-threads: 32
+
+spring:
+    application:
+      name: service-userinfo-api     #服务ID
+    rabbitmq:
+              host: 10.0.98.46       #10.0.98.18
+              port: 5672
+              username: admin
+              password: mon4498
+    #          acknowledge-mode: auto
+              acknowledge-mode: manual
+    cloud:
+        stream:
+            bindings:
+                springCloudBusOutput:
+                   destination: HqEventExchange
+                springCloudBusInput:
+                          destination: HqEventExchange
+                          group: ${service-name}
+    datasource:
+            type: com.zaxxer.hikari.HikariDataSource
+            url: jdbc:mysql://10.0.98.100:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+            password: root
+            username: root
+            driver-class-name: com.mysql.jdbc.Driver
+            minimum-idle: 5
+            maximum-pool-size: 20
+            idle-timeout: 600000
+            connection-timeout: 30000
+            max-lifetime: 1800000
+    redis:
+            enabled: true
+            # 指定连接工厂使用的Database index，默认为: 0
+            database: 5
+            # 指定Redis server host，默认为: localhost
+            host: 10.0.98.9
+            # 指定redis服务端端口，默认: 6379
+            port: 6382
+            # 指定Redis server的密码
+            # password:
+            use-pool: true
+            pool:
+                # 指定连接池最大的活跃连接数，-1表示无限，默认为8
+                max-active: 8
+                # 指定当连接池耗尽时，新获取连接需要等待的最大时间，以毫秒单位，-1表示无限等待
+                max-wait: 5000
+                # 指定连接池最大的空闲连接数，-1表示无限，默认为8
+                min-idle: 8
+            # sentinel:
+                # 指定redis server的名称
+                # master:
+                # 指定sentinel节点，逗号分隔，格式为host:port.
+                # nodes:
+            # 指定连接超时时间，毫秒单位，默认为0
+            timeout: 10000
+
+logging:
+    path: /logs
+    file: /logs/userinfocenter.log
+    level:
+       com:
+           elise:
+               userinfocenter:
+                   controller: INFO
+                   config: INFO
+                   interceptor: INFO
+
+http:
+    timeout:
+        conn: 4000
+        request: 6000
+        socket: 4000
+    pool:
+        max-total: 30
+        route-total: 6
+    retry-count: 1
+    expect-continue-enable: true
+local-info:
+    captcha-timeout: 600000
+    cookie-token-name: token
+    cookie-token-timeout: 86400
+    sso-host: http://10.0.98.80:8084 #http://10.0.98.14:8084       #http://10.0.98.15:28087
+    qr-code-url: http://10.0.98.14:8082/api/qrLogin/confirm?uuid=
+
+swagger:
+    enable: true
+    title-name: UserInfo Center 接口文档
+    base-package: com.elise.userinfocenter
+    author: Glenn
+    version: 1.0
+
+kaptcha:
+     border: yes
+     border-color: 105,179,90
+     text-producer-fond-color: blue
+     image-width: 130
+     image-height: 55
+     session-key: code
+     text-producer-char-length: 4
+     text-producer-font-names: 宋体,楷体,微软雅黑
+     validate: false      #是否对图形验证码进行验证
+
+google:
+    zxing:
+        width: 300
+        height: 300
+        character-set: UTF-8
+        margin: 0
+        error-connection: H
+        max-size: 350
+        min-size: 250
+# IP 白名单
+ip-white-list:
+    filter-switch: false
+    list:
+        - 8.8.8.8
+        - 0.0.0.0
+        - 127.0.0.1
+        - 0:0:0:0:0:0:0:1
+        - 177.77.83.149
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true                     # 设置微服务调用地址为IP优先（缺省为false）
+    ipAddress: 10.0.98.20
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://admin:hqjymicro@10.0.98.17:8100/eureka/,http://admin:hqjymicro@10.0.98.17:8101/eureka/,http://admin:hqjymicro@10.0.98.17:8102/eureka/
+    enabled: true
+

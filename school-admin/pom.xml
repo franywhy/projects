@@ -1,0 +1,1106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+
+	<!-- <parent> <groupId>com.school</groupId> <artifactId>school-parent</artifactId> 
+		<version>1.2.0</version> </parent> -->
+
+	<groupId>com.schooladmin</groupId>
+	<artifactId>school-admin</artifactId>
+	<version>1.0</version>
+	<packaging>war</packaging>
+	<description>school-admin</description>
+
+	<properties>
+		<java-version>1.8</java-version>
+		<servlet-version>3.1.0</servlet-version>
+		<junit-version>4.12</junit-version>
+		<springframework-version>4.2.9.RELEASE</springframework-version>
+		<mybatis-version>3.4.1</mybatis-version>
+		<mybatis-spring-version>1.3.0</mybatis-spring-version>
+		<mysql-version>5.1.38</mysql-version>
+		<druid-version>1.0.26</druid-version>
+		<commons-lang-version>2.6</commons-lang-version>
+		<commons-fileupload-version>1.3.1</commons-fileupload-version>
+		<commons-io-version>2.5</commons-io-version>
+		<commons-codec-version>1.10</commons-codec-version>
+		<commons-configuration-version>1.10</commons-configuration-version>
+		<commons-logging-version>1.2</commons-logging-version>
+
+		<slf4j-version>1.7.19</slf4j-version>
+		<log4j-version>1.2.17</log4j-version>
+		<fastjson-version>1.2.21</fastjson-version>
+		<shiro-version>1.3.2</shiro-version>
+		<quartz-version>2.2.3</quartz-version>
+		<kaptcha-version>0.0.9</kaptcha-version>
+		<velocity-version>1.7</velocity-version>
+		<velocity-tools-version>2.0</velocity-tools-version>
+		<jstl-version>1.2</jstl-version>
+		<taglibs-version>1.1.2</taglibs-version>
+		<freemarker-version>2.3.23</freemarker-version>
+        <spring-data-redis-version>1.7.1.RELEASE</spring-data-redis-version>
+
+
+		<javaModelGenerator.targetProject>${basedir}/src/main/java</javaModelGenerator.targetProject>
+		<sqlMapGenerator.targetProject>${basedir}/src/main/resources</sqlMapGenerator.targetProject>
+		<javaClientGenerator.targetProject>${basedir}/src/main/java</javaClientGenerator.targetProject>
+		<mybatis.generator.overwrite>true</mybatis.generator.overwrite>
+
+
+        <!-- 开发线默认变量 -->
+        <!--Logger日志级别 -->
+<!-- 		<pom.log4j.rootLogger><![CDATA[DEBUG,warn,error]]></pom.log4j.rootLogger> -->
+		<pom.log4j.sql><![CDATA[INFO,DEBUG,sql]]></pom.log4j.sql>
+		<pom.log4j.rootLogger><![CDATA[DEBUG,INFO,stdout,info,warn,error,sql]]></pom.log4j.rootLogger>
+        <!--默认校区ID-->
+		<pom.schoolId><![CDATA[test]]></pom.schoolId>
+      	<!-- redis配置 -->
+		<!--<pom.redis.host><![CDATA[10.0.98.9]]></pom.redis.host>
+        <pom.redis.port><![CDATA[6379]]></pom.redis.port>-->
+		<pom.redis.host><![CDATA[10.0.98.9]]></pom.redis.host>
+        <pom.redis.port><![CDATA[6384]]></pom.redis.port>
+		<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+		<pom.redis.dbindex><![CDATA[4]]></pom.redis.dbindex>
+
+		<redis.pool.maxActive>500</redis.pool.maxActive>
+		<redis.pool.maxIdle>500</redis.pool.maxIdle>
+		<redis.pool.maxWait>-1</redis.pool.maxWait>
+		<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+		<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+		<!-- 消息队列  报名表同步-->
+		<pom.rabbitmq.sign.url><![CDATA[test.nc.sign.sync.zk]]></pom.rabbitmq.sign.url>
+		<!-- MySQL数据库配置 -->
+
+		<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.5:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true]]></pom.jdbc.url>
+		<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+		<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+		<pom.jdbc.initialSize><![CDATA[5]]></pom.jdbc.initialSize>
+		<pom.jdbc.maxActive><![CDATA[30]]></pom.jdbc.maxActive>
+		<pom.jdbc.minPoolSize><![CDATA[2]]></pom.jdbc.minPoolSize>
+		<pom.jdbc.maxIdleTime><![CDATA[3000]]></pom.jdbc.maxIdleTime>
+		<pom.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.jdbc.idleConnectionTestPeriod>
+		<!-- 自适应学习MySQL数据库配置 -->
+		<!--<pom.adaptive.jdbc.url><![CDATA[jdbc:mysql://172.16.2.253:3307/hq_adaptive?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.adaptive.jdbc.url>
+		<pom.adaptive.jdbc.username><![CDATA[root]]></pom.adaptive.jdbc.username>
+		<pom.adaptive.jdbc.password><![CDATA[iWUe#GJkXa1m]]></pom.adaptive.jdbc.password>-->
+		<pom.adaptive.jdbc.url><![CDATA[jdbc:mysql://10.0.98.5:3307/hq_adaptive?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.adaptive.jdbc.url>
+		<pom.adaptive.jdbc.username><![CDATA[root]]></pom.adaptive.jdbc.username>
+		<pom.adaptive.jdbc.password><![CDATA[root]]></pom.adaptive.jdbc.password>
+		<pom.adaptive.jdbc.initialSize><![CDATA[2]]></pom.adaptive.jdbc.initialSize>
+		<pom.adaptive.jdbc.maxActive><![CDATA[30]]></pom.adaptive.jdbc.maxActive>
+		<pom.adaptive.jdbc.minPoolSize><![CDATA[2]]></pom.adaptive.jdbc.minPoolSize>
+		<pom.adaptive.jdbc.maxIdleTime><![CDATA[3000]]></pom.adaptive.jdbc.maxIdleTime>
+		<pom.adaptive.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.adaptive.jdbc.idleConnectionTestPeriod>
+		<!-- 课程服务MySQL数据库配置 -->
+		<!--<pom.courses.jdbc.url><![CDATA[jdbc:mysql://172.16.2.253:3307/hq_courses?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.courses.jdbc.url>
+		<pom.courses.jdbc.username><![CDATA[root]]></pom.courses.jdbc.username>
+		<pom.courses.jdbc.password><![CDATA[iWUe#GJkXa1m]]></pom.courses.jdbc.password>-->
+		<pom.courses.jdbc.url><![CDATA[jdbc:mysql://10.0.98.5:3307/hq_courses?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.courses.jdbc.url>
+		<pom.courses.jdbc.username><![CDATA[root]]></pom.courses.jdbc.username>
+		<pom.courses.jdbc.password><![CDATA[root]]></pom.courses.jdbc.password>
+
+		<pom.courses.jdbc.initialSize><![CDATA[2]]></pom.courses.jdbc.initialSize>
+		<pom.courses.jdbc.maxActive><![CDATA[30]]></pom.courses.jdbc.maxActive>
+		<pom.courses.jdbc.minPoolSize><![CDATA[2]]></pom.courses.jdbc.minPoolSize>
+		<pom.courses.jdbc.maxIdleTime><![CDATA[3000]]></pom.courses.jdbc.maxIdleTime>
+		<pom.courses.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.courses.jdbc.idleConnectionTestPeriod>
+		<!-- mongodb数据库配置 -->
+		<pom.mongodb.url><![CDATA[177.77.77.70:27017]]></pom.mongodb.url>
+		<pom.mongodb.connections.per.host><![CDATA[8]]></pom.mongodb.connections.per.host>
+		<pom.mongodb.threads.allowed><![CDATA[4]]></pom.mongodb.threads.allowed>
+		<pom.mongodb.connect.timeout><![CDATA[1000]]></pom.mongodb.connect.timeout>
+		<pom.mongodb.max.wait.time><![CDATA[1500]]></pom.mongodb.max.wait.time>
+		<pom.mongodb.auto.connect.retry><![CDATA[true]]></pom.mongodb.auto.connect.retry>
+		<pom.mongodb.socket.keep.alive><![CDATA[true]]></pom.mongodb.socket.keep.alive>
+		<pom.mongodb.socket.timeout><![CDATA[1500]]></pom.mongodb.socket.timeout>
+		<!-- H5页面地址 -->
+		<pom.apph5.msg.content.url><![CDATA[http://183.63.120.222:8028/zk-app-project/zk-message.html?contentId={id}&token=%s]]></pom.apph5.msg.content.url>
+		<pom.apph5.material.detail.url><![CDATA[/zk-app-project/zk-zlk-detail.html?detailId=]]></pom.apph5.material.detail.url>
+		<pom.apph5.course.guide.url><![CDATA[http://183.63.120.222:8028/zk-app-project/zk-getGuide.html?guideId={id}&token=%s]]></pom.apph5.course.guide.url>
+		<!-- 信鸽推送IOS 2开发测试环境 -->
+		<pom.app.xinge.iosenv><![CDATA[2]]></pom.app.xinge.iosenv>
+		<!--题库地址-->
+		<pom.tiku.domain><![CDATA[http://zktktest.hqjy.com]]></pom.tiku.domain>
+		<!--文件服务器地址-->
+		<pom.file.domain><![CDATA[http://177.77.77.186:8081]]></pom.file.domain>
+		<!-- gensee展示互动配置 -->
+		<pom.gensee.k.timeout><![CDATA[30000]]></pom.gensee.k.timeout>
+		<pom.gensee.webcast.web><![CDATA[http://@genseeDomain/webcast/site/entry/join-]]></pom.gensee.webcast.web>
+		<pom.gensee.loginname><![CDATA[469799470@qq.com]]></pom.gensee.loginname>
+		<pom.gensee.password><![CDATA[123456]]></pom.gensee.password>
+		<pom.gensee.webcast.log.url><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/history]]></pom.gensee.webcast.log.url>
+		<pom.gensee.webcast.vod.info><![CDATA[http://hqzk.gensee.com/integration/site/webcast/record/info]]></pom.gensee.webcast.vod.info>
+		<pom.gensee.webcast.vod.log><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/vod/history]]></pom.gensee.webcast.vod.log>
+		<pom.gensee.live.attend.time><![CDATA[300000]]></pom.gensee.live.attend.time>
+		<pom.gensee.video.attend.time><![CDATA[300000]]></pom.gensee.video.attend.time>
+		<!-- CC回放地址 -->
+		<pom.cc.vod.url><![CDATA[http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=]]></pom.cc.vod.url>
+		<!--用户默认密码hqzk123456-->
+		<pom.user.psw><![CDATA[1c3f360330c442c3cc62d1608fe7a3a3]]></pom.user.psw>
+		<!--用户体验商品ID-->
+		<pom.goods.id><![CDATA[201707031424]]></pom.goods.id>
+		<!--用户体验班级ID-->
+		<pom.mallclass.id><![CDATA[201707031424]]></pom.mallclass.id>
+		<!--rabbitMQ 队列名-->
+		<!-- 题库消息队列地址 -->
+		<pom.zk.plan.sync.tk><![CDATA[test.zk.plan.sync.tk]]></pom.zk.plan.sync.tk>
+		<pom.zk.userplanclass.sync.tk><![CDATA[test.zk.userplanclass.sync.tk]]></pom.zk.userplanclass.sync.tk>
+		<!-- NC报名表 -->
+		<pom.nc.sign.sync.zk><![CDATA[dev.nc.sign.sync.common2]]></pom.nc.sign.sync.zk>
+		<!--<pom.nc.sign.sync.zk><![CDATA[dev.nc.plan.sync.kjdev]]></pom.nc.sign.sync.zk>-->
+		<!--<pom.nc.sign.sync.zk><![CDATA[dev.nc.plan.sync.kjdev]]></pom.nc.sign.sync.zk>-->
+		<!-- NC报名表-手工推送 -->
+		<pom.nc.sign.sync.zk3><![CDATA[test.nc.sign.sync.zk3]]></pom.nc.sign.sync.zk3>
+		<!-- NC报名表中央财大-手工推送 -->
+		<pom.nc.sign.sync.zycd><![CDATA[dev.nc.sign.sync.zycd]]></pom.nc.sign.sync.zycd>
+		<!-- NC报名表-手工推送 -->
+		<pom.pc.upload.url><![CDATA[http://177.77.77.192:8081/file/singleDirectUpload]]></pom.pc.upload.url>
+		<!-- 会计队列 -->
+		<pom.nc.plan.sync.kj><![CDATA[test.nc.sign.sync.common.gif]]></pom.nc.plan.sync.kj>
+		<!-- 会计/学来学往分班推送到题库队列 -->
+		<pom.kj.class.sync.tk><![CDATA[dev.kj.class.sync.tk]]></pom.kj.class.sync.tk>
+		<!-- 自考班级推送到题库队列 -->
+		<pom.divide.class.sync.tk><![CDATA[dev.divide.class.sync.tk]]></pom.divide.class.sync.tk>
+		<!-- 学来学往班级推送到题库队列 -->
+		<pom.xlxw.class.sync.tk><![CDATA[test.xlxw.class.sync.tk]]></pom.xlxw.class.sync.tk>
+
+
+		<!-- NC给蓝鲸所有学员更新真实姓名,部门队列 -->
+		<pom.nc.users.sync.bluewhale><![CDATA[dev.nc.users.sync.bluewhale]]></pom.nc.users.sync.bluewhale>
+		<!-- 开通题库权限推送到题库队列 -->
+		<pom.open.permission.sync.tk><![CDATA[dev.open.permission.sync.tk]]></pom.open.permission.sync.tk>
+		<!-- 同步部门和校区队列 -->
+		<pom.nc.sign.sync.deptandschool><![CDATA[dev.nc.sign.sync.deptandschool]]></pom.nc.sign.sync.deptandschool>
+		<!-- 展示互动直播回调消息 -->
+		<pom.live.callback.info><![CDATA[dev.live.callback.info]]></pom.live.callback.info>
+		<!-- 展示互动直播回调消息 -->
+		<pom.live.callback.info><![CDATA[dev.live.callback.info]]></pom.live.callback.info>
+        <!-- 展示互动直播回放实时回调消息 -->
+        <pom.replay.callback.info><![CDATA[dev.replay.callback.info]]></pom.replay.callback.info>
+		<!-- 同步学员信息到Udesk消息队列 -->
+		<pom.customer.sync.udesk><![CDATA[dev.customer.sync.udesk]]></pom.customer.sync.udesk>
+		<!-- 员工的学员账号开通消息队列 -->
+		<pom.nc.sync.account><![CDATA[dev.nc.sync.account]]></pom.nc.sync.account>
+		<!-- 消息队列应用配置 -->
+		<pom.rabbitmq.config.service><![CDATA[10.0.98.18]]></pom.rabbitmq.config.service>
+		<pom.rabbitmq.config.service.username><![CDATA[admin]]></pom.rabbitmq.config.service.username>
+		<pom.rabbitmq.config.service.password><![CDATA[HQJY666]]></pom.rabbitmq.config.service.password>
+
+		<!-- 注册服务地址 -->
+		<pom.eureka.domain><![CDATA[http://dev.api.hqjy.cn]]></pom.eureka.domain>
+		<!-- 自适应算法服务url -->
+		<pom.adptive.service.domain><![CDATA[http://dev.api.hqjy.cn/adaptive-learn-center]]></pom.adptive.service.domain>
+		<!-- 消息系统 -->
+		<pom.msg.domain><![CDATA[http://10.0.98.15:8666]]></pom.msg.domain>
+		
+		<!--自适应学习地址-->
+		<pom.adaptive.learning.domain><![CDATA[http://dev.api.hqjy.cn/service-adaptive-api]]></pom.adaptive.learning.domain>
+		<!-- Udesk接口地址 -->
+		<pom.udesk.interface.domain><![CDATA[http://hqjy.udesk.cn/open_api_v1]]></pom.udesk.interface.domain>
+		<!-- 会答接口地址 -->
+		<pom.kuaida.api><![CDATA[http://api.kjcity.com]]></pom.kuaida.api>		
+		<!-- 云合同配置 -->
+        <pom.online.contract.url><![CDATA[https://api.yunhetong.com/api/]]></pom.online.contract.url>
+        <pom.online.contract.appId><![CDATA[2018060118124200004]]></pom.online.contract.appId>
+        <pom.online.contract.appKey><![CDATA[7GS8xU1oOsuWj]]></pom.online.contract.appKey>
+		<pom.online.contract.appSignerId><![CDATA[9252]]></pom.online.contract.appSignerId>	</properties>
+
+
+	<profiles>
+
+		<!-- 开发线 -->
+		<profile>
+			<id>dev</id>
+			<!-- 默认使用全局变量 -->
+			<properties>
+				<pom.schoolId><![CDATA[zikao]]></pom.schoolId>
+				<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.5:3307/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8]]></pom.jdbc.url>
+			</properties>
+		</profile>
+
+		<!-- 测试线 -->
+		<profile>
+			<id>test</id>
+			<properties>
+				<serverType>test</serverType>
+				<!--Logger日志级别 -->
+				<pom.log4j.rootLogger><![CDATA[warn,error,debug]]></pom.log4j.rootLogger>
+				<pom.log4j.sql><![CDATA[DEBUG,sql]]></pom.log4j.sql>
+		        <!--默认校区ID-->
+				<pom.schoolId><![CDATA[zikao]]></pom.schoolId>
+		      	<!-- redis配置 -->
+				<!-- <pom.redis.host><![CDATA[177.77.77.204]]></pom.redis.host>
+		        <pom.redis.port><![CDATA[6384]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[4]]></pom.redis.dbindex> -->
+				<pom.redis.host><![CDATA[10.0.98.9]]></pom.redis.host>
+		        <pom.redis.port><![CDATA[6384]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[4]]></pom.redis.dbindex>
+				<!-- 消息队列  报名表同步-->
+				<pom.rabbitmq.sign.url><![CDATA[test.nc.sign.sync.zk]]></pom.rabbitmq.sign.url>
+				<!-- MySQL数据库配置 -->
+				<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.5:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true]]></pom.jdbc.url>
+				<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+				<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+				<pom.jdbc.initialSize><![CDATA[5]]></pom.jdbc.initialSize>
+				<pom.jdbc.maxActive><![CDATA[30]]></pom.jdbc.maxActive>
+				<pom.jdbc.minPoolSize><![CDATA[2]]></pom.jdbc.minPoolSize>
+				<pom.jdbc.maxIdleTime><![CDATA[3000]]></pom.jdbc.maxIdleTime>
+				<pom.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.jdbc.idleConnectionTestPeriod>
+				<!-- mongodb数据库配置 -->
+				<pom.mongodb.url><![CDATA[177.77.77.70:27017]]></pom.mongodb.url>
+				<pom.mongodb.connections.per.host><![CDATA[8]]></pom.mongodb.connections.per.host>
+				<pom.mongodb.threads.allowed><![CDATA[4]]></pom.mongodb.threads.allowed>
+				<pom.mongodb.connect.timeout><![CDATA[1000]]></pom.mongodb.connect.timeout>
+				<pom.mongodb.max.wait.time><![CDATA[1500]]></pom.mongodb.max.wait.time>
+				<pom.mongodb.auto.connect.retry><![CDATA[true]]></pom.mongodb.auto.connect.retry>
+				<pom.mongodb.socket.keep.alive><![CDATA[true]]></pom.mongodb.socket.keep.alive>
+				<pom.mongodb.socket.timeout><![CDATA[1500]]></pom.mongodb.socket.timeout>
+				<!-- H5页面地址 -->
+				<pom.apph5.msg.content.url><![CDATA[http://183.63.120.222:8028/zk-app-project/zk-message.html?contentId={id}&token=%s]]></pom.apph5.msg.content.url>
+				<pom.apph5.material.detail.url><![CDATA[/zk-app-project/zk-zlk-detail.html?detailId=]]></pom.apph5.material.detail.url>
+				<pom.apph5.course.guide.url><![CDATA[http://183.63.120.222:8028/zk-app-project/zk-getGuide.html?guideId={id}&token=%s]]></pom.apph5.course.guide.url>
+				<!-- 信鸽推送IOS 2开发测试环境 -->
+				<pom.app.xinge.iosenv><![CDATA[2]]></pom.app.xinge.iosenv>
+				<!--题库地址-->
+				<pom.tiku.domain><![CDATA[http://zktktest.hqjy.com]]></pom.tiku.domain>
+				<!--文件服务器地址-->
+				<pom.file.domain><![CDATA[http://177.77.77.186:8081]]></pom.file.domain>
+				<!-- gensee展示互动配置 -->
+				<pom.gensee.k.timeout><![CDATA[30000]]></pom.gensee.k.timeout>
+				<pom.gensee.webcast.web><![CDATA[http://@genseeDomain/webcast/site/entry/join-]]></pom.gensee.webcast.web>
+				<pom.gensee.loginname><![CDATA[469799470@qq.com]]></pom.gensee.loginname>
+				<pom.gensee.password><![CDATA[123456]]></pom.gensee.password>
+				<pom.gensee.webcast.log.url><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/history]]></pom.gensee.webcast.log.url>
+				<pom.gensee.webcast.vod.info><![CDATA[http://hqzk.gensee.com/integration/site/webcast/record/info]]></pom.gensee.webcast.vod.info>
+				<pom.gensee.webcast.vod.log><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/vod/history]]></pom.gensee.webcast.vod.log>
+				<pom.gensee.live.attend.time><![CDATA[300000]]></pom.gensee.live.attend.time>
+				<pom.gensee.video.attend.time><![CDATA[300000]]></pom.gensee.video.attend.time>
+				<!-- CC回放地址 -->
+				<pom.cc.vod.url><![CDATA[http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=]]></pom.cc.vod.url>
+				<!--用户默认密码hqzk123456-->
+				<pom.user.psw><![CDATA[1c3f360330c442c3cc62d1608fe7a3a3]]></pom.user.psw>
+				<!--用户体验商品ID-->
+				<pom.goods.id><![CDATA[201707031424]]></pom.goods.id>
+				<!--用户体验班级ID-->
+				<pom.mallclass.id><![CDATA[201707031424]]></pom.mallclass.id>
+				<!--rabbitMQ 队列名-->
+				<!-- 题库消息队列地址 -->
+				<pom.zk.plan.sync.tk><![CDATA[test.zk.plan.sync.tk]]></pom.zk.plan.sync.tk>
+				<pom.zk.userplanclass.sync.tk><![CDATA[test.zk.userplanclass.sync.tk]]></pom.zk.userplanclass.sync.tk>
+				<!-- NC报名表 -->
+				<pom.nc.sign.sync.zk><![CDATA[test.nc.sign.sync.common]]></pom.nc.sign.sync.zk>
+               <!-- <pom.nc.sign.sync.zk><![CDATA[dev.nc.plan.sync.kjdev]]></pom.nc.sign.sync.zk>-->
+               <!-- <pom.nc.sign.sync.zk><![CDATA[dev.nc.plan.sync.kjdev]]></pom.nc.sign.sync.zk>-->
+				<!-- NC报名表-手工推送 -->
+				<pom.nc.sign.sync.zk3><![CDATA[test.nc.sign.sync.zk3]]></pom.nc.sign.sync.zk3>
+				<!-- NC报名表中央财大-手工推送 -->
+				<pom.nc.sign.sync.zycd><![CDATA[test.nc.sign.sync.zycd]]></pom.nc.sign.sync.zycd>
+				<!-- 会计队列 -->
+				<pom.nc.plan.sync.kj><![CDATA[dockertest.nc.sign.sync.common.gif]]></pom.nc.plan.sync.kj>
+				<!-- 学来学往班级推送到题库队列 -->
+				<pom.xlxw.class.sync.tk><![CDATA[test.xlxw.class.sync.tk]]></pom.xlxw.class.sync.tk>
+				<!-- 自考班级推送到题库队列 -->
+				<pom.divide.class.sync.tk><![CDATA[test.divide.class.sync.tk]]></pom.divide.class.sync.tk>
+				<!-- NC给蓝鲸所有学员更新真实姓名,部门队列 -->
+				<pom.nc.users.sync.bluewhale><![CDATA[test.nc.users.sync.bluewhale]]></pom.nc.users.sync.bluewhale>
+                <!-- 开通题库权限推送到题库队列 -->
+				<pom.open.permission.sync.tk><![CDATA[test.open.permission.sync.tk]]></pom.open.permission.sync.tk>
+				<!-- 同步部门和校区队列 -->
+				<pom.nc.sign.sync.deptandschool><![CDATA[test.nc.sign.sync.deptandschool]]></pom.nc.sign.sync.deptandschool>
+				<!-- 展示互动直播回调消息 -->
+				<pom.live.callback.info><![CDATA[test.live.callback.info]]></pom.live.callback.info>
+				<!-- 展示互动直播回调消息 -->
+				<pom.live.callback.info><![CDATA[test.live.callback.info]]></pom.live.callback.info>
+				<!-- 展示互动直播回放实时回调消息 -->
+				<pom.replay.callback.info><![CDATA[test.replay.callback.info]]></pom.replay.callback.info>
+				<!-- 同步学员信息到Udesk消息队列 -->
+		        <pom.customer.sync.udesk><![CDATA[test.customer.sync.udesk]]></pom.customer.sync.udesk>
+		        <!-- 员工的学员账号开通消息队列 -->
+				<pom.nc.sync.account><![CDATA[test.nc.sync.account]]></pom.nc.sync.account>
+				<!-- 教师排课消息队列 -->
+				<pom.teacher.plan.sync.kd><![CDATA[test.teacher.plan.sync.kd]]></pom.teacher.plan.sync.kd>
+				<!-- 消息队列应用配置 -->
+				<pom.rabbitmq.config.service><![CDATA[10.0.98.46]]></pom.rabbitmq.config.service>
+				<pom.rabbitmq.config.service.username><![CDATA[admin]]></pom.rabbitmq.config.service.username>
+				<pom.rabbitmq.config.service.password><![CDATA[mon4498]]></pom.rabbitmq.config.service.password>
+
+				<!-- 自适应算法服务url -->
+                <pom.adptive.service.domain><![CDATA[http://api.hqjy.com/adaptive-learn-center]]></pom.adptive.service.domain>
+				<!-- 消息系统 -->
+				<pom.msg.domain><![CDATA[http://10.0.98.15:8666]]></pom.msg.domain>
+				
+				<!--自适应学习地址-->
+				<pom.adaptive.learning.domain><![CDATA[http://dev.api.hqjy.cn/service-adaptive-api-test]]></pom.adaptive.learning.domain>
+				<!-- Udesk接口地址 -->
+				<pom.udesk.interface.domain><![CDATA[http://hqjy.udesk.cn/open_api_v1]]></pom.udesk.interface.domain>
+				<!-- 会答接口地址 -->
+				<pom.kuaida.api><![CDATA[http://10.0.98.87:8082]]></pom.kuaida.api>
+				<!-- app4.1消息推送时间限制 -->
+				<pom.message.push.time><![CDATA[10]]></pom.message.push.time>
+                <!-- nc推送学员排课信息队列 -->
+                <pom.ncToLanjing.shuangshi.courseuserplanclass><![CDATA[dev.ncToLanjing.shuangshi.courseuserplanclass]]></pom.ncToLanjing.shuangshi.courseuserplanclass>
+				<!-- 会计乐开通队列 -->
+				<queue.nc.sign.sync.common><![CDATA[accfun.test.nc.sign.sync.common]]></queue.nc.sign.sync.common>
+				<queue.nc.plan.sync.kj><![CDATA[test.nc.plan.sync.kj]]></queue.nc.plan.sync.kj>
+				<!-- 会计乐报名表消息队列消费休眠时间 1秒 -->
+				<pom.queue.sleep.millis>1000</pom.queue.sleep.millis>
+			</properties>
+		</profile>
+
+		<!-- 预正式线 -->
+		<profile>
+			<id>testProduct</id>
+			<properties>
+				<serverType>testProduct</serverType>
+				<!--Logger日志级别 -->
+				<pom.log4j.rootLogger><![CDATA[warn,error,debug]]></pom.log4j.rootLogger>
+				<pom.log4j.sql><![CDATA[DEBUG,sql]]></pom.log4j.sql>
+				<!--默认校区ID-->
+				<pom.schoolId><![CDATA[zikao]]></pom.schoolId>
+				<!-- redis配置 -->
+				<pom.redis.host><![CDATA[10.0.98.100]]></pom.redis.host>
+				<pom.redis.port><![CDATA[6379]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[4]]></pom.redis.dbindex>
+				<!-- 消息队列  报名表同步-->
+				<pom.rabbitmq.sign.url><![CDATA[test.nc.sign.sync.zk]]></pom.rabbitmq.sign.url>
+				<!-- MySQL数据库配置 -->
+				<pom.jdbc.url><![CDATA[jdbc:mysql://10.0.98.100:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true]]></pom.jdbc.url>
+				<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+				<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+				<pom.jdbc.initialSize><![CDATA[5]]></pom.jdbc.initialSize>
+				<pom.jdbc.maxActive><![CDATA[128]]></pom.jdbc.maxActive>
+				<pom.jdbc.minPoolSize><![CDATA[2]]></pom.jdbc.minPoolSize>
+				<pom.jdbc.maxIdleTime><![CDATA[3000]]></pom.jdbc.maxIdleTime>
+				<pom.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.jdbc.idleConnectionTestPeriod>
+				<!-- H5页面地址 -->
+				<pom.apph5.msg.content.url><![CDATA[https://wapzikao.hqjy.com/zk-app-project/zk-message.html?contentId={id}&token=%s]]></pom.apph5.msg.content.url>
+				<pom.apph5.material.detail.url><![CDATA[https://wapzikao.hqjy.com/zk-app-project/zk-zlk-detail.html?detailId=]]></pom.apph5.material.detail.url>
+				<pom.apph5.course.guide.url><![CDATA[https://wapzikao.hqjy.com/zk-app-project/zk-getGuide.html?guideId={id}&token=%s]]></pom.apph5.course.guide.url>
+				<!-- 信鸽推送IOS 1生产 -->
+				<pom.app.xinge.iosenv><![CDATA[1]]></pom.app.xinge.iosenv>
+				<!--文件服务器地址-->
+				<pom.file.domain><![CDATA[http://file.hqjy.com]]></pom.file.domain>
+				<!-- gensee展示互动配置 -->
+				<pom.gensee.k.timeout><![CDATA[30000]]></pom.gensee.k.timeout>
+				<pom.gensee.webcast.web><![CDATA[http://@genseeDomain/webcast/site/entry/join-]]></pom.gensee.webcast.web>
+				<pom.gensee.loginname><![CDATA[469799470@qq.com]]></pom.gensee.loginname>
+				<pom.gensee.password><![CDATA[123456]]></pom.gensee.password>
+				<pom.gensee.webcast.log.url><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/history]]></pom.gensee.webcast.log.url>
+				<pom.gensee.webcast.vod.info><![CDATA[http://hqzk.gensee.com/integration/site/webcast/record/info]]></pom.gensee.webcast.vod.info>
+				<pom.gensee.webcast.vod.log><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/vod/history]]></pom.gensee.webcast.vod.log>
+				<pom.gensee.live.attend.time><![CDATA[300000]]></pom.gensee.live.attend.time>
+				<pom.gensee.video.attend.time><![CDATA[300000]]></pom.gensee.video.attend.time>
+				<!-- CC回放地址 -->
+				<pom.cc.vod.url><![CDATA[http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=]]></pom.cc.vod.url>
+				<!--用户体验商品ID-->
+				<pom.goods.id><![CDATA[618]]></pom.goods.id>
+				<!--用户体验班级ID-->
+				<pom.mallclass.id><![CDATA[132]]></pom.mallclass.id>
+				<!--rabbitMQ 队列名-->
+				<pom.zk.plan.sync.tk><![CDATA[zk.plan.sync.tk]]></pom.zk.plan.sync.tk>
+				<pom.zk.userplanclass.sync.tk><![CDATA[zk.userplanclass.sync.tk]]></pom.zk.userplanclass.sync.tk>
+				<!-- NC报名表 -->
+				<pom.nc.sign.sync.zk><![CDATA[nc.sign.sync.common]]></pom.nc.sign.sync.zk>
+				<!-- NC报名表-手工推送 -->
+				<pom.nc.sign.sync.zk3><![CDATA[nc.sign.sync.zk3]]></pom.nc.sign.sync.zk3>
+				<!-- NC报名表中央财大-手工推送 -->
+				<pom.nc.sign.sync.zycd><![CDATA[nc.sign.sync.zycd]]></pom.nc.sign.sync.zycd>
+				<!-- 会计队列 -->
+				<pom.nc.plan.sync.kj><![CDATA[nc.sign.sync.common.gif]]></pom.nc.plan.sync.kj>
+				<!-- 会计班级推送到题库队列 -->
+				<pom.kj.class.sync.tk><![CDATA[kj.class.sync.tk]]></pom.kj.class.sync.tk>
+				<!-- 自考班级推送到题库队列 -->
+				<pom.divide.class.sync.tk><![CDATA[divide.class.sync.tk]]></pom.divide.class.sync.tk>
+				<!-- xlxw班级推送到题库队列 -->
+				<pom.xlxw.class.sync.tk><![CDATA[xlxw.class.sync.tk]]></pom.xlxw.class.sync.tk>
+				<!-- NC给蓝鲸所有学员更新真实姓名,部门队列 -->
+				<pom.nc.users.sync.bluewhale><![CDATA[nc.users.sync.bluewhale]]></pom.nc.users.sync.bluewhale>
+				<!-- 开通题库权限推送到题库队列 -->
+				<pom.open.permission.sync.tk><![CDATA[open.permission.sync.tk]]></pom.open.permission.sync.tk>
+				<!-- 同步部门和校区队列 -->
+				<pom.nc.sign.sync.deptandschool><![CDATA[test.nc.sign.sync.deptandschool]]></pom.nc.sign.sync.deptandschool>
+				<!-- 展示互动直播回调消息 -->
+				<pom.live.callback.info><![CDATA[live.callback.info]]></pom.live.callback.info>
+				<!-- 展示互动直播回调消息 -->
+				<pom.live.callback.info><![CDATA[live.callback.info]]></pom.live.callback.info>
+                <!-- 展示互动直播回放实时回调消息 -->
+                <pom.replay.callback.info><![CDATA[replay.callback.info]]></pom.replay.callback.info>
+				<!-- 同步学员信息到Udesk消息队列 -->
+				<pom.customer.sync.udesk><![CDATA[customer.sync.udesk]]></pom.customer.sync.udesk>
+				<!-- 员工的学员账号开通消息队列 -->
+				<pom.nc.sync.account><![CDATA[nc.sync.account]]></pom.nc.sync.account>
+				<!-- 教师排课消息队列 -->
+				<pom.teacher.plan.sync.kd><![CDATA[teacher.plan.sync.kd]]></pom.teacher.plan.sync.kd>
+				<!--测试消息队列应用配置 -->
+                <!--<pom.rabbitmq.config.service><![CDATA[10.0.98.18]]></pom.rabbitmq.config.service>
+                <pom.rabbitmq.config.service.username><![CDATA[admin]]></pom.rabbitmq.config.service.username>
+                <pom.rabbitmq.config.service.password><![CDATA[HQJY666]]></pom.rabbitmq.config.service.password>-->
+				<!-- 预正式消息队列应用配置-->
+				<pom.rabbitmq.config.service><![CDATA[10.0.98.46]]></pom.rabbitmq.config.service>
+				<pom.rabbitmq.config.service.username><![CDATA[admin]]></pom.rabbitmq.config.service.username>
+				<pom.rabbitmq.config.service.password><![CDATA[mon4498]]></pom.rabbitmq.config.service.password>
+				<!-- 消息系统 -->
+				<pom.msg.domain><![CDATA[http://dev.api.hqjy.cn/service-msg-api]]></pom.msg.domain>
+
+				<!-- 注册服务地址 -->
+				<pom.eureka.domain><![CDATA[http://172.16.3.1]]></pom.eureka.domain>
+				<!-- 自适应算法服务应用名称 -->
+				<pom.adptive-learn-center.application.name><![CDATA[adaptive-learn-center]]></pom.adptive-learn-center.application.name>
+				<!-- 自适应学习MySQL数据库配置 -->
+				<pom.adaptive.jdbc.url><![CDATA[jdbc:mysql://10.0.98.100:3306/hq_adaptive?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.adaptive.jdbc.url>
+				<pom.adaptive.jdbc.username><![CDATA[root]]></pom.adaptive.jdbc.username>
+				<pom.adaptive.jdbc.password><![CDATA[root]]></pom.adaptive.jdbc.password>
+				<pom.adaptive.jdbc.initialSize><![CDATA[2]]></pom.adaptive.jdbc.initialSize>
+				<pom.adaptive.jdbc.maxActive><![CDATA[30]]></pom.adaptive.jdbc.maxActive>
+				<pom.adaptive.jdbc.minPoolSize><![CDATA[2]]></pom.adaptive.jdbc.minPoolSize>
+				<pom.adaptive.jdbc.maxIdleTime><![CDATA[3000]]></pom.adaptive.jdbc.maxIdleTime>
+				<pom.adaptive.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.adaptive.jdbc.idleConnectionTestPeriod>
+				<!-- 课程服务MySQL数据库配置 -->
+				<pom.courses.jdbc.url><![CDATA[jdbc:mysql://10.0.98.100:3306/hq_courses?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.courses.jdbc.url>
+				<pom.courses.jdbc.username><![CDATA[root]]></pom.courses.jdbc.username>
+				<pom.courses.jdbc.password><![CDATA[root]]></pom.courses.jdbc.password>
+				<pom.courses.jdbc.initialSize><![CDATA[2]]></pom.courses.jdbc.initialSize>
+				<pom.courses.jdbc.maxActive><![CDATA[30]]></pom.courses.jdbc.maxActive>
+				<pom.courses.jdbc.minPoolSize><![CDATA[2]]></pom.courses.jdbc.minPoolSize>
+				<pom.courses.jdbc.maxIdleTime><![CDATA[3000]]></pom.courses.jdbc.maxIdleTime>
+				<pom.courses.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.courses.jdbc.idleConnectionTestPeriod>
+				<!--自适应学习地址-->
+                <pom.adaptive.learning.domain><![CDATA[http://dev.api.hqjy.cn/service-adaptive-api-testpro]]></pom.adaptive.learning.domain>
+                <!-- 自适应算法服务url -->
+                <pom.adptive.service.domain><![CDATA[http://dev.api.hqjy.cn/adaptive-learn-center-testpro]]></pom.adptive.service.domain>
+				<!-- Udesk接口地址 -->
+				<pom.udesk.interface.domain><![CDATA[http://hqjy.udesk.cn/open_api_v1]]></pom.udesk.interface.domain>
+				<!-- 会答接口地址 -->
+				<pom.kuaida.api><![CDATA[http://10.0.98.87:8082]]></pom.kuaida.api>
+                <!-- app4.1消息推送时间限制 -->
+                <pom.message.push.time><![CDATA[10]]></pom.message.push.time>
+                <!-- nc推送学员排课信息队列 -->
+                <pom.ncToLanjing.shuangshi.courseuserplanclass><![CDATA[test.ncToLanjing.shuangshi.courseuserplanclass]]></pom.ncToLanjing.shuangshi.courseuserplanclass>
+				<!-- 会计乐开通队列 -->
+				<queue.nc.sign.sync.common><![CDATA[accfun.prod.nc.sign.sync.common]]></queue.nc.sign.sync.common>
+				<queue.nc.plan.sync.kj><![CDATA[prod.nc.plan.sync.kj]]></queue.nc.plan.sync.kj>
+				<!-- 会计乐报名表消息队列消费休眠时间 1秒 -->
+				<pom.queue.sleep.millis>1000</pom.queue.sleep.millis>
+			</properties>
+		</profile>
+
+		<!-- 正式线 -->
+		<profile>
+			<id>product</id>
+			<properties>
+				<serverType>product</serverType>
+				 <!--Logger日志级别 -->
+				<pom.log4j.rootLogger><![CDATA[warn,error]]></pom.log4j.rootLogger>
+				<pom.log4j.sql><![CDATA[DEBUG]]></pom.log4j.sql>
+				<!--默认校区ID-->
+				<pom.schoolId><![CDATA[zikao]]></pom.schoolId>
+				<!-- redis配置 -->
+				<pom.redis.host><![CDATA[172.16.2.223]]></pom.redis.host>
+		        <pom.redis.port><![CDATA[6379]]></pom.redis.port>
+				<pom.redis.timeout><![CDATA[15000]]></pom.redis.timeout>
+				<pom.redis.dbindex><![CDATA[4]]></pom.redis.dbindex>
+				<!-- 消息队列  报名表同步-->
+				<pom.rabbitmq.sign.url><![CDATA[test.nc.sign.sync.zk]]></pom.rabbitmq.sign.url>
+				<!-- MySQL数据库配置 -->
+				<pom.jdbc.url><![CDATA[jdbc:mysql://172.16.2.223:3306/hq_school?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true]]></pom.jdbc.url>
+				<pom.jdbc.username><![CDATA[root]]></pom.jdbc.username>
+				<pom.jdbc.password><![CDATA[root]]></pom.jdbc.password>
+				<pom.jdbc.initialSize><![CDATA[5]]></pom.jdbc.initialSize>
+				<pom.jdbc.maxActive><![CDATA[128]]></pom.jdbc.maxActive>
+				<pom.jdbc.minPoolSize><![CDATA[2]]></pom.jdbc.minPoolSize>
+				<pom.jdbc.maxIdleTime><![CDATA[3000]]></pom.jdbc.maxIdleTime>
+				<pom.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.jdbc.idleConnectionTestPeriod>
+				<!-- H5页面地址 -->
+				<pom.apph5.msg.content.url><![CDATA[https://wapzikao.hqjy.com/zk-app-project/zk-message.html?contentId={id}&token=%s]]></pom.apph5.msg.content.url>
+				<pom.apph5.material.detail.url><![CDATA[https://wapzikao.hqjy.com/zk-app-project/zk-zlk-detail.html?detailId=]]></pom.apph5.material.detail.url>
+				<pom.apph5.course.guide.url><![CDATA[https://wapzikao.hqjy.com/zk-app-project/zk-getGuide.html?guideId={id}&token=%s]]></pom.apph5.course.guide.url>
+				<!-- 信鸽推送IOS 1生产 -->
+				<pom.app.xinge.iosenv><![CDATA[1]]></pom.app.xinge.iosenv>
+				<!--文件服务器地址-->
+				<pom.file.domain><![CDATA[http://file.hqjy.com]]></pom.file.domain>
+				<!-- gensee展示互动配置 -->
+				<pom.gensee.k.timeout><![CDATA[30000]]></pom.gensee.k.timeout>
+				<pom.gensee.webcast.web><![CDATA[http://@genseeDomain/webcast/site/entry/join-]]></pom.gensee.webcast.web>
+				<pom.gensee.loginname><![CDATA[469799470@qq.com]]></pom.gensee.loginname>
+				<pom.gensee.password><![CDATA[123456]]></pom.gensee.password>
+				<pom.gensee.webcast.log.url><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/history]]></pom.gensee.webcast.log.url>
+				<pom.gensee.webcast.vod.info><![CDATA[http://hqzk.gensee.com/integration/site/webcast/record/info]]></pom.gensee.webcast.vod.info>
+				<pom.gensee.webcast.vod.log><![CDATA[http://hqzk.gensee.com/integration/site/webcast/export/vod/history]]></pom.gensee.webcast.vod.log>
+				<pom.gensee.live.attend.time><![CDATA[300000]]></pom.gensee.live.attend.time>
+				<pom.gensee.video.attend.time><![CDATA[300000]]></pom.gensee.video.attend.time>
+				<!-- CC回放地址 -->
+				<pom.cc.vod.url><![CDATA[http://p.bokecc.com/playvideo.bo?uid=FE7A65E6BE2EA539&playerid=CED4B0511C5D4992&playertype=1&autoStart=false&vid=]]></pom.cc.vod.url>
+				<!--用户体验商品ID-->
+				<pom.goods.id><![CDATA[618]]></pom.goods.id>
+				<!--用户体验班级ID-->
+				<pom.mallclass.id><![CDATA[132]]></pom.mallclass.id>
+				<!--rabbitMQ 队列名-->
+				<pom.zk.plan.sync.tk><![CDATA[zk.plan.sync.tk]]></pom.zk.plan.sync.tk>
+		        <pom.zk.userplanclass.sync.tk><![CDATA[zk.userplanclass.sync.tk]]></pom.zk.userplanclass.sync.tk>
+		        <!-- NC报名表 -->
+				<pom.nc.sign.sync.zk><![CDATA[nc.sign.sync.common]]></pom.nc.sign.sync.zk>
+				<!-- NC报名表-手工推送 -->
+				<pom.nc.sign.sync.zk3><![CDATA[nc.sign.sync.zk3]]></pom.nc.sign.sync.zk3>
+				<!-- NC报名表中央财大-手工推送 -->
+				<pom.nc.sign.sync.zycd><![CDATA[nc.sign.sync.zycd]]></pom.nc.sign.sync.zycd>
+				<!-- 会计队列 -->
+				<pom.nc.plan.sync.kj><![CDATA[nc.sign.sync.common.gif]]></pom.nc.plan.sync.kj>
+				<!-- 会计班级推送到题库队列 -->
+				<pom.kj.class.sync.tk><![CDATA[kj.class.sync.tk]]></pom.kj.class.sync.tk>
+				<!-- 自考班级推送到题库队列 -->
+				<pom.divide.class.sync.tk><![CDATA[divide.class.sync.tk]]></pom.divide.class.sync.tk>
+				<!-- xlxw班级推送到题库队列 -->
+				<pom.xlxw.class.sync.tk><![CDATA[xlxw.class.sync.tk]]></pom.xlxw.class.sync.tk>
+				<!-- NC给蓝鲸所有学员更新真实姓名,部门队列 -->
+				<pom.nc.users.sync.bluewhale><![CDATA[nc.users.sync.bluewhale]]></pom.nc.users.sync.bluewhale>
+                <!-- 开通题库权限推送到题库队列 -->
+				<pom.open.permission.sync.tk><![CDATA[open.permission.sync.tk]]></pom.open.permission.sync.tk>
+				<!-- 同步部门和校区队列 -->
+				<pom.nc.sign.sync.deptandschool><![CDATA[nc.sign.sync.deptandschool]]></pom.nc.sign.sync.deptandschool>
+				<!-- 展示互动直播回调消息 -->
+				<pom.live.callback.info><![CDATA[live.callback.info]]></pom.live.callback.info>
+				<!-- 展示互动直播回调消息 -->
+				<pom.live.callback.info><![CDATA[live.callback.info]]></pom.live.callback.info>
+                <!-- 展示互动直播回放实时回调消息 -->
+                <pom.replay.callback.info><![CDATA[replay.callback.info]]></pom.replay.callback.info>
+				<!-- 同步学员信息到Udesk消息队列 -->
+				<pom.customer.sync.udesk><![CDATA[customer.sync.udesk]]></pom.customer.sync.udesk>
+				<!-- 员工的学员账号开通消息队列 -->
+				<pom.nc.sync.account><![CDATA[nc.sync.account]]></pom.nc.sync.account>
+				<!-- 教师排课消息队列 -->
+				<pom.teacher.plan.sync.kd><![CDATA[teacher.plan.sync.kd]]></pom.teacher.plan.sync.kd>
+				<!-- 消息队列应用配置 -->
+				<pom.rabbitmq.config.service><![CDATA[172.16.2.247]]></pom.rabbitmq.config.service>
+				<pom.rabbitmq.config.service.username><![CDATA[hquser]]></pom.rabbitmq.config.service.username>
+				<pom.rabbitmq.config.service.password><![CDATA[mon4498]]></pom.rabbitmq.config.service.password>
+
+				<!-- 注册服务地址 -->
+				<pom.eureka.domain><![CDATA[http://172.16.3.1]]></pom.eureka.domain>
+				<!-- 自适应算法服务应用名称 -->
+				<pom.adptive-learn-center.application.name><![CDATA[adaptive-learn-center]]></pom.adptive-learn-center.application.name>
+				<!-- 自适应学习MySQL数据库配置 -->
+				<pom.adaptive.jdbc.url><![CDATA[jdbc:mysql://172.16.2.223:3306/hq_adaptive?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.adaptive.jdbc.url>
+				<pom.adaptive.jdbc.username><![CDATA[root]]></pom.adaptive.jdbc.username>
+				<pom.adaptive.jdbc.password><![CDATA[root]]></pom.adaptive.jdbc.password>
+				<pom.adaptive.jdbc.initialSize><![CDATA[2]]></pom.adaptive.jdbc.initialSize>
+				<pom.adaptive.jdbc.maxActive><![CDATA[30]]></pom.adaptive.jdbc.maxActive>
+				<pom.adaptive.jdbc.minPoolSize><![CDATA[2]]></pom.adaptive.jdbc.minPoolSize>
+				<pom.adaptive.jdbc.maxIdleTime><![CDATA[3000]]></pom.adaptive.jdbc.maxIdleTime>
+				<pom.adaptive.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.adaptive.jdbc.idleConnectionTestPeriod>
+				<!-- 课程服务MySQL数据库配置 -->
+				<pom.courses.jdbc.url><![CDATA[jdbc:mysql://172.16.2.223:3306/hq_courses?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false]]></pom.courses.jdbc.url>
+				<pom.courses.jdbc.username><![CDATA[root]]></pom.courses.jdbc.username>
+				<pom.courses.jdbc.password><![CDATA[root]]></pom.courses.jdbc.password>
+				<pom.courses.jdbc.initialSize><![CDATA[2]]></pom.courses.jdbc.initialSize>
+				<pom.courses.jdbc.maxActive><![CDATA[30]]></pom.courses.jdbc.maxActive>
+				<pom.courses.jdbc.minPoolSize><![CDATA[2]]></pom.courses.jdbc.minPoolSize>
+				<pom.courses.jdbc.maxIdleTime><![CDATA[3000]]></pom.courses.jdbc.maxIdleTime>
+				<pom.courses.jdbc.idleConnectionTestPeriod><![CDATA[100]]></pom.courses.jdbc.idleConnectionTestPeriod>
+
+                <!-- 消息系统 -->
+                <pom.msg.domain><![CDATA[http://172.16.3.32:8100]]></pom.msg.domain>
+                <!-- 自适应算法服务url -->
+                <pom.adptive.service.domain><![CDATA[http://172.16.3.25:7000]]></pom.adptive.service.domain>
+				<!--自适应学习地址-->
+				<pom.adaptive.learning.domain><![CDATA[http://172.16.3.24:7100]]></pom.adaptive.learning.domain>
+				<!-- Udesk接口地址 -->
+				<pom.udesk.interface.domain><![CDATA[http://hqjy.udesk.cn/open_api_v1]]></pom.udesk.interface.domain>
+				<!-- 会答接口地址 -->
+				<pom.kuaida.api><![CDATA[http://api.kjcity.com]]></pom.kuaida.api>
+				<!-- 云合同配置 -->
+				<pom.online.contract.appId><![CDATA[2018070408523900018]]></pom.online.contract.appId>
+				<pom.online.contract.appKey><![CDATA[nLjKNLaVh2oap9HZ]]></pom.online.contract.appKey>
+				<pom.online.contract.appSignerId><![CDATA[1099684]]></pom.online.contract.appSignerId>
+                <!-- app4.1消息推送时间限制 -->
+                <pom.message.push.time><![CDATA[10]]></pom.message.push.time>
+                <!-- nc推送学员排课信息队列 -->
+                <pom.ncToLanjing.shuangshi.courseuserplanclass><![CDATA[prod.ncToLanjing.shuangshi.courseuserplanclass]]></pom.ncToLanjing.shuangshi.courseuserplanclass>
+				<!-- 会计乐开通队列 -->
+				<queue.nc.sign.sync.common><![CDATA[accfun.prod.nc.sign.sync.common]]></queue.nc.sign.sync.common>
+				<queue.nc.plan.sync.kj><![CDATA[prod.nc.plan.sync.kj]]></queue.nc.plan.sync.kj>
+				<!-- 会计乐报名表消息队列消费休眠时间 1秒 -->
+				<pom.queue.sleep.millis>1000</pom.queue.sleep.millis>
+			</properties>
+		</profile>
+
+	</profiles>
+
+	<!-- 阿里云maven仓库 -->
+	<repositories>
+		<repository>
+			<id>public</id>
+			<name>aliyun nexus</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public</id>
+			<name>aliyun nexus</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+
+         <!-- 消息队列配置 -->
+          <dependency>
+        <groupId>com.fasterxml</groupId>
+        <artifactId>classmate</artifactId>
+        <version>1.1.0</version>
+    </dependency>
+   	<dependency>
+		<groupId>com.rabbitmq</groupId>
+		<artifactId>amqp-client</artifactId>
+		<version>3.5.4</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.amqp</groupId>
+		<artifactId>spring-rabbit</artifactId>
+		<version>1.3.5.RELEASE</version>
+	</dependency>
+		<dependency>
+		<groupId>org.quartz-scheduler</groupId>
+		<artifactId>quartz</artifactId>
+		<version>2.2.1</version>
+	</dependency>
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+			<version>1.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springframework-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20180130</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j-version}</version>
+		</dependency>
+		<dependency>
+			<artifactId>commons-logging</artifactId>
+			<groupId>commons-logging</groupId>
+			<version>${commons-logging-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>${commons-configuration-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>${shiro-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>${shiro-version}</version>
+		</dependency>
+		 <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring-data-redis-version}</version>
+        </dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.5</version>
+		</dependency>
+
+        <dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>${quartz-version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>c3p0</artifactId>
+					<groupId>c3p0</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.axet</groupId>
+			<artifactId>kaptcha</artifactId>
+			<version>${kaptcha-version}</version>
+		</dependency>
+		<!-- Velocity视图所需jar -->
+		<dependency>
+			<artifactId>velocity</artifactId>
+			<groupId>org.apache.velocity</groupId>
+			<version>${velocity-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity-tools</artifactId>
+			<version>${velocity-tools-version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>dom4j</artifactId>
+					<groupId>dom4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>oro</artifactId>
+					<groupId>oro</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>sslext</artifactId>
+					<groupId>sslext</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>struts-core</artifactId>
+					<groupId>org.apache.struts</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>struts-taglib</artifactId>
+					<groupId>org.apache.struts</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>struts-tiles</artifactId>
+					<groupId>org.apache.struts</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-validator</artifactId>
+					<groupId>commons-validator</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-beanutils</artifactId>
+					<groupId>commons-beanutils</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-chain</artifactId>
+					<groupId>commons-chain</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-collections</artifactId>
+					<groupId>commons-collections</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- JSP视图所需jar -->
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>${taglibs-version}</version>
+		</dependency>
+		<!-- Freemarker视图所需jar -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>${freemarker-version}</version>
+		</dependency>
+		<!-- spring-data-mogodb -->
+		<dependency>  
+            <groupId>org.springframework.data</groupId>  
+            <artifactId>spring-data-mongodb</artifactId>  
+            <version>1.8.2.RELEASE</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.springframework.data</groupId>  
+            <artifactId>spring-data-commons</artifactId>  
+            <version>1.10.0.RELEASE</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.mongodb</groupId>  
+            <artifactId>mongo-java-driver</artifactId>  
+            <version>2.13.0-rc2</version>  
+        </dependency>
+        <dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-annotations</artifactId>
+		<version>2.4.4</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.4.4</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-core</artifactId>
+		<version>2.4.4</version>
+	</dependency>
+        <dependency>    
+    <groupId>net.sf.json-lib</groupId>    
+    <artifactId>json-lib</artifactId>    
+    <version>2.4</version>    
+    <classifier>jdk15</classifier>    
+	</dependency>
+	<dependency>
+		<groupId>net.sourceforge.jexcelapi</groupId>
+		<artifactId>jxl</artifactId>
+		<version>2.6.12</version>
+	</dependency>
+	 <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.3.1</version>
+      <scope>compile</scope>
+    </dependency>
+
+	<dependency>
+		<groupId>org.jarimport</groupId>
+		<artifactId>xingepush</artifactId>
+		<version>1.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjweaver</artifactId>
+		<version>1.8.10</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.github.jsqlparser</groupId>
+		<artifactId>jsqlparser</artifactId>
+		<version>1.0</version>
+	</dependency>
+		<dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+
+	</dependencies>
+	
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>
+					<!-- true:跳过测试 -->
+					<skip>true</skip>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<path>/</path>
+					<charset>UTF-8</charset>
+					<port>80</port>
+					<uriEncoding>UTF-8</uriEncoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<configuration>
+					<scanIntervalSeconds>30</scanIntervalSeconds>
+					<webApp>
+						<contextPath>/</contextPath>
+					</webApp>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.3.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>${mysql-version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<verbose>true</verbose>
+					<overwrite>true</overwrite>
+					<!--配置文件的路径-->
+					<configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
+				</configuration>
+			</plugin>
+
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/java/</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.js</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			
+		</resources>
+		<finalName>school-admin</finalName>
+	</build>
+	
+</project>

@@ -1,0 +1,33 @@
+<!--banner管理-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">总裁昵称</th>
+        <th class="auto">总裁头像</th>
+        <th class="auto">总裁简介</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){var d = data[i];%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+
+            <td class="short"><%=d.boss_name  %></td>
+            <td class="pic"><img src="<%=d.boss_pic %>" onclick="javascript:window.open('<%=d.boss_pic %>')" style="height:50px;"></td>
+            <td class="short"><%=d.boss_info  %></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详细</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/banner管理-->

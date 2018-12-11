@@ -1,0 +1,28 @@
+<form name="inputForm">
+<table style="width:300px;">
+    <tbody>
+        <tr>
+            <td><%-tip%></td>
+        </tr>
+        <tr>
+            <td>
+                <% for(var key in data){%>
+                <label style="width:150px;float:left;">
+                    <%if(selectCount==1){%>
+                    <input type="radio" name="teams" value="<%=key%>" />
+                    <%}else{%>
+                    <input type="checkbox" name="teams" value="<%=key%>" />
+                    <%}%>
+                    <%=data[key]%>(ID:<%=key%>)
+                </label>
+                <%}%>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span id="j-tip" class="red"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</form>

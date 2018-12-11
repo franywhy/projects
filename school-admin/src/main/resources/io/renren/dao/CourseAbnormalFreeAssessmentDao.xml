@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseAbnormalFreeAssessmentDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_abnormal_free_assessment.id AS id ,
+	course_abnormal_free_assessment.order_id AS orderId , 	course_abnormal_free_assessment.start_time AS startTime ,course_abnormal_free_assessment.create_time AS createTime ,
+	course_abnormal_free_assessment.end_time AS endTime ,
+	course_abnormal_free_assessment.audit_status AS auditStatus , 	course_abnormal_free_assessment.abnormal_reason AS abnormalReason ,
+	course_abnormal_free_assessment.remark AS remark , course_abnormal_free_assessment.orderno AS orderno,users.mobile,users.nick_name AS nickName,
+	mall_order.order_no AS mallOrderNo,mall_class.class_name AS className,sys_user.nick_name AS teacherName,
+	mall_profession.profession_name AS professionName,mall_area.area_name AS areaName,
+    mall_class_type.classtype_name AS classtypeName,mall_level.level_name AS levelName,
+    mall_order.creation_time AS creationTime,mall_order.date_validity AS dateValidity,
+    courses.course_name AS courseName
+</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1
+        <if test="orderNo != null">and course_abnormal_free_assessment.orderno = #{orderNo} </if>
+        <if test="mallOrderNo != null">and mall_order.order_no = #{mallOrderNo} </if>
+        <if test="nickName != null">and users.nick_name = #{nickName} </if>
+        <if test="mobile != null">and users.mobile = #{mobile} </if>
+        <if test="classTeacherId != null">and sys_user.user_id = #{classTeacherId} </if>
+        <if test="classId != null">and mall_class.class_id = #{classId} </if>
+		<if test="auditStatus != null">and course_abnormal_free_assessment.audit_status = #{auditStatus} </if>
+		<if test="startTime != null">
+			and course_abnormal_free_assessment.start_time  &gt;= #{startTime}
+		</if>
+		<!-- 结束时间 -->
+		<if test="endTime != null">
+			and course_abnormal_free_assessment.end_time  &lt;= #{endTime}
+		</if>
+		<if test="areaId != null">and mall_order.area_id = #{areaId} </if>
+		<if test="professionId != null">and mall_order.profession_id = #{professionId} </if>
+		<if test="levelId != null">and mall_order.level_id = #{levelId} </if>
+		<if test="classTypeId != null">and mall_order.class_type_id = #{classTypeId} </if>
+        <if test="courseName != null">and courses.course_name like concat('%',#{courseName},'%')  </if>
+</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM course_abnormal_free_assessment AS course_abnormal_free_assessment
+    	 left join mall_order  on course_abnormal_free_assessment.order_id=mall_order.order_id
+    	 left join users  on mall_order.user_id=users.user_id
+    	 left join mall_class  on mall_order.class_id = mall_class.class_id
+         left join sys_user  on mall_class.user_id = sys_user.user_id
+         left JOIN mall_profession AS mall_profession ON mall_order.profession_id = mall_profession.profession_id
+		 left JOIN mall_area AS mall_area ON mall_area.area_id = mall_order.area_id
+		 left JOIN mall_class_type AS mall_class_type ON mall_class_type.classtype_id = mall_order.class_type_id
+		 left JOIN mall_level AS mall_level ON mall_level.level_id = mall_order.level_id
+		 left join courses  AS courses on course_abnormal_free_assessment.course_id=courses.course_id
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="io.renren.pojo.CourseAbnormalFreeAssessmentPOJO">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		where  id = #{id}
+	</select>
+	<!--根据ID查询-->
+	<select id="verifyStatus" resultType="io.renren.pojo.CourseAbnormalFreeAssessmentPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		where course_abnormal_free_assessment.audit_status  != 1
+		and course_abnormal_free_assessment.order_id = #{orderId}
+		and course_abnormal_free_assessment.course_id = #{courseId}
+		and (course_abnormal_free_assessment.end_time  &gt;= #{startTime}
+		or course_abnormal_free_assessment.end_time is null
+		)
+		limit 0,1
+	</select>
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="io.renren.pojo.CourseAbnormalFreeAssessmentPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseAbnormalFreeAssessmentEntity">
+		insert into course_abnormal_free_assessment
+		(
+				`order_id`, 	`course_id`,			`start_time`, `end_time`,				`abnormal_reason`,				`audit_status`, 				`remark`, 				`create_person`, 				`modify_person`, 				`modified_time`, 				`update_person`, 				`update_time`, 				`orderno`, 				`product_id`		)
+		values
+		(
+				#{orderId}, 	#{courseId},			#{startTime}, #{endTime},				#{abnormalReason},				#{auditStatus}, 				#{remark}, 				#{createPerson}, 				#{modifyPerson}, 				#{modifiedTime}, 				#{updatePerson}, 				#{updateTime}, 				#{orderno}, 				#{productId}		)
+	</insert>
+
+	
+	<!--修改状态-->
+	<update id="updateStatus">
+        update course_abnormal_free_assessment
+        <set>
+            audit_status = auditStatus
+        </set>
+        where id = #{id}
+	</update>
+	
+	<!--批量反审核或作废-->
+	<update id="updateCancelBatch">
+		update course_abnormal_free_assessment
+		<set>
+			audit_status = #{auditStatus},update_person = #{updatePerson},update_time = #{updateTime}
+		</set>
+		where  id IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<!--批量审核通过-->
+	<update id="updateAuditPassBatch">
+		update course_abnormal_free_assessment
+		<set>
+			audit_status = #{auditStatus},modify_person = #{modifyPerson},modified_time = #{modifiedTime}
+		</set>
+		where  id IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

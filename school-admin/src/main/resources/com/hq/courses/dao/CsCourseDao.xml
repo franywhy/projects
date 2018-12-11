@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.courses.dao.CsCourseDao">
+
+	<sql id="join">
+		LEFT JOIN hq_school.sys_product  ON sys_product.product_id = cs_course.product_id
+	</sql>
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		cs_course.course_id AS courseId,
+		cs_course.course_name AS courseName,
+		cs_course.course_no AS courseNo,
+		cs_course.dr AS dr,
+		cs_course.product_id AS productId,
+		cs_course.update_time AS updateTime,
+		cs_course.create_time AS createTime,
+		cs_course.dept_id AS deptId,
+		cs_course.status AS status,
+		cs_course.remark AS remark,
+		cs_course.nc_id AS ncId,
+		cs_course.lj_id AS ljId,
+		cs_course.tk_id AS tkId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE dr = 0
+	</sql>
+	<sql id="select_query">
+		<if test="courseId != null and courseId > 0">
+			AND cs_course.`course_id` = #{courseId}
+		</if>
+		<if test="courseName != null and courseName.trim() != ''">
+			AND cs_course.`course_name` like concat('%', #{courseName}, '%')
+		</if>
+		<if test="courseNo != null and courseNo.trim() != ''">
+			AND cs_course.`course_no` like concat('%', #{courseNo}, '%')
+		</if>
+		<if test="productId != null">
+			AND cs_course.`product_id` = #{productId}
+		</if>
+		<if test="deptId != null">
+			AND cs_course.`dept_id` = #{deptId}
+		</if>
+		<if test="status != null">
+			AND cs_course.`status` = #{status}
+		</if>
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM cs_course AS cs_course
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by course_id desc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.courses.entity.CsCourseEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND course_id = #{courseId}
+	</select>
+
+	<select id="queryList"  parameterType="com.hq.courses.pojo.query.CsCourseQuery" resultType="com.hq.courses.entity.CsCourseEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="select_query"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="com.hq.courses.pojo.query.CsCourseQuery" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="select_query"/>
+	</select>
+	<select id="queryByCourseName" parameterType="com.hq.courses.pojo.query.CsCourseQuery" resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		where
+		cs_course.course_name = #{courseName}
+	</select>
+ 	<select id="queryByCourseNo" resultType="com.hq.courses.entity.CsCourseEntity">
+		SELECT 
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<where>
+			<if test="courseId != null">
+				cs_course.course_id &lt;&gt;  #{courseId}
+			</if>
+			<if test="courseNo != null and courseNo.trim() != ''">
+				AND cs_course.course_no = #{courseNo}
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.hq.courses.entity.CsCourseEntity" useGeneratedKeys="true" keyProperty="courseId">
+		INSERT INTO cs_course
+		(
+			`course_name`, 
+			`course_no`, 
+			`dr`, 
+			`product_id`, 
+			`dept_id`,
+			`status`,
+			`remark`,
+			`nc_id`,
+			`lj_id`,
+			`tk_id`
+		)
+		values
+		(
+			#{courseName}, 
+			#{courseNo}, 
+			#{dr}, 
+			#{productId}, 
+			#{deptId},
+			#{status},
+			#{remark},
+			#{ncId},
+			#{ljId},
+			#{tkId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.courses.entity.CsCourseEntity">
+		UPDATE cs_course 
+		<set>
+			<if test="courseName != null">`course_name` = #{courseName}, </if>
+			<if test="courseNo != null">`course_no` = #{courseNo}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="ncId != null">`nc_id` = #{ncId}, </if>
+			<if test="ljId != null">`lj_id` = #{ljId}, </if>
+			<if test="tkId != null">`tk_id` = #{tkId} </if>
+		</set>
+		WHERE course_id = #{courseId}
+	</update>
+	
+	<update id="updateStatus">
+		UPDATE cs_course 
+		   SET cs_course.`status` = #{status}
+		 WHERE cs_course.course_id = #{courseId}
+	</update>
+	
+	<update id="delete">
+		UPDATE cs_course 
+		   SET cs_course.`dr` = 1
+		 WHERE cs_course.course_id = #{courseId}
+	</update>
+
+</mapper>

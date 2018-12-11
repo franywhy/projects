@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.AppSchoolLastFourDao">
+	<select id="querySchoolList" resultType="com.hq.learningapi.pojo.AppSchoolPOJO">
+		SELECT
+			id,
+			name,
+			pic,
+			telephone,
+			address,
+			ROUND(
+				6378.138 * 2 * ASIN(
+					SQRT(
+						POW(
+							SIN(
+								(
+									#{latitude} * PI() / 180 - latitude * PI() / 180
+								) / 2
+							),
+							2
+						) + COS(#{latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+							SIN(
+								(
+									#{longitude} * PI() / 180 - longitude * PI() / 180
+								) / 2
+							),
+							2
+						)
+					)
+				) * 1000
+			) AS distance
+		FROM
+			sys_school
+		WHERE 
+			dr = 0  AND type = 2
+			<!--AND business_id = #{businessId}-->
+		ORDER BY
+			distance ASC
+		LIMIT 4
+	</select>
+	
+	
+</mapper>

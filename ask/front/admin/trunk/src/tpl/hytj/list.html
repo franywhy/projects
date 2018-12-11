@@ -1,0 +1,48 @@
+<!--活跃统计-->
+<%
+var t_day_1 = 0,t_day_7 = 0,t_day_30 = 0;
+var allText = "全部渠道";
+if(params.client==1){
+	allText = "全部PC渠道";
+}else if(params.client==2){
+	allText = "全部手机渠道";
+}
+%>
+<table width="100%" class="listTable tablesorter">
+ 	<thead>
+ 	<tr>
+			<th class="short">渠道名称</th>
+			<th class="short">日活</th>
+			<th class="short">周活</th>
+			<th class="short">月活</th>			
+    </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <%
+        var day_1 = data[i]["1_day"] || 0,
+        	day_7 = data[i]["7_day"] || 0,
+        	day_30 = data[i]["30_day"] || 0;
+        	t_day_1 +=(day_1-0);
+			t_day_7 +=(day_7-0);
+			t_day_30 +=(day_30-0);
+        %>
+        <tr>
+			<td class="short"><%=data[i].name || allText %></td>
+            <td class="short"><%=day_1%></td>
+			<td class="short"><%=day_7%></td>
+			<td class="short"><%=day_30%></td>
+        </tr>
+		<%}%>
+    </tbody>
+	<tfooter>		
+        <tr>
+			<th class="short">总计</th>
+            <th class="short"><%=t_day_1%></th>
+			<th class="short"><%=t_day_7%></th>
+			<th class="short"><%=t_day_30%></th>
+        </tr>
+    </tfooter>
+</table>
+<div class="appPager"></div> 
+<!--/活跃统计-->

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>免考核档案表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("freeassessment:save"))
+			<a class="btn btn-primary" @click="pass"><i class="fa fa-plus"></i>&nbsp;通过</a>
+			<a class="btn btn-primary" @click="cancel"><i class="fa fa-trash-o"></i>&nbsp;取消</a>
+			<a class="btn btn-primary" @click="downTemplate"><i class="fa fa-pencil-square-o"></i>&nbsp;下载模板</a>
+			<a class="btn btn-primary" @click="batchImport"><i class="fa fa-plus"></i>&nbsp;批量导入</a>
+			<a class="btn btn-primary" onclick="hq.ui.exportData(null);"><i class="fa fa-plus"></i>&nbsp;导出报表</a>
+			#end
+			#if($shiro.hasPermission("freeassessment:list"))
+			<table class="table-condensed" border="0">
+				<tr border="0">
+					<td><input type="text" class="form-control" v-model="q.teacherName" readonly="readonly" placeholder="点击选择班主任" @click="teacherLayerShow"></td>
+					<td><input type="text" class="form-control" v-model="q.course" readonly="readonly" placeholder="点击选择课程" @click="courseLayerShowDetail"></td>
+					<td><input type="text" class="form-control" v-model="q.studentMobile" @keyup.enter="query" placeholder="学员手机号"></td>
+					<td><label for="name">状态:</label></td>
+					<td>
+						<select class="form-control" v-model="q.applicationStatus">
+							<option value="">全部</option>
+							<option value="0">审核中</option>
+							<option value="1">通过</option>
+							<option value="2">取消</option>
+						</select>
+					</td>
+					<td style="width: 100px; padding-left: 20px;"><a class="btn btn-default" @click="clearQuery">&nbsp;重置</a></td>
+					<td><a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a></td>
+				</tr>
+			</table>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+	<!-- 上传文件弹窗 -->
+	<div id="uploadExcel" style="display: none;">
+		<form name="form_uploadImg" action="" enctype="multipart/form-data">
+			<input id="file_data"  type="file"  name="file_data" style="height: 35px; width: 200px;" />
+		</form>
+	</div>
+
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<div class="col-sm-2 control-label">学员名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.studentName" placeholder="学员名称"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">手机号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.studentMobile" placeholder="手机号"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">班级名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.className" placeholder="班级名称"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">班主任</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.teacherName" placeholder="班主任"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">免考核课程</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.course" placeholder="免考核课程"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">申请时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.applicationTime" placeholder="申请时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">截止时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.deadlineTime" placeholder="截止时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">申请原因</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.reason" placeholder="申请原因"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">申请状态:0.审核中,1.通过,2.取消</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="freeAssessment.applicationStatus" placeholder="申请状态:0.审核中,1.通过,2.取消"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/freeassessment.js?_${date.systemTime}"></script>
+#parse("layer/courseLay.html")
+#parse("layer/teacherLay.html")
+</body>
+</html>

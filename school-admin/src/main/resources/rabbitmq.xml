@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+    <!-- 扫描包 -->
+    <context:annotation-config />
+
+    <!-- 连接本地rabbitmq -->
+    <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <!-- <constructor-arg value="172.16.2.247" />
+        <property name="username" value="hquser" />
+        <property name="password" value="mon4498" /> -->
+        <constructor-arg value="${rabbitmq.config.service}" />
+        <property name="username" value="${rabbitmq.config.service.username}" />
+        <property name="password" value="${rabbitmq.config.service.password}" />
+        <property name="virtualHost" value="/" />
+        <property name="channelCacheSize" value="5" />
+    </bean>
+
+    <rabbit:admin connection-factory="connectionFactory" id="amqpAdmin" />
+
+    <!-- queue 队列声明 -->
+    <rabbit:queue id="nc.sign.sync.zk" durable="true" auto-delete="false" exclusive="false" name="${nc.sign.sync.zk}" />
+    <rabbit:queue id="nc.sign.sync.zk3" durable="true" auto-delete="false" exclusive="false" name="${nc.sign.sync.zk3}" />
+    <rabbit:queue id="nc.sign.sync.zycd" durable="true" auto-delete="false" exclusive="false" name="${nc.sign.sync.zycd}" />
+    <rabbit:queue id="nc.sign.sync.deptandschool" durable="true" auto-delete="false" exclusive="false" name="${nc.sign.sync.deptandschool}" />
+
+    <!-- 自考生产给题库队列 -->
+    <rabbit:queue id="zk.plan.sync.tk" durable="true" auto-delete="false" exclusive="false" name="${zk.plan.sync.tk}" />
+    <rabbit:queue id="zk.userplanclass.sync.tk" durable="true" auto-delete="false" exclusive="false" name="${zk.userplanclass.sync.tk}" />
+    <!-- 会计生产给题库队列 -->
+    <rabbit:queue id="kj.class.sync.tk" durable="true" auto-delete="false" exclusive="false" name="${kj.class.sync.tk}" />
+    <!-- 各业务线分班推送题库专用队列 -->
+    <rabbit:queue id="divide.class.sync.tk" durable="true" auto-delete="false" exclusive="false" name="${divide.class.sync.tk}" />
+    <!-- 学来学往生产给题库队列 -->
+    <rabbit:queue id="xlxw.class.sync.tk" durable="true" auto-delete="false" exclusive="false" name="${xlxw.class.sync.tk}" />
+
+    <!-- NC生产给会计队列 -->
+    <rabbit:queue id="nc.plan.sync.kj" durable="true" auto-delete="false" exclusive="false" name="${nc.plan.sync.kj}" />
+
+    <!-- NC给蓝鲸所有学员更新真实姓名,部门队列 -->
+    <rabbit:queue id="nc.users.sync.bluewhale" durable="true" auto-delete="false" exclusive="false" name="${nc.users.sync.bluewhale}" />
+    <!-- 录播课推送给题库 -->
+    <rabbit:queue id="open.permission.sync.tk" durable="true" auto-delete="false" exclusive="false" name="${open.permission.sync.tk}" />
+    <!-- 直播回调信息队列 -->
+    <rabbit:queue durable="true" auto-delete="false" exclusive="false" name="${live.callback.info}"/>
+    <!-- 直播回放回调信息队列 -->
+    <rabbit:queue durable="true" auto-delete="false" exclusive="false" name="${replay.callback.info}"/>
+
+    <!-- 同步学员信息到Udesk消息队列 -->
+    <rabbit:queue id="customer.sync.udesk" durable="true" auto-delete="false" exclusive="false" name="${customer.sync.udesk}" />
+    <!-- 员工的学员账号开通消息队列 -->
+    <rabbit:queue id="nc.sync.account" durable="true" auto-delete="false" exclusive="false" name="${nc.sync.account}" />
+    <!-- nc推送学员排课信息队列 -->
+    <rabbit:queue id="ncToLanjing.shuangshi.courseuserplanclass" durable="true" auto-delete="false" exclusive="false" name="${pom.ncToLanjing.shuangshi.courseuserplanclass}" />
+    <!-- NC学员报名队列 -->
+    <rabbit:queue name="${queue.nc.sign.sync.common}" durable="true" auto-delete="false" exclusive="false" />
+    <!-- NC学员排课队列 -->
+    <rabbit:queue name="${queue.nc.plan.sync.kj}" durable="true" auto-delete="false" exclusive="false" />
+
+    <!-- exchange queue binging key 绑定 -->
+    <rabbit:direct-exchange name="mq-exchange" durable="true" auto-delete="false" id="mq-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="${nc.sign.sync.zk}" key="nc.sign.sync.zk" />
+            <rabbit:binding queue="${nc.sign.sync.zk3}" key="nc.sign.sync.zk3" />
+            <rabbit:binding queue="${nc.sign.sync.zycd}" key="nc.sign.sync.zycd" />
+            <rabbit:binding queue="${nc.sign.sync.deptandschool}" key="${nc.sign.sync.deptandschool}" />
+            <!-- 自考生产给题库队列 -->
+            <rabbit:binding queue="zk.plan.sync.tk" key="${zk.plan.sync.tk}" />
+            <rabbit:binding queue="zk.userplanclass.sync.tk" key="${zk.userplanclass.sync.tk}" />
+            <rabbit:binding queue="kj.class.sync.tk" key="${kj.class.sync.tk}" />
+            <!-- 各业务线分班推送到题库专用队列 -->
+            <rabbit:binding queue="divide.class.sync.tk" key="${divide.class.sync.tk}" />
+            <!-- 学来学往生产给题库队列 -->
+            <rabbit:binding queue="xlxw.class.sync.tk" key="${xlxw.class.sync.tk}" />
+
+            <!-- NC生产给会计队列 -->
+            <rabbit:binding queue="nc.plan.sync.kj" key="${nc.plan.sync.kj}" />
+            <!-- NC给蓝鲸所有学员更新真实姓名,部门队列 -->
+            <rabbit:binding queue="${nc.users.sync.bluewhale}" key="nc.users.sync.bluewhale" />
+            <!-- NC给蓝鲸所有学员更新真实姓名,部门队列 -->
+            <rabbit:binding queue="${open.permission.sync.tk}" key="${open.permission.sync.tk}" />
+            <!-- 直播回调信息队列 -->
+            <rabbit:binding queue="${live.callback.info}" key="${live.callback.info}" />
+            <!-- 直播回放回调信息队列 -->
+            <rabbit:binding queue="${replay.callback.info}" key="${replay.callback.info}" />
+            <!-- 同步学员信息到Udesk消息队列 -->
+            <rabbit:binding queue="customer.sync.udesk" key="${customer.sync.udesk}" />
+            <!-- 员工的学员账号开通消息队列 -->
+            <rabbit:binding queue="nc.sync.account" key="${nc.sync.account}" />
+            <!-- nc推送学员排课信息队列 -->
+            <rabbit:binding queue="ncToLanjing.shuangshi.courseuserplanclass" key="${ncToLanjing.shuangshi.courseuserplanclass}" />
+            <!-- 会计乐开通队列 -->
+            <rabbit:binding queue="${queue.nc.plan.sync.kj}" key="${queue.nc.plan.sync.kj}" />
+            <rabbit:binding queue="${queue.nc.sign.sync.common}" key="${queue.nc.sign.sync.common}" />
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <!-- spring template声明 -->
+    <rabbit:template exchange="mq-exchange" id="amqpTemplate" connection-factory="connectionFactory" />
+
+    <!-- 声明一个消费者 -->
+    <bean id="OrderMessageConsumer" class="io.renren.controller.OrderMessageConsumerController"/>
+    <bean id="OrderMessageConsumer3" class="io.renren.controller.OrderMessageConsumer3Controller"/>
+    <bean id="OrderMessageConsumerZYCD" class="io.renren.controller.OrderMessageConsumerZYCDController"/>
+    <bean id="OrderMessageConsumerGiving" class="io.renren.controller.OrderMessageConsumerGivingController"/>
+    <bean id="OrderMessageConsumerUpdate" class="io.renren.controller.OrderMessageConsumerUpdateController"/>
+    <bean id="GenseeLiveCallback" class="io.renren.controller.GenseeLiveCallbackConsumerController"/>
+    <bean id="GenseeReplayCallback" class="io.renren.controller.GenseeReplayCallbackConsumerController"/>
+    <bean id="DeptAndSchoolConsumer" class="io.renren.controller.DeptAndSchoolConsumerController"/>
+
+    <bean id="UdeskMessageConsumer" class="io.renren.controller.UdeskMessageConsumerController"/>
+    <bean id="NcMessageConsumerController" class="io.renren.controller.NcMessageConsumerController"/>
+    <bean id="NCClassUserPlanMessageConsumerController" class="io.renren.controller.NCClassUserPlanMessageConsumerController"/>
+
+    <bean id="messageReceiver" class="io.renren.controller.mq.MessageConsumer" />
+    <bean id="signConsumer" class="io.renren.controller.mq.SignConsumer">
+        <property name="queueSleepMillis" value="${pom.queue.sleep.millis}"/>
+    </bean>
+
+    <!-- 声明一个生产者者 -->
+    <!--
+    <bean id="messageProductorCourseClassplanTest" class="io.renren.service.impl.MessageProductorCourseClassplanServiceImpl"></bean>
+    <bean id="messageProductorCourseUserplanClassTest" class="io.renren.service.impl.MessageProductorCourseUserplanClassServiceImpl"></bean>
+     -->
+    <!-- 消费者绑定队列 -->
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual" prefetch="200">
+        <!--<rabbit:listener queues="test.nc.sign.sync.common" ref="OrderMessageConsumer" />-->
+        <rabbit:listener queues="${nc.sign.sync.zk}" ref="OrderMessageConsumer" />
+        <rabbit:listener queues="${nc.sign.sync.zk3}" ref="OrderMessageConsumer3" />
+        <rabbit:listener queues="${nc.plan.sync.kj}" ref="OrderMessageConsumerGiving" />
+        <rabbit:listener queues="${nc.sign.sync.zycd}" ref="OrderMessageConsumerZYCD" />
+        <rabbit:listener queues="${nc.users.sync.bluewhale}" ref="OrderMessageConsumerUpdate" />
+        <!-- <rabbit:listener queues="${live.callback.info}" ref="GenseeLiveCallback" /> -->
+        <rabbit:listener queues="${nc.sign.sync.deptandschool}" ref="DeptAndSchoolConsumer" />
+        <rabbit:listener queues="${live.callback.info}" ref="GenseeLiveCallback" />
+        <rabbit:listener queues="${replay.callback.info}" ref="GenseeReplayCallback" />
+        <rabbit:listener queues="${nc.users.sync.bluewhale}" ref="OrderMessageConsumerUpdate" />
+        <rabbit:listener queues="${customer.sync.udesk}" ref="UdeskMessageConsumer" />
+        <rabbit:listener queues="${nc.sync.account}" ref="NcMessageConsumerController" />
+        <rabbit:listener queues="${pom.ncToLanjing.shuangshi.courseuserplanclass}" ref="NCClassUserPlanMessageConsumerController" />
+        <rabbit:listener queues="${queue.nc.plan.sync.kj}" ref="messageReceiver"/>
+        <rabbit:listener queues="${queue.nc.sign.sync.common}" ref="signConsumer"/>
+    </rabbit:listener-container>
+
+</beans>

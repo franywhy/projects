@@ -1,0 +1,88 @@
+<!--教师列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+			<th class="auto">ID</th>
+			<th class="auto">姓名</th>
+            <th class="auto">联系方式</th>
+            <th class="auto">地区</th>
+
+            <th class="auto">回答数</th>
+            <th class="auto">好评数</th>
+            <th class="auto">满意度</th>
+
+            <th class="auto">红包总金额</th>
+            <th class="auto">红包数</th>
+            <th class="auto">开启红包数</th>
+
+            <th class="auto">打赏数</th>
+            <th class="auto">打赏金额</th>
+
+            <th class="auto">已提现金额</th>
+            <th class="auto">已提现笔数</th>
+
+            <th class="auto">申请中金额</th>
+            <th class="auto">申请中笔数</th>
+
+
+            <th class="auto">提现失败总笔数</th>
+
+            <th class="auto">剩余金额</th>
+			 <th class="auto">是否登录</th>
+
+        </tr>
+	</thead>
+	<tbody>
+        <% for(var i=0; i< data.length; i++){ %>
+        <tr>
+            <!--ID-->
+			<td class="auto"><%=data[i]._id %></td>
+            <!--姓名-->
+			<td class="auto"><%=data[i].nick_name %></td>
+            <!--联系方式-->
+			<td class="auto"><%=data[i].mobile %></td>
+            <!--地区-->
+            <td  class="auto"><%=(data[i].province || "") + " - " + (data[i].city || "") %></td>
+
+            <!--回答数-->
+            <td  class="auto"><%=data[i].topic_count %></td>
+            <!--好评数-->
+            <td  class="auto"><%=data[i].topic_evaluation_count %></td>
+            <!--满意度-->
+            <td  class="auto"><%=data[i].satisfaction %></td>
+
+            <!--红包总金额-->
+            <td  class="auto"><%=data[i].bonus_money %></td>
+            <!--红包数-->
+            <td  class="auto"><%=data[i].bunus_num %></td>
+            <!--开启红包的数量-->
+            <td  class="auto"><%=data[i].bunus_open_num %></td>
+
+            <!--打赏数-->
+            <td  class="auto"><%=data[i].tip_num %></td>
+            <!--打赏金额-->
+            <td  class="auto"><%=data[i].tip_money %></td>
+
+            <!--已提现金额-->
+            <td  class="auto"><%=data[i].apply_ing_money %></td>
+            <!--已提现笔数-->
+            <td  class="auto"><%=data[i].apply_ing_num %></td>
+
+            <!--申请中金额-->
+            <td  class="auto"><%=data[i].apply_success_money %></td>
+            <!--申请中笔数-->
+            <td  class="auto"><%=data[i].apply_success_num %></td>
+
+            <!--提现失败总笔数-->
+            <td  class="auto"><%=data[i].apply_fail_num %></td>
+
+            <!--剩余金额-->
+            <td  class="auto"><%=data[i].account_money %></td>
+			
+			 <td  class="auto"><%=data[i].islogin %></td>
+        </tr>
+<%}%>
+</tbody>
+</table>
+<div class="appPager"></div>
+<!--/公司档案列表-->

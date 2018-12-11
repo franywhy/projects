@@ -1,0 +1,34 @@
+<!--任务输入-->
+<form name="inputForm">
+    任务ID：
+    <input name="_id" class="input" type="text" value="" />
+    <input name="add" type="hidden" value="0" />
+    <br />
+    <br />
+    任务类型
+    <input type="checkbox" class="input" name="type" value="1" id="pc">
+    <label for="pc">1:PC</label>
+    <input type="checkbox" class="input" name="type" value="2" id="mob">
+    <label for="mob">2:手机</label>
+    <br />
+    <br />
+    任务标题
+    <input class="input" type="text" name="title" value="" size="36" />
+    <br />
+    <br />
+    星币数量
+    <input class="input" name="coin_count" type="text" id="coin_count" size="8" />
+    顺序
+    <input class="input" name="order" value="0" type="text" id="order" size="5" />
+    <br />
+    <br />
+    图标地址
+    <input class="input" name="icon_url" id="icon_url" type="text" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('icon_url', 'tasks');" />
+    <br />
+    <br />
+    快照地址
+    <input class="input" name="pic_url" id="pic_url" type="text" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('pic_url', 'tasks');" />
+</form>
+<!--/任务输入-->

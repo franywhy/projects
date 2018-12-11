@@ -1,0 +1,61 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th >学生id</th>
+        <th >学生昵称</th>
+        <th >问题状态</th>
+        <th >老师id</th>
+        <th >老师昵称</th>
+
+        <th >评价</th>
+        <th>红包金额</th>
+        <th>抽奖状态</th>
+        <th>打赏金额</th>
+        <th>结束触发</th>
+        <th>内容</th>
+        <th>标签</th>
+
+        <th>最后内容</th>
+        <th>提问时间</th>
+        <th>老师抢答时间</th>
+        <th>最后更新时间</th>
+
+        <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        <th class="action action100">操作</th>
+        <%}%>
+    </tr>
+    </thead>
+    <tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr>
+        <td class="short"><%=data[i].author_id%></td>
+        <td class="short"><%=data[i].author_name%></td>
+        <td class="short"><%=data[i].type_name%></td>
+        <td class="short"><%=data[i].teach_id || "-"%></td>
+        <td  class="short"><%=data[i].teach_name || "-"%></td>
+
+        <td  class="short"><%=data[i].evaluation_name || "未评价" %></td>
+        <td  class="short"><%=data[i].bunus_money || "-"  %></td>
+        <td  class="short"><%=data[i].buns_name || "未打开"  %></td>
+        <td  class="short"><%=data[i].topic_tip || "-"%></td>
+
+        <td  class="short"><%=data[i].end_name || "-" %></td>
+        <td  class="action250"><%=data[i].content%></td>
+        <td  class="short"><%=data[i].tips_name || "-" %></td>
+
+        <td  class="action150"><%=data[i].last_reply_content   || "-"%></td>
+        <td  class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+        <td  class="longtime"><%=new Date(data[i].race_time).toLocaleString()%></td>
+        <td  class="longtime"><%=new Date(data[i].update_at).toLocaleString()%></td>
+
+        <td class="action">
+            <button class="d-button" onclick="Izb.controller.<%=pty.key%>.topicReplyInfo({_id:'<%=data[i]._id%>'});">查看</button>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

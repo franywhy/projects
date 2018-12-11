@@ -1,0 +1,23 @@
+<!-- 知识点 -->
+<div id="csKnowleTreeLayDiv" style="display: none">
+	<!-- 左侧树 -->
+	<div  style="float: left;width:300px">
+<!-- 	<div class="col-md-3"> -->
+		<table></table><ul id="csKnowleTreeLay_Tree" class="ztree"></ul></table>
+	</div>
+	<!-- 右侧列表 -->
+	<div style="float: left; width:700px ;position: relative;">
+		<div style="margin: 0px; margin-bottom: 5px;margin-top: 5px;">
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" id="csKnowleTreeLay_knowleName" placeholder="请输入知识点名称" >
+			</div>
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" id="csKnowleTreeLay_knowleNo" placeholder="请输入知识点编号" >
+			</div>
+			<a class="btn btn-primary" onclick="csKnowleTreeLay.reload();"><i class="fa fa-search"></i>&nbsp;查询</a>
+		</div>
+		<table id="csKnowleTreeLay_jqGridX" ></table>
+		<table id="csKnowleTreeLay_jqGridPagerX" ></table>
+	</div>
+</div>
+<script src="${rc.contextPath}/js/course-service-layer/csKnowleTreeLay.js?_${date.systemTime}"></script>

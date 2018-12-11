@@ -1,0 +1,116 @@
+<!--座驾输入-->
+<form name="inputForm">
+<table width="100%">
+    <tr>
+        <td align="right">徽章ID: </td>
+        <td>
+            <%if(data._id){%>
+            <input class="input" name="_id" type="hidden" value="" />
+            <%=data._id%>
+            <%}else{%>
+            <input class="input" name="_id" type="text" value="" />
+            <%}%>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">名称: </td>
+        <td>
+            <input class="input" name="name" type="text" value="" />    
+        </td>
+    </tr>
+    <tr>
+        <td align="right">类型: </td>
+        <td>
+            <select name="medal_type" class="input" id="j-medal_type">
+                <option value="1" selected>礼物</option>
+                <option value="2">活动</option>
+                <option value="3">系统</option>
+            </select>
+        </td>
+    </tr>
+    <tr  class="j-type-panel" id="j-user-type">
+        <td align="right">用户类型: </td>
+        <td>
+            <select name="type" class="input">
+                <option value="1" selected>用户</option>
+                <option value="2">主播</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">徽章图片: </td>
+        <td>
+            
+    <input class="input" name="pic_url" id="pic_url" type="text" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('pic_url', 'medal');" />60*60<br />
+
+            <input class="input" name="grey_pic" id="grey_pic" type="text" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('grey_pic', 'medal');" />60*60灰<br />
+
+            <input class="input" name="small_pic" id="small_pic" type="text" value="" size="36"/>
+    <input type="button" class="d-button" value="上传文件" onclick="Izb.ui.upload('small_pic', 'medal');" />30*30<br />
+        </td>
+    </tr>
+    <tr   class="j-type-panel">
+        <td align="right">礼物IDS: </td>
+        <td>
+            <textarea name="gift_ids" class="input" cols="80" rows="3"></textarea>
+            <br />多个ID逗号分隔
+        </td>
+    </tr>
+    <tr>
+        <td align="right">有效天数: </td>
+        <td>
+            <input class="input" name="expiry_days" type="text" value="" />    
+        </td>
+    </tr>
+    <tr class="j-type-panel">
+        <td align="right">累计天数: </td>
+        <td>
+            <input class="input" name="sum_days" type="text" value="" />    
+        </td>
+    </tr>
+    <tr>
+        <td align="right">描述: </td>
+        <td>
+            <textarea name="desc" class="input" cols="80" rows="3"></textarea>
+            
+        </td>
+    </tr>
+    <tr>
+        <td align="right">排序: </td>
+        <td>
+    <input class="input" name="order" type="text" id="order" size="5" value="0" />
+
+        </td>
+    </tr>
+    <tr class="j-type-panel">
+        <td align="right">累计礼物价值: </td>
+        <td>
+    <input class="input" name="coins" type="text" />(用户送出/主播收到星币数)
+
+        </td>
+    </tr>
+    <tr>
+        <td align="right">状态: </td>
+        <td>
+            <select name="status" class="input">
+        <option value="1" selected>上线</option>
+        <option value="0">下线</option>
+    </select>
+        </td>
+    </tr>
+
+    <tr class="j-type-panel">
+        <td align="right">开始时间：</td>
+        <td><input id="stime" type="text" class="input" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'etime\')}'})" /></td>
+    </tr>
+    <tr class="j-type-panel">
+        <td align="right">结束时间：</td>
+        <td><input id="etime" type="text" class="input" name="etime" value="" size="20"  readonly onClick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss', minDate: '#F{$dp.$D(\'stime\')}' })" /></td>
+    </tr>
+
+</table>
+
+</form>
+<!--/座驾输入-->

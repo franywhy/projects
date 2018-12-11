@@ -1,0 +1,53 @@
+/*共用部分  min格式                  2015-8-15*/
+/*
+
+  @author : huangxuejie ;
+  @date : 2015-8-15
+ */
+
+/*@utf-8;*/
+
+body{font-size:100%;background-color: #ffffff;overflow-x:hidden;}
+*{padding: 0;margin: 0;}
+img {border: 0 none;vertical-align:middle;}
+svg:not(:root) {overflow: hidden;}
+figure {margin: 0;}
+form {margin: 0;}
+a{text-decoration: none;}
+ul,ul li,ol,ol li{list-style:none;}
+fieldset {border: 1px solid #c0c0c0;margin: 0 2px;padding: 0.35em 0.625em 0.75em;}
+legend {border: 0 none;padding: 0; white-space: normal;}
+button, input, select, textarea {font-size: 100%;margin: 0;vertical-align: baseline middle;}
+button, input {line-height: normal;outline:medium;}
+button, select {text-transform: none;}
+button, html input[type="button"], input[type="reset"], input[type="submit"] {cursor: pointer;}
+button[disabled], html input[disabled] {cursor: default;}
+input[type="checkbox"], input[type="radio"] {box-sizing: border-box;padding: 0;}
+input[type="search"] {box-sizing: content-box;}
+button::-moz-focus-inner, input::-moz-focus-inner {border: 0 none;padding: 0;}
+textarea { overflow: auto;vertical-align: top;}
+table {border-collapse: collapse;border-spacing: 0;}
+body *{font-family:  "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;}
+h1,h2,h3,h4,h5,h6{font-weight:100;}
+div,p,a,dd,dt,input,textarea,h1,h2,h3,h4,h5,h6{font-weight:100;font-family:  "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;}
+.marginAuto{margin:0 auto;}
+.w1226{width:1226px;}
+.clear{clear: both;}
+.relative{position:relative;}
+.absolute{position:absolute;}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder{
+  color:#c2c2c2;
+  font-weight:normal !important;
+}
+input::-webkit-input-placeholder{color:#c2c2c2;font-weight:normal !important;}
+input:-ms-input-placeholder{color:#c2c2c2;font-weight:normal !important;}
+
+
+
+body{
+  width:100%;
+  zoom: 1;
+  position: relative;
+}

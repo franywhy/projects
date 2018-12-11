@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.elise.userinfocenter.dao.LabelDao">
+    <select id="queryLabelList" resultType="com.elise.userinfocenter.pojo.LabelPOJO">
+        SELECT  * FROM app_label WHERE product_id = #{productId} and dr = 0 AND parent_id = 0
+    </select>
+
+    <select id="isExistLabel" resultType="int">
+        SELECT COUNT(1) FROM app_user_label WHERE  user_id = #{userId}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM app_user_label WHERE  user_id = #{userId}
+    </delete>
+
+    <insert id="save" parameterType="com.elise.userinfocenter.entity.LabelEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT  INTO  app_user_label
+        (
+        id,
+        user_id,
+        label_id
+        )
+        VALUES
+        (
+        #{id},
+        #{userId},
+        #{labelId}
+        )
+    </insert>
+
+
+    <select id="getLabel" resultType="com.elise.userinfocenter.pojo.LabelPOJO">
+          SELECT app_label.* FROM app_label as app_label
+          LEFT JOIN app_user_label as app_user_label
+          ON app_label.id = app_user_label.label_id
+          WHERE app_user_label.user_id = #{userId}
+    </select>
+
+    <select id="queryLabelListByParentId" resultType="com.elise.userinfocenter.pojo.LabelPOJO">
+        SELECT  * FROM app_label WHERE  dr = 0 AND parent_id = #{parentId}
+    </select>
+</mapper>

@@ -1,0 +1,21 @@
+<!--课程服务页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        课程名称
+        <select id="course_id" name="course_id" class="input J_course_id" style="width:200px" data-options="required:true">
+        </select>
+        服务类型
+        <select name="services_type">
+            <option selected="selected" value="">请选择</option>
+            <option value="0">课程</option>
+            <option value="1">就业</option>
+        </select>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/课程服务页头-->

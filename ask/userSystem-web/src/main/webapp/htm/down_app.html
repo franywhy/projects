@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>注册成功</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,target-densitydpi=[dpi-value|device-dpi|high-dpi|medium-dpi|low-dpi],user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/isIe.js"></script>
+</head>
+
+<script>
+//声明_czc对象:
+	var _czc = _czc || [];
+	//绑定siteid，请用您的siteid替换下方"XXXXXXXX"部分
+	_czc.push(["_setAccount", "1253015962"]);
+</script>
+
+
+
+<style type="text/css">
+	*{
+		padding:0;
+		margin:0;
+	}
+	body{
+		position:fixed;
+		font-size:62.8%;
+		height:100%;
+	}
+	.banren{
+		width:100%;
+	}
+	.banren img{
+		width:100%;
+		vertical-align:middle;
+	}
+	.forme{
+		width:92%;
+		padding:0 4%;
+		padding-top: 8%;
+		font-size:1.6em;
+		text-align:center;
+	}
+	.bottom-con{
+		width:92%;
+		left: 4%;
+		bottom:2%;
+		text-align:center;
+		position:absolute;
+
+	}
+	.bottom-con .btn-tijiao{
+		background-color:#25b6ed;
+		color:#ffffff;
+		font-size:1.6em;
+		margin-top:4%;
+		text-align:center;
+		border-radius:5px;
+		padding:3% 0;
+	}
+	.bottom-con p{
+		margin-top:2%;
+		font-size:1.4em;
+	}
+</style>
+<body id="body">
+	<div class="banren"><img src="images/top1.jpg"></div>
+	
+	<div class="forme">
+		
+		恭喜您已经成功加入会答<br/>
+		下载APP登陆，即可获得1年免费使用
+
+	</div>
+	<div class="bottom-con">
+		<div class="btn-tijiao">下载会答APP</div>
+		<p id="down_p">10秒钟之后跳转下载会答APP</p>
+	</div>
+	<!-- <p>10秒钟之后跳转下载会答APP</p> -->
+</body>
+<script type="text/javascript">
+		
+
+	var secs = 10; //倒计时的秒数 
+	var URL = "http://m.kjcity.com/kuaida/";
+	function Load() {
+		for (var i = secs; i >= 0; i--) {
+			window.setTimeout('doUpdate(' + i + ')', (secs - i) * 1000);
+		}
+	}
+	function doUpdate(num) {
+		document.getElementById('down_p').innerHTML = num + '秒钟之后跳转下载会答APP';
+		if (num == 0) {
+			window.location = URL;
+		}
+	}
+
+	$(function() {
+
+		var browser = {
+			versions : function() {
+				var u = navigator.userAgent, app = navigator.appVersion;
+				return {
+
+					webKit : u.indexOf('AppleWebKit') > -1,
+					gecko : u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,
+					mobile : !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+					ios : !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+					android : u.indexOf('Android') > -1
+							|| u.indexOf('Linux') > -1,
+					iPhone : u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+					iPad : u.indexOf('iPad') > -1, //是否iPad
+					webApp : u.indexOf('Safari') == -1
+				//是否web应该程序，没有头部与底部
+				};
+			}(),
+			language : (navigator.browserLanguage || navigator.language)
+					.toLowerCase()
+		}
+		/*document.writeln("语言版本: "+browser.language);
+		document.writeln(" 是否为移动终端: "+browser.versions.mobile);*/
+		/*document.writeln(" ios终端: "+browser.versions.ios);
+		document.writeln(" android终端: "+browser.versions.android);
+		document.writeln(" 是否为iPhone: "+browser.versions.iPhone);
+		document.writeln(" 是否iPad: "+browser.versions.iPad);
+		alert(navigator.userAgent)*/
+
+		$(".btn-tijiao").click(function() {
+			/**
+			if(browser.versions.ios){
+				alert("您使用的是苹果设备");
+				//TODO 打开苹果商店
+			}
+			if(browser.versions.android){
+				alert("您使用的是安卓设备");
+				//下载
+			}
+			 */
+
+			window.location.href = URL;
+		});
+
+		Load();
+	});
+</script>
+
+	<div style="display:none">
+		<script src="http://s95.cnzz.com/z_stat.php?id=1253015962&web_id=1253015962" language="JavaScript"></script>
+	</div>
+</html>

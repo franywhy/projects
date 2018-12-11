@@ -1,0 +1,210 @@
+.study-center-main {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 1000px;
+    min-height: 600px;
+    height: auto !important;
+}
+.study-center-figure {
+    float: left;
+    width: 223px;
+    margin-right: 16px;
+    padding-bottom: 20px;
+    position: relative;
+    transition: 0.3s all;
+    -webkit-transition: 0.3s all;
+    -moz-transition: 0.3s all;
+    -ms-transition: 0.3s all;
+    margin-bottom: 20px;
+    overflow:hidden;
+}
+.study-center-figure.no-right-margin{
+    margin-right: 0;
+}
+.study-center-figure .study-pic{
+    position: relative;
+     width: 100%;
+    height: auto;
+    overflow:hidden 
+}
+.study-center-figure .study-pic img{
+   transition: 0.3s all;
+    -webkit-transition: 0.3s all;
+    -moz-transition: 0.3s all;
+    -ms-transition: 0.3s all; 
+}
+.study-center-figure .study-pic:hover img {
+   transform: rotate(0deg) scale(1.15)  translate(0px);
+    -webkit-transform: rotate(0deg) scale(1.15)  translate(0px);
+    -moz-transform: rotate(0deg) scale(1.15)  translate(0px);
+    -o-transform: rotate(0deg) scale(1.15)  translate(0px);
+    -ms-transform: rotate(0deg) scale(1.15)  translate(0px);
+}
+
+.study-center-figure:hover{
+    cursor: pointer;
+}
+
+
+.study-center-main .study-caption {
+    margin-top: 22px;
+    padding:0 12px;
+}
+
+.study-center-main .study-center-figure .study-pic-text {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 223px;
+    height: 50px;
+    background: #161616;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 5px 12px;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    transition: all .5s;
+     -ms-transition:  all .5s;
+}
+
+.study-center-main .study-caption .f-title {
+    font-size: 18px;
+    font-weight: bold;
+     color:#333333; 
+    margin-bottom: 20px;
+    height:40px;
+}
+
+.study-center-main .study-caption .f-text {
+    font-size: 12px;
+    color: #999999;
+    line-height: 1.6;
+    height:120px;
+}
+
+.study-center-main .study-caption .f-btn {
+    width: 200px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    border: 1px solid #18aa1f;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #18aa1f;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+     -ms-transition:  all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    transition: all .5s;
+    display: block;
+}
+
+.study-center-main .study-caption .f-btn:hover {
+    background: #18aa1f;
+    color: #fff;
+    cursor: pointer;
+}
+
+.study-popup {
+    width: 10000px;
+    height:10000px;
+    background: #000;
+    opacity: 0.8;
+    filter:alpha(opacity=80);
+    background: url(http://sandbox.runjs.cn/uploads/rs/390/vvqzmrls/gary_bg.png) center center repeat\9 !important;
+    position: fixed;
+    left:0;
+    top: 0;
+    z-index: 9998;
+    display: none;
+    overflow: hidden;
+}
+
+.center-popup {
+    background-color: #FFF;
+    border: 1px solid #ccc;
+    display: none;
+    width: 504px;
+    height: 372px;
+    left: 50%;
+    margin-top: -186px;
+    margin-left: -252px;
+    padding: 12px;
+    position: fixed !important;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    /* 浮动对话框 */
+    top: 50%;
+    border-radius: 10px;
+    z-index: 5;
+    text-align: center;
+    z-index: 9999;
+}
+
+.center-popup .close{
+    text-align: right;
+}
+.center-popup .close a{
+    font-size: 30px;
+    color: #bbb;
+    margin-right: 10px;
+    line-height: 1;
+}
+.center-popup .close a:hover{
+    color: #333
+}
+.popup-tips {
+    color: #999999;
+    margin-bottom: 67px;
+}
+
+.popup-use {
+    font-size: 26px;
+    font-weight: bold;
+    /* vertical-align: center; */
+    margin-bottom: 34px;
+}
+
+.popup-use img {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 16px;
+}
+
+.popup-explain {
+    line-height: 1.6;
+    margin-bottom: 26px;
+}
+
+.popup-server {
+    color: #18aa1f;
+}
+
+.popup-talk {
+    height: 42px;
+    width: 170px;
+    text-align: center;
+    /* background: #66bb6a; */
+    background: transparent;
+    color: #66bb6a;
+    border: 1px solid #66bb6a;
+    display: inline-block;
+    line-height: 42px;
+    border-radius: 5px;
+    -ms-transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    transition: all .5s;
+}
+
+.popup-talk:hover {
+    background: #18aa1f;
+    color: #fff;
+    cursor: pointer;
+    
+}

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.LogStudentAttendDao">
+	<!-- 按学员统计-根据班级或者班主任查询userplan -->
+	<select id="queryUserplanByClass" resultType="io.renren.pojo.log.LogStudentAttendPOJO">
+		SELECT course_userplan.user_plan_id as userplanId,course_userplan.user_id as userId,course_userplan.class_type_id as classTypeId,
+		(SELECT users.nick_name FROM users WHERE users.user_id = course_userplan.user_id) as userName,
+		(SELECT users.mobile FROM users WHERE users.user_id = course_userplan.user_id) as mobile,
+		(SELECT mall_area.area_name FROM mall_area WHERE mall_area.area_id = course_userplan.area_id) as areaName,
+		class.class_name as className,
+		(SELECT sys_user.nick_name FROM sys_user WHERE class.user_id = sys_user.user_id) as teacherName
+		FROM course_userplan
+		JOIN (SELECT mall_class.class_id,mall_class.class_name,mall_class.user_id FROM mall_class WHERE mall_class.dr=0 AND mall_class.`status`=1) as class ON course_userplan.class_id = class.class_id
+		WHERE course_userplan.dr = 0
+		<choose>
+			<when test="mobile !=null and mobile > 0">
+			AND course_userplan.user_id = (SELECT users.user_id FROM users WHERE users.mobile = #{mobile})
+			</when>
+			<otherwise>
+			<if test="areaId !=null and areaId > 0">AND course_userplan.area_id = #{areaId}</if>
+			<if test="deptId !=null and deptId > 0">AND course_userplan.dept_id = #{deptId}</if>
+			AND course_userplan.class_id IN
+			(SELECT mall_class.class_id
+			FROM mall_class
+			WHERE mall_class.dr=0 AND mall_class.`status`=1
+			<if test="classId !=null and classId > 0">AND mall_class.class_id = #{classId}</if>
+			<if test="classTeacherId !=null and classTeacherId > 0">AND mall_class.user_id = #{classTeacherId}</if>
+			)
+			ORDER BY course_userplan.user_id
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="queryLivePer" resultType="map">
+		SELECT course_classplan_lives.day_time as startClassTime,
+		AVG(CASE  
+			WHEN log_gensee_watch.live_dur / log_gensee_watch.full_dur IS NULL THEN 0
+			WHEN log_gensee_watch.live_dur / log_gensee_watch.full_dur > 1 THEN 1
+			ELSE log_gensee_watch.live_dur / log_gensee_watch.full_dur END) AS livePer,
+		AVG(CASE WHEN log_gensee_watch.attend_per IS NULL THEN 0 ELSE log_gensee_watch.attend_per END) AS attendPer
+		FROM (SELECT course_userplan_class_detail.classplan_id
+					FROM(SELECT course_userplan_detail.userplan_detail_id
+							 FROM course_userplan_detail
+							 WHERE course_userplan_detail.userplan_id = #{userplanId}
+							 AND course_userplan_detail.dr = 0) as userplanDetail
+					JOIN course_userplan_class_detail ON userplanDetail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id
+					WHERE course_userplan_class_detail.dr = 0) as userplanClassDetail
+		JOIN course_classplan_lives ON userplanClassDetail.classplan_id = course_classplan_lives.classplan_id
+		LEFT JOIN log_gensee_watch ON course_classplan_lives.classplan_live_id = log_gensee_watch.business_id AND log_gensee_watch.user_id = #{userId}
+		WHERE course_classplan_lives.dr = 0
+		AND course_classplan_lives.live_class_type_ids LIKE CONCAT('%,',#{classTypeId},',%')
+		AND course_classplan_lives.start_time &gt;= #{startDate}
+		AND course_classplan_lives.end_time &lt;= #{endDate}
+		GROUP BY course_classplan_lives.day_time
+	</select>
+
+	<select id="queryLivePerByMobile" resultType="map">
+		SELECT
+			course_classplan_lives.classplan_live_id AS classplanliveId,
+			course_classplan_lives.classplan_live_name as classplanLiveName,
+			course_classplan_lives.day_time AS startClassTime,
+			course_classplan_lives.start_time as startTime,
+			course_classplan_lives.end_time as endTime,
+		  log_gensee_watch.watch_dur/60000 as minWatchDur,
+		  TIME_TO_SEC(TIMEDIFF(course_classplan_lives.end_time,course_classplan_lives.start_time))/60 as minFullDur,
+			(
+				CASE
+				WHEN log_gensee_watch.live_dur / log_gensee_watch.full_dur IS NULL THEN
+					0
+				WHEN log_gensee_watch.live_dur / log_gensee_watch.full_dur > 1 THEN
+					1
+				ELSE
+					log_gensee_watch.live_dur / log_gensee_watch.full_dur
+				END
+			) AS livePer,
+			(
+				CASE
+				WHEN log_gensee_watch.attend_per IS NULL THEN
+					0
+				ELSE
+					log_gensee_watch.attend_per
+				END
+			) AS attendPer
+		FROM
+			(
+				SELECT
+					DISTINCT course_userplan_class_detail.classplan_id
+				FROM
+					(
+						SELECT
+							course_userplan_detail.userplan_detail_id
+						FROM
+							course_userplan_detail
+						WHERE
+							course_userplan_detail.userplan_id = #{userplanId}
+						AND course_userplan_detail.dr = 0
+					) AS userplanDetail
+				JOIN course_userplan_class_detail ON userplanDetail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id
+				WHERE
+					course_userplan_class_detail.dr = 0
+			) AS userplanClassDetail
+		JOIN course_classplan_lives ON userplanClassDetail.classplan_id = course_classplan_lives.classplan_id
+		LEFT JOIN log_gensee_watch ON course_classplan_lives.classplan_live_id = log_gensee_watch.business_id
+		AND log_gensee_watch.user_id = #{userId}
+		WHERE
+			course_classplan_lives.dr = 0
+		AND course_classplan_lives.attendance = 0
+		AND course_classplan_lives.live_class_type_ids LIKE CONCAT('%,',#{classTypeId},',%')
+		AND course_classplan_lives.start_time &gt;= #{startDate}
+		AND course_classplan_lives.end_time &lt;= #{endDate}
+		GROUP BY
+			course_classplan_lives.day_time ,course_classplan_lives.classplan_live_id ,log_gensee_watch.log_watch_id
+		ORDER BY
+			course_classplan_lives.day_time
+	</select>
+	
+	<select id="queryClassTotal" resultType="Long">
+		SELECT COUNT(1) FROM 
+		(SELECT COUNT(attend_month_report.user_id)
+			FROM 
+			(SELECT mall_class.class_id 
+			FROM mall_class 
+			WHERE mall_class.dr = 0
+			<if test="classId != null and classId > 0">AND mall_class.class_id = #{classId}</if>
+			<if test="classTeacherId != null and classTeacherId > 0">AND mall_class.user_id = #{classTeacherId}</if>
+			) as class
+		JOIN attend_month_report ON attend_month_report.class_id = class.class_id
+		GROUP BY attend_month_report.user_id) AS total
+	</select>
+
+	<!--周报-按班级统计-->
+ 	<select id="queryWeekGroupByClass" resultType="io.renren.pojo.log.LiveAttendPOJO">
+		SELECT attend_week.classId,attend_week.reportType,attend_week.reportCreateTime,attend_week.className,
+		attend_week.areaName,attend_week.professionName,attend_week.levelName,attend_week.classTeacherName,
+		AVG(attend_week.livePer) as livePer,AVG(attend_week.attendPer) as attendPer,
+		COUNT(attend_week.user_id) as totalStudent,COUNT(attend_week.user_id) as checkTotalStudent
+		FROM (SELECT attend_week_report.user_id,attend_week_report.class_id as classId,
+		date_format(attend_week_report.create_time,'%Y-%m-%d') as reportCreateTime,'周报' as reportType,
+		(SELECT mall_class.class_name FROM mall_class WHERE mall_class.class_id = attend_week_report.class_id) as className,
+		(SELECT mall_area.area_name FROM mall_area WHERE mall_area.area_id = attend_week_report.area_id) as areaName,
+		(SELECT mall_profession.profession_name FROM mall_profession WHERE mall_profession.profession_id = attend_week_report.profession_id) as professionName,
+		(SELECT mall_level.level_name FROM mall_level WHERE mall_level.level_id = attend_week_report.level_id) as levelName,
+		class.classTeacherName AS classTeacherName,
+		AVG(live_per) as livePer,AVG(attend_per) as attendPer
+		FROM (SELECT mall_class.class_id,sys_user.nick_name as classTeacherName
+			FROM mall_class
+			JOIN sys_user ON mall_class.user_id = sys_user.user_id
+			WHERE mall_class.dr = 0
+			<if test="classId != null and classId > 0">AND mall_class.class_id = #{classId}</if>
+			<if test="classTeacherId != null and classTeacherId > 0">AND mall_class.user_id = #{classTeacherId}</if>
+			) AS class
+		JOIN attend_week_report ON class.class_id = attend_week_report.class_id
+		<if test="areaId != null and areaId > 0">AND attend_week_report.area_id = #{areaId}</if>
+		<if test="professionId != null and professionId > 0">AND attend_week_report.profession_id = #{professionId}</if>
+		<if test="levelId != null and levelId > 0">AND attend_week_report.level_id = #{levelId}</if>
+		AND attend_week_report.create_time &gt;= #{startDate}
+		AND attend_week_report.create_time &lt;= #{endDate}
+		GROUP BY attend_week_report.user_id,classId,reportCreateTime,reportType,className,areaName,professionName,levelName,classTeacherName) as attend_week
+		GROUP BY attend_week.classId,attend_week.reportType,attend_week.reportCreateTime,attend_week.className,
+		attend_week.areaName,attend_week.professionName,attend_week.levelName,attend_week.classTeacherName
+	</select>
+	
+	<!--周报-按商品统计-->
+ 	<select id="queryWeekGroupByGoods" resultType="io.renren.pojo.log.LiveAttendPOJO">
+		SELECT attend_week.goodsId,attend_week.reportCreateTime,attend_week.reportType,attend_week.goodsName,
+		attend_week.classtypeName,attend_week.professionName,attend_week.levelName,
+		AVG(attend_week.livePer) as livePer,AVG(attend_week.attendPer) as attendPer,
+		COUNT(attend_week.user_id) as totalStudent,COUNT(attend_week.user_id) as checkTotalStudent
+		FROM
+		(SELECT attend_week_report.user_id,attend_week_report.goods_id as goodsId,
+		date_format(attend_week_report.create_time,'%Y-%m-%d') as reportCreateTime,'周报' as reportType,
+		(SELECT mall_goods_info.`name` FROM mall_goods_info WHERE mall_goods_info.id = attend_week_report.goods_id) as goodsName,
+		(SELECT mall_class_type.classtype_name FROM mall_class_type WHERE mall_class_type.classtype_id = attend_week_report.class_type_id) as classTypeName,
+		(SELECT mall_profession.profession_name FROM mall_profession WHERE mall_profession.profession_id = attend_week_report.profession_id) as professionName,
+		(SELECT mall_level.level_name FROM mall_level WHERE mall_level.level_id = attend_week_report.level_id) as levelName,
+		AVG(attend_week_report.live_per) as livePer,AVG(attend_week_report.attend_per) as attendPer
+		FROM attend_week_report 
+		WHERE attend_week_report.goods_id = #{goodsId}
+		AND attend_week_report.create_time &gt;= #{startDate}
+		AND attend_week_report.create_time &lt;= #{endDate}
+		GROUP BY attend_week_report.user_id,goodsId,reportCreateTime,reportType,goodsName,classTypeName,professionName,levelName) as attend_week
+		GROUP BY attend_week.goodsId,attend_week.reportCreateTime,attend_week.reportType,attend_week.goodsName,
+		attend_week.classtypeName,attend_week.professionName,attend_week.levelName
+	</select>
+	
+	<!--周报-按排课统计-->
+ 	<select id="queryWeekGroupByClassplan" resultType="io.renren.pojo.log.LiveAttendPOJO">
+		SELECT attend_week.classplanId,attend_week.classplanName,attend_week.reportCreateTime,attend_week.reportType,
+		attend_week.teacherName,attend_week.startClassTime,attend_week.totalLive,
+		AVG(attend_week.livePer) as livePer,AVG(attend_week.attendPer) as attendPer,
+		COUNT(attend_week.user_id) as totalStudent,COUNT(attend_week.user_id) as checkTotalStudent
+		FROM
+		(SELECT attend_week_report.user_id,attend_week_report.classplan_id as classplanId,
+		(SELECT course_classplan.classplan_name FROM course_classplan WHERE course_classplan.classplan_id = attend_week_report.classplan_id) as classplanName,
+		date_format(attend_week_report.create_time,'%Y-%m-%d') as reportCreateTime,'周报' as reportType,attend_week_report.teacher_id as teacherId,
+		(SELECT sys_user.nick_name FROM sys_user WHERE sys_user.user_id = attend_week_report.teacher_id) as teacherName,
+		(SELECT date_format(course_classplan.start_time,'%Y-%m-%d') FROM course_classplan WHERE course_classplan.classplan_id = attend_week_report.classplan_id) as startClassTime,
+		(SELECT COUNT(course_classplan_lives.classplan_live_id)
+		FROM course_classplan JOIN course_classplan_lives 
+		ON course_classplan.classplan_id = course_classplan_lives.classplan_id 
+		WHERE course_classplan.classplan_id = attend_week_report.classplan_id) as totalLive,
+		AVG(live_per) as livePer,AVG(attend_per) as attendPer
+		FROM attend_week_report
+		WHERE 1=1 
+		<if test="classplanId != null and classplanId != ''">AND attend_week_report.classplan_id = #{classplanId}</if>
+		<if test="teacherId != null and teacherId > 0">AND attend_week_report.teacher_id = #{teacherId}</if>
+		AND attend_week_report.create_time &gt;= #{startDate}
+		AND attend_week_report.create_time &lt;= #{endDate}
+		GROUP BY attend_week_report.user_id,classplanId,classplanName,reportCreateTime,reportType,teacherId,teacherName,startClassTime,totalLive) as attend_week
+		GROUP BY attend_week.classplanId,attend_week.classplanName,attend_week.reportCreateTime,attend_week.reportType,
+		attend_week.teacherName,attend_week.startClassTime,attend_week.totalLive
+	</select>
+	
+	<!--月报-按班级统计-->
+ 	<select id="queryMonthGroupByClass" resultType="io.renren.pojo.log.LiveAttendPOJO">
+		SELECT attend_month.classId,attend_month.reportType,attend_month.reportCreateTime,attend_month.className,
+		attend_month.areaName,attend_month.professionName,attend_month.levelName,attend_month.classTeacherName,
+		AVG(attend_month.livePer) as livePer,AVG(attend_month.attendPer) as attendPer,
+		COUNT(attend_month.user_id) as totalStudent,COUNT(attend_month.user_id) as checkTotalStudent
+		FROM (SELECT attend_month_report.user_id,attend_month_report.class_id as classId,
+		date_format(attend_month_report.create_time,'%Y-%m-%d') as reportCreateTime,'月报' as reportType,
+		(SELECT mall_class.class_name FROM mall_class WHERE mall_class.class_id = attend_month_report.class_id) as className,
+		(SELECT mall_area.area_name FROM mall_area WHERE mall_area.area_id = attend_month_report.area_id) as areaName,
+		(SELECT mall_profession.profession_name FROM mall_profession WHERE mall_profession.profession_id = attend_month_report.profession_id) as professionName,
+		(SELECT mall_level.level_name FROM mall_level WHERE mall_level.level_id = attend_month_report.level_id) as levelName,
+		class.classTeacherName AS classTeacherName,
+		AVG(live_per) as livePer,AVG(attend_per) as attendPer
+		FROM (SELECT mall_class.class_id,sys_user.nick_name as classTeacherName
+			FROM mall_class
+			JOIN sys_user ON mall_class.user_id = sys_user.user_id
+			WHERE mall_class.dr = 0
+			<if test="classId != null and classId > 0">AND mall_class.class_id = #{classId}</if>
+			<if test="classTeacherId != null and classTeacherId > 0">AND mall_class.user_id = #{classTeacherId}</if>
+			) AS class
+		JOIN attend_month_report ON class.class_id = attend_month_report.class_id
+		<if test="areaId != null and areaId > 0">AND attend_month_report.area_id = #{areaId}</if>
+		<if test="professionId != null and professionId > 0">AND attend_month_report.profession_id = #{professionId}</if>
+		<if test="levelId != null and levelId > 0">AND attend_month_report.level_id = #{levelId}</if>
+		AND attend_month_report.create_time &gt;= #{startDate}
+		AND attend_month_report.create_time &lt;= #{endDate}
+		GROUP BY attend_month_report.user_id,classId,reportCreateTime,reportType,className,areaName,professionName,levelName,classTeacherName) as attend_month
+		GROUP BY attend_month.classId,attend_month.reportType,attend_month.reportCreateTime,attend_month.className,
+		attend_month.areaName,attend_month.professionName,attend_month.levelName,attend_month.classTeacherName
+	</select>
+	
+	<!--月报-按商品统计-->
+ 	<select id="queryMonthGroupByGoods" resultType="io.renren.pojo.log.LiveAttendPOJO">
+		SELECT attend_month.goodsId,attend_month.reportCreateTime,attend_month.reportType,attend_month.goodsName,
+		attend_month.classtypeName,attend_month.professionName,attend_month.levelName,
+		AVG(attend_month.livePer) as livePer,AVG(attend_month.attendPer) as attendPer,
+		COUNT(attend_month.user_id) as totalStudent,COUNT(attend_month.user_id) as checkTotalStudent
+		FROM
+		(SELECT attend_month_report.user_id,attend_month_report.goods_id as goodsId,
+		date_format(attend_month_report.create_time,'%Y-%m-%d') as reportCreateTime,'月报' as reportType,
+		(SELECT mall_goods_info.`name` FROM mall_goods_info WHERE mall_goods_info.id = attend_month_report.goods_id) as goodsName,
+		(SELECT mall_class_type.classtype_name FROM mall_class_type WHERE mall_class_type.classtype_id = attend_month_report.class_type_id) as classTypeName,
+		(SELECT mall_profession.profession_name FROM mall_profession WHERE mall_profession.profession_id = attend_month_report.profession_id) as professionName,
+		(SELECT mall_level.level_name FROM mall_level WHERE mall_level.level_id = attend_month_report.level_id) as levelName,
+		AVG(attend_month_report.live_per) as livePer,AVG(attend_month_report.attend_per) as attendPer
+		FROM attend_month_report 
+		WHERE attend_month_report.goods_id = #{goodsId}
+		AND attend_month_report.create_time &gt;= #{startDate}
+		AND attend_month_report.create_time &lt;= #{endDate}
+		GROUP BY attend_month_report.user_id,goodsId,reportCreateTime,reportType,goodsName,classTypeName,professionName,levelName) as attend_month
+		GROUP BY attend_month.goodsId,attend_month.reportCreateTime,attend_month.reportType,attend_month.goodsName,
+		attend_month.classtypeName,attend_month.professionName,attend_month.levelName
+	</select>
+	
+	<!--月报-按排课统计-->
+ 	<select id="queryMonthGroupByClassplan" resultType="io.renren.pojo.log.LiveAttendPOJO">
+		SELECT attend_month.classplanId,attend_month.classplanName,attend_month.reportCreateTime,attend_month.reportType,
+		attend_month.teacherName,attend_month.startClassTime,attend_month.totalLive,
+		AVG(attend_month.livePer) as livePer,AVG(attend_month.attendPer) as attendPer,
+		COUNT(attend_month.user_id) as totalStudent,COUNT(attend_month.user_id) as checkTotalStudent
+		FROM
+		(SELECT attend_month_report.user_id,attend_month_report.classplan_id as classplanId,
+		(SELECT course_classplan.classplan_name FROM course_classplan WHERE course_classplan.classplan_id = attend_month_report.classplan_id) as classplanName,
+		date_format(attend_month_report.create_time,'%Y-%m-%d') as reportCreateTime,'月报' as reportType,attend_month_report.teacher_id as teacherId,
+		(SELECT sys_user.nick_name FROM sys_user WHERE sys_user.user_id = attend_month_report.teacher_id) as teacherName,
+		(SELECT date_format(course_classplan.start_time,'%Y-%m-%d') FROM course_classplan WHERE course_classplan.classplan_id = attend_month_report.classplan_id) as startClassTime,
+		(SELECT COUNT(course_classplan_lives.classplan_live_id)
+		FROM course_classplan JOIN course_classplan_lives 
+		ON course_classplan.classplan_id = course_classplan_lives.classplan_id 
+		WHERE course_classplan.classplan_id = attend_month_report.classplan_id) as totalLive,
+		AVG(live_per) as livePer,AVG(attend_per) as attendPer
+		FROM attend_month_report
+		WHERE 1=1 
+		<if test="classplanId != null and classplanId != ''">AND attend_month_report.classplan_id = #{classplanId}</if>
+		<if test="teacherId != null and teacherId > 0">AND attend_month_report.teacher_id = #{teacherId}</if>
+		AND attend_month_report.create_time &gt;= #{startDate}
+		AND attend_month_report.create_time &lt;= #{endDate}
+		GROUP BY attend_month_report.user_id,classplanId,classplanName,reportCreateTime,reportType,teacherId,teacherName,startClassTime,totalLive) as attend_month
+		GROUP BY attend_month.classplanId,attend_month.classplanName,attend_month.reportCreateTime,attend_month.reportType,
+		attend_month.teacherName,attend_month.startClassTime,attend_month.totalLive
+	</select>
+</mapper>

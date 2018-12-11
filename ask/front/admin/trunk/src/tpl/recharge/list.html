@@ -1,0 +1,298 @@
+<div class="tagArea">
+    <ul class="tagList">
+        <li class="<%=params.tab=='recharge-all'? 'cur':''%>
+            ">
+            <a href="#a=recharge&menu=recharge&tab=recharge-all"> <i></i>
+                <span>总计</span>
+            </a>
+        </li>
+        <li class="<%=params.tab=='recharge-webpay'? 'cur':''%>
+            ">
+            <a href="#a=recharge&menu=recharge&tab=recharge-webpay"> <i></i>
+                <span>Web版充值</span>
+            </a>
+        </li>
+        <li class="<%=params.tab=='recharge-mobilepay'? 'cur':''%>
+            ">
+            <a href="#a=recharge&menu=recharge&tab=recharge-mobilepay">
+                <i></i>
+                <span>手机版充值</span>
+            </a>
+        </li>
+        <li class="<%=params.tab=='recharge-channel'? 'cur':''%>
+            ">
+            <a href="#a=recharge&menu=recharge&tab=recharge-channel">
+                <i></i>
+                <span>渠道</span>
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+<%var pay_type=Izb.controller.recharge.getPayType();
+var pay_type_channel=["3g","ayouxi","kb","km-","ledou","op-","hulu","unipay"];
+Izb.core.out("PAY_TYPE",pay_type);
+%>
+
+<%if(params.tab=="recharge-all"){%>
+<p>注：付费人数=web版充值人数+手机版充值人数</p>
+<table class="listTable tablesorter" >
+    <thead>
+        <tr>
+            <th class="time">充值日期</th>
+            <th class="auto">总星豆</th>
+            <%if(params.mode=="test"){%>
+            <th class="auto">相加总星豆</th>
+            <%}%>
+            <th class="auto">总计（元）</th>
+            <%if(params.mode=="test"){%>
+            <th class="auto">相加总计（元）</th>
+            <%}%>
+            <th class="auto">付费人数（人）</th>
+            <!--<th class="auto">渠道人数（人）</th>
+        -->
+    </tr>
+</thead>
+<tbody>
+
+    <%
+    var t_cny=0;
+    for(var i=0;i<data.length;i++){%>
+
+    <%t_cny+=data[i].total;
+    var total_cny=0,total_user=0,total_coin=0,total_user_channel=0;
+            for(var j in pay_type){
+                for(var k in pay_type[j]){
+                    var item=$.extend({user:0,count:0,coin:0,cny:0},data[i][k.toLowerCase()]);
+
+                    total_cny+=item.cny;
+                    total_user+=item.user;
+                    total_coin+=item.coin;
+
+                    if(j=="qd"){
+                        total_user_channel+=item.user;
+                    }
+                }
+            }%>
+
+    <tr class="tr">
+        <td class="time"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+        <%if(params.mode=="test"){%>
+        <td class="<%=total_coin==data[i].total_coin?'':'red'%>" data-usertotal="<%=total_coin%>"><%=data[i].total_coin %></td>
+        <td><%=total_coin%></td>
+        <td class='<%=Izb.ui.toDecimal(total_cny)==Izb.ui.toDecimal(data[i].total)?"":"red"%>' data-usertotal="<%=Izb.ui.toDecimal(total_cny)%>">
+            <%=Izb.ui.toDecimal(data[i].total) %></td>
+        <td><%=Izb.ui.toDecimal(total_cny)%></td>
+        <%}else{%>
+        <td data-usertotal="<%=total_coin%>"><%=data[i].total_coin %></td>
+        <td data-usertotal="<%=Izb.ui.toDecimal(total_cny)%>"><%=Izb.ui.toDecimal(data[i].total) %></td>
+        <%}%>
+        <td><%=total_user -total_user_channel%></td>
+</tr>
+<%}%></tbody>
+    <tfoot>
+        <tr class="tr">
+            <td>总计：</td>
+            <%if(params.mode=="test"){%>
+            <td></td>
+            <td></td>
+            <td><%=Izb.ui.toDecimal(t_cny)%></td>
+            <td></td>
+            <%}else{%>
+            <td></td>
+            <td><%=Izb.ui.toDecimal(t_cny)%></td>
+        <%}%>
+            <td></td>
+        </tr>
+    </tfoot>
+
+</table>
+<%}%>
+<%if(params.tab=="recharge-webpay"){%>
+<%var tem_pay_type=pay_type["pc"];%>
+<div class="autoTable">
+<table class="listTable tablesorter">
+<thead>
+    <tr>
+        <th rowspan="2" style="width:100px;">充值日期</th>
+        <th colspan="2">总计</th>
+
+        <% for (var i in tem_pay_type) {
+                if(i.toLowerCase()=="yb"){%>
+        <th colspan="5">
+            <%=tem_pay_type[i]%></th>
+        <%}else{%>
+        <th colspan="3">
+            <%=tem_pay_type[i]%></th>
+        <%}%>
+        <%}%></tr>
+    <tr>
+        <th>金额</th>
+        <th>人数</th>
+
+        <%for(var i in tem_pay_type){%>
+        <%if(i.toLowerCase()=="yb"){%>
+        <th>手机充值卡</th>
+        <th>游戏点卡</th>
+        <th>总金额</th>
+        <%}else{%>
+        <th>金额</th>
+        <%}%>
+        <th>人数</th>
+        <th>人均</th>
+        <%}%></tr>
+</thead>
+<tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr class="tr">
+        <td class="time">
+            <%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+        <%var total_cny=0,total_user=0;
+            for(var j in tem_pay_type){%>
+        <%var item=$.extend({user:0,count:0,coin:0,cny:0},data[i][j.toLowerCase()]);%>
+        <%total_cny+=item.cny ;total_user+=item.user;}%>
+        <td>
+            <%=Izb.common.getRMB(total_cny)%></td>
+        <td>
+            <%=total_user%></td>
+        <%for(var j in tem_pay_type){%>
+        <%var item=$.extend({user:0,count:0,coin:0,cny:0},data[i][j.toLowerCase()]);%>
+        <%if(j.toLowerCase()=="yb"){%>
+        <td>
+            <%=data[i]["3"]||0%></td>
+        <td>
+            <%=data[i]["4"]||0%></td>
+        <td>
+            <%=item.cny %></td>
+        <%}else{%>
+        <td>
+            <%=item.cny %></td>
+        <%}%>
+
+        <td>
+            <%=item.user %></td>
+        <td>
+            <%=item.user >0 ? Izb.common.getRMB(item.cny/item.user):0 %></td>
+        <%}%></tr>
+    <%}%></tbody>
+</table>
+<!--/充值统计列表-->
+</div>
+<%}%>
+
+<%if(params.tab=="recharge-mobilepay"){%>
+<%var tem_pay_type=pay_type["moblie"];%>
+<div class="autoTable">
+<table class="listTable tablesorter">
+<thead>
+    <tr>
+        <th rowspan="2" style="width:100px;">充值日期</th>
+        <th colspan="2">总计</th>
+
+        <% for (var i in tem_pay_type) {%>
+        <th colspan="3">
+            <%=tem_pay_type[i]%></th>
+        <%}%></tr>
+    <tr>
+        <th>金额</th>
+        <th>人数</th>
+        <%for(var i in tem_pay_type){%>
+        <%if(i.toLowerCase()=="yb"){%>
+        <th>手机充值卡</th>
+        <th>游戏点卡</th>
+        <th>总金额</th>
+        <%}else{%>
+        <th>金额</th>
+        <%}%>
+        <th>人数</th>
+        <th>人均</th>
+        <%}%></tr>
+</thead>
+<tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr class="tr">
+        <td class="time">
+            <%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+        <%var total_cny=0,total_user=0;
+            for(var j in tem_pay_type){%>
+        <%var item=$.extend({user:0,count:0,coin:0,cny:0},data[i][j.toLowerCase()]);%>
+        <%total_cny+=item.cny ;total_user+=item.user;}%>
+        <td>
+            <%=Izb.common.getRMB(total_cny)%></td>
+        <td>
+            <%=total_user%></td>
+        <%for(var j in tem_pay_type){%>
+        <%var item=$.extend({user:0,count:0,coin:0,cny:0},data[i][j.toLowerCase()]);%>
+        <td>
+            <%=item.cny %></td>
+        <td>
+            <%=item.user %></td>
+        <td>
+            <%=item.user >0 ? Izb.common.getRMB(item.cny/item.user):0 %></td>
+        <%}%></tr>
+    <%}%></tbody>
+</table>
+<!--/充值统计列表-->
+</div>
+
+<%}%>
+<%if(params.tab=="recharge-channel"){%>
+<%var tem_pay_type=pay_type["qd"];%>
+<div class="autoTable">
+<table class="listTable tablesorter">
+<thead>
+    <tr>
+        <th rowspan="2" style="width:100px;">充值日期</th>
+        <th colspan="2">总计</th>
+
+        <% for (var i in tem_pay_type) {%>
+        <th colspan="3">
+            <%=tem_pay_type[i]%></th>
+        <%}%></tr>
+    <tr>
+        <th>金额</th>
+        <th>人数</th>
+        <%for(var i in tem_pay_type){%>
+        <%if(i.toLowerCase()=="yb"){%>
+        <th>手机充值卡</th>
+        <th>游戏点卡</th>
+        <th>总金额</th>
+        <%}else{%>
+        <th>金额</th>
+        <%}%>
+        <th>人数</th>
+        <th>人均</th>
+        <%}%></tr>
+</thead>
+<tbody>
+    <%for(var i=0;i<data.length;i++){%>
+    <tr class="tr">
+        <td class="time">
+            <%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+        <%var total_cny=0,total_user=0;
+            for(var j in tem_pay_type){%>
+        <%var item=$.extend({user:0,count:0,coin:0,cny:0},data[i][j.toLowerCase()]);%>
+        <%total_cny+=item.cny ;total_user+=item.user;}%>
+        <td>
+            <%=Izb.common.getRMB(total_cny)%></td>
+        <td>
+            <%=total_user%></td>
+        <%for(var j in tem_pay_type){%>
+        <%var item=$.extend({user:0,count:0,coin:0,cny:0},data[i][j.toLowerCase()]);%>
+        <td>
+            <%=item.cny %></td>
+        <td>
+            <%=item.user %></td>
+        <td>
+            <%=item.user >0 ? Izb.common.getRMB(item.cny/item.user):0 %></td>
+        <%}%></tr>
+    <%}%></tbody>
+</table>
+<!--/充值统计列表-->
+</div>
+<%}%>
+
+<!--充值统计列表-->
+
+<div class="appPager"></div>

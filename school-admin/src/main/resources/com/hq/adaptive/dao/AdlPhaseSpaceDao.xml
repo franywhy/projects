@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlPhaseSpaceDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_phase_space.space_id AS spaceId,
+		adl_phase_space.phase_id AS phaseId,
+		adl_phase_space.course_id AS courseId,
+		adl_phase_space.self_id AS selfId,
+		adl_phase_space.child_id AS childId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE adl_phase_space.phase_id = #{phaseId}
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_phase_space AS adl_phase_space
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		order by self_id ASC , child_id ASC
+	</sql>
+
+	<select id="queryList" parameterType="long" resultType="com.hq.adaptive.entity.AdlPhaseSpaceEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+	</select>
+	<select id="queryKnowledgeList" parameterType="long" resultType="long">
+		select distinct adl_phase_space.self_id from adl_phase_space where phase_id=#{phaseId}
+	</select>
+	<select id="queryKnowledgeTotal" parameterType="long" resultType="int">
+		select count(distinct adl_phase_space.self_id) from adl_phase_space where phase_id=#{phaseId}
+	</select>
+	<select id="queryKnowledgePhaseList" parameterType="long"  resultType="com.hq.adaptive.pojo.AdlPhasePOJO">
+		SELECT
+			DISTINCT adl_phase.*
+		FROM
+			`adl_phase_space`
+		LEFT JOIN adl_phase ON adl_phase.phase_id = adl_phase_space.phase_id
+		WHERE
+		self_id = #{knowledgeId}
+		AND adl_phase.dr = 0
+	</select>
+	<insert id="save" parameterType="com.hq.adaptive.entity.AdlPhaseSpaceEntity" useGeneratedKeys="true" keyProperty="spaceId">
+		INSERT INTO adl_phase_space
+		(
+			`phase_id`,
+			`course_id`,
+			`self_id`,
+			`child_id`
+		)
+		values
+		(
+			#{phaseId},
+			#{courseId},
+			#{selfId},
+			#{childId}
+		)
+	</insert>
+	 
+
+	<delete id="deleteByPhaseId" parameterType="long">
+		DELETE FROM adl_phase_space where phase_id = #{phaseId}
+	</delete>
+
+</mapper>

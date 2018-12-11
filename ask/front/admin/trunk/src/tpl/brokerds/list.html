@@ -1,0 +1,50 @@
+<!--经纪人详情--> 
+<%if(data && data.length>0){%>
+<%
+var nick_name = data[0].nick_name,
+	broker = data[0].broker,
+	stars = broker.stars||[],
+    t_cny = 0,
+    t_bean_count = 0;
+for(var i=0; i< data.length; i++){ 
+	var star = data[i].star || {},sale = data[i].sale || {};
+	t_cny+=(sale.cny || 0)-0;
+    t_bean_count+=(star.bean_count || 0)-0;
+}
+%>
+<div id="listSummary" class="listSummary">
+<strong><%=nick_name%></strong>
+旗下主播总数为<strong><%=stars.length%></strong>人，<!--broker.star_total  主播人数不一致-->
+旗下主播累计收入总额为<strong><%=broker.bean_total%></strong>星豆，
+代理销售总额为<strong><%=broker.cny_total%></strong>元。
+<br />
+从<%=params.stime%>到<%=params.etime%>，
+旗下主播累计收入为<strong><%=t_bean_count %></strong>星豆，
+代理销售为<strong><%=t_cny %></strong>元，
+立即<a href="#a=salary&broker=<%=params._id%>&stime=<%:u=params.stime%>&etime=<%:u=params.etime%>">查看旗下主播直播统计</a>。
+</div>
+<%}%>
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="longtime">时间</th>
+        <th class="auto">代理销售(元)</th>
+		<th class="auto">旗下主播数(人)</th>
+        <th class="auto">旗下主播累计收入(星豆)</th>
+    </tr>
+	</thead>
+	<tbody>
+    <% 
+    for(var i=0; i< data.length; i++){ 
+    var sale = data[i].sale || {},broker=data[i].broker || {},star = data[i].star || {};
+    %>
+    <tr>
+		<td class="longtime"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+        <td class="auto"><%=sale.cny || 0%></td>
+        <td class="auto"><%=star.count || 0%></td> 
+		<td class="auto"><%=star.bean_count || 0 %></td>         
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>

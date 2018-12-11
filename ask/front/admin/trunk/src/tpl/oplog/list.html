@@ -1,0 +1,28 @@
+<!--公告列表--> 
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+    		<th class="longtime">操作时间</th>
+            <th class="short">操作人ID</th>
+            <th class="short">操作人</th>
+			<th class="title" width="auto">操作详情</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i in data){
+        	var dataInfo = data[i].data;
+        %>
+        <tr>
+        	<td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>           	
+            <td class="short"><%=data[i].session._id%></td>
+			<td class="short"><%=data[i].session.nick_name%></td>                     
+            <td class="title text-break">
+            type:<a href="javascript:$.history.setAction('type','<%=data[i].type%>');"><%=data[i].type%></a><br />
+           	<%=JSON.stringify(dataInfo)%>
+			</td>                               
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/公告列表--> 

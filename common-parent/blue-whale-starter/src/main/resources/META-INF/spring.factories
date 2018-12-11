@@ -1,0 +1,10 @@
+#
+# Created by Glenn on 2017/8/7 0024.
+#
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
+  com.bluewhale.starter.AbstractRedisServiceConfiguration,\
+  com.bluewhale.starter.Swagger2Configuration,\
+  com.bluewhale.starter.HttpConnConfiguration,\
+  com.bluewhale.starter.MultiPartConfiguration,\
+  com.bluewhale.starter.FastDFSConfiguration

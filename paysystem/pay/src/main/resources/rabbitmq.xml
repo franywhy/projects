@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<!-- 扫描包 -->
+	<context:annotation-config />
+
+	<!-- 连接本地rabbitmq -->
+	<bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+		<constructor-arg value="101.201.144.188" />
+		<property name="username" value="hq_rabbit" />
+		<property name="password" value="C48WWmcFf5n43KHisMEc" />
+		<property name="virtualHost" value="/" />
+		<property name="channelCacheSize" value="5" />
+	</bean>
+
+	<rabbit:admin connection-factory="connectionFactory" id="amqpAdmin" />
+
+	<!-- queue 队列声明 -->
+	<rabbit:queue id="nc.sign.sync.zk" durable="true" auto-delete="false" exclusive="false" name="nc.sign.sync.zk" />
+	<rabbit:queue id="test.nc.sign.sync.zk3" durable="true" auto-delete="false" exclusive="false" name="test.nc.sign.sync.zk3" />
+	<!-- 测试线 -->
+	<rabbit:queue id="test.nc.sign.sync.zk2" durable="true" auto-delete="false" exclusive="false" name="test.nc.sign.sync.zk2" />
+		
+	
+	<!-- exchange queue binging key 绑定 -->
+	<rabbit:direct-exchange name="mq-exchange" durable="true" auto-delete="false" id="mq-exchange">
+		<rabbit:bindings>
+			<rabbit:binding queue="nc.sign.sync.zk" key="nc.sign.sync.zk" />
+			<rabbit:binding queue="test.nc.sign.sync.zk3" key="test.nc.sign.sync.zk3" />
+			<!-- 测试线 -->
+			<rabbit:binding queue="test.nc.sign.sync.zk2" key="test.nc.sign.sync.zk2" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<!-- spring template声明 -->
+	<rabbit:template exchange="mq-exchange" id="amqpTemplate" connection-factory="connectionFactory" />
+		
+	<!-- 声明一个消费者 -->
+    <bean id="OrderMessageConsumer" class="io.renren.controller.OrderMessageConsumerController"/>
+    <bean id="OrderMessageConsumer2" class="io.renren.controller.OrderMessageConsumer2Controller"/>
+    <!-- 测试线 -->
+    <bean id="OrderMessageConsumerTest" class="io.renren.controller.OrderMessageConsumerController"/>
+	
+	<rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual" prefetch="200">
+		<!-- 正式线 -->
+		<!-- 
+		<rabbit:listener queues="nc.sign.sync.zk" ref="OrderMessageConsumer" />
+		<rabbit:listener queues="test.nc.sign.sync.zk3" ref="OrderMessageConsumer2" />
+		 -->
+		<!-- 测试线 -->
+		 
+		<rabbit:listener queues="test.nc.sign.sync.zk2" ref="OrderMessageConsumerTest" />
+		
+	</rabbit:listener-container>
+
+</beans>
+    

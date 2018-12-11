@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>生成二维码</title>
+<style>
+body {
+	
+	background: url(images/bg_picture.jpg) no-repeat;
+}
+
+.div {
+	margin: 320 auto;
+	text-align: center;
+	
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.qrcode.js"></script>
+<script src="/js/qrcode.js"></script>
+
+</head>
+<body>
+ 	<div class="div" id="qrcode"></div> 
+</body>
+<script type="text/javascript">
+
+<!--获取地址栏中的链接参数-->
+   (function($) {
+		$.getUrlParam = function(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+		return unescape(r[2]);
+		return null;
+	    };
+    })(jQuery);
+	var o = $.getUrlParam("order_no");
+	var flag = $.getUrlParam("flag");
+	var payUrl = $.getUrlParam("payUrl");
+	var url;
+	var dev=payUrl+"/p.jsp?o="+o+"&flag="+flag+"&payUrl="+payUrl;
+	var test="";
+	var pro=payUrl+"/p.jsp?o="+o+"&flag="+flag+"&payUrl="+payUrl;
+	if(flag=="dev"){
+		 url=dev;
+	}else if(flag=="test"){
+		 url=test;
+	}else{
+		 url=pro;
+	}
+	<!--清空div内容，重新生成二维码-->
+	<!--生成二维码-->
+	<!--'http://weixin.hqjy.com/pay/p.jsp?o='+o//任意内容-->
+	$("#qrcode").qrcode({ 
+		render: "canvas", //table方式 canvas
+		typeNumber  : -1,      //计算模式  
+		correctLevel    : QRErrorCorrectLevel.H,//纠错等级  
+		background      : "#ffffff",//背景颜色  
+		foreground      : "#000000", //前景颜色
+		width: 300, //宽度 
+		height:300, //高度
+		text:url
+	}); 
+    </script>
+</html>

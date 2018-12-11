@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>考勤数据录入</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<!-- 排课计划 -->
+			<div class="form-group col-md-2">
+				<input type="text" class="form-control" v-model="q.classplanName" readonly="readonly" placeholder="点击选择排课" @click="classplanLayerShow">
+			</div>
+			<!-- 排课计划明细 -->
+			<div class="form-group col-md-2">
+				<input type="text" class="form-control" v-model="q.classplanLiveName" readonly="readonly" placeholder="点击选择排课明细" @click="classplanLivesLayerShow">
+			</div>
+			<a class="btn btn-primary" @click="uploadExcelMethod"><i class="fa fa-upload"></i>&nbsp;导入数据</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <!-- 排课明细弹窗 -->
+	<div id="classplanLiveslayer" style="display: none;">
+		<table id="classplanLivesGrid"></table>
+		<div id="classplanLivesGridPager"></div>
+	</div>
+	<!-- 上传文件弹窗 -->
+	<div id="uploadExcel" style="display: none;">
+		<form name="form_uploadImg" action="" enctype="multipart/form-data">
+			<input id="file_data"  type="file"  name="file_data" style="height: 35px; width: 200px;" /> 
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/logAtten/writeLogAttend.js?_${date.systemTime}"></script>
+#parse("layer/classplanLay.html")
+</body>
+</html>

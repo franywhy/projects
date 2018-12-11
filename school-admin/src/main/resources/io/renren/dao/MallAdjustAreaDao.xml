@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallAdjustAreaDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	mall_adjust_area.id AS id , 	mall_adjust_area.user_id AS userId , 	mall_adjust_area.order_id AS orderId , 	mall_adjust_area.last_area_id AS lastAreaId , 	mall_adjust_area.create_time AS createTime , 	mall_adjust_area.dr AS dr , 	mall_adjust_area.applyStatus AS applystatus
+   </sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE  mall_adjust_area.dr=0
+		<if test="applystatus != null and applystatus != -1">
+			and mall_adjust_area.applystatus = #{applystatus}
+		</if>
+		<if test="userName != null">
+			and users.nick_name = #{userName}
+		</if>
+		<if test="userId != null">
+			and sys_user.user_id =#{userId}
+		</if>
+
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM
+		mall_adjust_area mall_adjust_area
+		left join mall_order mall_order on mall_order.order_id=mall_adjust_area.order_id
+		left join mall_area mall_area on mall_area.area_id=mall_adjust_area.last_area_id
+		left join mall_area mall_area1 on mall_area1.area_id = mall_order.area_id
+		left join users users on users.user_id=mall_order.user_id
+		left join mall_class on mall_class.class_id=mall_order.class_id
+		left join sys_user on sys_user.user_id=mall_class.user_id
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="io.renren.pojo.MallAdjustAreaPOJO">
+		select
+		mall_adjust_area.id AS id,
+		mall_adjust_area.user_id AS userId,
+		mall_adjust_area.create_time AS createTime,
+		mall_adjust_area.applyStatus AS applystatus,
+		mall_area.area_name  AS lastAreaName,
+		mall_area1.area_name AS areaName,
+		users.nick_name as userName,
+		sys_user.nick_name AS teacherName
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MallAdjustAreaEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_adjust_area
+		(
+		`user_id`, 	`order_id`, `last_area_id`)
+		values
+		(#{userId},#{orderId},#{lastAreaId})
+	</insert>
+</mapper>

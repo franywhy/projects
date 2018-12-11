@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+        default-lazy-init="true">
+
+ <bean id="mainJedisPoolConfig"
+           class="redis.clients.jedis.JedisPoolConfig"
+           p:maxTotal="${redis.pool.maxActive}"
+           p:maxIdle="${redis.pool.maxIdle}"
+           p:maxWaitMillis="${redis.pool.maxWait}"
+           p:testOnBorrow="${redis.pool.testOnBorrow}"
+           p:testOnReturn="${redis.pool.testOnReturn}"/>
+
+
+    <bean id="redisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:timeout="${redis.timeout}"  p:poolConfig-ref="mainJedisPoolConfig"/>
+
+    <bean id="liveConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.mem.host}" p:port="${redis.mem.port}"/>
+
+    <bean id="chatJedisPoolConfig"
+          class="redis.clients.jedis.JedisPoolConfig"
+          p:maxTotal="${chat.pool.maxActive}"
+          p:maxIdle="${chat.pool.maxIdle}"
+          p:maxWaitMillis="${chat.pool.maxWait}"
+          p:testOnBorrow="${redis.pool.testOnBorrow}"
+          p:testOnReturn="${redis.pool.testOnReturn}"/>
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="poolConfig" ref="mainJedisPoolConfig" />
+        <constructor-arg name="host" value="${redis.host}" />
+        <constructor-arg name="port" value="${redis.port}" type="int" />
+        <constructor-arg name="timeout" value="${redis.timeout}" type="int" />
+    </bean>
+
+<!--  -->   
+    <bean id="chatConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.chat.host}" p:port="${redis.chat.port}"  p:poolConfig-ref="chatJedisPoolConfig"/>
+
+    <bean id="kgsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.kgs.host}" p:port="${redis.kgs.port}"/>
+
+    <bean id="mainRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="redisConnectionFactory" />
+
+
+    <bean id="liveRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="liveConnectionFactory" />
+
+    <bean id="chatRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="chatConnectionFactory" />
+
+    <bean id="kgsUniqueRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="kgsConnectionFactory" />
+
+    <bean id="picRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="redisConnectionFactory" />
+	<bean id="msgKGS" class="com.izhubo.rest.persistent.SimpleKGS"
+		p:nameSpace="gift" p:kgsRedis-ref="kgsUniqueRedis" p:offset="100"/>
+     
+     
+  
+     <bean id="applyKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="apply"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10000000">
+    </bean>
+
+
+    <bean id="userKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="users"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10010032">
+        <property name="prettys">
+            <bean class="com.izhubo.persistent.PrettyBitSetFactoryBean" p:mongoTemplate-ref="mainMongo"/>
+        </property>
+   </bean>
+   
+   
+     <bean id="ordersComKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="orders"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10000000">
+    </bean>
+    
+    
+    <bean id="currencyflowKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="currency"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10000000">
+    </bean>
+  
+  
+     <bean id="scoreOrderKGS" class="com.izhubo.rest.persistent.HighLowKGS"
+          p:nameSpace="score"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10000000">
+    </bean>
+</beans>

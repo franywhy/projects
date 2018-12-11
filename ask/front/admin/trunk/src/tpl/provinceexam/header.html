@@ -1,0 +1,31 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        省份
+        <select name="qcode" id="qcode">
+            <option value="" selected>==所有==</option>
+        </select>
+        省份名称
+        <input type="text" name="qname" size="20" />
+        省份
+        <select name="qtype" id="qtype">
+            <option value="" selected>==所有==</option>
+            <option value="0">会计从业考试</option>
+            <option value="1">初级会计师考试</option>
+            <option value="2">中级会计师考试</option>
+            <option value="3">注册会计师</option>
+        </select>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+
+<!--/通用应用头-->

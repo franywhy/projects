@@ -1,0 +1,66 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        学员名称
+        <input type="text" name="user_name" size="20" />
+
+        性别
+        <select name="sex" id="sex">
+            <option value="" selected>==所有==</option>
+            <option value="1">男</option>
+            <option value="2">女</option>
+        </select>
+
+        报名号
+        <input type="text" name="code" size="20" />
+
+        上课校区编号
+        <input type="text" name="school_code" size="20" />
+
+        上课校区名称
+        <input type="text" name="school_code" size="20" />
+
+        <br/>
+
+        报读班型
+        <input type="text" name="class_type" size="20" />
+
+        预计开班时间
+        <input id="spredict_open_time" class="input" type="text" name="spredict_open_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'spredict_open_time\')}'})"/>
+        至
+        <input id="epredict_open_time" class="input" type="text" name="epredict_open_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate:'#F{$dp.$D(\'epredict_open_time\')}'})"/>
+
+        订单编号
+        <input type="text" name="order_num" size="20" />
+
+        支付方式
+        <select name="pay_type" id="pay_type">
+            <option value="" selected>==所有==</option>
+        </select>
+
+        <br/>
+
+        创建时间
+        <input id="screate_time" class="input" type="text" name="screate_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'screate_time\')}'})"/>
+        至
+        <input id="ecreate_time" class="input" type="text" name="ecreate_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate:'#F{$dp.$D(\'ecreate_time\')}'})"/>
+
+        状态
+        <select name="status" id="status">
+            <option value="" selected>==所有==</option>
+            <option value="1">在读</option>
+            <option value="2">休学</option>
+            <option value="3">毕业</option>
+            <option value="4">暂停</option>
+            <option value="6">坏账</option>
+        </select>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头-->

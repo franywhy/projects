@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseAbnormalRegistrationDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.CourseAbnormalRegistrationEntity" id="courseAbnormalRegistrationMap">
+        <result property="id" column="id"/>
+        <result property="creater" column="creater"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updatePerson" column="update_person"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="registrationNo" column="registration_no"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userPlanId" column="user_plan_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="bkAreaId" column="bk_area_id"/>
+        <result property="examScheduleId" column="exam_schedule_id"/>
+        <result property="registrationNumber" column="registration_number"/>
+        <result property="registrationTime" column="registration_time"/>
+        <result property="productId" column="product_id"/>
+        <result property="status" column="status"/>
+        <result property="dr" column="dr"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.CourseAbnormalRegistrationEntity">
+		select * from course_abnormal_registration where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.CourseAbnormalRegistrationEntity">
+		select * from course_abnormal_registration
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+	SELECT 
+		count(*)
+	FROM
+		course_abnormal_registration AS re
+			LEFT JOIN course_userplan AS course_userplan ON re.user_plan_id = course_userplan.user_plan_id
+			-- LEFT JOIN mall_order AS ord ON course_userplan.order_id = ord.order_id
+			LEFT JOIN courses AS courses ON re.course_id = courses.course_id
+			LEFT JOIN sys_product AS pro ON re.product_id = pro.product_id
+			LEFT JOIN mall_class AS class ON course_userplan.class_id = class.class_id
+			LEFT JOIN mall_area AS areabd ON course_userplan.area_id = areabd.area_id
+			LEFT JOIN mall_profession AS p ON p.profession_id = course_userplan.profession_id
+			LEFT JOIN users AS u ON course_userplan.user_id = u.user_id
+			LEFT JOIN mall_level AS le ON le.level_id = course_userplan.level_id
+			LEFT JOIN mall_class_type AS cType ON course_userplan.class_type_id = cType.classtype_id
+			LEFT JOIN mall_area AS areabk ON re.bk_area_id = areabk.area_id
+			LEFT JOIN sys_user AS sysuser ON sysuser.user_id = class.user_id
+			LEFT JOIN mall_exam_schedule AS exc ON exc.id = re.exam_schedule_id
+	WHERE
+		re.dr = 0
+		AND course_userplan.dr = 0
+		
+		
+		<if test="classtypeId != null">
+				AND cType.classtype_id = #{classtypeId} 
+		</if>
+		<if test="scheduleDateId != null">
+				AND exc.id = #{scheduleDateId} 
+		</if>
+		<if test="sysUserId != null">
+				AND sysuser.user_id =#{sysUserId}
+		</if>
+		<if test="nickName != null">
+				AND u.nick_name =#{nickName}
+		</if>
+		<if test="classId != null">
+				AND class.class_id =#{classId}
+		</if>
+		<if test="mobile != null">
+				AND u.mobile =#{mobile}
+		</if>
+		<if test="courseId != null" >
+				AND courses.course_id =#{courseId}
+		</if>
+		<if test="status != null and status != -1" >
+				AND re.status =#{status}
+		</if>
+		<if test="professionId != null">
+				AND p.profession_id =#{professionId}
+		</if>
+		<if test="levelId != null">
+				AND le.level_id =#{levelId}
+		</if>
+		<if test="bdAreaId != null">
+				AND areabd.area_id =#{bdAreaId}
+		</if>
+		<if test="bkAreaId != null">
+				AND areabk.area_id =#{bkAreaId}
+		</if>
+		
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.CourseAbnormalRegistrationEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into course_abnormal_registration
+		(
+			`creater`, 
+			`update_person`, 
+			`registration_No`, 
+			`order_no`, 
+			`user_plan_id`, 
+			`course_id`, 
+			`bk_area_id`, 
+			`exam_schedule_id`, 
+			`registration_number`, 
+			`registration_time`, 
+			`product_id`, 
+			`status`, 
+			`dr`, 
+			`remark`
+		)
+		values
+		(
+			#{creater}, 
+			#{updatePerson}, 
+			#{registrationNo}, 
+			#{orderNo}, 
+			#{userPlanId}, 
+			#{courseId}, 
+			#{bkAreaId}, 
+			#{examScheduleId}, 
+			#{registrationNumber}, 
+			#{registrationTime}, 
+			#{productId}, 
+			#{status}, 
+			0, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.CourseAbnormalRegistrationEntity">
+		update course_abnormal_registration 
+		<set>
+			<if test="creater != null">`creater` = #{creater}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updatePerson != null">`update_person` = #{updatePerson}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="registrationId != null">`registration_no` = #{registrationNo}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="userPlanId != null">`user_plan_id` = #{userPlanId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="bkAreaId != null">`bk_area_id` = #{bkAreaId}, </if>
+			<if test="examScheduleId != null">`exam_schedule_id` = #{examScheduleId}, </if>
+			<if test="registrationNumber != null">`registration_number` = #{registrationNumber}, </if>
+			<if test="registrationTime != null">`registration_time` = #{registrationTime}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+	
+		
+	<select id="queryRegistrationList" resultType="io.renren.pojo.CourseAbnormalRegistrationPOJO">
+	SELECT
+		re.id AS id,
+		re.registration_no AS registrationNo,
+		re.order_no AS orderNo,
+		cType.classtype_name AS classtypeName,
+		courses.course_name AS courseName,
+		areabd.area_name AS bdAreaName,
+		areabk.area_name AS bkAreaName,
+		p.profession_name AS professionName,
+		le.level_name AS levelName,
+		class.class_name AS className,
+		sysuser.nick_name AS sysUserName,
+		u.nick_name AS nickName,
+		u.mobile AS mobile,
+		exc.schedule_name AS scheduleName,
+		exc.schedule_date AS scheduleDate,
+		pro.product_name AS productName,
+		re.registration_number AS registrationNumber,
+		re.registration_time AS registrationTime,
+		re.`status` STATUS
+	FROM
+		course_abnormal_registration AS re
+			LEFT JOIN course_userplan AS course_userplan ON re.user_plan_id = course_userplan.user_plan_id
+			-- LEFT JOIN mall_order AS ord ON course_userplan.order_id = ord.order_id
+			LEFT JOIN courses AS courses ON re.course_id = courses.course_id
+			LEFT JOIN sys_product AS pro ON re.product_id = pro.product_id
+			LEFT JOIN mall_class AS class ON course_userplan.class_id = class.class_id
+			LEFT JOIN mall_area AS areabd ON course_userplan.area_id = areabd.area_id
+			LEFT JOIN mall_profession AS p ON p.profession_id = course_userplan.profession_id
+			LEFT JOIN users AS u ON course_userplan.user_id = u.user_id
+			LEFT JOIN mall_level AS le ON le.level_id = course_userplan.level_id
+			LEFT JOIN mall_class_type AS cType ON course_userplan.class_type_id = cType.classtype_id
+			LEFT JOIN mall_area AS areabk ON re.bk_area_id = areabk.area_id
+			LEFT JOIN sys_user AS sysuser ON sysuser.user_id = class.user_id
+			LEFT JOIN mall_exam_schedule AS exc ON exc.id = re.exam_schedule_id
+	WHERE
+		re.dr = 0
+		AND course_userplan.dr = 0
+		
+		
+		<if test="classtypeId != null">
+				AND cType.classtype_id = #{classtypeId} 
+		</if>
+		<if test="scheduleDateId != null">
+				AND exc.id = #{scheduleDateId} 
+		</if>
+		<if test="sysUserId != null">
+				AND sysuser.user_id =#{sysUserId}
+		</if>
+		<if test="nickName != null">
+				AND u.nick_name =#{nickName}
+		</if>
+		<if test="classId != null">
+				AND class.class_id =#{classId}
+		</if>
+		<if test="mobile != null">
+				AND u.mobile =#{mobile}
+		</if>
+		<if test="courseId != null" >
+				AND courses.course_id =#{courseId}
+		</if>
+		<if test="status != null and status != -1" >
+				AND re.status =#{status}
+		</if>
+		<if test="professionId != null">
+				AND p.profession_id =#{professionId}
+		</if>
+		<if test="levelId != null">
+				AND le.level_id =#{levelId}
+		</if>
+		<if test="bdAreaId != null">
+				AND areabd.area_id =#{bdAreaId}
+		</if>
+		<if test="bkAreaId != null">
+				AND areabk.area_id =#{bkAreaId}
+		</if>
+			ORDER BY re.id DESC
+	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+	
+</select>
+
+	<update id="updateBatch">
+        update course_abnormal_registration set status = #{status} , update_person = #{updatePerson} where id in
+        <foreach item="registrationIds" collection="list" open="(" separator="," close=")">
+            #{registrationIds}
+        </foreach>
+    </update>
+    
+    <select id="queryRegistrationLayList" resultType="io.renren.pojo.CourseAbnormalRegistrationPOJO">
+	SELECT
+		re.id as id,
+		re.registration_no as registrationNo,
+		re.order_no as orderNo,
+		courses.course_name as courseName,
+		areabk.area_name as bkAreaName,
+		p.profession_name as professionName,
+		exc.schedule_name as scheduleName,
+		exc.schedule_date as scheduleDate,
+		re.product_id as productId,
+		pro.product_name as productName
+	FROM
+		course_abnormal_registration AS re
+		LEFT JOIN course_userplan AS course_userplan ON re.user_plan_id = course_userplan.user_plan_id
+		LEFT JOIN courses AS courses ON re.course_id = courses.course_id
+		LEFT JOIN sys_product AS pro ON re.product_id= pro.product_id
+		LEFT JOIN mall_class AS class ON course_userplan.class_id = class.class_id
+		LEFT JOIN mall_area AS areabk ON re.bk_area_id = areabk.area_id
+		LEFT JOIN mall_profession AS p ON p.profession_id = course_userplan.profession_id
+		LEFT JOIN mall_exam_schedule AS exc ON exc.id = re.exam_schedule_id
+	WHERE
+		re.dr=0
+		AND course_userplan.dr=0
+		
+		<if test="registrationNo != null">
+				AND re.registration_no = #{registrationNo} 
+		</if>
+		<if test="classtypeId != null">
+				AND cType.classtype_id = #{classtypeId} 
+		</if>
+		<if test="scheduleDateId != null">
+				AND exc.id = #{scheduleDateId} 
+		</if>
+		<if test="classId != null">
+				AND class.class_id =#{classId}
+		</if>
+		<if test="courseId != null" >
+				AND courses.course_id =#{courseId}
+		</if>
+		<if test="status != null and status != -1" >
+				AND re.status =#{status}
+		</if>
+		<if test="professionId != null">
+				AND p.profession_id =#{professionId}
+		</if>
+
+		<if test="bkAreaId != null">
+				AND areabk.area_id =#{bkAreaId}
+		</if>
+		
+		ORDER BY re.id DESC
+	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+</select>
+
+<select id="queryRegistrationEntity" resultType="io.renren.entity.CourseAbnormalRegistrationEntity">
+		select 
+			re.* 
+		from 
+			course_abnormal_registration as re
+		WHERE
+			re.dr = 0
+			
+		<if test="registrationNo != null " >
+				AND re.registration_no =#{registrationNo}
+		</if>
+		
+        <if test="status != null and status != -1" >
+				AND re.status =#{status}
+		</if>
+		<if test="statusNo != null and statusNo != -1" >
+				AND re.status != #{statusNo}
+		</if>
+		<if test="product_id != null">
+				AND re.product_id =#{productId}
+		</if>
+		<if test="registrationNumber != null">
+				AND re.registration_number =#{registrationNumber}
+		</if>
+		<if test="orderNo != null">
+				AND re.order_no =#{orderNo}
+		</if>
+		
+		<if test="courseId != null">
+				AND re.course_id =#{courseId}
+		</if>
+		
+		<if test="bkAreaId != null">
+				AND re.bk_area_id =#{bkAreaId}
+		</if>
+		
+		<if test="examScheduleId != null">
+				AND re.exam_schedule_id =#{examScheduleId}
+		</if>
+	</select>
+    
+    
+    <select id="queryLayTotal" resultType="int">
+	SELECT
+		count(*)
+	FROM
+		course_abnormal_registration AS re
+		LEFT JOIN course_userplan AS course_userplan ON re.user_plan_id = course_userplan.user_plan_id
+		LEFT JOIN courses AS courses ON re.course_id = courses.course_id
+		LEFT JOIN sys_product AS pro ON re.product_id= pro.product_id
+		LEFT JOIN mall_class AS class ON course_userplan.class_id = class.class_id
+		LEFT JOIN mall_area AS areabk ON re.bk_area_id = areabk.area_id
+		LEFT JOIN mall_profession AS p ON p.profession_id = course_userplan.profession_id
+		LEFT JOIN mall_exam_schedule AS exc ON exc.id = re.exam_schedule_id
+	WHERE
+		re.dr=0
+		AND course_userplan.dr=0
+		
+		<if test="registrationNo != null">
+				AND re.registration_no = #{registrationNo} 
+		</if>
+		<if test="classtypeId != null">
+				AND cType.classtype_id = #{classtypeId} 
+		</if>
+		<if test="scheduleDateId != null">
+				AND exc.id = #{scheduleDateId} 
+		</if>
+		<if test="classId != null">
+				AND class.class_id =#{classId}
+		</if>
+		<if test="courseId != null" >
+				AND courses.course_id =#{courseId}
+		</if>
+		<if test="status != null and status != -1" >
+				AND re.status =#{status}
+		</if>
+		<if test="professionId != null">
+				AND p.profession_id =#{professionId}
+		</if>
+
+		<if test="bkAreaId != null">
+				AND areabk.area_id =#{bkAreaId}
+		</if>
+	</select>
+
+</mapper>

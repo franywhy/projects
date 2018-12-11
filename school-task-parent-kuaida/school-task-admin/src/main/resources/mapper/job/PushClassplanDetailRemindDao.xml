@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.job.dao.PushClassplanDetailRemindDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	push_classplan_detail_remind.id AS id , 	push_classplan_detail_remind.push_classplan_remind_id AS pushClassplanRemindId , 	push_classplan_detail_remind.course_classplan_id AS courseClassplanId , 	push_classplan_detail_remind.course_classplan_lives_id AS courseClassplanLivesId , 	push_classplan_detail_remind.push_content AS pushContent , 	push_classplan_detail_remind.push_time AS pushTime , 	push_classplan_detail_remind.audit_status AS auditStatus , 	push_classplan_detail_remind.auditor AS auditor , 	push_classplan_detail_remind.audit_time AS auditTime , 	push_classplan_detail_remind.creater AS creater , 	push_classplan_detail_remind.create_time AS createTime , 	push_classplan_detail_remind.msg_id AS msgId , 	push_classplan_detail_remind.dr AS dr , 	push_classplan_detail_remind.ts AS ts 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM push_classplan_detail_remind AS push_classplan_detail_remind
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.modules.job.entity.PushClassplanDetailRemindEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.modules.job.entity.PushClassplanDetailRemindEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.modules.job.entity.PushClassplanDetailRemindEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into push_classplan_detail_remind
+		(
+		  `push_classplan_remind_id`,`course_classplan_id`, `course_classplan_lives_id`,`push_content`,`push_time`,
+		   `audit_status`,`auditor`, `audit_time`,`creater`,`create_time`,`msg_id`,`dr`,`ts`
+		)
+		values
+		(
+		#{pushClassplanRemindId},#{courseClassplanId}, #{courseClassplanLivesId},#{pushContent},#{pushTime},
+		#{auditStatus}, #{auditor},#{auditTime},#{creater},#{createTime},#{msgId}, 0, #{ts}									)
+</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.modules.job.entity.PushClassplanDetailRemindEntity">
+		update push_classplan_detail_remind 
+		<set>
+			<if test="pushClassplanRemindId != null">`push_classplan_remind_id` = #{pushClassplanRemindId}, </if>
+			<if test="courseClassplanId != null">`course_classplan_id` = #{courseClassplanId}, </if>
+			<if test="courseClassplanLivesId != null">`course_classplan_lives_id` = #{courseClassplanLivesId}, </if>
+			<if test="pushContent != null">`push_content` = #{pushContent}, </if>
+			<if test="pushTime != null">`push_time` = #{pushTime}, </if>
+			<if test="auditStatus != null">`audit_status` = #{auditStatus}, </if>
+			<if test="auditor != null">`auditor` = #{auditor}, </if>
+			<if test="auditTime != null">`audit_time` = #{auditTime}, </if>
+			<if test="creater != null">`creater` = #{creater}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="msgId != null">`msg_id` = #{msgId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="ts != null">`ts` = #{ts}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.modules.job.entity.PushClassplanDetailRemindEntity">
+		UPDATE push_classplan_detail_remind 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.modules.job.entity.PushClassplanDetailRemindEntity">
+		UPDATE push_classplan_detail_remind 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+    <select id="queryListByTs" resultType="io.renren.modules.job.entity.PushClassplanDetailRemindEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        WHERE ts > #{ts}
+    </select>
+</mapper>

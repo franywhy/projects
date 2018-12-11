@@ -1,0 +1,66 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th class="auto">大区</th>
+			<th class="auto">校区</th>
+			<th class="auto">报读月份</th>   
+			<th class="auto">报读班型</th>
+			<th class="auto">报读人数</th>
+			<th class="auto">结业人数</th>
+			<th class="auto">结业率</th>			 
+			<th class="auto">应修学分</th>
+            <th class="auto">实修学分</th>
+            <th class="auto">学分完成率</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr did="<%=data[i].id%>">
+			<td class="auto"><%=i+1 %></td>
+			<td class="auto" name="largeAreaName"><%=data[i].largeAreaName%></td>
+			<td class="auto" name="orgName"><%=data[i].orgName%></td>
+			<td class="auto" name="signDate"><%=data[i].signDate%></td>
+			<td class="auto" name="className"><%=data[i].className%></td>
+			<td class="auto" name="studentnumber"><%=data[i].studentnumber%></td>
+			<td class="auto" name="passrs"><%=data[i].passrs%></td>
+
+	      <td class="auto" type="text" name="hglv" ><%=data[i].passrs/data[i].passRemark%> </td>
+
+         <!--    <%if(data[i].studentnumber==0){%>
+            <td class="auto" name="hglv" >0</td>
+            <%}else{%>
+				<td class="auto" type="text" name="hglv" ><%=data[i].passrs/data[i].studentnumber%> </td>
+			<%}%> -->
+ 
+			 
+			<td class="auto" name="claimScore"><%=data[i].claimScore%></td>
+			<td class="auto" name="totalScore"><%=data[i].totalScore%></td>
+	        <td class="auto" name="xflv" ><%=data[i].checkRemark%> </td>
+
+
+
+		<!-- 		  <%if(data[i].claimScore==0){%>
+            <td class="auto" name="xflv">0</td>
+            
+            <%}else{%>
+				<td class="auto" name="xflv" ><%=data[i].totalScore/data[i].claimScore%> </td>
+				 
+			<%}%>
+			 -->
+
+
+
+		 
+			
+			<!--  <td class="action"> -->
+			 	<!-- <a class="d-button" href="#a=creditrecordcard&studentName=<%=data[i].studentName%>&idCard=<%=data[i].idCard%>&phone=<%=data[i].phone%>&orgName=<%=data[i].orgName%>&nc_user_id=<%=data[i].studentId%>&class_id=<%=data[i].classId%>&menu=creditrecord&tab=detail">详情</a>-->
+			 	<!--  <button class="d-button" onclick="Izb.controller.<%=pty.key%>.details('<%=data[i].studentName%>','<%=data[i].phone%>','<%=data[i].orgName%>','<%=data[i].studentId%>','<%=data[i].classId%>','<%=data[i].className%>')">详情</button> -->
+            <!-- </td> -->
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

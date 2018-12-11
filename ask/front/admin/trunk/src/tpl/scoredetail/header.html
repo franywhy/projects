@@ -1,0 +1,54 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        学员ID
+        <input type="text" name="user_id" size="20" />
+
+        学员昵称
+        <input type="text" name="user_nickname" size="20" />
+
+        积分类型
+        <select name="score_gain_type" id="score_gain_type">
+            <option value="" selected>==所有==</option>
+            <option value="0">默认</option>
+            <option value="1">首次赠送</option>
+            <option value="2">每天一次</option>
+            <option value="3">消耗积分</option>
+        </select>
+
+        线上付款方式
+        <select name="score_type" id="score_type">
+            <option value="" selected>==所有==</option>
+            <option value="0">上传头像</option>
+            <option value="1">绑定邮箱</option>
+            <option value="2">完成职业测试</option>
+            <option value="3">完善所有信息</option>
+            <option value="4">每日签到登录</option>
+            <option value="5">分享链接</option>
+            <option value="6">邀请朋友注册</option>
+            <option value="8">购买商品消耗积分</option>
+            <option value="9">在兑吧消费</option>
+            <option value="10">兑吧消费失败积分退还</option>
+            <option value="11">购买商品赠送积分</option>
+            <option value="12">订单取消积分返还</option>
+            <option value="13">会答提问</option>
+            <option value="14">打卡考勤</option>
+            <option value="15">课程试听</option>
+        </select>
+
+        <br/>
+
+        创建时间
+        <input id="screate_time" class="input" type="text" name="screate_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'screate_time\')}'})"/>
+        至
+        <input id="ecreate_time" class="input" type="text" name="ecreate_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',minDate:'#F{$dp.$D(\'ecreate_time\')}'})"/>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头-->

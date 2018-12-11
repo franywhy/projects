@@ -1,0 +1,117 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+
+        <th class="auto">编号</th>
+        <th class="auto">名称</th>
+        <th class="auto">NC名称</th>
+        <th class="auto">商品名称</th>
+
+        <th class="auto">PC-小图</th>
+        <th class="auto">PC-大图</th>
+        <th class="auto">APP-小图</th>
+        <th class="auto">APP-大图</th>
+
+        <th class="auto">类型</th>
+        <th class="auto">讲师</th>
+        <th class="auto">适用对象</th>
+        <th class="auto">上课方式</th>
+        <!--<th class="auto">首付款</th>-->
+        <th class="auto">显示价格</th>
+        <th class="auto">原价</th>
+        <th class="auto">可使用支付积分</th>
+        <th class="auto">赠送积分</th>
+        <th class="auto">标签</th>
+
+        <th class="auto">是否上架</th>
+     <!--   <th class="longtime">上架时间</th>
+        <th class="longtime">下架时间</th>-->
+        <th class="auto">是否删除</th>
+        <th class="auto">教学方式</th>
+
+        <th class="auto">PC排序</th>
+        <th class="auto">APP排序</th>
+        <th class="auto">套餐排序</th>
+        <th class="auto">推荐</th>
+
+        <th class="auto">是否需要排课</th>
+        <th class="longtime">同步时间</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+
+            <td class="auto"><%=data[i].code %></td>
+            <td class="auto"><%=data[i].name %></td>
+            <td class="auto"><%=data[i].nc_name %></td>
+            <td class="auto"><%=data[i].short_name %></td>
+
+            <td class="pic"><img src="<%=data[i].thumbnail %>" onclick="javascript:window.open('<%=data[i].thumbnail %>')" style="height:50px;"></td>
+            <td class="pic"><img src="<%=data[i].photo %>" onclick="javascript:window.open('<%=data[i].photo %>')" style="height:50px;"></td>
+            <td class="pic"><img src="<%=data[i].app_thumbnail %>" onclick="javascript:window.open('<%=data[i].app_thumbnail %>')" style="height:50px;"></td>
+            <td class="pic"><img src="<%=data[i].app_photo %>" onclick="javascript:window.open('<%=data[i].app_photo %>')" style="height:50px;"></td>
+
+            <td class="auto"><%=Izb.controller.commoditys.typeToString(data[i].type) %></th>
+            <td class="auto"><%=data[i].teacher_name %></td>
+            <td class="auto"><%=data[i].reader %></td>
+            <td class="auto"><%=data[i].classmode %></td>
+           <!-- <td class="auto"><%=data[i].firstpay %></td>-->
+            <td class="auto"><%=data[i].titles %></td>
+            <td class="auto"><%=data[i].original_price %></td>
+            <td class="auto"><%=data[i].paypoints %></td>
+            <td class="auto"><%=data[i].points %></td>
+            <td class="auto"><%=data[i].labels %></td>
+            <td class="auto">
+                <%if(data[i].is_shelves){%>
+                    <%if(data[i].is_shelves==0){%>
+                    下架
+                    <%}%>
+                    <%if(data[i].is_shelves==1){%>
+                    上架
+                    <%}}else{%>
+                下架
+                <%}%>
+            </td>
+           <!-- <td class="longtime"><%=new Date(data[i].up_shelves_time).toLocaleString() %></td>
+            <td class="longtime"><%=new Date(data[i].down_shelves_time).toLocaleString()%></td>-->
+            <td class="auto"><%=data[i].dr==0 ? "正常" : "删除" %></td>
+            <td class="auto"><%=data[i].teach_type %></td>
+
+            <td class="auto"><%=data[i].order %></td>
+            <td class="auto"><%=data[i].order_app %></td>
+            <td class="auto"><%=data[i].order_page %></td>
+            <td class="auto"><%=data[i].is_hot == 1 ? "推荐" : "正常" %></td>
+
+            <td class="auto"><%=data[i].is_sort_course %></td>
+            <td class="longtime"><%=new Date(data[i].syn_time).toLocaleString()%></td>
+            <td  class="action action150">
+                <a class="d-button" href="#a=commoditystab&_id=<%=data[i]._id%>&is_shelves=<%=data[i].is_shelves%>&upload_flag=<%=data[i].upload_flag%>&menu=commoditys&tab=detail&_id=<%=data[i]._id%>">详情</a>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <%if(data[i].is_shelves){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.freeze('<%=data[i]._id%>','<%=data[i].is_shelves%>')">下架</button>
+                <%}else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.freeze('<%=data[i]._id%>','<%=data[i].is_shelves%>')">上架</button>
+                <%}%>
+                <%if(data[i].upload_flag){%>
+                <%if(data[i].audit_flag){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.unaudit('<%=data[i]._id%>','<%=data[i].audit_flag%>')">反审核</button>
+                <%}else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.unsubmit('<%=data[i]._id%>','<%=data[i].upload_flag%>')">反提交</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.audit('<%=data[i]._id%>','<%=data[i].audit_flag%>')">审核</button>
+                <%}%>
+                <%}else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.submit('<%=data[i]._id%>','<%=data[i].upload_flag%>')">提交</button>
+                <%}%>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

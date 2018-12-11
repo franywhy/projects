@@ -1,0 +1,50 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        考勤单号
+        <input id="nc_code" type="text" name="nc_code" value="" size="20"  />
+
+        考勤时间
+        <input id="sattendance_time" type="text" name="sattendance_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'sattendance_time\')}'})"  />
+        到
+        <input id="eattendance_time" type="text" name="eattendance_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'eattendance_time\')}'})" />
+
+        排课计划
+        <input id="nc_class_plan" type="text" name="nc_class_plan" value="" size="20"  />
+
+        <br/>
+
+        校区编号
+        <input id="nc_school_code" type="text" name="nc_school_code" value="" size="20"  />
+
+        校区名称
+        <input id="nc_school_name" type="text" name="nc_school_name" value="" size="20"  />
+
+        课程科目名称
+        <input id="nc_course_name" type="text" name="nc_course_name" value="" size="20"  />
+
+        教师名称
+        <input id="nc_teacher_name" type="text" name="nc_teacher_name" value="" size="20"  />
+
+        教室
+        <input id="room" type="text" name="room" value="" size="20"  />
+
+        <br/>
+
+        课次
+        <input id="sessions" type="text" name="sessions" value="" size="20"  />
+
+        同步时间
+        <input id="ssyn_time" type="text" name="ssyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'ssyn_time\')}'})"  />
+        到
+        <input id="esyn_time" type="text" name="esyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'esyn_time\')}'})" />
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头--> 

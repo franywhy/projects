@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.courses.dao.CsKnowledgeContainDao">
+
+	<select id="queryListBySelfId" parameterType="long" resultType="com.hq.courses.pojo.CsKnowledgeContainPOJO">
+		SELECT
+			cs_knowledge_contain.id AS id,
+			cs_knowledge_contain.self_id AS selfId,
+			cs_knowledge_contain.child_id AS childId,
+			cs_knowledge.knowledge_name AS childName,
+			cs_knowledge.knowledge_no AS childNo
+		FROM cs_knowledge_contain AS cs_knowledge_contain	
+		JOIN cs_knowledge AS cs_knowledge ON cs_knowledge.knowledge_id = cs_knowledge_contain.child_id
+		WHERE cs_knowledge_contain.self_id = #{selfId}
+		AND cs_knowledge.dr = 0
+		ORDER BY cs_knowledge_contain.child_id,id DESC
+		LIMIT 1000
+	</select>
+	<select id="queryListByChildId" parameterType="long" resultType="com.hq.courses.pojo.CsKnowledgeContainPOJO">
+		SELECT
+			cs_knowledge_contain.id AS id,
+			cs_knowledge_contain.self_id AS selfId,
+			cs_knowledge_contain.child_id AS childId,
+			cs_knowledge.knowledge_name AS childName,
+			cs_knowledge.knowledge_no AS childNo,
+			cs_knowledge_self.knowledge_no as selfNo,
+			cs_knowledge_self.knowledge_name as selfName
+		FROM cs_knowledge_contain AS cs_knowledge_contain	
+		JOIN cs_knowledge AS cs_knowledge ON cs_knowledge.knowledge_id = cs_knowledge_contain.child_id
+		JOIN cs_knowledge AS cs_knowledge_self  on cs_knowledge_self.knowledge_id=cs_knowledge_contain.self_id
+		WHERE cs_knowledge_contain.child_id = #{childId}
+		AND cs_knowledge_self.dr = 0
+		ORDER BY cs_knowledge_contain.child_id,id DESC
+		LIMIT 1000
+	</select>
+	
+	<insert id="save" parameterType="com.hq.courses.entity.CsKnowledgeContainEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO cs_knowledge_contain
+		(
+			`self_id`, 
+			`child_id`
+		)
+		values
+		(
+			#{selfId}, 
+			#{childId}
+		)
+	</insert>
+	
+	<delete id="delete">
+		DELETE FROM cs_knowledge_contain where self_id = #{knowledgeId}
+	</delete>
+
+</mapper>

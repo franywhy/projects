@@ -1,0 +1,52 @@
+<!--海报列表--> 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="auto">ID</th>
+        <th class="auto">标题</th>
+		<th class="auto">链接</th>
+        <th class="auto" style="width:200px;">图片</th>
+		<th class="auto">排序</th>
+        <th class="auto">添加时间</th>
+        <th class="auto">操作</th>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+        <td class="auto"><%=data[i]._id%></td>
+        <td class="auto"><%=data[i].title%></td>
+		<td class="auto">
+		<%if(data[i].click_url){%>
+		<a href="<%=data[i].click_url%>" target="_blank">
+		<%=data[i].click_url%>
+		</a>
+            <%}%>
+        </td>
+        <td class="auto">
+            <%if(data[i].click_url){%>
+            <a href="<%=data[i].click_url%>" target="_blank">
+                <%}%>
+                <img height="80" src="<%=data[i].pic_url%>" />
+                <%if(data[i].click_url){%>
+            </a>
+            <%}%>
+		</td>
+		<td class="auto"><%=data[i].order%></td>
+        <td class="auto"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+        <td class="auto">
+            <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">查看</button>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit( <%=data[i]._id%> )">改</button>
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.update({_id:'<%=data[i]._id%>',order:<%=(data[i].order+1)%>})">升</button>
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.update({_id:'<%=data[i]._id%>',order:<%=(data[i].order-1)%>})">降</button>
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.update({_id:'<%=data[i]._id%>',status:<%=data[i].status ? 0  : 1 %>})"><%=data[i].status ? '下'  : '上'%>线</button>
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.del(<%=data[i]._id%>)">删</button>
+            <%}%>
+			</td>
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>
+<!--/海报列表--> 

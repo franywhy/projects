@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.dao.CourseClassplanDao">
+
+	<!-- 这个逻辑有问题 -->
+	<select id="queryClassplanByUserplanId" resultType="com.school.entity.CourseClassplanEntity">
+	select 
+		course_classplan.classplan_id,course_classplan.classplan_name 
+	from course_classplan course_classplan
+	join course_userplan_class_detail on course_classplan.classplan_id = course_userplan_class_detail.classplan_id
+	join course_userplan_class on course_userplan_class_detail.userplan_class_id = course_userplan_class.userplan_class_id
+	join course_userplan on course_userplan_class.userplan_id = course_userplan.user_plan_id
+	and course_classplan.dr = #{dr}
+	and course_classplan.`status` = #{status}
+	and course_userplan_class_detail.dr = #{dr}
+	and course_userplan_class.dr = #{dr}
+	and course_userplan_class.`status` = #{status}
+	and course_userplan.user_plan_id = #{userplanId}
+	and course_userplan.dr = #{dr}
+	and course_userplan.`status` = #{status}
+	order by course_userplan_class_detail.`timestamp` desc
+	limit 1
+	</select>
+	
+	<select id="queryClassplanByClassplanId" resultType="com.school.entity.CourseClassplanEntity">
+		select * 
+		from course_classplan
+		where classplan_id = #{classplanId}
+		and is_audited = #{isAudited}
+		and is_open = #{isOpen}
+		and dr = #{dr}
+		and `status` = #{status}
+	</select>
+	
+</mapper>

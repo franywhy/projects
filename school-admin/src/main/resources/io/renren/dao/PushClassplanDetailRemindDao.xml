@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.PushClassplanDetailRemindDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	push_classplan_detail_remind.id AS id , 	push_classplan_detail_remind.push_classplan_remind_id AS pushClassplanRemindId , 	push_classplan_detail_remind.course_classplan_id AS courseClassplanId , 	push_classplan_detail_remind.course_classplan_lives_id AS courseClassplanLivesId , 	push_classplan_detail_remind.push_content AS pushContent , 	push_classplan_detail_remind.push_time AS pushTime , 	push_classplan_detail_remind.audit_status AS auditStatus , 	push_classplan_detail_remind.auditor AS auditor , 	push_classplan_detail_remind.audit_time AS auditTime , 	push_classplan_detail_remind.creater AS creater , 	push_classplan_detail_remind.create_time AS createTime , 	push_classplan_detail_remind.msg_id AS msgId , 	push_classplan_detail_remind.dr AS dr , 	push_classplan_detail_remind.ts AS ts 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE push_classplan_detail_remind.dr=0 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM push_classplan_detail_remind AS push_classplan_detail_remind
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.PushClassplanDetailRemindEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" parameterType="map" resultType="io.renren.entity.PushClassplanDetailRemindEntity">
+		select
+			push_classplan_detail_remind.id as detailId,
+			push_classplan_detail_remind.push_classplan_remind_id as pushClassplanRemindId,
+			push_classplan_detail_remind.course_classplan_id as classplanId,
+			course_classplan_lives.classplan_live_name as classplanLiveName,
+			course_classplan_lives.start_time as startTime,
+			course_classplan_lives.end_time as endTime,
+			(select sys_user.nick_name from sys_user sys_user where sys_user.user_id = course_classplan_lives.teacher_id) as teacherName,
+			(select push_time_template.name from push_time_template push_time_template where push_time_template.id = push_classplan_detail_remind.push_time_template_id) as templateName,
+			push_classplan_detail_remind.push_time as pushTime,
+			push_classplan_detail_remind.push_content as pushContent,
+			push_classplan_detail_remind.audit_status as auditStatus,
+			(select sys_user.nick_name from sys_user sys_user where sys_user.user_id = push_classplan_detail_remind.auditor) as auditorName,
+			push_classplan_detail_remind.audit_time as auditTime
+		from push_classplan_detail_remind AS push_classplan_detail_remind
+		join course_classplan_lives course_classplan_lives on push_classplan_detail_remind.course_classplan_lives_id = course_classplan_lives.classplan_live_id
+		where
+			push_classplan_detail_remind.dr = 0 and
+			push_classplan_detail_remind.push_classplan_remind_id = #{pushClassplanRemindId} and
+			course_classplan_lives.dr = 0
+			<if test="liveName != null">
+				and course_classplan_lives.classplan_live_name like concat('%',#{liveName},'%')
+			</if>
+		order by push_classplan_detail_remind.id asc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		from push_classplan_detail_remind AS push_classplan_detail_remind
+		join course_classplan_lives course_classplan_lives on push_classplan_detail_remind.course_classplan_lives_id = course_classplan_lives.classplan_live_id
+		where
+			push_classplan_detail_remind.dr = 0 and
+			push_classplan_detail_remind.push_classplan_remind_id = #{pushClassplanRemindId} and
+			course_classplan_lives.dr = 0
+			<if test="liveName != null">
+				and course_classplan_lives.classplan_live_name like concat('%',#{liveName},'%')
+			</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.PushClassplanDetailRemindEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into push_classplan_detail_remind
+	(
+		`push_classplan_remind_id`,
+		`course_classplan_id`, 
+		`course_classplan_lives_id`, 
+		`push_content`,
+		`push_time`, 
+		`audit_status`, 
+		`auditor`, 
+		`audit_time`, 
+		`creater`,
+		`create_time`, 
+		`msg_id`, 
+		`dr`, 
+		`ts`,
+		`push_time_template_id` 
+	)
+	values
+	(
+		#{pushClassplanRemindId},
+		#{courseClassplanId}, 
+		#{courseClassplanLivesId}, 
+		#{pushContent},
+		#{pushTime},
+		#{auditStatus}, 
+		#{auditor}, 
+		#{auditTime}, 
+		#{creater},
+		#{createTime}, 
+		#{msgId}, 
+		0, 
+		#{ts},
+		#{pushTimeTemplateId} 
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.PushClassplanDetailRemindEntity">
+		update push_classplan_detail_remind 
+		<set>
+			<if test="pushClassplanRemindId != null">`push_classplan_remind_id` = #{pushClassplanRemindId}, </if>
+			<if test="courseClassplanId != null">`course_classplan_id` = #{courseClassplanId}, </if>
+			<if test="courseClassplanLivesId != null">`course_classplan_lives_id` = #{courseClassplanLivesId}, </if>
+			<if test="pushContent != null">`push_content` = #{pushContent}, </if>
+			<if test="pushTime != null">`push_time` = #{pushTime}, </if>
+			<if test="auditStatus != null">`audit_status` = #{auditStatus}, </if>
+			<if test="auditor != null">`auditor` = #{auditor}, </if>
+			<if test="auditTime != null">`audit_time` = #{auditTime}, </if>
+			<if test="creater != null">`creater` = #{creater}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="msgId != null">`msg_id` = #{msgId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="ts != null">`ts` = #{ts}, </if>
+			<if test="pushTimeTemplateId != null">`push_time_template_id` = #{pushTimeTemplateId}</if>
+		</set>
+		where
+			id = #{detailId}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.PushClassplanDetailRemindEntity">
+		UPDATE push_classplan_detail_remind 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="map">
+		UPDATE push_classplan_detail_remind 
+		<set> dr = 1, auditor = #{updater}, audit_time = #{updateTime} </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	<!--通过课次id批量删除-->
+	<update id="deleteBatchByIds" parameterType="map">
+		UPDATE push_classplan_detail_remind 
+		<set> dr = 1, auditor = #{updater}, audit_time = #{updateTime} </set>
+		<include refid="base_where"/>
+		AND push_classplan_remind_id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	<!-- 审核 -->
+	<update id="theAudit" parameterType="map">
+		UPDATE push_classplan_detail_remind
+		set audit_status = #{audit}, auditor = #{auditor}, audit_time = #{auditTime}
+		where id = #{id}
+	</update>
+	<!-- 通过推送课次id获取推送课次详情 -->
+	<select id="getListByParentId" parameterType="Integer" resultType="io.renren.entity.PushClassplanDetailRemindEntity">
+		select 
+			*
+		from
+			push_classplan_detail_remind
+		where
+			push_classplan_remind_id = #{pushClassplanRemindId} and
+			dr = 0
+	</select>
+	<!-- 刷新 -->
+	<update id="refresh" parameterType="map">
+		update push_classplan_detail_remind
+		set dr = 1, auditor = #{updater}, audit_time = #{updateTime}
+		where dr = 0 and push_classplan_remind_id = #{pushClassplanRemindId}
+	</update>
+</mapper>

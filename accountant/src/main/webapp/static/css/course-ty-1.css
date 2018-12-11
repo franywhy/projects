@@ -1,0 +1,1168 @@
+.ffffff{
+	background-color: #fff;
+}
+.color-fff{
+	color:#fff;
+}
+.course-btn-g{
+	width:270px;
+	height:64px;
+	line-height: 64px;
+	font-size: 18px;
+	color:#fff;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	text-align: center;
+	margin:0 auto;
+	/*background-color: #66BA6A;
+	opacity: 0.85;
+	filter: alpha(opacity=85);*/
+	background-color: rgba(102,187,106,0.8);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#c866BA6A,endColorstr=#c866BA6A);
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+}
+:root .course-btn-g{
+	filter: none;
+}
+.course-btn-g:hover{
+	/*opacity: 1;
+	filter: alpha(opacity=100);*/
+	background-color: #66BA6A;
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+}
+.course-btn-o{
+	width:270px;
+	height:64px;
+	line-height: 64px;
+	font-size: 18px;
+	color:#fff;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	text-align: center;
+	margin:0 auto;
+	/*background-color: #ff6700;
+	opacity: 0.85;
+	filter: alpha(opacity=85);*/
+	background-color: rgba(255,103,0,0.8);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#c8ff6700,endColorstr=#c8ff6700);
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+}
+:root .course-btn-o{
+	filter: none;
+}
+.course-btn-o:hover{
+	/*opacity: 1;
+	filter: alpha(opacity=100);*/
+	background-color: #ff6700;
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+}
+.course-btn-w-g{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border:1px solid #66BA6A;
+	width:270px;
+	height:64px;
+	line-height: 64px;
+	font-size: 18px;
+	color:#18AA1F;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	text-align: center;
+	margin:0 auto;
+	opacity: 0.85;
+	filter: alpha(opacity=85);
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+}
+.course-btn-w-g:hover{
+	background-color: #66BA6A;
+	color:#fff;
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+}
+.course-title{
+	text-align: center;
+	margin-bottom:36px;
+}
+.course-title .t-h1{
+	font-size: 42px;
+	margin-bottom:12px;
+}
+.course-title .t-h2{
+	font-size: 18px;
+	margin-bottom:12px;
+}
+.course-title .t-h3{
+	font-size: 18px;
+}
+.course-mb{
+	margin-bottom:38px;
+}
+.course-btn-box{
+	width:578px;
+	margin:0 auto;
+}
+/*===================*/
+.course-slide-banner{
+	color:#fff;
+	text-align: center;
+	height:591px;
+}
+.course-slide-banner .slide-li{
+	
+}
+.course-slide-banner .slide-li .c-t-h1{
+	font-size: 30px;
+	margin-top:126px;
+	margin-bottom:4px;
+}
+.course-slide-banner .slide-li .c-t-h2{
+	font-size: 60px;
+	margin-bottom:38px;
+	line-height: normal;
+}
+.course-slide-banner .slide-li .c-t-h3{
+	font-size: 16px;
+	margin-bottom:32px;
+}
+.course-slide-banner .slide-li .c-t-h4{
+	margin-bottom:110px;
+}
+.slide-banner .slide-dl{
+	bottom:80px;
+}
+.course-slide-banner .c-t-h5{
+	text-align: center;
+	width:100%;
+	position: absolute;
+	bottom:26px;
+	font-size: 14px;
+	height:18px;
+	line-height: 18px;
+}
+.course-slide-banner .c-t-h5 .i-2{
+	width:1px;
+	height:12px;
+	background-color: #fff;
+	margin:0 8px;
+}
+/*=========================================*/
+.course-a .cont .t-h1{
+	height:497px;
+	margin-bottom:30px;
+}
+.course-a .cont .t-h1 img{
+	margin:0 auto;
+}
+.course-a .cont .t-h2{
+	text-align: center;
+	font-size: 18px;
+	line-height: 28px;
+}
+/*=================================*/
+.course-b .cont ul{
+	width:1158px;
+	margin: 0 auto;
+	margin-bottom:38px;
+}
+.course-b .cont li{
+	width:206px;
+	margin: 0 90px;
+	float:left;
+}
+.course-b .cont li .t-h1{
+	width:206px;
+	height:206px;
+	background: url(../images/temp/course-3r-bg-1.png) no-repeat 0 0;
+	margin-bottom:24px;
+}
+.course-b .cont li.li-1 .t-h1{
+	background-position: 0 0;
+}
+.course-b .cont li.li-2 .t-h1{
+	background-position: -290px 0;
+}
+.course-b .cont li.li-3 .t-h1{
+	background-position: -580px 0;
+}
+.course-b .cont li .t-h2{
+	font-size: 24px;
+	margin-bottom:12px;
+	text-align: center;
+}
+.course-b .cont li .t-h3{
+	font-size: 14px;
+	margin-bottom:12px;
+}
+/*=================================*/
+.course-c .course-title .t-h1{
+	margin-bottom:6px;
+}
+.course-c .course-title .t-h3{
+	font-size: 18px;
+	margin-bottom:36px;
+}
+.course-c .cont .djs-block{
+	width:278px;
+	height:290px;
+	margin-left: 490px;
+	background: url(../images/temp/course-djs-bg-1.png) no-repeat center center;
+}
+.course-c .cont .djs-block{
+	font-size: 75px;
+	color:#66BA6A;
+	line-height: 216px;
+	font-family: arial;
+	font-weight: bold;
+	text-indent: 27px;
+}
+.course-c .cont .djs-block em{
+    right:136px;
+}
+/*.course-c .cont .djs-block.dan{
+	text-indent: 78px;
+}
+.course-c .cont .djs-block.san{
+	text-indent: -40px;
+}*/
+/*=============================*/
+.course-d .bz-tit{
+	width:120px;
+	height:44px;
+	line-height: 44px;
+	font-size: 18px;
+	color:#fff;
+	margin:0 auto;
+	background-color: #333;
+	text-align: center;
+	margin-bottom:42px;
+}
+.course-d .bz-title{
+	text-align: center;
+}
+.course-d .bz-title .t-h1{
+	font-size: 24px;
+	margin-bottom:10px;
+}
+.course-d .bz-title .t-h2{
+	font-size: 18px;
+	color:#999;
+	margin-bottom:38px;
+}
+.course-d .bz-1,.course-d .bz-2,.course-d .bz-3,.course-d .bz-4,.course-d .bz-5{
+	padding-bottom:64px;
+}
+.course-d .bz-1{
+	background-color: #707aad;
+}
+.course-d .bz-1 .bz-title{
+	color:#fff;
+}
+.course-d .bz-1 .bz-title .t-h2{
+	color:#fff;
+}
+.course-d .bz-1 table{
+	width:100%;
+	color:#fff;
+	background-color: rgba(255,255,255,0.1);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff);
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	text-align: center;
+	font-size: 14px;
+	border-collapse: collapse;
+}
+:root .course-d .bz-1 table{
+	filter: none;
+}
+.course-d .bz-1 table tr{
+	border-top:1px solid #fff;
+}
+.course-d .bz-1 table tr.no-b{
+	border-top:none;
+}
+.course-d .bz-1 table .t-b4{
+	border-left:1px solid #fff;
+	border-right:1px solid #fff;
+}
+.course-d .bz-1 table .t-1{
+	width:13%;
+}
+.course-d .bz-1 table .t-2,.course-d .bz-1 table .t-3,.course-d .bz-1 table .t-4{
+	width:29%;
+}
+.course-d .bz-1 table th{
+	padding:22px 0;
+}
+.course-d .bz-1 table td{
+	padding:16px 0;
+}
+.course-d .bz-1 table th,.course-d .bz-1 table .t-b1{
+	font-size: 18px;
+	font-weight: bold;
+}
+.course-d .bz-1 table .t-b2{
+	line-height: 28px;
+	vertical-align: top;
+}
+.course-d .bz-1 table .course-btn-o{
+	width:160px;
+	height:40px;
+	line-height: 40px;
+	font-size: 14px;
+}
+.course-d .bz-1 table .t-b3{
+	padding: 24px 0;
+}
+/*===================*/
+.course-d .bz-2{
+	background-color: #fff;
+}
+.course-d .bz-2 .bz-cont ul{
+	margin-bottom:46px;
+}
+.course-d .bz-2 .bz-cont li{
+	width:170px;
+	text-align: center;
+}
+.course-d .bz-2 .bz-cont li .t-h1{
+	width:120px;
+	height:120px;
+	margin:0 auto;	
+	margin-bottom:18px;
+	background: url(../images/temp/course-7r-bg-1.png) no-repeat 0 0;
+}
+.course-d .bz-2 .bz-cont li.li-1 .t-h1{
+	background-position: 0 0;
+}
+.course-d .bz-2 .bz-cont li.li-2 .t-h1{
+	background-position: -180px 0;
+}
+.course-d .bz-2 .bz-cont li.li-3 .t-h1{
+	background-position: -360px 0;
+}
+.course-d .bz-2 .bz-cont li.li-4 .t-h1{
+	background-position: -540px 0;
+}
+.course-d .bz-2 .bz-cont li.li-5 .t-h1{
+	background-position: -720px 0;
+}
+.course-d .bz-2 .bz-cont li.li-6 .t-h1{
+	background-position: -900px 0;
+}
+.course-d .bz-2 .bz-cont li.li-7 .t-h1{
+	background-position: -1080px 0;
+}
+.course-d .bz-2 .bz-cont li .t-h2{
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom:2px;
+}
+.course-d .bz-2 .bz-cont li .t-h3{
+	font-size: 14px;
+}
+/*======================*/
+.course-d .bz-3{
+	background:url(../images/temp/course-bz3-bg-1.jpg) no-repeat center 0;
+}
+.course-d .bz-3 .bz-cont .text{
+	text-align: center;
+	font-size: 14px;
+	line-height: 24px;
+	margin-bottom:46px;
+}
+/*======================*/
+.course-d .bz-4{
+	background-color: #fff;
+}
+.course-d .bz-4 .bz-cont ul{
+	width:900px;
+	margin:0 auto;
+	margin-bottom:46px;
+}
+.course-d .bz-4 .bz-cont ul li{
+	width:300px;
+}
+.course-d .bz-4 .bz-cont ul li .t-h1{
+	width:138px;
+	height:156px;
+	margin: 0 auto;
+	margin-bottom:24px;
+	background:url(../images/temp/course-bz4-bg-1.png) no-repeat 0 0;
+}
+.course-d .bz-4 .bz-cont ul li.li-1 .t-h1{
+	background-position: 0 0;
+}
+.course-d .bz-4 .bz-cont ul li.li-2 .t-h1{
+	background-position: -252px 0;
+}
+.course-d .bz-4 .bz-cont ul li.li-3 .t-h1{
+	background-position: -504px 0;
+}
+.course-d .bz-4 .bz-cont ul li .t-h2{
+	text-align: center;
+	font-size: 14px;
+	line-height: 20px;
+}
+/*================*/
+.course-d .bz-5 .bz-cont ul{
+	margin-bottom:46px;
+}
+.course-d .bz-5 .bz-cont ul li{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	width:560px;
+	height:340px;
+	padding-top:100px;
+	padding-left:46px;
+	padding-right:46px;
+	background-color: #fff;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+}
+.course-d .bz-5 .bz-cont ul li .t-h1{
+	display: inline-block;
+	font-size: 24px;
+	padding-bottom:6px;
+	border-bottom:1px solid #888;
+	margin-bottom:6px;
+}
+.course-d .bz-5 .bz-cont ul li .t-h2{
+	font-size: 16px;
+	color:#888;
+	margin-bottom:18px;
+}
+.course-d .bz-5 .bz-cont ul li .t-h3{
+	font-size: 14px;
+	line-height: 24px;
+}
+.course-d .bz-5 .bz-cont ul li .t-h4{
+	width:160px;
+	height:160px;
+	left:0;
+	right:0;
+	top:-50px;
+	margin: 0 auto;
+	background: url(../images/temp/course-bz5-bg-1.png) no-repeat 0 0;
+}
+.course-d .bz-5 .bz-cont ul li.li-1 .t-h4{
+	background-position: 0 0;
+}
+.course-d .bz-5 .bz-cont ul li.li-2 .t-h4{
+	background-position: -624px 0;
+}
+.course-d .bz-5 .bz-title .t-h2{
+	margin-bottom:96px;
+}
+.course-d.main-pad{
+	padding-bottom:0;
+}
+/*===================*/
+.course-sc{
+	background: url(../images/temp/course-sc-bg-1.jpg) no-repeat center 0;
+}
+.course-sc .course-title .t-h1{
+	font-size: 42px;
+	color:#fff;
+}
+.course-sc .cont .box{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-top:46px;
+	width:414px;
+	height:368px;
+	margin:0 auto;
+	background-color: rgba(255,255,255,0.5);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff,endColorstr=#7fffffff);
+}
+:root .course-sc .cont{
+	filter: none;
+}
+.course-sc .cont .tips-text{
+	text-align: center;
+	color:#fff;
+	margin-top:10px;
+}
+.course-sc .cont .t-h1{
+	font-size: 20px;
+	margin-bottom:16px;
+	text-align: center;
+}
+.course-sc .cont .t-h2{
+	margin-bottom:18px;
+}
+.course-bor{
+	height:1px;
+	width:58px;
+	background-color: #333;
+	margin:0 auto;
+}
+.course-sc .cont .t-h3{
+	width:272px;
+	height:54px;
+	line-height: 54px;
+	margin: 0 auto;
+	margin-bottom:18px;
+}
+.course-sc .cont .t-h3 input{
+	width:100%;
+	height:100%;
+	border:none;
+	padding:0;
+	outline: none;
+	line-height: 54px;
+	text-indent: 14px;
+	font-size: 16px;
+}
+.course-sc .cont .t-h4{
+	width:272px;
+	height:64px;
+	line-height: 64px;
+	font-size: 16px;
+}
+/*========================*/
+.course-f .course-title .t-h1{
+	margin-bottom:70px;
+}
+.course-f .cont{
+	width:1088px;
+	height:384px;
+	background: url(../images/temp/course-zcsl-bg-1.png) no-repeat center 0;
+	margin:0 auto;
+	margin-bottom:46px;
+}
+.course-f .cont .tit{
+	position: absolute;
+	font-size: 18px;
+	font-weight: bold;
+}
+.course-f .cont .tit-1{
+	top:-28px;
+	left:158px;
+}
+.course-f .cont .tit-2{
+	top:190px;
+	left:614px;
+}
+.course-f .cont .tt-1{
+	position: absolute;
+	font-size: 14px;
+	color:#18AA1F;
+	left:186px;
+}
+.course-f .cont .tt-2{
+	position: absolute;
+	font-size: 14px;
+	left:646px;
+}
+.course-f .cont .t-1{
+	top:3px;
+}
+.course-f .cont .t-2{
+	top:39px;
+}
+.course-f .cont .t-3{
+	top:73px;
+}
+.course-f .cont .t-4{
+	top:107px;
+}
+.course-f .cont .t-5{
+	top:141px;
+}
+.course-f .cont .t-6{
+	top:223px;
+}
+.course-f .cont .t-7{
+	top:257px;
+}
+.course-f .cont .t-8{
+	top:291px;
+}
+.course-f .cont .t-9{
+	top:325px;
+}
+.course-f .cont .t-10{
+	top:359px;
+}
+/*========================*/
+.course-g{
+	background: url(../images/temp/course-xs-bg-1.jpg) no-repeat center 0;
+}
+.course-g .course-title .t-h1{
+	margin-bottom:104px;
+}
+.course-g .cont{
+	margin-bottom:322px;
+}
+.course-g .cont .ul-out{
+	width:612px;
+	height:236px;
+	margin: 0 auto;
+	overflow: hidden;
+	margin-bottom:16px;
+}
+.course-g .cont ul{
+	/*margin-top:-354px;*/
+	width:100%;
+}
+.course-g .cont ul li{
+	width:100%;
+	height:53px;
+	line-height: 53px;
+	font-size: 16px;
+	text-indent: 62px;
+	padding-bottom:6px;
+}
+.course-g .cont ul li.li-1{
+	background: url(../images/temp/course-xs-bar-1.png) no-repeat 0 0;
+}
+.course-g .cont ul li.li-2{
+	background: url(../images/temp/course-xs-bar-2.png) no-repeat 0 0;
+}
+.course-g .cont ul li.li-3{
+	background: url(../images/temp/course-xs-bar-3.png) no-repeat 0 0;
+}
+.course-g .cont ul li.li-4{
+	background: url(../images/temp/course-xs-bar-4.png) no-repeat 0 0;
+}
+.course-g .cont ul li.li-5{
+	background: url(../images/temp/course-xs-bar-5.png) no-repeat 0 0;
+}
+.course-g .cont ul li.li-6{
+	background: url(../images/temp/course-xs-bar-6.png) no-repeat 0 0;
+}
+/*=====================*/
+.course-h{
+	background: url(../images/temp/course-cgbc-bg-1.jpg) no-repeat center 0;
+}
+.course-h .course-title{
+	color:#fff;
+}
+.course-h .cont .text{
+	height:48px;
+	line-height: 48px;
+	color:#fff;
+	text-align: center;
+	font-size: 14px;
+	margin-bottom:44px;
+}
+.course-h .cont .text i,.course-h .cont .text span{
+	display: inline-block;
+}
+.course-h .cont .text span{
+	font-size: 36px;
+	background-color: #333;
+	padding:0 10px;
+	margin:0 10px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+.course-h .course-title .t-h1{
+	margin-bottom:72px;
+}
+.course-h .course-title .t-h2{
+	line-height: 30px;
+	font-size: 18px;
+}
+/*===========================*/
+.course-i{
+	background: url(../images/temp/course-bwjh-bg-1.jpg) no-repeat center 0;
+}
+.course-i .course-title .t-h2{
+	margin-bottom:46px;
+	line-height: 30px;
+	font-size: 18px;
+}
+.course-i.main-pad{
+	padding-bottom:90px;
+}
+/*=====================*/
+.course-j .course-title .t-h1{
+	margin-bottom:4px;
+}
+.course-j .course-title .t-h3{
+	font-size: 18px;
+	margin-bottom:30px;
+}
+.course-j .cont .text{
+	text-align: center;
+	height:20px;
+	line-height: 20px;
+	font-size: 14px;
+	color:#999;
+	background: url(../images/icon/index-ssn-bar.jpg) no-repeat center center;
+	margin-bottom:38px;
+}
+.course-j .cont ul{
+	width:1100px;
+	margin:0 auto;
+}
+.course-j .cont ul li{
+	width:33.3%;
+	text-align: center;
+	margin-bottom:26px;
+}
+.course-j .cont ul li .t-h1 img{
+	margin:0 auto;
+}
+.course-j .cont ul li .t-h1{
+	margin-bottom:6px;
+	height:85px;
+}
+.course-j .cont ul li .t-h2{
+	font-size: 16px;
+	font-weight: 600;
+}
+.course-j .cont ul li .t-h3{
+	font-size: 14px;
+}
+.course-j .cont ul li.last{
+	height:140px;
+}
+.course-j .cont ul li .last-text{
+	margin-top:70px;
+}
+/*==================================*/
+.course-k{
+	background: url(../images/taoye/taoye-zk/course-ty-zk-jjf-bg.jpg) no-repeat center 0;
+}
+.course-k .cont ul{
+	text-align: center;
+	margin-bottom:38px;
+}
+.course-k .cont ul li{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width:254px;
+	height:320px;
+	background-color: #fff;
+	padding-top:68px;
+	margin:0 73px;
+}
+.course-k .cont ul li .t-h1{
+	font-size: 24px;
+	margin-bottom:10px;
+}
+.course-k .cont ul li .t-h2{
+	font-size: 14px;
+	line-height: 24px;
+}
+.course-k .cont ul li .t-h3{
+	width:104px;
+	height:104px;
+	left:0;
+	right:0;
+	margin:0 auto;
+	top:-50px;
+}
+.course-k .cont ul li.li-1 .t-h3{
+	background: url(../images/taoye/taoye-zk/course-ty-zk-three-r-2-1.png) no-repeat center center;
+}
+.course-k .cont ul li.li-2 .t-h3{
+	background: url(../images/taoye/taoye-zk/course-ty-zk-three-r-2-2.png) no-repeat center center;
+}
+.course-k .cont ul li.li-3 .t-h3{
+	background: url(../images/taoye/taoye-zk/course-ty-zk-three-r-2-3.png) no-repeat center center;
+}
+.course-k .course-title .t-h1{
+	margin-bottom:10px;
+}
+.course-k .course-title{
+	margin-bottom:90px;
+}
+/*========================*/
+.course-l{
+	
+}
+.course-l .cont ul{
+	
+}
+.course-l .cont ul li{
+	width:376px;
+	margin:0 12px;
+	margin-bottom:32px;
+}
+.course-l .cont ul li .t-h1{
+	width:376px;
+	height:229px;
+	margin-bottom:24px;
+}
+.course-l .cont ul li .t-h1 img{
+	width:100%;
+	height:100%;
+}
+.course-l .cont ul li .t-h2{
+	font-size: 24px;
+	margin-bottom:12px;
+}
+.course-l .cont ul li .t-h3{
+	font-size: 14px;
+	line-height: 24px;
+}
+.course-l .cont ul li.li-4{
+	margin-left:190px;
+}
+.course-l .course-title{
+	margin-bottom:40px;
+}
+.course-l .course-title .t-h1{
+	margin-bottom:10px;
+}
+/*=========================*/
+.course-n{
+	background: url(../images/taoye/taoye-zk/course-ty-zk-nxsw-bg.jpg) no-repeat center 0;
+}
+.course-n .cont ul{
+	height:280px;
+	background: url(../images/taoye/taoye-zk/course-ty-zk-nxsw-in.jpg) no-repeat center 0;
+	margin-bottom:42px;
+}
+.course-n .cont ul li{
+	float:left;
+	width:200px;
+	height:140px;
+	color:#fff;
+	font-size: 18px;
+	text-align: center;
+	line-height: 210px;
+}
+.course-n .cont .t-img img{
+	margin:0 auto;
+}
+/*=====================*/
+.course-m{
+	
+}
+.course-m .cont ul{
+	margin-bottom:46px;
+}
+.course-m .cont ul li{
+	float:left;
+	width:330px;
+	padding:0 35px;
+}
+.course-m .cont ul li .t-h1{
+	width:100%;
+	height:105px;
+	margin-bottom:26px;
+}
+.course-m .cont ul li.li-1 .t-h1{
+	background: url(../images/taoye/taoye-zk-sf/course-ty-zk-sf-blue-img-1.png) no-repeat center 0;
+}
+.course-m .cont ul li.li-2 .t-h1{
+	background: url(../images/taoye/taoye-zk-sf/course-ty-zk-sf-blue-img-2.png) no-repeat center 0;
+}
+.course-m .cont ul li.li-3 .t-h1{
+	background: url(../images/taoye/taoye-zk-sf/course-ty-zk-sf-blue-img-3.png) no-repeat center 0;
+}
+.course-m .cont ul li .t-h1 i{
+	font-size: 24px;
+	color:#fff;
+	padding-left:46px;
+}
+.course-m .cont ul li .t-h2{
+	font-size: 14px;
+	line-height: 24px;
+}
+/*===================*/
+.course-o.main-pad{
+	padding-bottom:0;
+}
+.course-o .cont .box{
+	width:600px;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-left:66px;
+	padding-top:66px;
+}
+.course-o .cont-1{
+	background: url(../images/taoye/taoye-zk-sf/course-ty-zk-sf-qjx-bg-1.jpg) no-repeat center 0;
+}
+.course-o .cont-1 .box{
+	height:413px;
+}
+.course-o .cont-2{
+	background: url(../images/taoye/taoye-zk-sf/course-ty-zk-sf-qjx-bg-2.jpg) no-repeat center 0;
+}
+.course-o .cont-2 .box{
+	height:394px;
+}
+.course-o .cont-3{
+	background: url(../images/taoye/taoye-zk-sf/course-ty-zk-sf-qjx-bg-3.jpg) no-repeat center 0;
+}
+.course-o .cont-3 .box{
+	height:475px;
+}
+.course-o .cont .box .t-h1{
+	font-size: 24px;
+	margin-bottom:26px;
+}
+.course-o .cont .box .t-h2{
+	margin-bottom:36px;
+}
+.course-o .cont .box .t-h2 .t-ul p{
+	float:left;
+	width:100px;
+	height:42px;
+	text-align: center;
+	line-height: 42px;
+	border:1px solid #ddd;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	font-size: 14px;
+	margin-right:24px;
+	margin-bottom:14px;
+}
+.course-o .cont .box .course-btn-g{
+	margin-left:0;
+	margin-right:0;
+}
+.course-o .cont .box .t-h2 .text{
+	font-size: 14px;
+	line-height: 24px;
+}
+.course-o .cont-3 .box .t-h1{
+	margin-bottom:38px;
+}
+.course-o .cont .box .t-h2 .fenzhi{
+	width:306px;
+	height:156px;
+	background: url(../images/taoye/taoye-zk-sf/course-ty-zk-sf-fenzhi-1.png) no-repeat center 0;
+}
+.course-o .cont .box .t-h2 .fenzhi p{
+	font-size: 14px;
+}
+.course-o .cont .box .t-h2 .fenzhi p em i{
+	font-size: 20px;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-1{
+	left:19px;
+	top:-20px;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-2{
+	left:215px;
+	top:-20px;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-3{
+	left:2px;
+	top:109px;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-4{
+	left:226px;
+	top:104px;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-1 em{
+	color:#ffd227;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-2 em{
+	color:#ee1194;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-3 em{
+	color:#f36174;
+}
+.course-o .cont .box .t-h2 .fenzhi .t-p-4 em{
+	color:#ae53a2;
+}
+.course-o .cont-1 .box .t-wang{
+	width:487px;
+	height:187px;
+	background: url(../images/taoye/taoye-zk-sj/course-ty-zk-sj-wang.png) no-repeat center 0;
+}
+.course-o .cont-1 .box .t-wang p{
+	font-size: 14px;
+	width:92px;
+	text-align: center;
+}
+.course-o .cont-1 .box .t-wang .t-1{
+	top:46px;
+}
+.course-o .cont-1 .box .t-wang .t-2{
+	top:134px;
+}
+.course-o .cont-1 .box .t-wang .t-p-1{
+	left:12px;
+}
+.course-o .cont-1 .box .t-wang .t-p-2{
+	left:138px;
+}
+.course-o .cont-1 .box .t-wang .t-p-3{
+	left:263px;
+}
+.course-o .cont-1 .box .t-wang .t-p-4{
+	left:380px;
+}
+.course-o .cont-1 .box .t-wang .t-p-5{
+	left:12px;
+}
+.course-o .cont-1 .box .t-wang .t-p-6{
+	left:138px;
+}
+.course-o .cont-1 .box .t-wang .t-p-7{
+	left:258px;
+}
+.course-o .cont-1 .box .t-wang .t-p-8{
+	left:380px;
+}
+/*=========================*/
+.course-p{
+	
+}
+.course-p .cont .t-ul{
+	margin-bottom:46px;
+}
+.course-p .cont .t-ul li{
+	float:left;
+	width:300px;
+	margin:0 50px;
+}
+.course-p .cont .t-ul li .t-h1{
+	width:100%;
+	height:180px;
+}
+.course-p .cont .t-ul li .t-h1 img{
+	width:100%;
+	height:100%;
+}
+.course-p .cont .t-ul li .box{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-top:28px;
+	padding-left:40px;
+	padding-right:40px;
+	height:286px;
+}
+.course-p .cont .t-ul li.li-1 .box{
+	background-color: #ed8262;
+}
+.course-p .cont .t-ul li.li-2 .box{
+	background-color: #5787f4;
+}
+.course-p .cont .t-ul li.li-3 .box{
+	background-color: #8e7cfc;
+}
+.course-p .cont .t-ul li .box .t-h2{
+	font-size: 24px;
+	margin-bottom:10px;
+	text-align: center;
+}
+.course-p .cont .t-ul li .box .t-h3{
+	font-size: 14px;
+	line-height:24px;
+}
+/*------*/
+.course-p .cont .tt-ul{
+	margin-bottom:46px;
+}
+.course-p .cont .tt-ul li{
+	float:left;
+	width:400px;
+}
+.course-p .cont .tt-ul li .t-h1{
+	width:100%;
+	height:216px;
+}
+.course-p .cont .tt-ul li .t-h1 img{
+	width:100%;
+	height:100%;
+}
+.course-p .cont .tt-ul li .box{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-top:24px;
+	padding-left:42px;
+	padding-right:42px;
+	height:216px;
+}
+.course-p .cont .tt-ul li.li-1 .box{
+	background-color: #5f452f;
+}
+.course-p .cont .tt-ul li.li-2 .box{
+	background-color: #353c63;
+}
+.course-p .cont .tt-ul li.li-3 .box{
+	background-color: #3d5858;
+}
+.course-p .cont .tt-ul li .box .t-h2{
+	font-size: 24px;
+	margin-bottom:10px;
+	text-align: center;
+}
+.course-p .cont .tt-ul li .box .t-h3{
+	font-size: 14px;
+	line-height:24px;
+}
+/*===============================*/
+.course-q{
+	background: url(../images/taoye/taoye-zk-cw/course-ty-zk-cw-glass-bg.jpg) no-repeat center 0;
+} 
+.course-q .cont .t-ul{
+	margin-bottom:46px;
+}
+.course-q .cont .t-ul li{
+	float:left;
+	width:400px;
+}
+.course-q .cont .t-ul li .t-h1{
+	width:200px;
+	height:200px;
+	border-radius: 50%;
+	border:1px solid #fff;
+	margin: 0 auto;
+	margin-bottom:20px;
+}
+.course-q .cont .t-ul li.li-1 .t-h1{
+	background: url(../images/taoye/taoye-zk-cw/course-ty-zk-cw-icon-1.png) no-repeat center 53px;
+}
+.course-q .cont .t-ul li.li-2 .t-h1{
+	background: url(../images/taoye/taoye-zk-cw/course-ty-zk-cw-icon-2.png) no-repeat center 53px;
+}
+.course-q .cont .t-ul li.li-3 .t-h1{
+	background: url(../images/taoye/taoye-zk-cw/course-ty-zk-cw-icon-3.png) no-repeat center 53px;
+}
+.course-q .cont .t-ul li .t-h1 p{
+	margin-top:120px;
+	font-size: 24px;
+	text-align: center;
+}
+.course-q .cont .t-ul li .t-h2{
+	text-align: center;
+	font-size: 14px;
+	line-height: 24px;
+	width:190px;
+	margin: 0 auto;
+}
+.course-q .cont .t-ul li .t-h3 img{
+	margin:0 auto;
+}
+.course-l .video-box-out{
+	width:550px;
+	height:300px;
+}
+/*================*/
+.course-btn-o-t{
+	margin-top:40px;
+}
+.video-infor-text{
+	text-align: center;
+	font-size: 20px;
+	margin-top:10px;
+}
+/*================*/

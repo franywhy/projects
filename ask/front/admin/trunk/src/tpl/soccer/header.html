@@ -1,0 +1,65 @@
+
+<%if(params.a!="soccerlog" ){%>
+
+<div class="tagArea">
+    <ul class="tagList">
+        <li class="<%=params.tab=="daily"? "cur ":" "%>"><a href="#a=soccer&tab=daily&type=4"><i></i><span>每日竞猜</span></a></li>
+        <li class="<%=params.tab=="teams"? "cur ":" "%>"><a href="#a=soccer&tab=teams"><i></i><span>所有球队</span></a></li>
+        <li class="<%=params.tab=="log_list"? "cur ":" "%>"><a href="#a=soccer&tab=log_list"><i></i><span>所有竞猜记录</span></a></li>
+        <li class="<%=params.tab=="top3"? "cur ":" "%>"><a href="#a=soccer&tab=top3&type=1"><i></i><span>前三</span></a></li>
+        <li class="<%=params.tab=="top4"? "cur ":" "%>"><a href="#a=soccer&tab=top4&type=2"><i></i><span>四强</span></a></li>
+        <li class="<%=params.tab=="top8"? "cur ":" "%>"><a href="#a=soccer&tab=top8&type=3"><i></i><span>八强</span></a></li>
+    </ul>
+    <div class="tag_r">
+        <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+			<%if(params.tab=="daily"){%>
+				<input type="button" class="d-button d-state-highlight" value="添加竞猜" onclick="Izb.controller.soccer.daily_add()" />
+                
+			<%}%>
+			<%if(params.tab=="top3"){%>
+				<input type="button" class="d-button d-state-highlight" value="发布前三" onclick="Izb.controller.soccer.publish(1)" />
+        <%}%>
+        <%if(params.tab=="top4"){%>
+				<input type="button" class="d-button d-state-highlight" value="发布四强" onclick="Izb.controller.soccer.publish(2)" />
+        <%}%>
+        <%if(params.tab=="top8"){%>
+				<input type="button" class="d-button d-state-highlight" value="发布八强" onclick="Izb.controller.soccer.publish(3)" />
+        <%}%>
+
+			
+
+        <%}%>
+    </div>
+</div>
+<%}else{%>
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<%}%>
+
+
+<%if(params.tab=="log_list"||params.a=="soccerlog" ){%>
+    <div class="searchForm">
+        <form name="searchForm">
+            用户ID
+            <input type="number" name="userId" value="" />
+            类型
+             <select name="type" class="input" >
+                    <option value="">全部</option>
+                    <option value="1">前三</option>
+                    <option value="2">四强</option>
+                    <option value="3">八强</option>
+                    <option value="4">每日</option>
+
+                </select>
+            选择日期
+        <input id="stime" type="text" name="stime" value="" size="20" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})" />
+            <input class="d-button J_search" type="button" value="查询" />
+            <input class="d-button J_reset" type="reset" name="" value="重置">
+        </form>
+    </div>
+    <%}%>

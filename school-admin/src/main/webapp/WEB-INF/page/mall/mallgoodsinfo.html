@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>商品档案</title> #parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group">
+					<table class="table table-condensed" border="0">
+						<tr border="0">
+							<td><label for="name">商品 ID:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.id" @keyup.enter="query" placeholder="商品ID"></td>
+							<td><label for="name">商品名称:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.name" @keyup.enter="query" placeholder="商品名称"></td>
+							<!-- <td><label for="name">适用人群:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.suitableUser" @keyup.enter="query" placeholder="适用人群"></td> -->
+						</tr>
+						<tr border="0">
+							<td><label for="name">上架状态:</label></td>
+							<td>
+								<select name="status" form="query" class="form-control" v-model.trim="q.status">
+									<option value="">全部</option>
+									<option value="1">上架</option>
+									<option value="0">下架</option>
+								</select>
+							</td>
+							<td><label for="name">层次:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.levelName" readonly="readonly" placeholder="点击选择层次" @click="levelLayerShowQuery"></td>
+							<td><label for="name">专业:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.professionName" readonly="readonly" placeholder="点击选择专业" @click="professionLayerShowQuery"></td>
+						</tr>
+						<tr border="0">
+							<td><label for="name">班型:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.classTypeName" readonly="readonly" placeholder="点击选择班级" @click="classTypeLayerShowQuery"></td>
+						    <td><label for="name">NCId:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.ncId"  placeholder="请输入NCId号"></td>
+							<td><label for="name">产品线:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.productName" readonly="readonly" placeholder="点击选择产品线" @click="productLayerShowQuery"></td>
+						</tr>
+					</table>
+					<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+					<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+					#if($shiro.hasPermission("mallgoodsinfo:save"))
+						<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					#end 
+					#if($shiro.hasPermission("mallgoodsinfo:update"))
+						<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a> 
+					#end
+					#if($shiro.hasPermission("mallgoodsinfo:delete"))
+						<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+					#end 
+					#if($shiro.hasPermission("mallgoodsinfo:resume")) 
+					<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;上架</a>
+					#end #if($shiro.hasPermission("mallgoodsinfo:pause")) 
+						<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;下架</a>
+					#end 
+					#if($shiro.hasPermission("mallgoodsinfo:accept")) 
+						<a class="btn btn-primary" @click="audit"><i class="fa fa-question-circle"></i>&nbsp;审核</a> 
+					#end
+					<!-- 2017-08-01 -->
+				    #if($shiro.hasPermission("mallgoodsinfo:copyArea"))
+					<a class="btn btn-primary" @click="copyGoodAreaLayerShow"><i class="fa fa-plus"></i>&nbsp;拷贝省份</a>
+					#end
+				</div>
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group" style="display: none">
+					<div class="col-sm-2 control-label">商品ID</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.id" placeholder="商品ID" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">商品名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.name" placeholder="商品名称" id="nameTextContent" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">售价</div>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" v-model.trim="mallGoodsInfo.presentPrice" placeholder="售价" id="presentPriceTextContent" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">原价</div>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" v-model.trim="mallGoodsInfo.originalPrice" placeholder="原价" id="originalPriceTextContent" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">适用对象</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.suitableUser" placeholder="适用对象" id="suitableUserTextContent" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">学习周期</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.learningTime" placeholder="学习周期" id="learningTimeTextContent" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">上课方式</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.pattern" placeholder="上课方式" id="patternTextContent" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-2 control-label">班型</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.classTypeName" readonly="readonly" placeholder="点击选择班型" @click="classTypeLayerShow">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-2 control-label">专业</div>
+					<div class="col-sm-10">
+						<!-- <select name="status" form="query" class="form-control" placeholder="专业" v-model.trim="mallGoodsInfo.professionId" id="professionContent">
+							<option v-for="option in professionSelections" v-bind:value="option.value">{{ option.name }}</option>
+						</select> -->
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.professionName" readonly="readonly" placeholder="点击选择专业" @click="professionLayerShow">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">层次</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.levelName" readonly="readonly" placeholder="点击选择层次" @click="levelLayerShow">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">有效期(天)</div>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" v-model.trim="mallGoodsInfo.dayValidity" placeholder="有效期" >
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">产品线</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.productName" readonly="readonly" placeholder="点击选择产品线" @click="productLayerShow">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">小图</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.thumbPath" placeholder="小图" readonly="readonly" onclick="hq.core.upload(null,'vm.mallGoodsInfo.thumbPath');"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">大图</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.originPath" placeholder="大图" readonly="readonly" onclick="hq.core.upload(null,'vm.mallGoodsInfo.originPath');"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">合同模板</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.templateName" placeholder="点击选择模板" readonly="readonly" @click="templateLayerShow"/>
+					</div>
+				</div>
+                <div class="form-group">
+					<div class="col-sm-2 control-label">NCID</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.ncId" placeholder="NCID" onkeyup="value=value.replace(/[^\w\/]/ig,'')" />
+					</div>
+				</div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">开通题库权限</div>
+                    <div class="col-sm-10">
+                        <label class="radio-inline"><input type="radio" name="onlyOne" value="1" v-model.trim="mallGoodsInfo.onlyOne" @change=""  /> 是</label>
+                        <label class="radio-inline"> <input type="radio" name="onlyOne" value="0" v-model.trim="mallGoodsInfo.onlyOne" @change="" /> 否</label>
+                    </div>
+                </div>
+                <div class="form-group" v-show="mallGoodsInfo.onlyOne == 1">
+					<div class="col-sm-2 control-label">绑定题库科目代码</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.tkCourseCode" placeholder="例如(多个代码用英文逗号隔开):kckm001,kckm002" onkeyup="value=value.replace(/[^\w\,\/]/ig,'')" />
+					</div>
+				</div>
+                <div class="form-group" v-show="mallGoodsInfo.onlyOne == 1">
+					<div class="col-sm-2 control-label">商品介绍</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="mallGoodsInfo.goodRecomment" placeholder="商品介绍,100字以内"/>
+					</div>
+				</div>
+                <div class="form-group">
+					<div class="col-sm-2 control-label">课程详情</div>
+					<div class="col-sm-10">
+						<a class="btn btn-primary" @click="iadd"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					    <a class="btn btn-primary" @click="iupdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+					    <a class="btn btn-primary" @click="idelete"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+						<table id="jqGridDetail"></table>
+						<div id="jqGridPagerDetail"></div>
+					</div>
+				</div>
+				<div class="form-group" id="commitButton">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" /> &nbsp;&nbsp;
+					<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+
+				<div class="form-group" id="auditButton">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="accept" value="通过" /> &nbsp;&nbsp;
+					<input type="button" class="btn btn-warning" @click="reject" value="驳回" />
+				</div>
+			</form>
+		</div>
+		
+	<!-- 商品下的课程 -->
+	<div id="courseMaterialTypeLayer" style="display: none;">
+		<form class="form-horizontal">
+		<div class="form-group">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">省份</div>
+			   	<div class="col-sm-10">
+			   		<input type="text" class="form-control" v-model.trim="detailItem.areaName" readonly="readonly" placeholder="点击选择省份" @click="areaLayerShowDetail">
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">课程</div>
+			   	<div class="col-sm-10">
+			   		<input type="text" class="form-control" v-model.trim="detailItem.courseName" readonly="readonly" placeholder="点击选择课程" @click="courseLayerShowDetail">
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">类型</div>
+			   	<div class="col-sm-10">
+					<input type="radio" id="tid1" name="courseType" value="0" v-model.trim="detailItem.courseType"><label for="tid1">正常</label><br/>
+					<input type="radio" id="tid2" name="courseType" value="1" v-model.trim="detailItem.courseType"> <label for="tid2">被代替课程</label><br/>
+					<input type="radio" id="tid3" name="courseType" value="2" v-model.trim="detailItem.courseType"> <label for="tid3">代替课程</label><br/>
+					<input type="radio" id="tid4" name="courseType" value="3" v-model.trim="detailItem.courseType"> <label for="tid4">专业不对口课程</label>
+				</div>
+			</div>
+			
+		</div>
+		</form>
+	</div>
+		
+		
+		
+		<!-- 商品下的课程 -->
+		<div id="copyAreaLayer" style="display: none;">
+			<form class="form-horizontal">
+			<div class="form-group">
+				<div class="form-group">
+				   	<div class="col-sm-2 control-label">该商品现有省份</div>
+				   	<div class="col-sm-10">
+				   		<input type="text" class="form-control" v-model.trim="copyArea.areaName1" readonly="readonly" placeholder="点击选择该商品现有省份" @click="copyArea1LayerShow">
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-2 control-label">新加省份</div>
+				   	<div class="col-sm-10">
+				   		<input type="text" class="form-control" v-model.trim="copyArea.areaName2" readonly="readonly" placeholder="点击选择新加省份" @click="copyArea2LayerShow">
+				    </div>
+				</div>
+			</div>
+			</form>
+		</div>
+		
+		
+		
+	</div>
+
+	<script src="${rc.contextPath}/js/mall/mallgoodsinfo.js?_${date.systemTime}"></script>
+#parse("layer/areaLay.html")
+#parse("layer/productLay.html")
+#parse("layer/areaGoodsLay.html")
+#parse("layer/courseLay.html")
+#parse("layer/classTypeLay.html")
+#parse("layer/levelLay.html")
+#parse("layer/professionLay.html")
+#parse("layer/templateLay.html")
+#parse("../../statics/plugins/upload/upload.html")
+</body>
+</html>

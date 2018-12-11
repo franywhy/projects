@@ -1,0 +1,173 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:150px;">学员</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="userId" id="userId" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">校区编码</td>
+            <td>
+                <input class="input" type="text" name="ncSchoolId" id="ncSchoolId" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">订单编号</td>
+            <td>
+                <input class="input" type="text" name="orderno" id="orderno" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">订单名称</td>
+            <td>
+                <input class="input" type="text" name="orderName" id="orderName" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">订单描述</td>
+            <td>
+                <input class="input" type="text" name="orderDescribe" id="orderDescribe" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">订单有效期</td>
+            <td>
+                <input class="input" type="text" name="validity" id="validity" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">订单金额</td>
+            <td>
+                <input class="input" type="text" name="totalMoney" id="totalMoney" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">订单状态</td>
+            <td>
+                <input class="input" type="text" name="status" id="status" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">商品NCID</td>
+            <td>
+                <input class="input" type="text" name="ncProductId" id="nc_productId" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">商品ID</td>
+            <td>
+                <input class="input" type="text" name="productId" id="productId" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">商品图片</td>
+            <td>
+                <input class="input" type="text" name="pic" id="pic" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">商品类型</td>
+            <td>
+                <input class="input" type="text" name="productType" id="productType" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">线上付款方式</td>
+            <td>
+                <input class="input" type="text" name="payOnLineType" id="payOnLineType" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">支付宝交易号</td>
+            <td>
+                <input class="input" type="text" name="alipayTradeNo" id="alipayTradeNo" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">支付方式</td>
+            <td>
+                <input class="input" type="text" name="payType" id="payType" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">实际支付金额</td>
+            <td>
+                <input class="input" type="text" name="payMoney" id="payMoney" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">支付回调时间</td>
+            <td>
+                <input class="input" type="text" name="payCallblack_time" id="payCallblack_time" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">支付回调备注</td>
+            <td>
+                <input class="input" type="text" name="payCallblack_remark" id="payCallblack_remark" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">支付状态</td>
+            <td>
+                <input class="input" type="text" name="payStatus" id="payStatus" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">支付时间</td>
+            <td>
+                <input class="input" type="text" name="payTime" id="payTime" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">支付IP</td>
+            <td>
+                <input class="input" type="text" name="payIP" id="payIP" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">优惠券ID</td>
+            <td>
+                <input class="input" type="text" name="couponId" id="couponId" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">优惠方案</td>
+            <td>
+                <input class="input" type="text" name="preferenceScheme" id="preferenceScheme" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">优惠金额</td>
+            <td>
+                <input class="input" type="text" name="favorableMoney" id="favorableMoney" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">赠送积分</td>
+            <td>
+                <input class="input" type="text" name="addScore" id="addScore" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">使用积分</td>
+            <td>
+                <input class="input" type="text" name="useIntegral" id="useIntegral" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">学生期望上课时间</td>
+            <td>
+                <input class="input" type="text" name="hopeClassTimeType" id="hopeClassTimeType" value="" data-options="required:true"/>
+            </td>
+            <td style="width:150px;">是否取消用户操作</td>
+            <td>
+                <input class="input" type="text" name="isCancel" id="isCancel" value="" data-options="required:true"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:150px;">创建时间</td>
+            <td>
+                <input class="input" type="text" name="createTime"  id="createTime"/>
+            </td>
+            <td style="width:150px;">是否删除</td>
+            <td>
+                <input class="input" type="text" name="dr" id="dr"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">最后修改人</td>
+            <td>
+                <input class="input" type="text" name="modifier"  id="modifier"/>
+            </td>
+            <td style="width:150px;">最后修改时间</td>
+            <td>
+                <input class="input" type="text" name="modifiedtime" id="modifiedtime"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">备注</td>
+            <td>
+                <input class="input" type="text" name="remark" id="remark" value="" data-options="required:true"/>
+            </td>
+        </tr>
+
+    </table>
+</form>

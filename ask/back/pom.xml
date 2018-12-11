@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+		<groupId>com.izhubo</groupId>
+		<artifactId>izhubo</artifactId>
+		<version>1.0</version>
+	</parent>
+	
+    <artifactId>admin</artifactId>
+    <version>2.0</version>
+    <packaging>war</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.izhubo</groupId>
+            <artifactId>rest</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-tx</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring-data-redis-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>1.2.0.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.5</version>
+        </dependency>
+
+        <!--<dependency>   java ioc annotations -->
+        <!--<groupId>javax.inject</groupId>-->
+        <!--<artifactId>javax.inject</artifactId>-->
+        <!--<version>1</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.19</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.7</version>
+        </dependency>
+        
+        
+        <dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.3.10.Final</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>4.1.7.RELEASE</version>
+		</dependency>
+<!-- <dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency> -->
+		
+	 <dependency>
+	  <groupId>com.google.code.gson</groupId>
+	  <artifactId>gson</artifactId>
+	  <version>2.2.2</version>
+    </dependency>
+		 <!--begin axis2 -->
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2</artifactId>
+
+			<version>1.7.0</version>
+
+			<type>pom</type>
+
+			<scope>compile</scope>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-adb</artifactId>
+
+			<version>1.7.0</version>
+
+			<type>jar</type>
+
+			<scope>compile</scope>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-kernel</artifactId>
+
+			<version>1.7.0</version>
+
+			<type>jar</type>
+
+			<scope>compile</scope>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-transport-http</artifactId>
+
+			<version>1.7.0</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-transport-local</artifactId>
+
+			<version>1.7.0</version>
+
+		</dependency>
+        <!--end axis2 -->
+	<dependency>
+			<groupId>javax.xml.rpc</groupId>
+			<artifactId>javax.xml.rpc-api</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<!-- MySQL驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.24</version>
+		</dependency>
+
+		<!-- mchange C3P0 数据源 -->
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5-pre2</version>
+		</dependency>
+		
+			<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		
+			<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		
+		
+		<dependency>
+	<groupId>commons-httpclient</groupId>
+	<artifactId>commons-httpclient</artifactId>
+	<version>3.0.1</version>
+</dependency>
+
+        <!-- poi office -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>3.9</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r05</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <properties>
+        <contextPath></contextPath>
+                 <redis.port>6379</redis.port>
+                <redis.host>177.77.77.158</redis.host>
+                <redis.mem.host>${redis.host}</redis.mem.host>
+                <redis.mem.port>6379</redis.mem.port>
+                <redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+				<chat.pool.maxActive>300</chat.pool.maxActive>
+				<chat.pool.maxIdle>300</chat.pool.maxIdle>
+				<chat.pool.maxWait>1500</chat.pool.maxWait>
+				
+                <mongo.uri>177.77.77.158</mongo.uri>
+                <!--<mongo.uri>${redis.host}:10000,${redis.host}:20000</mongo.uri>-->
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                
+                <red.url>res/chat/red.png</red.url>
+
+               <!--  <pic.folder>D:/java/eclipse_dev/file/img</pic.folder> -->
+                <!-- <pic.folder>D:/svn/eclipse_dev/front/file/img</pic.folder> -->
+                 <pic.folder>E:/SVN/DEV/front/file/img</pic.folder>
+                <video.folder>D:/svn/eclipse_dev/front/file/img</video.folder>
+                <upload.domain>http://127.0.0.1:9000/</upload.domain>
+                 <h5.domain>http://183.63.120.222:8028/</h5.domain>
+                   <us.domain>http://183.63.120.222:8011/</us.domain>
+                <!-- <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder> -->
+                <log.target>logfile</log.target>
+
+                <groovy-scope>provided</groovy-scope>
+                <aspectj-scope>provided</aspectj-scope>
+                 <admin.domain>http://ttadmin.app1101168695.twsapp.com/</admin.domain>
+                <pic.domain>http://183.63.120.222:8014/</pic.domain>
+               	<api.domain>http://ttapi.app1101815070.twsapp.com/</api.domain>
+                <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder>
+                 <upload.domain>http://127.0.0.1:9000/</upload.domain>
+                  <templateLoaderPath>file:///data/website/www.xxx.com/admin-view</templateLoaderPath>
+                <template_update_delay>30</template_update_delay>
+                <dev>test</dev>
+                
+                
+                	<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<sqlurl><![CDATA[jdbc:mysql://177.77.77.158:3307/ask?autoReconnect=true&characterEncoding=UTF-8]]></sqlurl>
+				<username>root</username>
+				<password>root</password>
+				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+				<hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+				<!-- 支付宝批量付款异步通知接口 -->
+				<!-- <notify.url.batch.alipay>http://adminapi1.kjcity.com/alipaybatchnotify.json</notify.url.batch.alipay> -->
+				<notify.url.batch.alipay>http://113.108.202.180:1708/alipaybatchnotify.json</notify.url.batch.alipay>
+				<!-- 支付宝单号补齐位 -->
+				<notify.pay_flow_id_head>100</notify.pay_flow_id_head>
+				<push.access_id>2200149294</push.access_id>
+				<push.env>1</push.env>
+				<!-- sso约定密钥-->
+               	<push.secret_key>55b252ee247f1c9b2e642ac8cc9eec61</push.secret_key>
+				<sso.key>6512bd43d9caa6e02c990b0a82652dca</sso.key>
+				 <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>2</push.env>
+        
+        <!-- sso约定密钥-->
+		<sso.key>6512bd43d9caa6e02c990b0a82652dca</sso.key>
+		<!-- 学分制 -->
+		<credit.mycredit.key>6512bd43d9caa6e02c990b$AF>.12**</credit.mycredit.key>
+		<credit.ncsecret.key>1512bd43d9caa6e02c990b0a82637dca</credit.ncsecret.key>
+		<credit.sync.url>http://177.77.77.118:8085/</credit.sync.url>
+		<credit.webservice.url>http://39.108.151.223:86/Webservice1.asmx</credit.webservice.url>
+			<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+				<hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+				<!-- sync的地址和密钥 用于调用sync中的学分运算 -->
+				<credit.hqonlinesync.url>http://10.0.98.88:8889/sync/</credit.hqonlinesync.url>
+				<credit.hqonlinesync.key>sync360888c442c3cc62d1608fe7f9d9</credit.hqonlinesync.key>    
+    </properties>
+
+    <profiles>
+
+        <profile>
+            <id>testLocal</id>
+            <properties>
+
+                <redis.host>127.0.0.1</redis.host>
+                <redis.mem.host>${redis.host}</redis.mem.host>
+                <redis.mem.port>6379</redis.mem.port>
+                <mongo.uri>${redis.host}:27017</mongo.uri>
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                <pic.folder>c:/upload/</pic.folder>
+                <video.folder>c:/upload/</video.folder>
+                <groovy-scope>provided</groovy-scope>
+                <templateLoaderPath>file:///D:/Project/xingYuanAdmin/projects/admin-view/</templateLoaderPath>
+                <api.domain>http://ttestapi.app1101168695.twsapp.com/</api.domain>
+                <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder>
+				<upload.domain>http://127.0.0.1:9000</upload.domain>
+            </properties>
+
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-all</artifactId>
+                    <version>${groovy-all-compiler-version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+
+        </profile>
+
+        <profile>
+            <id>test</id>
+            <properties>
+
+                <redis.host>127.0.0.1</redis.host>
+                <redis.mem.host>${redis.host}</redis.mem.host>
+                <redis.mem.port>6380</redis.mem.port>
+                <mongo.uri>${redis.host}:10000</mongo.uri>
+                <!--<mongo.uri>${redis.host}:10000,${redis.host}:20000</mongo.uri>-->
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+
+                <pic.folder>/empty/upload/</pic.folder>
+                <video.folder>/empty/upload/</video.folder>
+                <log.target>logfile</log.target>
+
+                <groovy-scope>provided</groovy-scope>
+                <aspectj-scope>provided</aspectj-scope>
+                <pic.domain>http://test.img.izhubo.com/</pic.domain>
+                <api.domain>http://ttestapi.app1101168695.twsapp.com/</api.domain>
+                <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder>
+                 <upload.domain>127.0.0.1:9000</upload.domain>
+                <templateLoaderPath>file://data/website/ttwww.app1101168695.twsapp.com/admin-view</templateLoaderPath>
+                <dev>test</dev>
+            </properties>
+
+        </profile>
+        
+         <profile>
+            <id>dockerDev</id>
+            <properties>
+
+                <redis.host>177.77.77.158</redis.host>
+                <redis.mem.host>${redis.host}</redis.mem.host>
+                <redis.mem.port>6379</redis.mem.port>
+                <redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+                <mongo.uri>177.77.77.158</mongo.uri>
+                <!--<mongo.uri>${redis.host}:10000,${redis.host}:20000</mongo.uri>-->
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                
+                <red.url>res/chat/red.png</red.url>
+
+               <!--  <pic.folder>D:/java/eclipse_dev/file/img</pic.folder> -->
+                <!-- <pic.folder>D:/svn/eclipse_dev/front/file/img</pic.folder> -->
+                 <pic.folder>/www/img</pic.folder>
+                <video.folder>/www/img</video.folder>
+                <upload.domain>http://177.77.77.181:8092/</upload.domain>
+                 <h5.domain>http://177.77.77.181:9000/</h5.domain>
+                   <us.domain>http://177.77.77.181:8091/</us.domain>
+                <!-- <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder> -->
+                <log.target>logfile</log.target>
+
+                <groovy-scope>provided</groovy-scope>
+                <aspectj-scope>provided</aspectj-scope>
+                 <admin.domain>http://ttadmin.app1101168695.twsapp.com/</admin.domain>
+                <pic.domain>http://177.77.77.181:8094/</pic.domain>
+               	<api.domain>http://177.77.77.181:8090/</api.domain>
+                <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder>
+                 <upload.domain>http://127.0.0.1:9000/</upload.domain>
+                <templateLoaderPath>file:///data/nginx-web/www.izhubo.com/admin-view</templateLoaderPath>
+                <dev>dev</dev>
+                
+                
+                	<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<sqlurl><![CDATA[jdbc:mysql://177.77.77.158:3307/ask?autoReconnect=true&characterEncoding=UTF-8]]></sqlurl>
+                <username><![CDATA[root]]></username>
+                <password><![CDATA[root]]></password>
+				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+				<hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+				<!-- 支付宝批量付款异步通知接口 -->
+				<!-- <notify.url.batch.alipay>http://adminapi1.kjcity.com/alipaybatchnotify.json</notify.url.batch.alipay> -->
+				<notify.url.batch.alipay>http://113.108.202.180:1708/alipaybatchnotify.json</notify.url.batch.alipay>
+				<!-- 支付宝单号补齐位 -->
+				<notify.pay_flow_id_head>100</notify.pay_flow_id_head>
+				<push.access_id>2200149294</push.access_id>
+				<push.env>1</push.env>
+				<!-- sso约定密钥-->
+               	<push.secret_key>55b252ee247f1c9b2e642ac8cc9eec61</push.secret_key>
+				<sso.key>6512bd43d9caa6e02c990b0a82652dca</sso.key>
+				 <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>2</push.env>
+            </properties>
+
+        </profile>
+        
+         <profile>
+            <id>dockerTest</id>
+            <properties>
+
+                <redis.host>10.0.98.9</redis.host>
+                <redis.mem.host>${redis.host}</redis.mem.host>
+                <redis.mem.port>6379</redis.mem.port>
+                <redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+                <mongo.uri>10.0.98.10:27017</mongo.uri>
+                <!--<mongo.uri>${redis.host}:10000,${redis.host}:20000</mongo.uri>-->
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                
+                <red.url>res/chat/red.png</red.url>
+
+               <!--  <pic.folder>D:/java/eclipse_dev/file/img</pic.folder> -->
+                <!-- <pic.folder>D:/svn/eclipse_dev/front/file/img</pic.folder> -->
+                 <pic.folder>/www/img</pic.folder>
+                <video.folder>/www/img</video.folder>
+                <upload.domain>http://10.0.98.20:8092/</upload.domain>
+                 <h5.domain>http://10.0.98.20:9000/</h5.domain>
+                   <us.domain>http://10.0.98.20:8091/</us.domain>
+                <!-- <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder> -->
+                <log.target>logfile</log.target>
+
+                <groovy-scope>provided</groovy-scope>
+                <aspectj-scope>provided</aspectj-scope>
+                 <admin.domain>http://ttadmin.app1101168695.twsapp.com/</admin.domain>
+                <pic.domain>http://10.0.98.20:8094/</pic.domain>
+               	<api.domain>http://10.0.98.20:8090/</api.domain>
+                <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder>
+                 <upload.domain>http://127.0.0.1:9000/</upload.domain>
+                <templateLoaderPath>file:///data/nginx-web/www.izhubo.com/admin-view</templateLoaderPath>
+                <dev>dev</dev>
+                
+                
+                	<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<sqlurl><![CDATA[jdbc:mysql://10.0.98.5:3306/ask?autoReconnect=true&characterEncoding=UTF-8]]></sqlurl>
+                <username><![CDATA[root]]></username>
+                <password><![CDATA[root]]></password>
+				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+				<hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+				<!-- 支付宝批量付款异步通知接口 -->
+				<!-- <notify.url.batch.alipay>http://adminapi1.kjcity.com/alipaybatchnotify.json</notify.url.batch.alipay> -->
+				<notify.url.batch.alipay>http://113.108.202.180:1708/alipaybatchnotify.json</notify.url.batch.alipay>
+				<!-- 支付宝单号补齐位 -->
+				<notify.pay_flow_id_head>100</notify.pay_flow_id_head>
+				<push.access_id>2200149294</push.access_id>
+				<push.env>1</push.env>
+				<!-- sso约定密钥-->
+               	<push.secret_key>55b252ee247f1c9b2e642ac8cc9eec61</push.secret_key>
+				<sso.key>6512bd43d9caa6e02c990b0a82652dca</sso.key>
+				 <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>2</push.env>
+            </properties>
+
+        </profile>
+        
+          <profile>
+              <id>testRemote</id>
+          <properties>
+              <dev>test</dev>
+              <redis.host>177.77.77.86</redis.host>
+              <redis.mem.host>${redis.host}</redis.mem.host>
+              <redis.mem.port>6379</redis.mem.port>
+              <redis.chat.host>177.77.77.86</redis.chat.host>
+              <redis.chat.port>6381</redis.chat.port>				<!-- 6381 -->
+              <!-- 红包地址 -->
+              <red.url>res/chat/red.png</red.url>
+
+              <redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+              <redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+              <chat.pool.maxActive>300</chat.pool.maxActive>
+              <chat.pool.maxIdle>300</chat.pool.maxIdle>
+              <chat.pool.maxWait>1500</chat.pool.maxWait>
+
+              <log.target>logfile</log.target>
+              <log.web.level>INFO</log.web.level>
+              <pic.folder>/www/nginx-web/img</pic.folder>
+              <video.folder>/mnt/data</video.folder>
+
+              <groovy-scope>provided</groovy-scope>
+              <aspectj-scope>provided</aspectj-scope>
+              <admin.domain>http://177.77.77.81:8085/</admin.domain>
+              <us.domain>http://177.77.77.81:8082/</us.domain>
+              <api.domain>http://177.77.77.81:8081/</api.domain>
+              <upload.domain>http://177.77.77.81:8083/</upload.domain>
+              <pic.domain>http://177.77.77.81:8084/</pic.domain>
+              <h5.domain>http://177.77.77.81:9000/</h5.domain>
+              <!-- replset-->
+              <mongo.uri>177.77.77.106</mongo.uri>
+              <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
+              <templateLoaderPath>file:///data/website/www.xxx.com/admin-view</templateLoaderPath>
+              <template_update_delay>30</template_update_delay>
+              <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+              <hibernate.show_sql>true</hibernate.show_sql>
+              <hibernate.format_sql>true</hibernate.format_sql>
+              <hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+              <!-- 支付宝单号补齐位 -->
+              <notify.pay_flow_id_head>200</notify.pay_flow_id_head>
+              <notify.url.batch.alipay>http://axdd.kjcity.com/alipaybatchnotify.json</notify.url.batch.alipay>
+              <!-- 推送接口信息 -->
+              <push.access_id>2200149294</push.access_id>
+              <push.secret_key>55b252ee247f1c9b2e642ac8cc9eec61</push.secret_key>
+              <!-- 开发环境是2，生产环境是1 -->
+              <push.env>2</push.env>
+              <!-- sso约定密钥-->
+              <sso.key>6512bd43d9caa6e02c990b0a82652dca</sso.key>
+              <!-- 学分制 -->
+              <credit.mycredit.key>6512bd43d9caa6e02c990b$AF>.12**</credit.mycredit.key>
+              <credit.ncsecret.key>1512bd43d9caa6e02c990b0a82637dca</credit.ncsecret.key>
+              <credit.sync.url>http://10.0.96.248:8887/ncws/</credit.sync.url>
+              <credit.webservice.url>http://39.108.151.223:86/Webservice1.asmx</credit.webservice.url>
+
+              <hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+              <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+              <validationQuery>SELECT 1</validationQuery>
+              <sqlurl><![CDATA[jdbc:mysql://177.77.77.158:3307/ask?autoReconnect=true&characterEncoding=UTF-8]]></sqlurl>
+              <username><![CDATA[root]]></username>
+              <password><![CDATA[root]]></password>
+              <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+              <hibernate.show_sql>true</hibernate.show_sql>
+              <hibernate.format_sql>true</hibernate.format_sql>
+              <hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+          </properties>
+
+        </profile>
+        
+        <profile>
+            <id>betaTest</id>
+            <properties>
+
+                <redis.host>177.77.77.158</redis.host>
+                <redis.mem.host>${redis.host}</redis.mem.host>
+                <redis.mem.port>6379</redis.mem.port>
+                <redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+                <mongo.uri>177.77.77.158</mongo.uri>
+                <!--<mongo.uri>${redis.host}:10000,${redis.host}:20000</mongo.uri>-->
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                
+                <red.url>res/chat/red.png</red.url>
+
+               <!--  <pic.folder>D:/java/eclipse_dev/file/img</pic.folder> -->
+                <!-- <pic.folder>D:/svn/eclipse_dev/front/file/img</pic.folder> -->
+                 <pic.folder>E:/SVN/DEV/front/file/img</pic.folder>
+                <video.folder>D:/svn/eclipse_dev/front/file/img</video.folder>
+                <upload.domain>http://127.0.0.1:9000/</upload.domain>
+                 <h5.domain>http://183.63.120.222:8028/</h5.domain>
+                   <us.domain>http://183.63.120.222:8011/</us.domain>
+                <!-- <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder> -->
+                <log.target>logfile</log.target>
+
+                <groovy-scope>provided</groovy-scope>
+                <aspectj-scope>provided</aspectj-scope>
+                 <admin.domain>http://ttadmin.app1101168695.twsapp.com/</admin.domain>
+                <pic.domain>http://183.63.120.222:8014/</pic.domain>
+               	<api.domain>http://ttapi.app1101815070.twsapp.com/</api.domain>
+                <video.folder>D:/svn/eclipse_dev/front/file/video</video.folder>
+                 <upload.domain>http://127.0.0.1:9000/</upload.domain>
+                <templateLoaderPath>file:///data/nginx-web/www.izhubo.com/admin-view</templateLoaderPath>
+                <dev>test</dev>
+                
+                
+                	<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<sqlurl><![CDATA[jdbc:mysql://177.77.77.158:3307/ask?autoReconnect=true&characterEncoding=UTF-8]]></sqlurl>
+                <username><![CDATA[root]]></username>
+                <password><![CDATA[root]]></password>
+				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+				<hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+				<!-- 支付宝批量付款异步通知接口 -->
+				<!-- <notify.url.batch.alipay>http://adminapi1.kjcity.com/alipaybatchnotify.json</notify.url.batch.alipay> -->
+				<notify.url.batch.alipay>http://113.108.202.180:1708/alipaybatchnotify.json</notify.url.batch.alipay>
+				<!-- 支付宝单号补齐位 -->
+				<notify.pay_flow_id_head>100</notify.pay_flow_id_head>
+				<push.access_id>2200149294</push.access_id>
+				<push.env>1</push.env>
+				<!-- sso约定密钥-->
+               	<push.secret_key>55b252ee247f1c9b2e642ac8cc9eec61</push.secret_key>
+				<sso.key>6512bd43d9caa6e02c990b0a82652dca</sso.key>
+				 <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>2</push.env>
+            </properties>
+
+        </profile>
+
+        <profile>
+            <id>product</id>
+            <properties>
+                <dev>product</dev>
+
+                <redis.host>172.16.2.244</redis.host>
+                <redis.mem.host>${redis.host}</redis.mem.host>
+                <redis.mem.port>6379</redis.mem.port>
+				<redis.chat.host>172.16.2.244</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>				<!-- 6381 -->
+				
+				<!-- 红包地址 -->
+				<red.url>res/chat/red.png</red.url>
+				
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+				<chat.pool.maxActive>300</chat.pool.maxActive>
+				<chat.pool.maxIdle>300</chat.pool.maxIdle>
+				<chat.pool.maxWait>1500</chat.pool.maxWait>
+				
+                <log.target>logfile</log.target>
+                <log.web.level>INFO</log.web.level>
+                <pic.folder>/www/nginx-web/img</pic.folder>
+                <video.folder>/mnt/data</video.folder>
+
+                <groovy-scope>provided</groovy-scope>
+                <aspectj-scope>provided</aspectj-scope>
+                <admin.domain>http://adminapi.kjcity.com/</admin.domain>
+                 <us.domain>http://passport.kjcity.com/</us.domain>
+                <api.domain>http://api1.xuelxuew.com/</api.domain>
+                <upload.domain>http://120.24.71.220:8080/uploadSystem/</upload.domain>
+                <pic.domain>http://answerimg.kjcity.com/</pic.domain>
+                <h5.domain>https://appapi.hqjy.com/</h5.domain>
+                <!-- replset-->
+               <mongo.uri>172.16.2.246:27018</mongo.uri>
+                <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
+                <templateLoaderPath>file:///data/website/www.xxx.com/admin-view</templateLoaderPath>
+                <template_update_delay>30</template_update_delay>
+                <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+				<hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+				<!-- 支付宝单号补齐位 -->
+				<notify.pay_flow_id_head>200</notify.pay_flow_id_head>
+               	<notify.url.batch.alipay>http://axdd.kjcity.com/alipaybatchnotify.json</notify.url.batch.alipay>
+               	<!-- 推送接口信息 -->
+               	<push.access_id>2200149294</push.access_id>
+               	<push.secret_key>55b252ee247f1c9b2e642ac8cc9eec61</push.secret_key>
+                     <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>1</push.env>
+				<!-- sso约定密钥-->
+				<sso.key>6512bd43d9caa6e02c990b0a82652dca</sso.key>
+				<!-- 学分制 -->
+		      <credit.mycredit.key>6512bd43d9caa6e02c990b$AF>.12**</credit.mycredit.key>
+		      <credit.ncsecret.key>1512bd43d9caa6e02c990b0a82637dca</credit.ncsecret.key>
+		      <credit.sync.url>http://10.0.96.248:8887/ncws/</credit.sync.url>
+		      <credit.webservice.url>http://39.108.151.223:86/Webservice1.asmx</credit.webservice.url>
+				<!-- sync的地址和密钥 用于调用sync中的学分运算 -->
+				<credit.hqonlinesync.url>http://172.16.2.245:8083/</credit.hqonlinesync.url>
+				<credit.hqonlinesync.key>sync360888c442c3cc62d1608fe7f9d9</credit.hqonlinesync.key>    
+				 	<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<sqlurl><![CDATA[jdbc:mysql://172.16.2.223:3306/ask?autoReconnect=true&amp;characterEncoding=UTF-8]]></sqlurl>
+				<username><![CDATA[root]]></username>
+				<password><![CDATA[root]]></password>
+				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+				<hibernate.jdbc.batch_size>50</hibernate.jdbc.batch_size>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+        <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.3.14.v20161028</version>
+            <configuration>
+                <scanIntervalSeconds>0</scanIntervalSeconds>
+                <stopKey>foo</stopKey>
+                <stopPort>9999</stopPort>
+                <webAppConfig>
+                    <contextPath>/</contextPath>
+                    <defaultsDescriptor>src/main/resources/webdefault.xml</defaultsDescriptor>
+                </webAppConfig>
+            </configuration>
+        </plugin>
+        </plugins>
+    </build>
+
+</project>

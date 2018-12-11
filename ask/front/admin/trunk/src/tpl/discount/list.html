@@ -1,0 +1,173 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">名称</th>
+        <th class="auto">编码</th>
+        <th class="auto">优惠券数量</th>
+        <th class="auto">优惠金额</th>
+        <th class="auto">消费最低限制</th>
+        <th class="auto">优惠图片地址</th>
+        <th class="auto">领取数量</th>
+        <th class="auto">每日领取最大限制</th>
+        <th class="auto">有效天数</th>
+        <th class="longtime">开始时间</th>
+        <th class="longtime">结束时间</th>
+        <th class="auto">时间类型</th>
+        <th class="auto">类型</th>
+        <th class="auto">使用平台</th>
+        <th class="auto">是否停用</th>
+        <th class="auto">备注</th>
+        <th class="auto">创建用户</th>
+        <th class="longtime">创建时间</th>
+        <th class="auto">修改用户</th>
+        <th class="longtime">修改时间</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto">
+                <%if(data[i].name){%>
+                <%=data[i].name %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].code){%>
+                <%=data[i].code %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].limitNumber){%>
+                <%=data[i].limitNumber %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].money){%>
+                <%=data[i].money %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].enoughMoney){%>
+                <%=data[i].enoughMoney %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].picUrl){%>
+                <%=data[i].picUrl %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].getNum){%>
+                <%=data[i].getNum %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].dayMaxNum){%>
+                <%=data[i].dayMaxNum %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].validDays){%>
+                <%=data[i].validDays %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="longtime">
+                <%if(data[i].startTime){%>
+                <%=new Date(data[i].startTime).toLocaleString() %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="longtime">
+                <%if(data[i].endTime){%>
+                <%=new Date(data[i].endTime).toLocaleString() %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].timeType==0){%>
+                固定日期
+                <%}else if(data[i].timeType==1){%>
+                领取后生效
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].type==0){%>
+                标准
+                <%}else if(data[i].type==1){%>
+                活动赠送
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].workType==0){%>
+                不限制
+                <%}else if(data[i].workType==1){%>
+                恒企在线
+                <%}else if(data[i].workType==2){%>
+                会答APP
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].isStop==0){%>
+                正常
+                <%}else if(data[i].isStop==1){%>
+                停用
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].content){%>
+                <%=data[i].content %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].createUserId){%>
+                <%=data[i].createUserId %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="longtime">
+                <%if(data[i].createTime){%>
+                <%=new Date(data[i].createTime).toLocaleString() %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="auto">
+                <%if(data[i].updateUserId){%>
+                <%=data[i].updateUserId %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td class="longtime">
+                <%if(data[i].updateTime){%>
+                <%=new Date(data[i].updateTime).toLocaleString() %>
+                <%}else{%>
+                <%}%>
+            </td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i].id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i].id%>')">删除</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.stop('<%=data[i].id%>','<%=data[i].isStop%>')">停用/恢复</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

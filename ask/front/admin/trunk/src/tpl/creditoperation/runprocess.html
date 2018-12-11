@@ -1,0 +1,109 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+<tr>
+  <td> 项目名称</td>
+  <td>是否执行</td>
+  <td>开始日期</td>
+  <td>结束日期</td>
+</tr>
+
+      <tr>
+           <td>NC报名表</td>
+            <td size="10" >
+               <select style="width:50px" type="text" class="input" id="syncnc" name="syncreg">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+           </td>
+          
+     
+            <td>
+              <input id="begin_reg_time" type="text" name="begin_reg_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_reg_time\')}'})" />
+            </td>
+       
+            <td>
+            	<input id="end_reg_time" type="text" name="end_reg_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_reg_time\')}'})" />
+            </td>
+        </tr>
+
+
+
+ 
+              <tr>
+           <td> NC考勤表</td>
+            <td size="10" >
+               <select style="width:50px" type="text" class="input" id="syncatt" name="syncatt">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+           </td>
+            
+            <td>
+              <input id="begin_att_time" type="text" name="begin_att_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_att_time\')}'})" />
+            </td>
+            
+            <td>
+            	<input id="end_att_time" type="text" name="end_att_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_att_time\')}'})" />
+            </td>
+        </tr>
+
+
+              <tr>
+           <td> NC成绩单</td>
+            <td size="10" >
+               <select style="width:50px" type="text" class="input" id="syncexam" name="syncexam">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+           </td>
+            
+            <td>
+              <input id="begin_exam_time" type="text" name="begin_exam_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_exam_time\')}'})" />
+            </td>
+            
+            <td>
+              <input id="end_exam_time" type="text" name="end_exam_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_exam_time\')}'})" />
+            </td>
+        </tr>
+
+         <tr>
+          <td  >题库成绩单</td>
+                     <td size="10" >
+               <select style="width:50px" type="text" class="input" id="synctk" name="synctk">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+           </td>
+            <td style="width:130px;">题库月份</td>
+               
+            <td>
+              <input id="begin_tk_time" type="text" name="begin_tk_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM',maxDate:'#F{$dp.$D(\'begin_tk_time\')}'})" />
+            </td>
+ 
+        </tr>
+          
+
+        <!--  <tr>
+           <td>运算学分</td>
+            <td size="10" >
+               <select style="width:50px" type="text" class="input" id="syncall" name="syncall">
+                    <option value="0" selected>否</option>
+                    <option value="1">是</option>
+                </select>
+           </td>
+           <td>
+              <input id="begin_all_time" type="text" name="begin_all_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'begin_all_time\')}'})" />
+            </td>
+            
+            <td>
+              <input id="end_all_time" type="text" name="end_all_time" value="" size="10" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_all_time\')}'})" />
+            </td>
+       </tr>
+  -->
+
+
+    </table>
+    <hr/>
+ 
+    <table id="q-standard-creditoperation-runprocess"></table>
+</form>

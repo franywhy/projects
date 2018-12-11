@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseScoreRecordDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_score_record.score_record_id AS scoreRecordId , 	course_score_record.score_record_no AS scoreRecordNo , 	course_score_record.exam_record_id AS examRecordId , 	course_score_record.remark AS remark , 	course_score_record.school_id AS schoolId , 	course_score_record.create_time AS createTime , 	course_score_record.modify_time AS modifyTime , 	course_score_record.create_person AS createPerson , 	course_score_record.modify_person AS modifyPerson , 	course_score_record.dr AS dr , 	course_score_record.audited AS audited 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where course_score_record.dr=0 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_score_record as course_score_record
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseScoreRecordEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND score_record_id = #{scoreRecordId}
+	</select>
+	
+	<!--根据ID查询(含报考登记单号)-->
+	<select id="queryOne" resultType="map">
+		select
+		<include refid="base_column"/>
+		 , course_exam_record.exam_record_no as examRecordNo
+		<include refid="base_from"/> 
+		, course_exam_record
+		<include refid="base_where"/>
+		 and course_exam_record.exam_record_id = course_score_record.exam_record_id 
+		 AND score_record_id = #{scoreRecordId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseScoreRecordEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页列表(含报考登记单号)-->
+	<select id="queryAll" resultType="map">
+		select
+		<include refid="base_column"/>
+		 , course_exam_record.exam_record_no as examRecordNo
+		 ,sys_product.product_name as productName 
+		<include refid="base_from"/> 
+		, course_exam_record,sys_product 
+		<include refid="base_where"/>
+		<if test="scoreRecordNo !=null">
+			and `score_record_no` like concat('%',#{scoreRecordNo},'%') 
+		</if>
+		 and course_exam_record.exam_record_id = course_score_record.exam_record_id 
+		 and sys_product.product_id=course_score_record.product_id 
+		 order by course_score_record.score_record_id
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="scoreRecordNo !=null">
+			and `score_record_no` like concat('%',#{scoreRecordNo},'%') 
+		</if>
+	</select>
+	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseScoreRecordEntity" useGeneratedKeys="true" keyProperty="scoreRecordId">
+		insert into course_score_record
+		(
+				`score_record_no`, 
+				`product_id`, 			
+				`exam_record_id`, 				
+				`remark`, 				
+				`school_id`, 				
+				`create_time`, 				
+				`modify_time`, 				
+				`create_person`, 				
+				`modify_person`, 				
+				`dr`, 				
+				`audited`		)
+		values
+		(
+				#{scoreRecordNo}, 
+				#{productId}, 																		
+				#{examRecordId}, 																			
+				#{remark}, 																			
+				#{schoolId}, 																			
+				#{createTime}, 																			
+				#{modifyTime}, 																			
+				#{createPerson}, 																			
+				#{modifyPerson}, 																			
+				0, 																			
+				#{audited}									
+				)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseScoreRecordEntity">
+		update course_score_record 
+		<set>
+			<if test="scoreRecordNo != null">`score_record_no` = #{scoreRecordNo}, </if>
+			<if test="examRecordId != null">`exam_record_id` = #{examRecordId}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="audited != null">`audited` = #{audited}</if>
+		</set>
+		<include refid="base_where"/>
+		AND score_record_id = #{scoreRecordId}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.CourseScoreRecordEntity">
+		UPDATE course_score_record 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND score_record_id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		delete from course_score_record 
+		where score_record_id in
+		<foreach item="scoreRecordId" collection="ids" open="(" separator="," close=")">
+			#{scoreRecordId}
+		</foreach>
+	</delete>
+	<!-- <update id="deleteBatch" parameterType="io.renren.entity.CourseScoreRecordEntity">
+		UPDATE course_score_record 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND score_record_id IN 
+		<foreach item="scoreRecordId" collection="ids" open="(" separator="," close=")">
+			#{scoreRecordId}
+		</foreach>
+	</update> -->
+	
+	
+	<!--查询未被关联的已审核报考登记-->
+	<select id="queryExamRecordList" resultType="io.renren.entity.CourseExamRecordEntity">
+		select bk.* ,sys_product.product_name as productName from course_exam_record as bk
+		 join sys_product sys_product on sys_product.product_id=bk.product_id  
+		where bk.dr=0
+		and bk.audited = 1
+		and 0 = (
+			select count(1) 
+			from course_score_record as fs
+			where fs.score_record_id = bk.exam_record_id
+			and fs.dr=0
+			)
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+		<!--查询未被关联的已审核报考登记去导出对应字段-->
+	<select id="queryExamRecordListForExport" resultType="io.renren.entity.CourseExamRecordEntity">
+SELECT
+	bk.exam_record_no as examRecordNo,
+	courses.course_no as courseNo,
+	users.mobile as mobile
+FROM
+	course_exam_record AS bk
+LEFT JOIN course_exam_record_detail AS bkd ON bk.exam_record_id = bkd.exam_record_id
+LEFT JOIN courses AS courses ON courses.course_id = bkd.course_id
+LEFT JOIN users AS users ON users.user_id = bkd.user_id
+WHERE
+	bk.dr = 0
+AND bk.audited = 1
+AND 0 = (
+	SELECT
+		count(1)
+	FROM
+		course_score_record AS fs
+	WHERE
+		fs.score_record_id = bk.exam_record_id
+	AND fs.dr = 0
+)
+AND bk.exam_record_id = #{examRecordId}
+	</select>
+	<!--查询未被关联的报考登记总数-->
+ 	<select id="queryExamRecordTotal" resultType="int">
+		select count(1) 
+		from course_exam_record as bk
+		where bk.dr=0
+		and 0 = (
+			select count(1) 
+			from course_score_record as fs
+			where fs.score_record_id = bk.exam_record_id
+			and fs.dr=0
+			)
+	</select>
+	
+	<!-- 审核 -->
+	<update id="accept" parameterType="io.renren.entity.CourseScoreRecordEntity">
+		update course_score_record 
+		<set>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="audited != null">`audited` = #{audited}</if>
+		</set>
+		<include refid="base_where"/>
+		AND score_record_id = #{scoreRecordId}
+	</update>
+</mapper>

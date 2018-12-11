@@ -1,0 +1,105 @@
+<!--留存数据汇总-->
+<%
+	var isHZ = !params._id,
+		isMobile = (params.client!=1);
+    
+    var t_reg = 0,
+    	t_active = 0,
+    t_day_1=0,
+    t_day_3=0,
+    t_day_7=0,
+    t_day_30=0;
+%>
+<table width="100%" class="listTable">
+ 	<thead>
+ 	<tr>
+			<%if(isHZ){%>
+			<th class="longtime" rowspan="2">渠道名称</th>
+			<%}else{%>
+			<th class="longtime" rowspan="2">日期</th>
+			<%}%>
+			<%if(isMobile){%>
+			<th class="num" rowspan="2">激活数</th>
+			<%}%>
+			<th class="num" rowspan="2">注册数</th>
+			<th class="short" colspan="2">次日登录</th>
+			<th class="short" colspan="2">3日登录</th>
+			<th class="short" colspan="2">7日登录</th>
+			<th class="short" colspan="2">30日登录</th>	
+    </tr>
+ 	<tr>
+		<th>数</th>
+		<th>率</th>
+		<th>数</th>
+		<th>率</th>
+		<th>数</th>
+		<th>率</th>
+		<th>数</th>
+		<th>率</th>
+	</tr>
+	</thead>
+
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<%if(isHZ){%>
+			<td class="longtime"><a href="#a=qdlcsj&_id=<%=data[i].qd%>&client=<%=params.client%>&tab=<%=params.tab%>&menu=<%=params.menu%>&channel=<%=data[i].qd%>&stime=<%=Izb.ui.getFirstDay()%>&etime=<%=Izb.ui.getLastDay(true)%>"><%=data[i].name%></a></td>
+			<%}else{%>
+			<td class="longtime"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+			<%}%>
+			<%	
+				var s_reg = $.isNumeric(data[i].reg) ? data[i].reg : 0,
+                	s_active = $.isNumeric(data[i].active) ? data[i].active : 0;
+				var day_1 = data[i]["1_day"] || 0,
+					day_1_avg = (s_reg == 0) ? 0 : Math.round((day_1/s_reg)*10000)/100;
+				var day_3 = data[i]["3_day"] || 0,
+					day_3_avg = (s_reg == 0) ? 0 : Math.round((day_3/s_reg)*10000)/100;
+				var day_7 = data[i]["7_day"] || 0,
+					day_7_avg = (s_reg == 0) ? 0 : Math.round((day_7/s_reg)*10000)/100;
+				var day_30 = data[i]["30_day"] || 0,
+					day_30_avg = (s_reg == 0) ? 0 : Math.round((day_30/s_reg)*10000)/100;
+			%>
+			<%
+				t_reg += (s_reg-0);
+                t_active +=(s_active-0);
+				t_day_1 +=(day_1-0);
+				t_day_3 +=(day_3-0);
+				t_day_7 +=(day_7-0);
+				t_day_30 +=(day_30-0);
+              
+			%>
+			<%if(isMobile){%>
+            <td class="num"><%=s_active%></td>
+			<%}%>
+            <td class="num"><%=s_reg %></td>
+			<td class="short"><%=day_1%></td>
+			<td class="short"><%=day_1_avg%>%</td>
+			<td class="short"><%=day_3%></td>
+			<td class="short"><%=day_3_avg%>%</td>
+			<td class="short"><%=day_7%></td>
+			<td class="short"><%=day_7_avg%>%</td>
+			<td class="short"><%=day_30%></td>
+			<td class="short"><%=day_30_avg%>%</td>
+        </tr>
+		<%}%>
+    </tbody>
+	<tfooter>		
+        <tr>
+			<th class="short">总计</th>
+            <%if(isMobile){%>
+			<th class="num"><%=t_active%></th>
+			<%}%>
+            <th class="short"><%=t_reg%></th>
+			<th class="short"><%=t_day_1%></th>
+			<th class="short"><%=(t_reg == 0) ? 0 : Math.round((t_day_1/t_reg)*10000)/100%>%</th>
+			<th class="short"><%=t_day_3%></th>
+			<th class="short"><%=(t_reg == 0) ? 0 : Math.round((t_day_3/t_reg)*10000)/100%>%</th>
+			<th class="short"><%=t_day_7%></th>
+			<th class="short"><%=(t_reg == 0) ? 0 : Math.round((t_day_7/t_reg)*10000)/100%>%</th>
+			<th class="short"><%=t_day_30%></th>
+			<th class="short"><%=(t_reg == 0) ? 0 : Math.round((t_day_30/t_reg)*10000)/100%>%</th>
+        </tr>
+    </tfooter>
+</table>
+<div class="appPager"></div>
+<!--/留存数据汇总-->

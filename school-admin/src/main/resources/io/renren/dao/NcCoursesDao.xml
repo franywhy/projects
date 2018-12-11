@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.NcCoursesDao">
+
+ 	<resultMap type="io.renren.entity.NcCoursesEntity" id="ncCoursesResultMap">
+		<id property="courseCode" column="course_code" />
+		<id property="courseName" column="course_name" />
+		<id property="charpterCode" column="charpter_code" />
+		<id property="charpterName" column="charpter_name" />
+		<id property="sectionCode" column="section_code" />
+		<id property="sectionName" column="section_name" />
+		<id property="code" column="code" />
+		
+		<id property="chapterIdx" column="chapter_idx" />
+		<id property="sectionIdx" column="section_idx" />
+		
+	</resultMap>
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		nc_courses.id AS id , 
+		nc_courses.course_code AS courseCode ,
+		nc_courses.course_name AS  courseName , 
+		nc_courses.charpter_code AS charpterCode ,
+		nc_courses.charpter_name AS charpterName , 
+		nc_courses.section_code AS sectionCode , 
+		nc_courses.section_name AS sectionName , 
+		nc_courses.code AS code 
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where nc_courses.id = #{id}
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from nc_courses as nc_courses
+	</sql>
+	<!-- <sql id="other_where">
+		<if test=" null != chapter and chapter.trim() != ''">
+			and knowledge_point.chapter = #{chapter}
+		</if>
+		<if test=" null != verse and verse.trim() != ''">
+			and knowledge_point.verse = #{verse}
+		</if>
+
+		<if test=" null != name and name.trim() != ''">
+			and knowledge_point.name  like concat('%',#{name},'%')
+		</if>
+
+
+	</sql> -->
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.NcCoursesEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		
+	</select>
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="io.renren.entity.NcCoursesEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<!-- <include refid="base_where" /> -->
+		<!-- <include refid="other_where" /> -->
+		
+		<where>
+		 	<if test="null！=chapter_code">and chapter_code = #{chapter_code}</if>
+		 	<if test="null！=course_code">and course_code = #{course_code}</if>
+		 	<if test="null！=section_code">and section_code = #{section_code}</if>
+		 	<if test="null！=start_idx">and idx >= #{start_idx}</if>
+		 	<if test="null！=end_idx"><![CDATA[and idx <= #{end_idx}]]></if>
+		</where>
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数 -->
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from" />
+		<!-- <include refid="base_where" /> -->
+		<!-- <include refid="other_where" /> -->
+	</select>
+	
+	
+	
+	<!--新增 -->
+	<insert id="save" parameterType="io.renren.entity.NcCoursesEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into nc_courses
+		(
+		`course_code`, `course_name`,
+		`charpter_code`, `charpter_name`, `section_code`, `section_name`,  `code` )
+		values
+		(
+		#{courseCode} , #{courseName},
+		#{charpterCode}, #{charpterName}, #{sectionCode}, #{sectionName}, #{item.code} )
+	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true" >
+	 	<selectKey resultType="long" keyProperty="id" order="AFTER">
+	 	SELECT LAST_INSERT_ID() 
+ 	</selectKey>
+		insert into nc_courses
+		(
+		`course_code`, `course_name`,
+		`charpter_code`, `charpter_name`, `section_code`, `section_name`, `code`,
+		 `chapter_idx`,`section_idx`
+		 )
+		values
+		<foreach collection="list" item="item" index="index" separator="," > 
+ 			(
+		#{item.courseCode} , #{item.courseName},
+		#{item.charpterCode}, #{item.charpterName}, #{item.sectionCode}, #{item.sectionName}, #{item.code},
+		 #{item.chapterIdx}, #{item.sectionIdx}
+		 )
+ 		</foreach> 
+		
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.NcCoursesEntity">
+		update nc_courses
+		<set>
+			<if test="name != null">`course_code` = #{courseCode}, </if>
+			
+			<if test="createBy != null">`course_name` = #{courseName}, </if>
+			<if test="createTime != null">`charpter_code` = #{charpterCode}, </if>
+			<if test="updateBy != null">`charpter_name` = #{charpterName}, </if>
+			<if test="updateTime != null">`section_code` = #{sectionCode}, </if>
+			<if test="course != null">`section_name` = #{sectionName}, </if>
+			<if test="chapter != null">`is_delete` = #{isDelete}, </if>
+			<if test="verse != null">`is_use` = #{isUse},</if>
+			
+		</set>
+		<!-- <include refid="base_where" /> -->
+		where id = #{id}
+	</update>
+
+	<!--删除 -->
+	<delete id="delete">
+		DELETE FROM nc_courses
+		
+		where  id = #{id}
+	</delete>
+	
+	<delete id="deleteAll">
+		DELETE FROM nc_courses
+		
+		
+	</delete>
+
+	<!--批量删除 -->
+	<!-- <delete id="deleteBatch">
+		DELETE FROM nc_courses
+		
+		where  id IN
+		<foreach item="id" collection="ids" open="(" separator=","
+			//close=")">
+			#{id}
+		</foreach>
+	</delete> -->
+	
+	<!--分页列表 -->
+	<select id="queryListForAttendance" resultType="io.renren.entity.NcCoursesEntity">
+	
+	 	 
+                select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<where>
+		 	
+		</where>
+	</select>
+
+</mapper>

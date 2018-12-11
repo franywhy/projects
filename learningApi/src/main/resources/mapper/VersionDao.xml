@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningapi.dao.VersionDao">
+
+    <select id="queryList" resultType="com.hq.learningapi.entity.VersionEntity">
+        select `version_code`,`version_name`,`update_strategy`,
+                `download_url`,`update_detail`,`md5`,`is_grey_update`,`update_user_list`
+        from  sys_version
+        where client_type = #{clientType}
+        and   is_active = #{isActive}
+        and   school_id = #{schoolId}
+        and   version_code >= #{versionCode}
+        and   min_version_code &lt;= #{versionCode}
+        order by version_code desc
+    </select>
+
+</mapper>

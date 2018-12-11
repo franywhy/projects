@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.dao.CourseRecordDetailDao">
+
+    <select id="queryIdListByCourseId" resultType="Long">
+        select SQL_CACHE record_id as recordId 
+		from course_record_detail 
+		where course_id = #{courseId}
+		<![CDATA[and ((vid <> '' and vid IS NOT NULL) or (cc_id <> '' and cc_id IS NOT NULL))]]>
+    </select>
+	
+	<select id="queryCourseId" resultType="Long">
+		select 
+			DISTINCT(mall_goods_details.course_id) 
+		from 
+			mall_order as mall_order
+			left join mall_goods_details as mall_goods_details on mall_goods_details.mall_goods_id = mall_order.commodity_id
+		where
+			mall_order = #{orderId} 
+			and mall_goods_details.mall_area_id = #{areaId}
+			and mall_goods_details.mall_goods_id = #{commodityId}
+			and mall_goods_details.dr = 0
+			and dr = 0
+	</select>
+	
+	<select id="queryRecordCourseNum" resultType="int">
+		select count(1) from course_record_detail where course_id = #{courseId}
+	</select>
+	
+	<select id="queryRecordCourse" resultType="com.school.pojo.CoursesPOJO">
+		select
+			courses.* 
+		from 
+			courses as courses
+		where
+			courses.course_id = #{courseId} 
+			and courses.product_id in
+			<foreach item="productId" collection="productIdList" open="(" separator="," close=")">
+	            #{productId}
+	        </foreach>
+			and courses.dr = 0
+	</select>
+	
+	<select id="queryRecordDetailList" resultType="com.school.pojo.CourseRecordDetailPOJO">
+		select 
+			course_record_detail.record_id AS recordId,
+			course_record_detail.course_id AS courseId,
+			course_record_detail.parent_id AS parentId,
+			course_record_detail.name AS name,
+			course_record_detail.user_id AS userId,
+			course_record_detail.type AS type,
+			course_record_detail.vid AS vid,
+			course_record_detail.cc_id AS ccId,
+			course_record_detail.polyv_name AS polyvName,
+			course_record_detail.duration_s AS durationS,
+			course_record_detail.duration AS duration,
+			course_record_detail.first_image AS firstImage,
+			course_record_detail.order_num AS orderNum,
+			sys_user.nick_name as teacherName
+		from
+			course_record_detail as course_record_detail
+			left join sys_user as sys_user on sys_user.user_id = course_record_detail.user_id
+		where
+			course_record_detail.course_id = #{courseId}
+			and course_record_detail.parent_id = 0
+			order by course_record_detail.order_num asc
+	</select>
+	
+	<select id="queryRecordDetailList2" resultType="com.school.pojo.CourseRecordDetailPOJO">
+		select 
+			course_record_detail.record_id AS recordId,
+			course_record_detail.course_id AS courseId,
+			course_record_detail.parent_id AS parentId,
+			course_record_detail.name AS name,
+			course_record_detail.user_id AS userId,
+			course_record_detail.type AS type,
+			course_record_detail.vid AS vid,
+			course_record_detail.cc_id AS ccId,
+			course_record_detail.polyv_name AS polyvName,
+			course_record_detail.duration_s AS durationS,
+			course_record_detail.duration AS duration,
+			course_record_detail.first_image AS firstImage,
+			course_record_detail.order_num AS orderNum,
+			sys_user.nick_name as teacherName
+		from
+			course_record_detail as course_record_detail
+			left join course_record_detail as record_detail on record_detail.parent_id = course_record_detail.record_id
+			left join sys_user as sys_user on sys_user.user_id = course_record_detail.user_id
+		where
+			course_record_detail.parent_id = #{recordId}
+			and course_record_detail.course_id = #{courseId}
+			order by course_record_detail.order_num asc
+	</select>
+	
+	<select id="queryLogWatchRecordList" resultType="com.school.pojo.LogWatchRecordPOJO">
+		select 
+			course_record_detail.name as  recordName,
+			log_watch_record.ts as ts
+		from
+			log_watch_record as log_watch_record
+			left join course_record_detail as course_record_detail on course_record_detail.record_id = log_watch_record.record_id
+		where 
+			log_watch_record.user_id = #{userId} and log_watch_record.attend = 1
+			order by log_watch_record.ts desc
+	</select>
+	
+	<select id="queryIsWatch" resultType="int">
+		select count(1) from log_watch_record where record_id = #{recordId} and attend = 1
+	</select>
+	
+	<select id="getRecordInfo" resultType="com.school.pojo.CourseRecordDetailPOJO">
+		select * from course_record_detail where record_id = #{recordId}
+	</select>
+	
+	<select id="queryProductId" resultType="long">
+		select
+			product_id
+		from
+			sys_business_product
+		where
+			business_id = #{businessId}
+	</select>
+</mapper>

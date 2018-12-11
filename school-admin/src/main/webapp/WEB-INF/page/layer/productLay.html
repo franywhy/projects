@@ -1,0 +1,19 @@
+<div id="productLayDiv" style="display: none">
+<!-- 产品线查询条件 -->
+<table  border="0">
+	<tr class="row" >
+		<td class=""><label for="name">产品线名称</label></td>
+		<td >
+			<input type="text" class="form-control" id="qproductName" placeholder="产品线名称">
+		</td>
+		<!-- 按钮 -->
+		<td class="grid-btn">
+			<!-- <a class="btn btn-primary" @click="clearQueryOrderParams">清空</a>  -->
+			<a class="btn btn-default" onclick="productLay.reload();">查询</a> 
+		</td>
+	</tr>
+</table>
+<table id="productLay_jqGrid" ></table>
+<table id="productLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/productLay.js?_${date.systemTime}"></script>

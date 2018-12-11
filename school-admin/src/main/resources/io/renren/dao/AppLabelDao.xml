@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.dao.AppLabelDao" >
+  <resultMap id="BaseResultMap" type="io.renren.entity.AppLabel" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="label_name" property="labelName" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="is_common" property="isCommon" jdbcType="TINYINT" />
+    <result column="dr" property="dr" jdbcType="TINYINT" />
+    <result column="course_code" property="courseCode" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="base_column" >
+    app_label.id as id, 
+    app_label.parent_id as parentId, 
+    app_label.label_name as labelName, 
+    app_label.product_id as productId,
+    app_label.is_common as isCommon,
+    app_label.dr as dr, 
+    app_label.course_code as courseCode
+  </sql>
+  <!-- 通用查询条件 -->
+  <sql id="base_where">
+    where 1=1
+  </sql>
+  <!-- 通用from -->
+  <sql id="base_from">
+    from app_label as app_label
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_column" />
+    from app_label
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <!--分页列表-->
+  <select id="queryList" resultType="io.renren.entity.AppLabel">
+    select
+    <include refid="base_column"/>
+    ,
+    (select al.label_name from app_label as al where al.id = app_label.parent_id) as parentName
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    <if test="labelName != null and labelName.trim() != ''">
+      and `label_name` like concat('%',#{labelName},'%')
+    </if>
+    <if test="productId != null and productId > -1">
+      and `product_id` = #{productId}
+    </if>
+    <if test="dr != null and dr > -1">
+      and `dr` = #{dr}
+    </if>
+    order by parent_id asc
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+  <!--分页总数-->
+  <select id="queryTotal" resultType="int">
+    select count(1)
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    <if test="labelName != null and labelName.trim() != ''">
+      and `label_name` like concat('%',#{labelName},'%')
+    </if>
+    <if test="productId != null and productId > -1">
+      and `product_id` = #{productId}
+    </if>
+    <if test="dr != null and dr > -1">
+      and `dr` = #{dr}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_label
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="io.renren.entity.AppLabel" >
+    insert into app_label (id, parent_id, label_name, 
+      product_id, dr)
+    values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{labelName,jdbcType=VARCHAR}, 
+      #{productId,jdbcType=BIGINT}, #{dr,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="io.renren.entity.AppLabel" >
+    update app_label
+    set parent_id = #{parentId,jdbcType=BIGINT},
+      label_name = #{labelName,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=BIGINT},
+      dr = #{dr,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryObject" resultType="io.renren.entity.AppLabel">
+  	select 
+    <include refid="base_column" />
+    ,
+    (select al.label_name from app_label as al where al.id = app_label.parent_id) as parentName
+    <include refid="base_from" />
+    where app_label.id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="update" parameterType="io.renren.entity.AppLabel">
+  	update app_label 
+	<set>
+		<if test="parentId != null">`parent_id` = #{parentId}, </if>
+		<if test="labelName != null">`label_name` = #{labelName}, </if>
+		<if test="productId != null">`product_id` = #{productId}, </if>
+		<if test="dr != null">`dr` = #{dr}, </if>
+		<if test="courseCode != null">`course_code` = #{courseCode}, </if>
+        <if test="isCommon != null">`is_common` = #{isCommon}</if>
+	</set>
+	where id = #{id}
+  </update>
+  
+  <select id="queryCountByLabelNameAndParentId" resultType="int">
+  	select 
+  		count(1) 
+  	from 
+  		app_label
+  	where
+        label_name = #{labelName} and
+        parent_id = #{parentId} and
+        product_id = #{productId}
+  </select>
+  
+  <select id="queryListByProfessionName" resultType="io.renren.entity.AppLabel">
+  	select
+  	<include refid="base_column"/>
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    and label_name = #{professionName}
+    and product_id = #{productId}
+  </select>
+  
+  <insert id="save" parameterType="io.renren.entity.AppLabel" useGeneratedKeys="true" keyProperty="id">
+  	insert into app_label
+  	(
+		`parent_id`, 
+		`label_name`, 
+		`product_id`, 
+		`dr`,
+		`course_code`,
+		`is_common`
+	)
+	values
+	(
+		#{parentId}, 
+		#{labelName}, 
+		#{productId}, 
+		#{dr},
+		#{courseCode},
+		#{isCommon}
+	)
+  </insert>
+  
+  <update id="updateDr">
+  	update app_label set dr = #{dr} where id = #{id}
+  </update>
+  
+  <select id="queryParentList" resultType="io.renren.entity.AppLabel">
+  	select
+    <include refid="base_column"/>
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    <if test="labelParentName != null and labelParentName.trim() != ''">
+      and `label_name` like concat('%',#{labelParentName},'%')
+    </if>
+    <if test="productId != null">
+      and `product_id` = #{productId}
+    </if>
+      and `parent_id` = 0
+      and `dr` = 0
+    <if test="offset != null and limit != null">
+	  limit #{offset}, #{limit}
+	</if>
+  </select>
+  <select id="queryParentTotal" resultType="int">
+  	select
+  	 count(1)
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    <if test="labelParentName != null and labelParentName.trim() != ''">
+      and `label_name` like concat('%',#{labelParentName},'%')
+    </if>
+    <if test="productId != null">
+      and `product_id` = #{productId}
+    </if>
+      and `parent_id` = 0
+      and `dr` = 0
+  </select>
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.dao.manage.CustomCardDao" >
+
+  <!-- 关联产品表字段 -->
+  <sql id="join_productName">
+    sys_product.product_name AS productName
+  </sql>
+  <!-- 关联产品表 -->
+  <sql id="join">
+    LEFT JOIN sys_product AS sys_product ON sys_product.product_id = custom_card.product_id
+  </sql>
+  
+  <sql id="base_column" >
+    custom_card.card_id, custom_card.title, custom_card.subtitle, custom_card.card_url, custom_card.card_banner_url,
+    custom_card.product_id, custom_card.school_id, custom_card.push_status, custom_card.push_time, custom_card.push_msg_id,
+    custom_card.can_share, custom_card.app_status, custom_card.creator, custom_card.creation_time, custom_card.modifier,
+    custom_card.modified_time
+  </sql>
+  <!-- 通用查询条件 -->
+  <sql id="base_where">
+    where 1=1
+  </sql>
+  <!-- 通用from -->
+  <sql id="base_from">
+    from custom_card as custom_card
+  </sql>
+
+  <!--根据ID查询-->
+  <select id="queryMsgMap" resultType="java.util.Map">
+    select
+      card_id AS cardId,
+      title AS title,
+      subtitle AS subtitle,
+      card_url AS cardUrl,
+      card_banner_url AS cardBannerurl,
+      can_share AS canShare,
+      push_msg_id AS pushMsgId
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND card_id = #{cardId}
+  </select>
+
+  <!--根据ID查询-->
+  <select id="queryPojoObject" resultType="io.renren.pojo.manage.CustomCardPOJO">
+    select
+    <include refid="base_column"/>
+    ,
+    (select cu.username from sys_user cu where cu.user_id = custom_card.creator) as creationName,
+    (select mu.username from sys_user mu where mu.user_id = custom_card.modifier) as modifiedName,
+    <include refid="join_productName"/>
+    <include refid="base_from"/>
+    <include refid="join"/>
+    <include refid="base_where"/>
+    AND card_id = #{cardId}
+  </select>
+
+  <!--分页列表-->
+  <select id="queryPojoList" resultType="io.renren.pojo.manage.CustomCardPOJO">
+    select
+    <include refid="base_column"/>
+    ,
+    (select cu.username from sys_user cu where cu.user_id = custom_card.creator) as creationName,
+    (select mu.username from sys_user mu where mu.user_id = custom_card.modifier) as modifiedName,
+    <include refid="join_productName"/>
+    <include refid="base_from"/>
+    <include refid="join"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="title != null and title.trim() != ''">
+      and `title` like concat('%',#{title},'%')
+    </if>
+    order by creation_time desc
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <!--分页总数-->
+  <select id="queryTotal" resultType="int">
+    select count(1)
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="title != null and title.trim() != ''">
+      and `title` like concat('%',#{title},'%')
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="io.renren.entity.manage.CustomCard" >
+    insert into custom_card (card_id, title, subtitle, 
+      card_url, card_banner_url, product_id, school_id,
+      push_status, push_time, push_msg_id, can_share,
+      app_status,
+      creation_time, modified_time,
+      creator, modifier, dr)
+    values (#{cardId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, 
+      #{cardUrl,jdbcType=VARCHAR}, #{cardBannerUrl,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT},
+      #{schoolId,jdbcType=VARCHAR},
+      #{pushStatus,jdbcType=TINYINT}, #{pushTime,jdbcType=TIMESTAMP}, #{pushMsgId,jdbcType=VARCHAR},
+      #{canShare,jdbcType=TINYINT},
+      #{appStatus,jdbcType=TINYINT},
+      #{creationTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP},
+      #{creator,jdbcType=BIGINT}, #{modifier,jdbcType=BIGINT},
+      #{dr,jdbcType=TINYINT})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="io.renren.entity.manage.CustomCard" >
+    update custom_card
+    set title = #{title,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      card_url = #{cardUrl,jdbcType=VARCHAR},
+      card_banner_url = #{cardBannerUrl,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=BIGINT},
+      school_id = #{schoolId,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=TINYINT},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      push_msg_id = #{pushMsgId,jdbcType=VARCHAR},
+      can_share = #{canShare,jdbcType=TINYINT},
+      app_status = #{appStatus,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=BIGINT},
+      modifier = #{modifier,jdbcType=BIGINT},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where card_id = #{cardId,jdbcType=BIGINT}
+  </update>
+
+  <!--批量删除-->
+  <update id="deleteBatch">
+    update custom_card set dr = 1 where card_id in
+    <foreach item="cardId" collection="list" open="(" separator="," close=")">
+      #{cardId}
+    </foreach>
+  </update>
+
+  <!-- 更新推送状态 -->
+  <update id="updatePushStatus">
+    update custom_card set push_status = #{pushStatus}, push_time = #{pushTime}, push_msg_id = #{pushMsgId}
+    where card_id = #{cardId}
+  </update>
+
+  <!-- 批量更新状态 -->
+  <update id="updateBatch">
+    update custom_card set app_status = #{appStatus} where card_id in
+    <foreach item="cardId" collection="list" open="(" separator="," close=")">
+      #{cardId}
+    </foreach>
+  </update>
+
+    <select id="queryCountByPushTime" resultType="string">
+         SELECT  push_time FROM custom_card WHERE  push_time  BETWEEN #{startTime} AND #{endTime} ORDER BY push_time desc limit 1
+    </select>
+</mapper>

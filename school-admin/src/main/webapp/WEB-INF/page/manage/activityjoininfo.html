@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>活动参与信息管理</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("activityjoininfo:list"))
+			<table  class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">活动编号:</label></td>
+					<td><input type="text" class="form-control" v-model="q.activityCode" @keyup.enter="query" placeholder="活动编号"></td>
+					<td><label for="name">手机号码:</label></td>
+					<td><input type="text" class="form-control" v-model="q.mobile" @keyup.enter="query" placeholder="手机号码"></td>
+					<td><label for="name">状态:</label></td>
+					<td>
+						<select class="form-control" v-model="q.status">
+							<option value="">全部</option>
+							<option value="0">下架</option>
+							<option value="1">上架</option>
+						</select>
+					</td>
+					<td><label for="name">时间起始:</label></td>
+					<td nowrap="nowrap" colspan=2>
+						<input type="text" class="datetimepicker_start" id="StartTime" readonly="readonly" v-model="q.startTime" @keyup.enter="query" placeholder="开始时间">
+						-
+						<input type="text" class="datetimepicker_end" id="EndTime" readonly="readonly" v-model="q.endTime" @keyup.enter="query" placeholder="结束时间">
+					</td>
+				</tr>
+			</table>
+			<a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a>
+			<a class="btn btn-primary" @click="clearQuery"><i class="fa fa-search"></i>&nbsp;重置</a>
+			#end
+			#if($shiro.hasPermission("activityjoininfo:update"))
+			<a class="btn btn-primary" @click="updateStatus(1,'上架')"><i class="fa fa-pencil-square-o"></i>&nbsp;上架</a>
+			<a class="btn btn-primary" @click="updateStatus(0,'下架')"><i class="fa fa-pencil-square-o"></i>&nbsp;下架</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+</div>
+
+<script src="${rc.contextPath}/js/manage/activityjoininfo.js?_${date.systemTime}"></script>
+</body>
+</html>

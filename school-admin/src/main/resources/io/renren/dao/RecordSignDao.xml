@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.RecordSignDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	s.record_sign_id recordSignId,
+	s.record_id recordId, 
+	u.nick_name name, 
+	u.sex sex,   
+	u.mobile mobile, 
+	s.record_id recordId,
+	s.course_name courseName,
+	s.reg_date regDate,
+	s.bdyx bdyx,
+	s.zy zy,
+	s.class_name className,
+	s.level level,
+	s.status status,
+	s.order_id orderId,
+	s.user_id userId,
+	s.nc_id ncId,
+	s.create_time createTime,
+	s.ts ts,
+	s.sync_time syncTime  
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from record_sign as s left join users u on s.user_id=u.user_id 
+    	 left join mall_order o on s.order_id = o.order_id
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.RecordSignEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND s.record_sign_id = #{recordSignId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.RecordSignEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		
+		<if test="className != null and className.trim() != ''">
+			and s.class_name like concat('%',#{className},'%')
+		</if>
+		 <if test="name != null and name.trim() != ''">
+			and u.nick_name =#{name}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and u.mobile = #{mobile}
+		</if>
+		 <if test="orderId != null  ">
+			and s.order_id =#{orderId} 
+		</if>
+		  <if test="userId!= null  ">
+			and s.user_id =#{userId} 
+		</if>
+		
+		 <if test="dr != null  ">
+			and IFNULL(o.dr,0)=#{dr} 
+		</if>
+		
+		
+		
+		<if test="classId != null and classId.trim() != ''">
+			and o.class_id =#{classId} 
+		</if>
+		<if test="recordId != null and recordId.trim() != ''">
+			and s.record_id =#{recordId} 
+		</if>
+		<if test="ncId != null and ncId.trim() != ''">
+			and s.nc_id =#{ncId} 
+		</if>
+		order by s.record_sign_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		
+		<if test="className != null and className.trim() != ''">
+			and s.class_name like concat('%',#{className},'%')
+		</if>
+		 <if test="name != null and name.trim() != ''">
+			and u.nick_name =#{name}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and u.mobile #{mobile}
+		</if>
+		 <if test="orderId != null  ">
+			and s.order_id =#{orderId} 
+		</if>
+		  <if test=" userId!= null  ">
+			and s.user_id =#{userId} 
+		</if>
+		 <if test="dr != null  ">
+			and IFNULL(o.dr,0)=#{dr} 
+		</if>
+		<if test="classId != null and classId.trim() != ''">
+			and o.class_id =#{classId} 
+		</if>
+	 
+		
+		<if test="recordId != null and recordId.trim() != ''">
+			and s.record_id =#{recordId} 
+		</if>
+		<if test="ncId != null and ncId.trim() != ''">
+			and s.nc_id =#{ncId} 
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.RecordSignEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into record_sign
+	(
+	`record_sign_id`, `user_id`,
+	`record_id`,
+	`course_name`,
+	`reg_date`,
+	`bdyx`,
+	`zy`,
+	`class_name`,
+	`level`,
+	`status`,
+	`order_id`,
+	`nc_id`,
+	`create_time`,
+	`ts`,
+	`sync_time`
+	)
+	values
+	(
+	#{recordSignId}, #{userId},
+	#{recordId},
+	#{courseName},
+	#{regDate},
+	#{bdyx},
+	#{zy},
+	#{className},
+	#{level},
+	#{status},
+	#{orderId},
+	#{ncId},
+	#{createTime},
+	#{ts},
+	#{syncTime} 
+
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.RecordSignEntity">
+		update record_sign 
+		<set> 
+<if test="recordId != null">`record_id` = #{recordId}, </if>
+<if test="orderId != null">`order_id` = #{orderId}, </if>
+<if test="userId != null">`user_id` = #{userId}, </if>
+<if test="courseName != null">`course_name` = #{courseName}, </if>
+<if test="regDate != null">`reg_date` = #{regDate}, </if>
+<if test="bdyx != null">`bdyx` = #{bdyx}, </if>
+<if test="zy != null">`zy` = #{zy}, </if>
+<if test="className != null">`class_name` = #{className}, </if>
+<if test="level != null">`level` = #{level}, </if>
+<if test="status != null">`status` = #{status}, </if> 
+<if test="ncId != null">`nc_id` = #{ncId}, </if>
+<if test="createTime != null">`create_time` = #{createTime}, </if>
+<if test="ts != null">`ts` = #{ts}, </if>
+<if test="syncTime != null">`sync_time` = #{syncTime} </if>
+
+		</set>
+		<include refid="base_where"/>
+		AND record_sign_id = #{recordSignId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM record_sign 
+		<include refid="base_where"/>
+		AND record_sign_id = #{recordSignId}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM record_sign 
+		<include refid="base_where"/> 
+		AND record_sign_id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+	   update record_sign set status = #{status} where record_sign_id in
+	   <foreach item="id" collection="list" open="(" separator="," close=")">
+	   	#{id}
+		</foreach>
+	</update>
+</mapper>

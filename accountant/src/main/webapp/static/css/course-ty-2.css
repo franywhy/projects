@@ -1,0 +1,186 @@
+.taoye-2 .slide-banner .c-t-h4{
+	width:290px;
+}
+/*===============================*/
+.taoye-2 .course-b.course-book .cont li .t-h1{
+	width:214px;
+	height:261px;
+}
+.taoye-2 .course-b.course-book .cont li.li-1 .t-h1{
+	background: url(../images/taoye/taoye-zj/course-ty2-book-1.png) no-repeat center 0;
+}
+.taoye-2 .course-b.course-book .cont li.li-2 .t-h1{
+	background: url(../images/taoye/taoye-zj/course-ty2-book-2.png) no-repeat center 0;
+}
+.taoye-2 .course-b.course-book .cont li.li-3 .t-h1{
+	background: url(../images/taoye/taoye-zj/course-ty2-book-3.png) no-repeat center 0;
+}
+/*===============================*/
+.taoye-2 .course-b.course-b-bg{
+	background: url(../images/taoye/taoye-zj/course-ty2-bk-bg.jpg) no-repeat center 0;
+}
+/*==========================*/
+.taoye-2 .course-d .bz-1{
+	background: url(../images/taoye/taoye-zj/course-ty2-bz1-bg.jpg) no-repeat center 0;
+}
+/*==========================*/
+.taoye-2 .course-d .bz-3{
+	background: url(../images/taoye/taoye-zj/course-ty2-bz3-bg.jpg) no-repeat center 0;
+}
+.taoye-2 .course-d .bz-3 .t-ul{
+	color:#fff;
+	text-align: center;
+	width:1128px;
+	margin:0 auto;
+	margin-bottom:44px;
+}
+.taoye-2 .course-d .bz-3 .t-ul li{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width:162px;
+	height:162px;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border:1px solid #fff;
+	margin:0 60px;
+}
+.taoye-2 .course-d .bz-3 .t-ul li .t-h1{
+	font-size: 24px;
+	margin-top:34px;
+	margin-bottom:10px;
+}
+.taoye-2 .course-d .bz-3 .t-ul li .t-h2{
+	font-size: 14px;
+}
+.taoye-2 .bz-3 .bz-title .t-h1,.taoye-2 .bz-3 .bz-title .t-h2{
+	color:#fff;
+}
+/*========================*/
+.taoye-2 .course-d .bz-5{
+	background: url(../images/taoye/taoye-zj/course-ty2-teacher-bg.jpg) no-repeat center 0;
+}
+.taoye-2 .course-d .bz-5 .bz-cont ul li{
+	width:350px;
+	margin:0 25px;
+}
+.taoye-2 .course-d .bz-5 .bz-cont ul li{
+	height:395px;
+}
+.taoye-2 .course-d .bz-5 .bz-cont ul li.li-1 .t-h4{
+	background: url(../images/taoye/taoye-zj/course-ty2-teacher-1.png);
+}
+.taoye-2 .course-d .bz-5 .bz-cont ul li.li-2 .t-h4{
+	background: url(../images/taoye/taoye-zj/course-ty2-teacher-2.png);
+}
+.taoye-2 .course-d .bz-5 .bz-cont ul li.li-3 .t-h4{
+	background: url(../images/taoye/taoye-zj/course-ty2-teacher-3.png);
+}
+.taoye-2 .course-d .bz-5 .bz-title .t-h2{
+	margin-bottom:85px;
+}
+/*==================*/
+.taoye-2 .course-sc{
+	background: url(../images/taoye/taoye-zj/course-ty2-sc-bg.jpg) no-repeat center 0;
+}
+/*===================*/
+.taoye-2 .course-e .cont{
+	width:800px;
+	margin:0 auto;
+}
+.taoye-2 .course-e .cont .left{
+	height:368px;
+}
+/*===================*/
+.taoye-2 .course-h{
+	background: url(../images/taoye/taoye-zj/course-ty2-bm-bg.jpg) no-repeat center 0;
+}
+.taoye-2 .course-h .course-title{
+	color:#333;
+}
+.taoye-2 .course-h .cont .text{
+	color:#333;
+}
+.taoye-2 .course-h .cont .text span{
+	color:#fff;
+}
+/*=====================*/
+.taoye-2 .course-i{
+	background: url(../images/taoye/taoye-zj/course-ty2-zxc-bg.jpg) no-repeat center 0;	
+}
+.taoye-2 .course-i .course-title{
+	color:#fff;
+}
+/*===============*/
+.taoye-2 .course-g{
+	background: url(../images/taoye/taoye-zj/course-ty2-md-bg.jpg) no-repeat center 0;
+}
+.taoye-2 .course-g .course-title{
+	color:#fff;
+}
+.taoye-2 .course-g .course-title .t-h1{
+	margin-bottom:54px;
+}
+.taoye-2 .course-g .cont .ul-out{
+	width:617px;
+}
+.taoye-2 .course-g .cont ul{
+	margin-top:0;
+}
+.taoye-2 .course-g .cont ul li{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width:617px;
+	height:65px;
+	text-indent: 0;
+	font-size: 16px;
+	line-height: 24px;
+	padding-left:80px;
+	padding-right:30px;
+	padding-bottom:0;
+	margin-bottom:10px;
+}
+.taoye-2 .course-g .cont ul li.li-1{
+	height:78px;
+	background: url(../images/taoye/taoye-zj/course-ty2-xy-1.png) no-repeat center 0;
+}
+.taoye-2 .course-g .cont ul li.li-2{
+	background: url(../images/taoye/taoye-zj/course-ty2-xy-2.png) no-repeat center 0;
+}
+.taoye-2 .course-g .cont ul li.li-3{
+	background: url(../images/taoye/taoye-zj/course-ty2-xy-3.png) no-repeat center 0;
+}
+.taoye-2 .course-g .cont ul li.li-4{
+	background: url(../images/taoye/taoye-zj/course-ty2-xy-4.png) no-repeat center 0;
+}
+.taoye-2 .course-g .cont ul li.li-5{
+	background: url(../images/taoye/taoye-zj/course-ty2-xy-5.png) no-repeat center 0;
+}
+.taoye-2 .course-g .cont ul li.li-6{
+	background: url(../images/taoye/taoye-zj/course-ty2-xy-6.png) no-repeat center 0;
+}
+.taoye-2 .course-g .cont{
+	margin-bottom:102px;
+}
+
+
+ .taoye-2 .course-f .cont .t-5{
+ 	width:30px;
+ 	height:30px;
+ 	background-color: #f4f4f4;
+ 	top:133px;
+ 	left:148px;
+ }
+ .taoye-2 .course-f .cont .t-10{
+ 	width:30px;
+ 	height:30px;
+ 	background-color: #f4f4f4;
+ 	top:355px;
+ 	left:605px;
+ }
+.course-l .video-box-out{
+	text-align: center;
+	width:800px;
+	height:500px;
+	margin:0 auto;
+}

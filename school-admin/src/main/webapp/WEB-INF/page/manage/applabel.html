@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>app用户----标签</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="!showList0">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("applabel:list"))
+			<table  class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">标签名称:</label></td>
+					<td><input type="text" class="form-control" v-model="q.labelName" placeholder="标签名称"></td>
+					<td><label for="name">产品线:</label></td>
+					<td>
+						<select class="form-control" v-model="q.productId">
+							<option value="">全部</option>
+							<option value="0">会计</option>
+							<option value="1">自考</option>
+						</select>
+					</td>
+					<td><label for="name">状态:</label></td>
+					<td>
+						<select class="form-control" v-model="q.dr">
+							<option value="">全部</option>
+							<option value="0">正常</option>
+							<option value="1">禁用</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<a class="btn btn-default" @click="clearQuery"><i class="fa fa-search"></i>&nbsp;重置</a>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("applabel:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("applabel:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("applabel:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+			#end
+			#if($shiro.hasPermission("applabel:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a>
+			#end
+			#if($shiro.hasPermission("applabel:downKJExcelTemplate"))
+			<a class="btn btn-primary" @click="downKJExcelTemplate"><i class="fa fa-pencil-square-o"></i>&nbsp;会计标签模板下载</a>
+			#end
+			#if($shiro.hasPermission("applabel:downZKExcelTemplate"))
+			<a class="btn btn-primary" @click="downZKExcelTemplate"><i class="fa fa-pencil-square-o"></i>&nbsp;自考标签模板下载</a>
+			#end
+			#if($shiro.hasPermission("applabel:importKJExcel"))
+		    <a class="btn btn-primary" @click="importKJExcel"><i class="fa fa-recycle"></i>&nbsp;会计标签批量导入</a>
+		    #end
+			#if($shiro.hasPermission("applabel:importZKExcel"))
+		    <a class="btn btn-primary" @click="importZKExcel"><i class="fa fa-recycle"></i>&nbsp;自考标签批量导入</a>
+		    #end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList1" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.id" placeholder=""/>
+			    </div>
+		    </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">修改类型</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline"><input type="radio" name="type" value="1" v-model="appLabel.type" disabled='disabled'/> 标签</label>
+                    <label class="radio-inline"><input type="radio" name="type" value="0" v-model="appLabel.type" disabled='disabled'/> 专业</label>
+                </div>
+            </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">产品线</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline"><input type="radio" name="product" value="0" v-model="appLabel.productId" disabled='disabled'/> 会计</label>
+                    <label class="radio-inline"><input type="radio" name="product" value="1" v-model="appLabel.productId" disabled='disabled'/> 自考</label>
+                </div>
+            </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">状态</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline"><input type="radio" name="dr" value="0" v-model="appLabel.dr" disabled='disabled'/> 正常</label>
+                    <label class="radio-inline"><input type="radio" name="dr" value="1" v-model="appLabel.dr" disabled='disabled'/> 禁用</label>
+                </div>
+            </div>
+			<div class="form-group" v-show="appLabel.type == 1">
+				<div class="col-sm-2 control-label">公共标签</div>
+				<div class="col-sm-10">
+					<label class="radio-inline"><input type="radio" name="isCommon" value="0" v-model="appLabel.isCommon"/> 否</label>
+					<label class="radio-inline"><input type="radio" name="isCommon" value="1" v-model="appLabel.isCommon"/> 是</label>
+				</div>
+			</div>
+			<div class="form-group" v-show="appLabel.type == 1">
+			   	<div class="col-sm-2 control-label">父级名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.parentName" readonly="readonly" placeholder="父级名称" @click="selectParent"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">标签名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.labelName" placeholder="标签名称"/>
+			    </div>
+			</div>
+			<div class="form-group" v-show="appLabel.type == 1">
+			   	<div class="col-sm-2 control-label">课程代码</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.courseCode" placeholder="课程代码（多个代码用‘,’逗号分开）"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+    <div v-show="!showList2" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.id" placeholder=""/>
+			    </div>
+		    </div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">新增类型</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline"><input type="radio" name="type" value="1" v-model="appLabel.type" @change="clearQuery" /> 标签</label>
+                    <label class="radio-inline"><input type="radio" name="type" value="0" v-model="appLabel.type" @change="clearQuery" /> 专业</label>
+                </div>
+            </div>
+			<div class="form-group" v-show="appLabel.type == 0">
+                <div class="col-sm-2 control-label">产品线</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline"><input type="radio" name="product" value="0" v-model="appLabel.productId"/> 会计</label>
+                    <label class="radio-inline"><input type="radio" name="product" value="1" v-model="appLabel.productId"/> 自考</label>
+                </div>
+            </div>
+			<div class="form-group" v-show="appLabel.type == 1">
+				<div class="col-sm-2 control-label">公共标签</div>
+				<div class="col-sm-10">
+					<label class="radio-inline"><input type="radio" name="isCommon" value="0" v-model="appLabel.isCommon"/> 否</label>
+					<label class="radio-inline"><input type="radio" name="isCommon" value="1" v-model="appLabel.isCommon"/> 是</label>
+				</div>
+			</div>
+			<div class="form-group" v-show="appLabel.type == 1">
+				<div class="col-sm-2 control-label">所属父级</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="appLabel.parentName" readonly="readonly" placeholder="点击选择父级" @click="selectParent"/>
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">标签名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.labelName" placeholder="标签名称"/>
+			    </div>
+			</div>
+			<div class="form-group" v-show="appLabel.type == 1">
+			   	<div class="col-sm-2 control-label">小图地址</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.smallPicUrl" placeholder="小图地址"/>
+			    </div>
+			</div>
+			<div class="form-group" v-show="appLabel.type == 1">
+			   	<div class="col-sm-2 control-label">大图地址</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.bigPicUrl" placeholder="大图地址"/>
+			    </div>
+			</div>
+			<div class="form-group" v-show="appLabel.type == 1">
+			   	<div class="col-sm-2 control-label">课程代码</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="appLabel.courseCode" placeholder="课程代码（多个代码用‘,’逗号分开）"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+<div id="fileUploadLayer" style="display: none;">
+    <div class="panel-heading">标签批量上传</div>
+    <input type="file" id="file_data" name="file_data" accept=".xls"/>
+</div>
+<script src="${rc.contextPath}/js/manage/applabel.js?_${date.systemTime}"></script>
+#parse("layer/labelParentLay.html")
+</body>
+</html>

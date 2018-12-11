@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseClassplanDao">
+	<!-- 查询学习计划根据学习计划ID -->
+	<select id="queryObjectByClassplanId" resultType="io.renren.entity.CourseClassplanEntity">
+		SELECT
+			course_classplan.*
+		FROM course_classplan AS course_classplan 
+		WHERE 
+		course_classplan.classplan_id = #{classplanId} 
+		AND course_classplan.dr = 0
+	</select>
+	
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = c.product_id
+	</sql>
+	<!-- 根据学员规划子表id查询排课计划下拉列表 -->
+	<select id="queryListByUserplanDetailId" resultType="map">
+		select
+			classplan.classplan_id AS classplanId,
+			classplan.classplan_name AS classplanName
+		from course_classplan classplan 
+		JOIN course_userplan_detail userplan_detail ON(userplan_detail.course_id = classplan.course_id) 
+		where 
+		userplan_detail.userplan_detail_id = #{userplanDetailId} 
+		and classplan.status = 1
+		and classplan.is_audited = 1
+		and classplan.dr = 0
+	</select>
+	
+	<!-- 根据排课id查询学员列表 -->
+	<select id="queryUserList" resultType="map">
+		SELECT 
+			userplan.user_id as userId,<!-- 学员id -->
+			users.nick_name as userName,
+			users.mobile as mobile,
+			userplan_class.userplan_class_no as userplanClassNo,<!-- 学习计划单号 -->
+			userplan_class_detail.timestamp as timestamp,<!-- 入课时间 -->
+			userplan.order_id as orderId,<!-- 订单id -->
+			userplan.order_no as orderNo,<!-- 订单号 -->
+			userplan.class_type_id as classTypeId,<!-- 班型id -->
+			userplan.class_id as classId,<!-- 班级id -->
+			mall_class.class_name as className,<!-- 班级名称 -->
+			(select classType.classtype_name from mall_class_type classType where classType.classtype_id = userplan.class_type_id) as classTypeName<!-- 班型名称 -->
+		FROM
+			course_classplan as classplan,<!-- 排课计划表 -->
+			course_userplan_class_detail as userplan_class_detail,<!-- 学习计划子表 -->
+			course_userplan_class as userplan_class,<!-- 学习计划表 -->
+			course_userplan as userplan,<!-- 学员规划表 -->
+			mall_class as mall_class,<!-- 班级表 -->
+			users as users
+		WHERE 
+			users.user_id = userplan.user_id
+			AND userplan.class_id = mall_class.class_id
+			AND classplan.classplan_id = #{classplanId}
+			AND userplan_class_detail.classplan_id = #{classplanId}
+			AND userplan_class_detail.userplan_class_id = userplan_class.userplan_class_id
+			AND userplan_class.userplan_id = userplan.user_plan_id
+			<if test="userName != null and userName.trim() != ''">
+				AND users.nick_name = #{userName}
+			</if>
+			<if test="mobile != null and mobile.trim() != ''">
+				AND users.mobile = #{mobile} 
+			</if>
+			<if test="className != null and className.trim() != ''">
+				AND mall_class.class_name = #{className}
+			</if>
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+	</select>
+	<!-- 根据排课id查询学员列表总数 -->
+	<select id="queryUserListTotal" resultType="int">
+		SELECT 
+			count(1)
+		FROM
+			course_classplan as classplan,<!-- 排课计划表 -->
+			course_userplan_class_detail as userplan_class_detail,<!-- 学习计划子表 -->
+			course_userplan_class as userplan_class,<!-- 学习计划表 -->
+			course_userplan as userplan,<!-- 学员规划表 -->
+			mall_class as mall_class,<!-- 班级表 -->
+			users as users
+		WHERE 
+			users.user_id = userplan.user_id
+			AND userplan.class_id = mall_class.class_id
+			AND classplan.classplan_id = #{classplanId}
+			AND userplan_class_detail.classplan_id = #{classplanId}
+			AND userplan_class_detail.userplan_class_id = userplan_class.userplan_class_id
+			AND userplan_class.userplan_id = userplan.user_plan_id
+			<if test="userName != null and userName.trim() != ''">
+				AND users.nick_name = #{userName} 
+			</if>
+			<if test="mobile != null and mobile.trim() != ''">
+				AND users.mobile = #{mobile} 
+			</if>
+			<if test="className != null and className.trim() != ''">
+				AND mall_class.class_name = #{className}
+			</if>
+	</select>
+	
+	<select id="queryObject1" resultType="io.renren.pojo.classplan.ClassplanPOJO">
+		select 
+			c.classplan_id as classplanId,
+			c.classplan_name as classplanName,
+			c.course_id as courseId,
+			c.classplan_live_detail as classplanLiveDetail,
+			c.remark as remark,
+			c.start_time as startTime,
+			c.teacher_id as teacherId,
+			c.timetable_id as timetableId,
+			c.live_room_id as liveRoomId,
+			c.studio_id as studioId,
+			c.creator as creator,
+			c.creation_time as creationTime,
+			c.modifier as modifier,
+			c.modified_time as modifiedTime,
+			c.school_id as schoolId,
+			c.dr as dr,
+			c.status as status,
+			c.is_audited as isAudited,
+			c.is_open as isOpen,
+			c.material_id as materialId,
+			c.material_ids as materialIds,
+			c.product_id as productId,
+			(select cu.username from sys_user cu where cu.user_id = c.creator) as creationName,
+			(select mu.username from sys_user mu where mu.user_id = c.modifier) as modifiedName,
+			courses.course_name as courseName,
+			timetable.name as timetableName,
+			(select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+			mall_live_room.live_room_name as liveRoomName,
+			(select su.username from sys_user su where su.user_id = c.teacher_id) as teacherName,
+			(select co.material_name from course_material co where co.material_id = c.material_id) as materialName,
+			<include refid="join_productName"/>
+		from course_classplan c 
+			<include refid="join"/>
+		LEFT JOIN courses AS courses ON courses.course_id = c.course_id
+		LEFT JOIN timetable AS timetable ON timetable.number = c.timetable_id
+		LEFT JOIN mall_live_room AS mall_live_room ON mall_live_room.live_room_id = c.live_room_id
+		where classplan_id = #{classplanId}
+	</select>
+
+	<select id="queryList" resultType="io.renren.pojo.classplan.ClassplanPOJO">
+		select 
+			c.classplan_id as classplanId,
+			c.classplan_name as classplanName,
+			c.course_id as courseId,
+			c.classplan_live_detail as classplanLiveDetail,
+			c.remark as remark,
+			c.start_time as startTime,
+			c.teacher_id as teacherId,
+			c.timetable_id as timetableId,
+			c.live_room_id as liveRoomId,
+			c.studio_id as studioId,
+			c.creator as creator,
+			c.creation_time as creationTime,
+			c.modifier as modifier,
+			c.modified_time as modifiedTime,
+			c.school_id as schoolId,
+			c.dr as dr,
+			c.status as status,
+			c.is_audited as isAudited,
+			c.is_open as isOpen,
+			c.material_id as materialId,
+			c.material_ids as materialIds,
+			c.product_id as productId,
+			(select cu.username from sys_user cu where cu.user_id = c.creator) as creationName,
+			(select mu.username from sys_user mu where mu.user_id = c.modifier) as modifiedName,
+			courses.course_name as courseName,
+			timetable.name as timetableName,
+			(select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+			mall_live_room.live_room_name as liveRoomName,
+			(select su.nick_name from sys_user su where su.user_id = c.teacher_id) as teacherName,
+			(select co.material_name from course_material co where co.material_id = c.material_id) as materialName,
+			(SELECT 
+					count(1)
+				FROM
+					course_userplan_class_detail as userplan_class_detail,<!-- 学习计划子表 -->
+					course_userplan_class as userplan_class,<!-- 学习计划表 -->
+					course_userplan as userplan,<!-- 学员规划表 -->
+					users as users
+				WHERE 
+					users.user_id = userplan.user_id
+					AND c.classplan_id = userplan_class_detail.classplan_id
+					AND userplan_class_detail.userplan_class_id = userplan_class.userplan_class_id
+					AND userplan_class.userplan_id = userplan.user_plan_id
+			) as studentNumber,
+			(SELECT 
+					count(1)
+				FROM
+					course_classplan_lives as course_classplan_lives
+				WHERE
+					course_classplan_lives.classplan_id = c.classplan_id
+					AND course_classplan_lives.dr = 0
+			) as liveNumber,
+			<include refid="join_productName"/>
+		from course_classplan as c
+			<include refid="join"/>
+		LEFT JOIN courses AS courses ON courses.course_id = c.course_id
+		LEFT JOIN timetable AS timetable ON timetable.number = c.timetable_id
+		LEFT JOIN mall_live_room AS mall_live_room ON mall_live_room.live_room_id = c.live_room_id
+		where c.dr = 0
+			
+		<if test="classplanName != null and classplanName.trim() != ''">
+			and c.`classplan_name` like concat('%',#{classplanName},'%')
+		</if>
+		order by courseId, startTime desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 查询状态为正常并且审核状态为通过并且dr=0的排课 -->
+	<select id="queryList1" resultType="io.renren.pojo.classplan.ClassplanPOJO">
+		select 
+			c.classplan_id as classplanId,
+			c.classplan_name as classplanName,
+			c.course_id as courseId,
+			c.classplan_live_detail as classplanLiveDetail,
+			c.remark as remark,
+			c.start_time as startTime,
+			c.teacher_id as teacherId,
+			c.timetable_id as timetableId,
+			c.live_room_id as liveRoomId,
+			c.studio_id as studioId,
+			c.creator as creator,
+			c.creation_time as creationTime,
+			c.modifier as modifier,
+			c.modified_time as modifiedTime,
+			c.school_id as schoolId,
+			c.dr as dr,
+			c.status as status,
+			c.is_audited as isAudited,
+			c.is_open as isOpen,
+			c.material_id as materialId,
+			c.material_ids as materialIds,
+			(select cu.username from sys_user cu where cu.user_id = c.creator) as creationName,
+			(select mu.username from sys_user mu where mu.user_id = c.modifier) as modifiedName,
+			courses.course_name as courseName,
+			timetable.name as timetableName,
+			(select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+			(select ml.live_room_name from mall_live_room ml where ml.live_room_id = c.live_room_id) as liveRoomName,
+			(select su.username from sys_user su where su.user_id = c.teacher_id) as teacherName,
+			(select co.material_name from course_material co where co.material_id = c.material_id) as materialName
+		from course_classplan c 
+		LEFT JOIN courses AS courses ON courses.course_id = c.course_id
+		LEFT JOIN timetable AS timetable ON timetable.number = c.timetable_id
+		where c.dr = 0 
+		and c.status = 1 
+		and c.is_audited = 1
+		<if test="classplanName != null and classplanName.trim() != ''">
+			and c.`classplan_name` like concat('%',#{classplanName},'%') 
+		</if>
+		order by c.course_id, c.start_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryListMap" resultType="map">
+		select course_classplan.classplan_id as id
+		from course_classplan course_classplan 
+	</select>
+	<select id="queryOtherById" resultType="map">
+		SELECT
+			course_classplan.classplan_name AS classplanName,
+			course_classplan.creation_time AS creationTime,
+			course_classplan.dr,
+			course_classplan.course_id AS courseCode,
+			course_classplan_lives.end_time AS endTime,
+			sys_user.mobile AS teacherCode,
+			course_classplan.ts
+		FROM
+			course_classplan course_classplan
+		JOIN course_classplan_lives course_classplan_lives ON course_classplan.classplan_id = course_classplan_lives.classplan_id
+		JOIN sys_user sys_user ON course_classplan.teacher_id = sys_user.user_id
+		where course_classplan_lives.classplan_id = #{id}
+		and course_classplan.ts >#{millisecond}
+		ORDER BY
+			course_classplan_lives.end_time DESC
+		LIMIT 0,1
+	</select>
+	
+	<select id="findCId" resultType="int">
+		select count(classplan_id) from course_classplan where classplan_id=#{classPlanId}
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from course_classplan where dr = 0
+		<if test="classplanName != null and classplanName.trim() != ''">
+			and `classplan_name` like concat('%',#{classplanName},'%') 
+		</if>
+	</select>
+	<!-- 查询状态为正常并且审核状态为通过并且dr=0的排课的总数 -->
+	<select id="queryTotal1" resultType="int">
+		select count(1) from course_classplan where dr = 0
+        <if test="classplanName != null and classplanName.trim() != ''">
+            and `classplan_name` like concat('%',#{classplanName},'%')
+        </if>
+		and status = 1 and is_audited = 1
+	</select>
+	<!--  <select id="checkClassType" resultType="int">
+		select count(1) from course_classplan course_classplan where course_classplan.
+	</select> -->
+	<insert id="save" parameterType="io.renren.entity.CourseClassplanEntity"  useGeneratedKeys="true" keyProperty="classplanId">
+		insert into course_classplan
+		(
+			`classplan_id`, 
+			`classplan_name`, 
+			`course_id`, 
+			`material_id`, 
+			`material_ids`, 
+			`classplan_live_detail`, 
+			`remark`, 
+			`start_time`, 
+			`teacher_id`, 
+			`timetable_id`, 
+			`live_room_id`, 
+			`studio_id`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`school_id`, 
+			`dr`, 
+			`status`, 
+			`is_audited`, 
+			`is_open`,
+			`product_id`
+		)
+		values
+		(
+			#{classplanId}, 
+			#{classplanName}, 
+			#{courseId},
+			#{materialId},
+			#{materialIds},
+			#{classplanLiveDetail}, 
+			#{remark}, 
+			#{startTime}, 
+			#{teacherId}, 
+			#{timetableId}, 
+			#{liveRoomId}, 
+			#{studioId}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime}, 
+			#{schoolId}, 
+			#{dr}, 
+			#{status}, 
+			#{isAudited}, 
+			#{isOpen},
+			#{productId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.CourseClassplanEntity">
+		update course_classplan 
+		<set>
+			<if test="classplanName != null">`classplan_name` = #{classplanName}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="classplanLiveDetail != null">`classplan_live_detail` = #{classplanLiveDetail}, </if>
+			<if test="materialId != null">`material_id` = #{materialId}, </if>
+			<if test="materialIds != null">`material_ids` = #{materialIds}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="teacherId != null">`teacher_id` = #{teacherId}, </if>
+			<if test="timetableId != null">`timetable_id` = #{timetableId}, </if>
+			<if test="liveRoomId != null">`live_room_id` = #{liveRoomId}, </if>
+			<if test="studioId != null">`studio_id` = #{studioId}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="isAudited != null">`is_audited` = #{isAudited}, </if>
+			<if test="isOpen != null">`is_open` = #{isOpen}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		where classplan_id = #{classplanId}
+	</update>
+	<!-- 资料库关联修改 -->
+	<update id="updateMaterial" parameterType="map">
+		update course_classplan 
+		<set>
+			<if test="materialId != null">`material_id` = #{materialId}, </if>
+			<if test="materialIds != null">`material_ids` = #{materialIds} </if>
+		</set>
+		where classplan_id = #{classplanId}
+	</update>
+	
+	<update id="updateBatch">
+	   update course_classplan set status = #{status} where classplan_id in
+	   <foreach item="classplanId" collection="list" open="(" separator="," close=")">
+	   	#{classplanId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from course_classplan where classplan_id = #{value}
+	</delete>
+	
+	
+	<update id="deleteBatch">
+		update course_classplan
+		<set>
+			dr = 1
+		</set>
+		where classplan_id in 
+		<foreach item="classplanId" collection="ids" open="(" separator="," close=")">
+			#{classplanId}
+		</foreach>
+	</update>
+	<!-- 审核 -->
+	<update id="audited">
+	   update course_classplan set is_audited = #{isAudited} where classplan_id =#{classplanId}
+	</update>
+
+
+
+</mapper>

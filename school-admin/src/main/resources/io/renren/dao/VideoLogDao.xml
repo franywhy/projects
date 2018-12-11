@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.VideoLogDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	video_log.video_log_id AS videoLogId , 	video_log.video_id AS videoId , 	video_log.user_id AS userId , 	video_log.watch_duration AS watchDuration , 	video_log.video_duration AS videoDuration , 	video_log.attend_30 AS attend30 , 	video_log.version_code AS versionCode , 	video_log.school_id AS schoolId , 	video_log.m_id AS mId , 	video_log.create_time AS createTime 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM video_log AS video_log
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  video_log_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.VideoLogEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		and video_id = #{videoId}
+		<if test="userId != null">
+		and user_id = #{userId}
+		</if>
+	</select>
+	
+	<select id="queryByVideoId" resultType="io.renren.entity.VideoLogEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="userId != null">
+		and user_id = #{userId}
+		</if>
+		<if test="videoId != null">
+		and video_id = #{videoId}
+		</if>
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.VideoLogEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!-- 查询是否存在这条记录 -->
+	<select id="videoLogExist" parameterType="string" resultType="int">
+	    SELECT COUNT(video_log_id) FROM `video_log` WHERE m_id=#{mId}
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.VideoLogEntity" useGeneratedKeys="true" keyProperty="videoLogId">
+		insert into video_log
+		(	`video_id`, 				`user_id`, 				`watch_duration`, 				`video_duration`, 				`attend_30`, 				`version_code`, 				`school_id`, 				`m_id`, 				`create_time`		)
+		values
+		(													#{videoId}, 																			#{userId}, 																			#{watchDuration}, 																			#{videoDuration}, 																			#{attend30}, 																			#{versionCode}, 																			#{schoolId}, 																			#{mId}, 																			#{createTime}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.VideoLogEntity">
+		update video_log 
+		<set>
+			<if test="videoId != null">`video_id` = #{videoId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="watchDuration != null">`watch_duration` = #{watchDuration}, </if>
+			<if test="videoDuration != null">`video_duration` = #{videoDuration}, </if>
+			<if test="attend30 != null">`attend_30` = #{attend30}, </if>
+			<if test="versionCode != null">`version_code` = #{versionCode}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="mId != null">`m_id` = #{mId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		<include refid="base_where"/>
+		AND video_log_id = #{videoLogId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM video_log 
+		<include refid="base_where"/>
+		AND video_log_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM video_log 
+		<include refid="base_where"/> 
+		AND video_log_id IN 
+		<foreach item="videoLogId" collection="ids" open="(" separator="," close=")">
+			#{videoLogId}
+		</foreach>
+	</delete>
+</mapper>

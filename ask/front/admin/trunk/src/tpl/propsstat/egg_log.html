@@ -1,0 +1,50 @@
+<!--座驾统计-->
+<table width="100%" class="listTable">
+<thead>
+        <tr>
+    		<th class="longtime" rowspan="3">时间</th>
+            <th  colspan="9">锤子</th>
+            <th class="auto" rowspan="3">总用户数</th>
+            <th class="auto" rowspan="3">总次数</th>
+            <th class="auto" rowspan="3">总消耗星币</th>
+            <th class="auto" rowspan="3">产生礼物价值</th>
+        </tr>
+        <tr>
+            <th class="auto" colspan="3">100</th>
+            <th class="auto" colspan="3">250</th>
+            <th class="auto" colspan="3">500</th
+        </tr>
+        <tr>
+            <th class="auto">次数</th>
+            <th class="auto">用户数</th>
+            <th class="auto">价值</th>
+            <th class="auto">次数</th>
+            <th class="auto">用户数</th>
+            <th class="auto">价值</th>
+            <th class="auto">次数</th>
+            <th class="auto">用户数</th>
+            <th class="auto">价值</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+            <td><%=data[i]["100"]["count"]%></td>
+            <td><%=data[i]["100"]["users"]%></td>
+            <td><%=data[i]["100"]["price"]%></td>
+            <td><%=data[i]["250"]["count"]%></td>
+            <td><%=data[i]["250"]["users"]%></td>
+            <td><%=data[i]["250"]["price"]%></td>
+            <td><%=data[i]["500"]["count"]%></td>
+            <td><%=data[i]["500"]["users"]%></td>
+            <td><%=data[i]["500"]["price"]%></td>
+            <td><%=data[i].users%></td>
+            <td><%=data[i].count%></td>
+            <td><%=data[i]["100"]["count"]*100+data[i]["250"]["count"]*250+data[i]["500"]["count"]*500%></td>
+			<td><%=data[i].total_price%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.dao.TeachEvaluateDao">
+
+    <select id="check" resultType="java.lang.Boolean">
+        SELECT 1 FROM teach_evaluate
+        WHERE user_id = #{userId} AND topic_id = #{topicId}
+        AND topic_type = #{topicType} AND status = 1
+        limit 1
+    </select>
+
+    <insert id="insert" parameterType="com.school.entity.TeachEvaluate" >
+        insert into teach_evaluate (
+        id, score, content,
+        user_id, topic_id, topic_type,
+        stage_code, create_time, status,
+        file_key, material_score, content_score,
+        teach_style_score)
+        values (
+        #{id,jdbcType=BIGINT},
+        #{score,jdbcType=INTEGER},
+        #{content,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
+        #{topicId,jdbcType=VARCHAR},
+        #{topicType,jdbcType=BIGINT},
+        #{stageCode,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{status,jdbcType=TINYINT},
+        #{fileKey,jdbcType=VARCHAR},
+        #{materialScore,jdbcType=INTEGER},
+        #{contentScore,jdbcType=INTEGER},
+        #{teachStyleScore,jdbcType=INTEGER})
+    </insert>
+
+</mapper>

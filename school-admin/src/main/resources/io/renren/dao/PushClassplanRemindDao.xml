@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.PushClassplanRemindDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	push_classplan_remind.id AS id , 	push_classplan_remind.course_classplan_id AS courseClassplanId , 	push_classplan_remind.push_time_template_id AS pushTimeTemplateId , 	push_classplan_remind.creater AS creater , 	push_classplan_remind.create_time AS createTime , 	push_classplan_remind.updater AS updater , 	push_classplan_remind.update_time AS updateTime , 	push_classplan_remind.dr AS dr 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE push_classplan_remind.dr=0 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM push_classplan_remind AS push_classplan_remind
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObjectPojo" parameterType="map" resultType="io.renren.pojo.PushClassplanRemindPojo">
+		select 
+      		push_classplan_remind.id as id,
+			push_time_template.id as pushTimeTemplateId,
+			push_time_template.name as pushTimeTemplateName,
+			push_time_template.push_content_template as pushTimeTemplateContent,
+			push_time_template.push_time as pushTimeTemplateTime,
+			push_time_template.push_day as pushTimeTemplateDay,
+			push_time_template.type as type,
+			course_classplan.classplan_id as courseClassplanId,
+			course_classplan.classplan_name as courseClassplanName,
+			(select courses.course_name from courses courses where course_classplan.course_id = courses.course_id and courses.dr = 0) as courseName,
+			course_classplan.start_time as startTime,
+			(select sys_user.nick_name from sys_user sys_user where course_classplan.teacher_id = sys_user.user_id) as teacherName,
+			(select sys_product.product_name from sys_product sys_product where course_classplan.product_id = sys_product.product_id) as productName,
+			(select user.nick_name from sys_user user where push_classplan_remind.updater = user.user_id) as updaterName,
+			push_classplan_remind.update_time as updateTime,
+			push_classplan_remind.creater as creater
+      	from push_classplan_remind as push_classplan_remind
+			join course_classplan course_classplan on push_classplan_remind.course_classplan_id = course_classplan.classplan_id
+			join push_time_template push_time_template on push_classplan_remind.push_time_template_id = push_time_template.id
+		where
+			push_classplan_remind.dr = 0 and
+			push_classplan_remind.id = #{id} and
+			course_classplan.dr = 0 and
+			push_time_template.dr = 0
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryListPojo" resultType="io.renren.pojo.PushClassplanRemindPojo">
+		select
+			push_classplan_remind.id as id,
+			push_time_template.id as pushTimeTemplateId,
+			push_time_template.name as pushTimeTemplateName,
+			push_time_template.push_content_template as pushTimeTemplateContent,
+			push_time_template.push_time as pushTimeTemplateTime,
+			push_time_template.push_day as pushTimeTemplateDay,
+			push_time_template.type as type,
+			course_classplan.classplan_id as courseClassplanId,
+			course_classplan.classplan_name as courseClassplanName,
+			(select courses.course_name from courses courses where course_classplan.course_id = courses.course_id and courses.dr = 0) as courseName,
+			course_classplan.start_time as startTime,
+			(select sys_user.nick_name from sys_user sys_user where course_classplan.teacher_id = sys_user.user_id) as teacherName,
+			(select sys_product.product_name from sys_product sys_product where course_classplan.product_id = sys_product.product_id) as productName,
+			(select user.nick_name from sys_user user where push_classplan_remind.updater = user.user_id) as updaterName,
+			push_classplan_remind.update_time as updateTime,
+			push_classplan_remind.creater as creater
+		from push_classplan_remind as push_classplan_remind
+			join course_classplan course_classplan on push_classplan_remind.course_classplan_id = course_classplan.classplan_id
+			join push_time_template push_time_template on push_classplan_remind.push_time_template_id = push_time_template.id
+		where
+			push_classplan_remind.dr = 0 and
+			course_classplan.dr = 0 and
+			push_time_template.dr = 0
+			<if test="name != null">
+				and course_classplan.classplan_name like concat('%',#{name},'%')
+			</if>
+			<if test="templateName != null">
+				and push_time_template.name like concat('%',#{templateName},'%') 
+			</if>
+		order by push_classplan_remind.id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		from push_classplan_remind as push_classplan_remind
+			join course_classplan course_classplan on push_classplan_remind.course_classplan_id = course_classplan.classplan_id
+			join push_time_template push_time_template on push_classplan_remind.push_time_template_id = push_time_template.id
+		where
+			push_classplan_remind.dr = 0 and
+			course_classplan.dr = 0 and
+			push_time_template.dr = 0
+			<if test="name != null">
+				and course_classplan.classplan_name like concat('%',#{name},'%')
+			</if>
+			<if test="templateName != null">
+				and push_time_template.name like concat('%',#{templateName},'%')
+			</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.PushClassplanRemindEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into push_classplan_remind
+	(
+		`course_classplan_id`, 
+		`push_time_template_id`, 
+		`creater`, 
+		`create_time`, 
+		`updater`,
+		`update_time`, 
+		`dr` 
+	)
+	values
+	(
+		#{courseClassplanId}, 
+		#{pushTimeTemplateId}, 
+		#{creater}, 
+		#{createTime}, 
+		#{updater},
+		#{updateTime}, 
+		0 
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.PushClassplanRemindEntity">
+		update push_classplan_remind 
+		<set>
+			<if test="courseClassplanId != null">`course_classplan_id` = #{courseClassplanId}, </if>
+			<if test="pushTimeTemplateId != null">`push_time_template_id` = #{pushTimeTemplateId}, </if>
+			<if test="creater != null">`creater` = #{creater}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updater != null">`updater` = #{updater}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.PushClassplanRemindEntity">
+		UPDATE push_classplan_remind 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="map">
+		UPDATE push_classplan_remind 
+		<set> dr = 1, updater = #{updater}, update_time = #{updateTime} </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

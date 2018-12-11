@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>商品关联档案表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.relatedName" @keyup.enter="query" placeholder="关联名称">
+			</div>
+			<a class="btn btn-default" @click="query">查询</a>
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">关联商品id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="relatedCommodity.relatedCommodityId" placeholder="关联商品id"/>
+			    </div>
+		    </div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">关联名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="relatedCommodity.relatedName" placeholder="关联名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="relatedCommodity.remake" placeholder="备注"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">是否禁用</div> 
+				<label class="radio-inline">
+				  <input type="radio" name="status" value="0" v-model="relatedCommodity.status"/> 禁用
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="status" value="1" v-model="relatedCommodity.status"/> 正常
+				</label>
+			</div>
+			<!-- ---------------------------------ITEM 子表--------------------------------- -->
+			<div class="form-group">
+				<div class="col-sm-2 control-label">子表</div>
+			    <div class="tab-pane col-sm-10 fade in active">
+				    <a class="btn btn-primary" @click="iadd"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				    <a class="btn btn-primary" @click="iupdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+				    <a class="btn btn-primary" @click="idel"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				    <!-- <a class="btn btn-primary" @click="demo"><i class="fa fa-trash-o"></i>&nbsp;demo</a> -->
+				    <table id="detailGrid"></table>
+				    <div id="detailGridPager"></div>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		
+		</form>
+	</div>
+	
+	<!-- 修改关联商品子表 -->
+	<div id="liveLayer" style="display: none;">
+		<form class="form-horizontal">
+		<div class="form-group">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">商品</div>
+			   	<div class="col-sm-10">
+			      <!-- <input type="text" class="form-control" v-model="detail.obj.commodity" placeholder="商品" /> -->
+			      <select class="form-control" v-model="detail.obj.commodity" id="selGoods" @change="commodityChange">
+				       <option v-for="option in commodityList" v-bind:value="option.id" >{{ option.professionName+'|'+option.levelName+'|'+option.alias+'|'+option.name }}</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">别名</div>
+			   	<div class="col-sm-10">
+			      <!-- <input type="text" class="form-control" placeholder="别名" /> -->
+			      <input type="text" class="form-control" v-model="detail.obj.alias" placeholder="别名" id="input_alias"/>
+			    </div>
+			</div>
+		</div>
+		</form>
+	</div>
+	
+</div>
+
+<script src="${rc.contextPath}/js/mall/relatedcommodity.js?_${date.systemTime}"></script>
+</body>
+</html>

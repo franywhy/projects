@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${package}.dao.${className}Dao">
+
+	##表的别名
+	#set($tableAsName = ${tableName})
+	
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+#foreach($column in $columns)##
+	${tableAsName}.$column.columnName AS $column.attrname #if($velocityCount != $columns.size()), #end
+#end##
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE ${tableAsName}.school_id = #{schoolId} #if($drTag)AND ${tableAsName}.dr=0 #end
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM ${tableName} AS ${tableAsName}
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  ${pk.columnName} DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="${package}.entity.${className}Entity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND ${pk.columnName} = #{${pk.attrname}}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="${package}.entity.${className}Entity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="${package}.entity.${className}Entity"#if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$pk.attrname"#end>
+		insert into ${tableName}
+		(
+#foreach($column in $columns)##
+#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')##
+				`$column.columnName`#if($velocityCount != $columns.size()), #end
+#end##
+#end##
+		)
+		values
+		(
+#foreach($column in $columns)
+			#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+				#if($column.columnName == 'dr')
+					0#if($velocityCount != $columns.size()), #end
+				#else	
+					#{$column.attrname}#if($velocityCount != $columns.size()), #end
+				#end
+			#end			
+#end
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="${package}.entity.${className}Entity">
+		update ${tableName} 
+		<set>
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName)
+			<if test="$column.attrname != null">`$column.columnName` = #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
+#end
+#end
+		</set>
+		<include refid="base_where"/>
+		AND ${pk.columnName} = #{${pk.attrname}}
+	</update>
+	
+	<!--删除-->
+#if($drTag)
+	<update id="delete" parameterType="${package}.entity.${className}Entity">
+		UPDATE ${tableName} 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND ${pk.columnName} = #{id}
+	</update>
+#else
+	<delete id="delete">
+		DELETE FROM ${tableName} 
+		<include refid="base_where"/>
+		AND ${pk.columnName} = #{id}
+	</delete>
+#end
+	
+	<!--批量删除-->
+#if($drTag)
+	<update id="deleteBatch" parameterType="${package}.entity.${className}Entity">
+		UPDATE ${tableName} 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND ${pk.columnName} IN 
+		<foreach item="${pk.attrname}" collection="ids" open="(" separator="," close=")">
+			#{${pk.attrname}}
+		</foreach>
+	</update>
+#else
+	<delete id="deleteBatch">
+		DELETE FROM ${tableName} 
+		<include refid="base_where"/> 
+		AND ${pk.columnName} IN 
+		<foreach item="${pk.attrname}" collection="ids" open="(" separator="," close=")">
+			#{${pk.attrname}}
+		</foreach>
+	</delete>
+#end
+</mapper>

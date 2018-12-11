@@ -1,0 +1,26 @@
+<!--问卷调查项目输入-->
+<form name="inputForm">
+    <input name="_id" hidden="hidden"/>
+    <table width="100%">
+    <tr><td>项目名称<span class="red">*</span>:</td>
+        <td>
+             <input class="input" type="text" name="item_name" value="" size="30" required/>
+         </td>
+        <td>
+            所属调查问卷<span class="red">*</span>:
+        </td>
+        <td>
+            <select id="user_id" name="type_id" class="input J_type_id" style="width:250px" data-options="required:true">
+            </select>
+        </td>
+     </tr>
+
+     <tr><td td colspan="4"> &nbsp;</td></tr>
+     <tr>
+        <td td colspan="2"> <input type="button" class="d-button" value="新增调查项目选项" onClick="Izb.controller.questionnaireitem.addOptins();" /></td>
+     </tr>
+       <tr><td td colspan="4"> &nbsp;</td></tr>
+     <tr><td colspan="4"><div id="container"></div><td></tr>
+    </table>
+</form>
+<!--/问卷调查项目输入-->

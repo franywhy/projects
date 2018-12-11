@@ -1,0 +1,46 @@
+<!--海报列表--> 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="title">标题</th>
+		<th width="60px">类型</th>
+		<th width="60px">状态</th>
+		<th>接收对象</th>
+		<th>附带内容</th>
+        <th>定时时间</th>
+        <th class="longtime">时间</th>
+		<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        	<th class="action action250">操作</th>
+		<%}%>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+        <td><%=data[i].title%></td>
+        <td><%=data[i].type==0?"公共消息":"个人消息"%></td>
+        <td><%=data[i].status?"已发送":"未发送"%></td>
+        <td><%if(data[i].s_type){%>
+            用户组：<%=["--","运营人员","教师","普通用户","客服人员","经纪人"][data[i].user_type]%>
+            <%}else{%>
+            用户：<%=data[i].user_id%>
+            <%}%>
+        </td>
+        <td><%=data[i].content%></td>
+        <td><%=data[i].send_time%></td>
+        <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+		<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+			<td class="action">
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit(<%=data[i]._id%>)">改</button>
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.del(<%=data[i]._id%>)">删</button>
+                <%if(!data[i].status){%>
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.send({_id:'<%=data[i]._id%>'})">发送</button>
+                <%}%>
+			</td>
+		<%}%>
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>
+<!--/海报列表--> 

@@ -1,0 +1,49 @@
+/*
+* Izb
+* http://www.izhubo.com
+* @author Lijian
+* @version v 1.0 2012/11/23
+* @201305081609
+* 123123123123123123123132
+*/
+
+/*-- reset --*/
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, p, blockquote, th, td, article, aside, dialog, figure, footer, header, hgroup, menu, nav, section, time, mark, audio, video, details, summary { margin: 0; padding: 0; }
+section, article, aside, header, footer, nav, dialog, figure { display: block; }
+html {font-size: 12px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+body{line-height: 1.5; color: #333333; background-color:#ffffff; }
+a {text-decoration: none; color:#0088cc; }
+a:active,a:hover,a:focus{outline: 0;}
+ol, ul { list-style: none; }
+img, iframe, fieldset { border: 0; }
+img { vertical-align: top; }
+table { border-collapse: collapse; border-spacing: 0; }
+button, input, select, textarea { font-family: inherit; font-size: 100%; }
+q:before, q:after, blockquote:before, blockquote:after { content:''; }
+h1,h2,h3,h4,h5,h6,h7 {font-size:100%;font-weight:500;}
+/*-- //reset --*/
+
+/*-- common --*/
+/* display */
+#page .hidden,.hidden { display:none; }
+#page .shown,.shown { display:block; }
+.invisible { visibility:hidden; }
+.visible { visibility:visible; }
+.inline-block { display:inline-block; *display:inline;*zoom:1;}
+/* float */
+.fl, #page .fl { float: left; }
+.fr, #page .fr { float: right; }
+.fn, #page .fn { float: none; }
+/* clear */
+.fix,.clearfix,#content { display: inline-block; }
+.fix,.clearfix,#content { display: block; }
+.clear, .fix:after,.clearfix:after,#content:after { display: block; visibility: hidden; overflow: hidden; clear: both; height: 0; content: ""; }
+/* text */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-hidden { overflow:hidden; text-indent:100%; white-space:nowrap; }
+.text-overflow { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.text-break { word-wrap: break-word; word-break: break-all; }
+.scripts{ display:none; }
+/*-- //common --*/

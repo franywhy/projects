@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+    <!-- 扫描包 -->
+    <context:component-scan base-package="com.hqonline.schedule.mq.*" />
+
+    <context:annotation-config />
+
+    <!-- 连接本地rabbitmq -->    
+  <bean id="connectionFactory"  
+      class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">  
+        <constructor-arg value="10.0.98.46"/>  
+        <property name="username" value="admin"/>  
+        <property name="password" value="mon4498"/>  
+        <property name="virtualHost" value="/"/> 
+        <property name="channelCacheSize" value="5"/>  
+
+    </bean>  
+
+    <rabbit:admin connection-factory="connectionFactory" id="amqpAdmin" />
+
+  
+		
+	<rabbit:queue id="queue_nc_userpk" durable="true" 
+		auto-delete="false" exclusive="false" name="${queue.nc_userpk}" />
+        
+	
+		
+
+	<!-- exchange queue binging key 绑定 -->
+	<rabbit:direct-exchange name="mq-exchange"
+		durable="true" auto-delete="false" id="mq-exchange">
+		<rabbit:bindings>
+			<rabbit:binding queue="${queue.nc_userpk}" key="queue_nc_userpk" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+    <!-- spring template声明 -->
+    <rabbit:template exchange="mq-exchange" id="amqpTemplate"
+        connection-factory="connectionFactory" />
+        
+
+ 
+       
+           <bean id="messageConsumer" class="com.izhubo.web.mq.MessageConsumer">
+              <constructor-arg ref="mainMongo"/>
+                <constructor-arg ref="qquserMongo"/>
+         </bean>
+      
+       
+        
+           <rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual" prefetch="1">
+        <rabbit:listener queues="${queue.nc_userpk}" ref="messageConsumer"/>
+      </rabbit:listener-container> 
+
+</beans>

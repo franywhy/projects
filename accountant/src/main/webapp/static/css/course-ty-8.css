@@ -1,0 +1,118 @@
+.taoye-8 .course-p{
+	background-color: #fff;
+}.taoye-8 .course-p .cont .t-ul li{
+	width:400px;
+	height:334px;
+	margin:0;
+	float:left;
+}
+.taoye-8 .course-p .cont .t-ul li.li-1{
+	background: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-xqs-img-1.jpg) no-repeat center 0;
+}
+.taoye-8 .course-p .cont .t-ul li.li-2{
+	background: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-xqs-img-2.jpg) no-repeat center 0;
+}
+.taoye-8 .course-p .cont .t-ul li.li-3{
+	background: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-xqs-img-3.jpg) no-repeat center 0;
+}
+.taoye-8 .course-p .cont .t-ul li .t-h1{
+	height:44px;
+	margin-top:40px;
+}
+.taoye-8 .course-p .cont .t-ul li .t-h1 img{
+	width:auto;
+	margin:0 auto;
+}
+.taoye-8 .course-p .cont .t-ul li.li-1 .box,.taoye-8 .course-p .cont .t-ul li.li-2 .box,.taoye-8 .course-p .cont .t-ul li.li-3 .box{
+	background: none;
+	color:#fff;
+}
+.taoye-8 .course-p .cont .t-ul li .box {
+    padding-left: 38px;
+    padding-right: 38px;
+}
+/*===============*/
+.taoye-8 .course-o{
+	background: #ededed;
+}
+.taoye-8 .course-o .cont{
+	margin-bottom:20px;	
+}
+.taoye-8 .course-o .cont-1{
+	background-image: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-jiexi-bg-1.jpg);
+}
+.taoye-8 .course-o .cont-2{
+	background-image: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-jiexi-bg-2.jpg);
+}
+.taoye-8 .course-o .cont-3{
+	background-image: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-jiexi-bg-3.jpg);
+}
+.taoye-8 .course-o .cont-1 .box{
+	height:437px;
+}
+.taoye-8 .course-o .cont-2 .box{
+	height:417px;
+}
+.taoye-8 .course-o .cont-3 .box{
+	height:445px;
+}
+.taoye-8 .course-slide-banner .slide-li{
+	color:#fff;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3{
+	margin-bottom:36px;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar{
+	height:26px;
+	margin-bottom:18px;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar i{
+	font-size: 14px;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar span{
+	font-size: 14px;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar span i{
+	font-size: 20px;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar-1 span{
+	color:#0289c0;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar-2 span{
+	color:#ffa575;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar-3 span{
+	color:#ffc872;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar em{
+	margin:0 10px;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar-1 em{
+	width:92px;
+	background-color: #0289c0;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar-2 em{
+	width:70px;
+	background-color: #ffa575;
+}
+.taoye-8 .course-o .cont-3 .box .t-h3 .t-bar-3 em{
+	width:150px;
+	background-color: #ffc872;
+}
+/*========================*/
+.taoye-8.taoye-6.taoye-4 .course-d .bz-1{
+	background: #3c8d62;
+}
+.taoye-8 .course-d .bz-1 table{
+	background-color: rgba(255,255,255,0.1);
+    folter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff);
+}
+.taoye-8.taoye-6.taoye-2 .course-sc{
+	background-image: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-sc-bg.jpg);
+}
+.taoye-8 .course-n{
+	background: none;
+}
+.taoye-8.taoye-6.taoye-3 .course-i{
+	background-image: url(../images/taoye/taoye-zk-kj/course-ty-zk-kj-nvli-bg.jpg);
+}

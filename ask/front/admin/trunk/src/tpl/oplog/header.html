@@ -1,0 +1,41 @@
+<!--基础数据页头|选择起始日期到结束日期--> 
+<%
+var oplogEnum = {
+	"sys_fill_bag":"发放礼物",
+    "finance_donate_car":"赠送座驾",
+    "finance_add":"加星币",
+"finance_cut_coin":"减星币",
+	"user_ban":"封杀设备",
+    "user_unban":"解封设备",
+    "gifts_del":"删除礼物",
+    "user_freeze":"冻结/解冻用户"
+};
+%>
+<div class="tagArea">
+	<ul class="tagList">
+		<li class="<%=!params.type ? "cur":""%>"><a href="#a=oplog"><i></i><span>全部日志</span></a></li>        
+        
+        <%
+        var flag = false;
+        for(var type in oplogEnum){
+        	if(type==params.type){
+            	flag = true;
+            }
+        %>
+       	<li class="<%=type==params.type ? "cur":"" %>"><a href="#a=oplog&type=<%=type%>"><i></i><span><%=oplogEnum[type]%></span></a></li>
+        <%}%>
+        <%if(!flag && params.type){%>
+        	<li class="<%=params.type ? "cur" : ""%>"><a href="#a=oplog&type=<%=params.type%>"><i></i><span><%=params.type%></span></a></li>
+        <%}%>
+	</ul>
+</div>
+<div class="searchForm">
+<form name="searchForm">
+选择日期
+<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+    到
+<input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+</form>
+</div>
+<!--/基础数据页头--> 

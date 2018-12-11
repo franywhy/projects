@@ -1,0 +1,13 @@
+<div class="tagArea">
+	<ul class="tagList">
+		<li class="<%=!params.type && params.type!="0" ? "cur":""%>"><a href="#a=notice"><i></i><span>全部</span></a></li>
+		<li class="<%=params.type=="0"? "cur":""%>"><a href="#a=notice&type=0"><i></i><span>公告</span></a></li>
+        <li class="<%=params.type=="1"? "cur":""%>"><a href="#a=notice&type=1"><i></i><span>帮助</span></a></li>
+        <li class="<%=params.type=="2"? "cur":""%>"><a href="#a=notice&type=2"><i></i><span>主播通知</span></a></li>
+        <li class="<%=params.type=="3"? "cur":""%>"><a href="#a=notice&type=3"><i></i><span>充值公告</span></a></li>
+	</ul>
+	<div class="tag_r"><%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="添加<%=['公告','帮助','主播通知','充值公告'][(params.type||0)]%>"   />
+	<%}%>
+	</div>
+</div>

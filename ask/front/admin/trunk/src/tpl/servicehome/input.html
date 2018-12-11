@@ -1,0 +1,125 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:150px;">学员ID</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="user_id"/>
+            </td>
+            <td style="width:150px;">学员昵称</td>
+            <td>
+                <input class="input" type="text" name="nick_name"  value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">企业名称</td>
+            <td>
+                <input class="input" type="text" name="company_name"/>
+            </td>
+            <td style="width:150px;">企业地址</td>
+            <td>
+                <input class="input" type="text" name="company_addres" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">企业性质</td>
+            <td>
+                <input class="input" type="text" name="company_type"/>
+            </td>
+            <td style="width:150px;">所属行业</td>
+            <td>
+                <input class="input" type="text" name="company_industry" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">企业人数</td>
+            <td>
+                <input class="input" type="text" name="company_peoples"/>
+            </td>
+            <td style="width:150px;">是否有分公司</td>
+            <td>
+                <input type="radio" name="company_filiale" value="0"/>否
+                <input type="radio" name="company_filiale" value="1"/>是
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">财务人数</td>
+            <td>
+                <input class="input" type="text" name="finance_peoples"/>
+            </td>
+            <td style="width:150px;">财务最高岗位</td>
+            <td>
+                <input class="input" type="text" name="finance_job_max"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">是否使用财务软件</td>
+            <td>
+                <input type="radio" name="finance_use_sofe" value="0"/>否
+                <input type="radio" name="finance_use_sofe" value="1"/>是
+            </td>
+            <td style="width:150px;">是否有财务基本制度</td>
+            <td>
+                <!--<input class="input" type="text" name="finance_basic_system" />-->
+                <input type="radio" name="finance_basic_system" value="0"/>否
+                <input type="radio" name="finance_basic_system" value="1"/>是
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">是否完整有财务</td>
+            <td>
+                <input type="radio" name="finance_full" value="0"/>否
+                <input type="radio" name="finance_full" value="1"/>是
+            </td>
+            <td style="width:150px;">是否有财务报表</td>
+            <td>
+                <input type="radio" name="finance_report" value="0"/>否
+                <input type="radio" name="finance_report" value="1"/>是
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">姓名</td>
+            <td>
+                <input class="input" type="text" name="contacts_name"/>
+            </td>
+            <td style="width:150px;">性别</td>
+            <td>
+                <input type="radio" name="contacts_sex" value="1"/>男
+                <input type="radio" name="contacts_sex" value="0"/>女
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">身份</td>
+            <td>
+                <input class="input" type="text" name="contacts_identity"/>
+            </td>
+            <td style="width:150px;">手机号码</td>
+            <td>
+                <input class="input" type="text" name="contacts_phone" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">邮箱</td>
+            <td>
+                <input class="input" type="text" name="contacts_email"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">IP</td>
+            <td>
+                <input class="input" type="text" name="IP"/>
+            </td>
+            <td style="width:150px;">时间</td>
+            <td>
+                <input class="input" type="text" name="timestamp" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px;">财务需求</td>
+            <td colspan="3">
+                <textarea class="input" name="finance_demand" style="width:500px;height:160px;"></textarea>
+            </td>
+        </tr>
+
+    </table>
+</form>

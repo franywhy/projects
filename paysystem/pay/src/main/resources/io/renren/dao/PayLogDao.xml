@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.PayLogDao">
+
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		pay_log.id AS id , pay_log.order_no AS orderNo , pay_log.trade_money AS
+		tradeMoney , pay_log.terrace AS terrace , pay_log.pay_mode AS payMode
+		, pay_log.create_order_ip AS createOrderIp , pay_log.alipay_ip AS
+		alipayIp , pay_log.pay_order_no AS payOrderNo ,
+		pay_log.alipay_return_code AS alipayReturnCode , pay_log.error_log AS
+		errorLog , pay_log.ts AS ts
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		FROM pay_log AS pay_log
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		ORDER BY id DESC
+	</sql>
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.PayLogEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND trade_no = #{tradeNo}
+	</select>
+
+	<select id="queryLogExist"  resultType="int">
+		select count(id) from pay_log log where log.alipay_return_code=1 and
+		log.pay_order_no=#{payOrderNo} and
+		log.trade_no=#{tradeNo}
+	</select>
+
+	<!--新增 -->
+	<insert id="save" parameterType="io.renren.entity.PayLogEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into pay_log
+		(
+		`order_no`, `trade_no`, `trade_money`, `terrace`, `pay_mode`, `create_order_ip`,
+		`alipay_ip`, `pay_order_no`, `alipay_return_code`, `error_log`, `ts` )
+		values
+		(
+		#{orderNo}, #{tradeNo}, #{tradeMoney}, #{terrace}, #{payMode}, #{createOrderIp},
+		#{alipayIp}, #{payOrderNo}, #{alipayReturnCode}, #{errorLog}, #{ts} )
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.PayLogEntity">
+		update pay_log
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="tradeMoney != null">`trade_money` = #{tradeMoney}, </if>
+			<if test="terrace != null">`terrace` = #{terrace}, </if>
+			<if test="payMode != null">`pay_mode` = #{payMode}, </if>
+			<if test="createOrderIp != null">`create_order_ip` = #{createOrderIp}, </if>
+			<if test="alipayIp != null">`alipay_ip` = #{alipayIp}, </if>
+			<if test="payOrderNo != null">`pay_order_no` = #{payOrderNo}, </if>
+			<if test="alipayReturnCode != null">`alipay_return_code` = #{alipayReturnCode}, </if>
+			<if test="errorLog != null">`error_log` = #{errorLog}, </if>
+			<if test="ts != null">`ts` = #{ts}</if>
+			<if test="trade_no != null">`trade_no` = #{tradeNo}</if>
+		</set>
+		<include refid="base_where" />
+		AND id = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysRoleDao">
+	<!-- 关联部门表字段 -->
+	<sql id="join_deptName">
+		sys_dept.name AS deptName
+	</sql>
+	<!-- 关联部门表 -->
+	<sql id="join">
+		LEFT JOIN sys_dept AS sys_dept ON sys_dept.dept_id = s.dept_id
+	</sql>
+	<select id="queryObject" resultType="io.renren.entity.SysRoleEntity">
+		select 
+			s.*,
+			<include refid="join_deptName"/>
+		from sys_role s 
+			<include refid="join"/>
+		where role_id = #{value}
+	</select>
+	
+	 <select id="queryList" resultType="io.renren.entity.SysRoleEntity">
+		select 
+			s.*,
+			<include refid="join_deptName"/> 
+		from sys_role s
+			<include refid="join"/>
+		<where>
+			<if test="roleName != null and roleName.trim() != ''">
+				and s.role_name like concat('%',#{roleName},'%') 
+			</if>
+			<if test="deptName != null and deptName.trim() != ''">
+				and sys_dept.name like concat('%',#{deptName},'%') 
+			</if>
+		</where>
+		order by role_id asc 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryTotal" resultType="int">
+		select count(1) from sys_role s
+		<include refid="join"/>
+		<where>
+			<if test="roleName != null and roleName.trim() != ''">
+				and s.role_name like concat('%',#{roleName},'%') 
+			</if>
+			<if test="deptName != null and deptName.trim() != ''">
+				and sys_dept.name like concat('%',#{deptName},'%') 
+			</if>
+		</where>
+	</select>
+	
+	<insert id="save" parameterType="io.renren.entity.SysRoleEntity" useGeneratedKeys="true" keyProperty="roleId">
+		insert into sys_role
+		(
+			`role_id`, 
+			`role_name`, 
+			`dept_id`,
+			`remark`,
+			`create_time`,
+			`school_id`
+		)
+		values
+		(
+			#{roleId}, 
+			#{roleName}, 
+			#{deptId},
+			#{remark},
+			#{createTime},
+			#{schoolId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.SysRoleEntity">
+		update sys_role 
+		<set> 
+			<if test="roleName != null">`role_name` = #{roleName}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where role_id = #{roleId}
+	</update>
+	
+	<delete id="deleteBatch">
+		delete from sys_role where role_id in 
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+		;
+		delete from sys_role_menu where role_id in 
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+		;
+		delete from sys_user_role where role_id in 
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+	</delete>
+	
+
+</mapper>

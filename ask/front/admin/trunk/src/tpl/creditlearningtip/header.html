@@ -1,0 +1,14 @@
+		<div class="searchForm">
+		    <form name="searchForm">
+		                     班级名称
+		        <input type="text" name="class_name" size="20" />
+		                      班级编号
+		        <input type="text" name="class_code" size="20" />
+		       <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+		    </form>
+		</div>
+		<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="添加班级" />
+		<%}%>
+		<input type="button" value="导出表格" class="d-button J_export">
+

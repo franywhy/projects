@@ -1,0 +1,24 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        校区省份
+        <select name="province" id="province">
+            <option value="" selected>==所有==</option>
+        </select>
+
+        校区名称
+        <input type="text" name="school" size="20" />
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+
+<div>
+        <button class="d-button" onclick="Izb.controller.<%=pty.key%>.add()">增加</button>
+</div>
+<!--/通用应用头--> 

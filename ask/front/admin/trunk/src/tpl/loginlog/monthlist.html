@@ -1,0 +1,25 @@
+<!--登录统计列表-->
+
+
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="longtime">日期月份</th>
+            <th class="auto">PC人数</th>
+			<th class="auto">手机人数</th>            
+            <th class="auto">总计</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="longtime"><%=new Date(data[i].timestamp).format("yyyy-MM")%></td>
+            <td class="auto"><%=data[i].total-data[i].moblie%></td>
+            <td class="auto"><%=data[i].moblie%></td>
+            <td class="auto"><%=data[i].total%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/登录统计列表-->

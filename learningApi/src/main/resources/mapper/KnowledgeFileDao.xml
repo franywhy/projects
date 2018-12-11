@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningapi.dao.KnowledgeFileDao">
+
+    <insert id="batchSave" parameterType="com.hq.learningapi.entity.KnowledgeFileEntity">
+
+        insert into course_knowledge_file
+        (
+        `phase_id`,
+        `user_id`,
+        `dr`,
+        `knowledge_id`,
+        `knowledge_name`,
+        `file_url`,
+        `file_name`,
+        `polyv_vid`,
+        `pplyv_name`,
+        `employv_picail`,
+        `polyv_duration`,
+
+        `vtype`,
+        `multi_classes_id`,
+        `examUUID`,
+        `remake`
+        )
+
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.phaseId},
+            #{item.userId},
+            #{item.dr},
+            #{item.knowledgeId},
+            #{item.knowledgeName},
+            #{item.fileUrl},
+            #{item.fileName},
+            #{item.polyvVid},
+            #{item.pplyvName},
+            #{item.ployvPic},
+            #{item.polyvDuration},
+
+            #{item.vtype},
+            #{item.multiClassesId},
+            #{item.examUUID},
+            #{item.remake}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryForList" resultType="com.hq.learningapi.pojo.KnowledgeFilePOJO">
+        select
+        *
+        from
+        course_knowledge_file
+
+        <where>
+            1 = 1
+            <if test="multiClassesId !=null">
+               AND multi_classes_id = #{multiClassesId}
+            </if>
+
+            <if test="userId !=null">
+               AND user_id = #{userId}
+            </if>
+            <if test="examUUID !=null">
+                AND examUUID = #{examUUID}
+            </if>
+              AND dr=0
+        </where>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <update id="cleanOldRecord" parameterType="com.hq.learningapi.entity.KnowledgeFileEntity">
+        update course_knowledge_file
+         <set>dr=1</set>
+        where user_id = #{userId} AND multi_classes_id = #{multiClassesId} AND examUUID = #{examUUID}
+    </update>
+
+</mapper>

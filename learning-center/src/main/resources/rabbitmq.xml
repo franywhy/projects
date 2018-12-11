@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<context:annotation-config />
+
+    <!-- 连接rabbitmq -->
+	<bean id="connectionFactory"
+		class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+		<constructor-arg value="${queue.servers}" />
+		<property name="username" value="${queue.username}" />
+		<property name="password" value="${queue.password}" />
+		<property name="virtualHost" value="/" />
+		<property name="channelCacheSize" value="5" />
+	</bean>
+	
+    <!-- 定义rabbit template用于数据的接收和发送 -->
+	<rabbit:template exchange="mq-exchange" id="amqpTemplate" connection-factory="connectionFactory" />
+	
+	<!-- 通过指定下面的admin信息，当前producer中的 exchange 和 queue 会在 rabbitmq 服务器上自动生成 -->
+	<rabbit:admin connection-factory="connectionFactory" />
+
+	<!-- queue 队列声明 -->
+	<!-- NC学员报名队列 -->
+	<rabbit:queue name="${queue.nc.sign.sync.common}" durable="true" auto-delete="false" exclusive="false" />
+	<!-- NC学员排课队列 -->
+	<rabbit:queue name="${queue.nc.plan.sync.kj}" durable="true" auto-delete="false" exclusive="false" />
+	<!-- NC老师排课队列 -->
+	<rabbit:queue name="${queue.nc.teacher.sync.kj}" durable="true" auto-delete="false" exclusive="false" />
+	<!-- 金蝶云财贸队列 -->
+	<rabbit:queue name="${queue.nc.sign.sync.kingdee}" durable="true" auto-delete="false" exclusive="false" />
+	<!-- 直播回调信息队列 -->
+	<rabbit:queue name="${queue.live.callback.info}" durable="true" auto-delete="false" exclusive="false" />
+	<!-- 回放回调信息队列 -->
+	<rabbit:queue name="${queue.replay.callback.info}" durable="true" auto-delete="false" exclusive="false" />
+
+	<!-- 定义direct exchange，绑定 rabbitmq_test -->
+	<rabbit:direct-exchange name="mq-exchange" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${queue.nc.sign.sync.common}" key="${queue.nc.sign.sync.common}" />
+			<rabbit:binding queue="${queue.nc.plan.sync.kj}" key="${queue.nc.plan.sync.kj}" />
+			<rabbit:binding queue="${queue.nc.teacher.sync.kj}" key="${queue.nc.teacher.sync.kj}" />
+			<rabbit:binding queue="${queue.nc.sign.sync.kingdee}" key="${queue.nc.sign.sync.kingdee}" />
+			<rabbit:binding queue="${queue.live.callback.info}" key="${queue.live.callback.info}" />
+			<rabbit:binding queue="${queue.replay.callback.info}" key="${queue.replay.callback.info}" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+	
+	<!-- 消息接收者 -->
+    <bean id="messageReceiver" class="com.kuaiji.controller.mq.MessageConsumer" />
+    <bean id="messageConsumerTeacher" class="com.kuaiji.controller.mq.MessageConsumerTeacher" />
+	<bean id="kingDeeConsumer" class="com.kuaiji.controller.mq.KingDeeConsumer" />
+	<bean id="signConsumer" class="com.kuaiji.controller.mq.SignConsumer">
+		<property name="queueSleepMillis" value="${pom.queue.sleep.millis}"/>
+	</bean>
+
+    <!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象-->
+    <rabbit:listener-container
+            connection-factory="connectionFactory" acknowledge="manual" prefetch="200">
+		<!--<rabbit:listener queues="${queue.nc.plan.sync.kj}" ref="messageReceiver"/>
+        <rabbit:listener queues="${queue.nc.teacher.sync.kj}" ref="messageConsumerTeacher"/>
+        <rabbit:listener queues="${queue.nc.sign.sync.kingdee}" ref="kingDeeConsumer"/>
+		<rabbit:listener queues="${queue.nc.sign.sync.common}" ref="signConsumer"/>-->
+    </rabbit:listener-container>
+
+</beans>
+    

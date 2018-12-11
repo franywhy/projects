@@ -1,0 +1,23 @@
+<!-- 班级 -->
+<div id="classLayDiv" style="display: none">
+<!-- 班级查询条件 -->
+<table  border="0">
+	<tr class="row" >
+		<td class=""><label for="name">班级名称</label></td>
+		<td >
+			<input type="text" class="form-control" id="classLayClassName" placeholder="班级名称">
+		</td>
+		<td class=""><label for="name">班主任名称</label></td>
+		<td >
+			<input type="text" class="form-control" id="teacherName" placeholder="班主任名称">
+		</td>
+		<!-- 按钮 -->
+		<td class="grid-btn">
+			<a class="btn btn-default" onclick="classLay.reload();">查询</a> 
+		</td>
+	</tr>
+</table>
+<table id="classLay_jqGrid" ></table>
+<table id="classLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/classLay.js?_${date.systemTime}"></script>

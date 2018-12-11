@@ -1,0 +1,399 @@
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+    font-family: Helvetica,Tahoma,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei",STXihei,STHeiti,Heiti,SimSun,sans-serif;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    font-weight:100;
+}
+*{
+	padding: 0;
+	margin:0;
+}
+/*.body{
+	position:fixed;
+	width:100%;
+	height:100%;
+	left:0;
+	top:0;
+	background:url(../images/fisrtbg.jpg) no-repeat center center fixed;
+
+}*/
+.clear{
+	clear: both;
+}
+*:focus { outline: none; }
+/* 
+@media screen and (min-width: 1921px) {
+	.body{
+	    left: 50%;
+	    margin-left: -50%;
+	    width: 100%;
+	}
+	.body {
+	    background-size: 100% auto;
+	}
+}
+@media screen and (max-width: 1440px) {
+	.body {
+	    background-image: url("../images/bg1_1600.jpg");
+	}
+}
+@media screen and (max-width: 1200px) and (min-height: 1400px) {
+	.body {
+	    background-size: cover;
+	}
+}
+@media screen and (min-width: 1200px) and (min-height: 900px) {
+	.body {
+	    background-size: cover;
+	}
+}
+
+
+
+.body{
+	overflow: hidden;
+-webkit-filter: blur(10px); Chrome, Opera
+    -moz-filter: blur(10px);
+    -ms-filter: blur(10px);    
+    filter: blur(10px); 
+filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false); IE6~IE9
+} */
+
+/*
+body{
+	position:fixed;
+	width:100%;
+	height:100%;
+	left:0;
+	top:0;
+	background-color:#444444;
+}*/
+.login-bg{
+	width:100%;
+	height:100%;
+	position:fixed;
+	left:0;
+	top:0;
+	/*background-color:#000000;*/
+	/*opacity:0.5;*/
+	z-index: 990;
+	display:none; 
+}
+.loginBox{
+	display:none;
+	width: 500px;
+	height: 400px;
+	border: 1px solid #ececec;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left: -250px;
+	margin-top: -130px;
+	background-color:#ffffff;
+	border-radius: 17px;
+	overflow:hidden;
+    -moz-box-shadow: 6px 7px 11px #555555;
+    -webkit-box-shadow: 6px 7px 11px #555555;
+    box-shadow: 6px 7px 11px #555555;
+	z-index: 999 !important;
+}
+.loginBox .ul{
+	width:100%;
+	height:100%;
+}
+.loginBox .top-title{
+	width: 100%;
+	height:60px;
+	line-height: 60px;
+	background-color: #ececec;
+	font-size: 14px;
+	cursor: default; 
+	position:relative;
+}
+.loginBox .top-title .back-btn{
+	width:45px;
+	height:100%;
+	position:absolute;
+	left:0;
+	top:0;
+	background: url(../images/back_btn.png) no-repeat center center;
+	cursor:pointer;
+	display:none;
+}
+.loginBox .top-title .top-left{
+	float: left;
+	width:420px;
+	text-align:center;
+	display: inline-block;
+	height: 60px;
+	line-height: 60px;
+	margin-left: 10px;
+	padding-left: 20px;
+	font-size: 20px;
+	font-family: '微软雅黑';
+	color: #8b8b8b;
+}
+.loginBox .top-title .top-left .registerText{
+	position:absolute;
+	left:56%;
+	top:0;
+	display:inline-block;
+	opacity:0;
+	filter:alpha(opacity=0);
+}
+
+
+.loginBox .top-title .btn-right{
+	width: 17px;
+	height: 17px;
+	cursor: pointer;
+	display: inline-block;
+	background:url(../images/offBox-btn.png) no-repeat left top;
+	float: right;
+	margin-top: 21px;
+	margin-right: 10px;
+}
+.loginBox .top-title .btn-right:hover{
+	background-position: -26px top;
+}
+.loginBox .form-table{
+	padding: 30px 40px;
+	float:left;
+	width:420px;
+}
+.loginBox .form-table .baseInput{
+	width: 100%;
+	position:relative;
+	overflow:hidden;
+}
+.loginBox .form-table .baseInput .icon-pd{
+	position:absolute;
+	width:30px;
+	height:30px;
+	right:0;
+	top:15px;
+	border-radius:30px;
+	background: url(../images/yesORno.png) no-repeat center -3px;
+	display:none;
+}
+.loginBox .form-table .baseInput .icon-pd.active{
+	background-position:center -77px;
+}
+.loginBox .form-table .pwd{
+	margin-top: 25px;
+}
+.loginBox .form-table .rpwd{
+	margin-top: 25px;
+}
+.loginBox .form-table .baseInput input{
+	width: 90%;
+	border:none;
+	border-bottom:1px solid #d8d8d8;
+	height: 53px;
+	line-height: 73px;
+	font-family: '微软雅黑';
+	padding-left: 10%;
+	color: #616161;
+	background: url(../images/user-login-Icon.png) no-repeat 0 8px;
+}
+.loginBox .form-table .pwd input{
+	background-position:0 -53px;
+}
+.loginBox .form-table .upwd input{
+	background-position:0 -53px;
+}
+.loginBox .form-table .rpwd input{
+	background-position:0 -183px;
+}
+
+.loginBox .form-table .userCode{
+	border-bottom:1px solid #d8d8d8;
+}
+.loginBox .form-table .userCode input{
+	background-position:0 -118px;
+	width:250px;
+	border-bottom:none;
+	margin-top: 25px;
+}
+.loginBox .form-table .select{
+	width: 100%;
+	height: 30px;
+	margin-top: 18px;
+	margin-bottom:10px;
+}
+.loginBox .form-table .next-btn{
+	/*margin-top:60px;*/
+}
+.loginBox .form-table .select .s-left.active{
+	background-position: left 3px;
+}
+.loginBox .form-table .select .s-btn-forget{
+	float: left;
+}
+.loginBox .form-table .select .s-btn-forget a{
+	color: #555555;
+	font-size: 14px;
+	font-family: '微软雅黑';
+	text-decoration: none;
+}
+.loginBox .form-table .select .s-btn-forget a:hover{
+	text-decoration: underline;
+}
+
+
+.loginBox .form-table .select .s-btn-reight a{
+	color: #555555;
+	font-size: 14px;
+	font-family: '微软雅黑';
+	text-decoration: none;
+	float:right;
+}
+.loginBox .form-table .select .s-btn-reight a:hover{
+	color: #f6850f;
+}
+.loginBox .form-table .bitme-btn{
+	width: 100%;
+	height: 60px;
+	text-align: center;
+	font-size: 18px;
+	font-family: '微软雅黑';
+	color: #ffffff;
+	background-color: #cccccc;
+	cursor: default;
+	border:0;
+	border-radius: 2px;
+	line-height:60px;
+}
+.loginBox .form-table .bitme-btn.active{
+	background-color: #22d8f3;
+	cursor: pointer;
+}
+.loginBox .form-table .tip-text{
+	font-size:12px;
+	height:14px;
+	color:#ff0000;
+	padding-top:5px;
+}
+
+
+/*=========================================*/
+.userCode .getCode{
+	background-color: #22d8f3;
+    border-radius: 6px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 40px;
+    text-align: center;
+    width: 115px;
+    font-size:14px;
+    border-radius:35px;
+}
+.userCode .getCode.active{
+	background-color:#cccccc;
+	cursor:default;
+}
+.userCode .getCode.addBg{
+	background: url(../images/yesORno.png) no-repeat center -3px;
+	background-color:#22d8f3;
+	overflow:hidden;
+	text-indent:7777px;
+	cursor:default;
+}
+.userCode .getCode.loginBg{
+	background: url(../images/lodinBg.gif) no-repeat center center; 
+ 	background-color:#fcfcfc;
+	overflow:hidden;
+	text-indent:7777px;
+	cursor:default;
+}
+.userRegister .re-ul{
+	width:1000px;
+}
+
+.userRegister .re-ul .re-ul-li{
+	width:420px;
+	float:left;
+	margin-right:80px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes shake {
+  0%, 100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+.shake {
+  -webkit-animation-name: shake;
+  animation-name: shake;
+}

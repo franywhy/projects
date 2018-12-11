@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!--<classPathEntry location="${classPathEntry.mysql.location}" />-->
+
+	<context id="mysqlTables" targetRuntime="MyBatis3">
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://10.0.98.5:3306/hq_school?characterEncoding=utf8"
+			userId="root" password="root">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="io.renren.generated.domain"
+			targetProject="${javaModelGenerator.targetProject}">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="io.renren.generated.dao"
+			targetProject="${sqlMapGenerator.targetProject}">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="io.renren.generated.dao" targetProject="${javaClientGenerator.targetProject}">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+
+		<!--基础档案-->
+		<table tableName="generator_demo" domainObjectName="GeneratorDemo">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		<table tableName="course_abnormal_order" domainObjectName="CourseAbnormalOrder">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		<!--<table tableName="cs_course" domainObjectName="CsCourse">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="courseId" sqlStatement="MySql" identity="true"/>
+			<columnOverride column="dr" javaType="java.lang.Integer" jdbcType="TINYINT" />
+			<columnOverride column="status" javaType="java.lang.Integer" jdbcType="TINYINT" />
+		</table>
+		<table tableName="cs_config" domainObjectName="CsConfig">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+			<columnOverride column="status" javaType="java.lang.Integer" jdbcType="TINYINT" />
+		</table>
+		<table tableName="cs_chapter" domainObjectName="CsChapter">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+			<columnOverride column="dr" javaType="java.lang.Integer" jdbcType="TINYINT" />
+		</table>
+		<table tableName="cs_section" domainObjectName="CsSection">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+			<columnOverride column="dr" javaType="java.lang.Integer" jdbcType="TINYINT" />
+		</table>
+		<table tableName="cs_knowledge" domainObjectName="CsKnowledge">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+			<columnOverride column="key_point" javaType="java.lang.Integer" jdbcType="TINYINT" />
+			<columnOverride column="status" javaType="java.lang.Integer" jdbcType="TINYINT" />
+			<columnOverride column="dr" javaType="java.lang.Integer" jdbcType="TINYINT" />
+		</table>
+		<table tableName="cs_knowledge_contain" domainObjectName="CsKnowledgeContain">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		<table tableName="cs_knowledge_questiontype" domainObjectName="CsKnowledgeQuestiontype">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		<table tableName="schedule_job" domainObjectName="ScheduleJob">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+			<columnOverride column="status" javaType="java.lang.Integer" jdbcType="TINYINT" />
+		</table>
+		<table tableName="schedule_job_log" domainObjectName="ScheduleJobLog">
+			<property name="useActualColumnNames" value="false"/>
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+			<columnOverride column="status" javaType="java.lang.Integer" jdbcType="TINYINT" />
+		</table>-->
+	</context>
+</generatorConfiguration>

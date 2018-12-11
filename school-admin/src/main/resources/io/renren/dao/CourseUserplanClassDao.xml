@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseUserplanClassDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	    course_userplan_class.userplan_class_id AS userplanClassId ,
+	    course_userplan_class.userplan_id AS userplanId ,
+	    course_userplan_class.userplan_class_no AS userplanClassNo ,
+	    course_userplan_class.exam_schedule_id AS examScheduleId ,
+	    course_userplan_class.remark AS remark ,
+	    course_userplan_class.school_id AS schoolId ,
+	    course_userplan_class.create_time AS createTime ,
+	    course_userplan_class.modify_time AS modifyTime ,
+	    course_userplan_class.create_person AS createPerson ,
+	    course_userplan_class.modify_person AS modifyPerson ,
+	    course_userplan_class.dr AS dr,
+	    course_userplan_class.status AS status,
+	    course_userplan_class.dept_id AS deptId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		<where>
+			course_userplan_class.dr=0 	
+			<!-- 学习计划单号 -->
+		<if test="userplanClassNo != null and userplanClassNo.trim() != ''">
+			AND userplan_class_no = #{userplanClassNo}
+		</if>
+		<!-- 学员姓名 -->
+		<if test="userName != null and userName.trim() != ''">
+			AND users.nick_name like concat('%',#{userName},'%')
+		</if>
+		<!-- 学员手机号码 -->
+		<if test="mobile != null and mobile.trim() != ''">
+			AND users.mobile = #{mobile}
+		</if>
+		<!-- 部门 -->
+		<if test="deptId != null">
+			AND course_userplan_class.dept_id = #{deptId}
+		</if>
+		<if test="deptIdList != null and deptIdList.size() >0">
+			AND course_userplan_class.dept_id IN
+            <foreach collection="deptIdList" item="deptId" open="(" close=")" separator=",">
+                #{deptId}
+            </foreach>
+		</if>
+		</where>
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	from course_userplan_class as course_userplan_class
+	</sql>
+	
+	
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseUserplanClassEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<if test="userplanClassId != null">
+		AND userplan_class_id = #{userplanClassId}
+		</if>
+	</select>
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="io.renren.pojo.CourseUserplanClassPOJO">
+		select 
+      	<include refid="base_column"/>
+      	,
+		(select cu.username from sys_user cu where cu.user_id = createPerson) as creationName,
+		(select cm.username from sys_user cm where cm.user_id = modifyPerson) as modifiedName,
+		(select es.schedule_name from mall_exam_schedule es where es.id = examScheduleId) as examScheduleName,
+		(select u.nick_name from users u where u.user_id = c.user_id) as userName,
+		c.order_no as orderNo
+		<include refid="base_from"/>
+		JOIN course_userplan c ON(c.user_plan_id = course_userplan_class.userplan_id)
+		<include refid="base_where"/>
+		AND userplan_class_id = #{userplanClassId}
+	</select>
+	<!-- 获取学习计划单号 -->
+	<select id="queryUserclassplaNo" resultType="io.renren.pojo.CourseUserplanClassPOJO">
+		select userclass_plan_no from course_userplan_class 
+		where 1=1
+	
+	</select>
+	
+	<!-- 判断是否存在记录在数据库中 -->
+	<select id="queryUserClassPlanMid" parameterType="string" resultType="Integer" >
+	     SELECT COUNT(userplan_class_id) FROM `course_userplan_class` WHERE m_id=#{value}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseUserplanClassEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="userplanId != null">
+		AND userplan_id = #{userplanId}
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="io.renren.pojo.CourseUserplanClassPOJO">
+		select
+		<include refid="base_column"/>
+		,
+		(select sys_dept.name from sys_dept as sys_dept where sys_dept.dept_id = course_userplan_class.dept_id) as deptName,
+		<!-- (select cu.username from sys_user cu where cu.user_id = createPerson) as creationName, -->
+		<!-- (select cm.username from sys_user cm where cm.user_id = modifyPerson) as modifiedName, -->
+		(select es.schedule_name from mall_exam_schedule es where es.id = examScheduleId) as examScheduleName,
+		users.nick_name as userName,
+		users.mobile as mobile
+		<include refid="base_from"/> 
+		JOIN course_userplan c ON(c.user_plan_id = course_userplan_class.userplan_id)
+		JOIN users users ON (
+	    c.user_id = users.user_id
+        )
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		JOIN course_userplan c ON(c.user_plan_id = course_userplan_class.userplan_id)
+		JOIN users users ON (
+	    c.user_id = users.user_id
+        )
+		<include refid="base_where"/>
+	</select>
+
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseUserplanClassEntity" useGeneratedKeys="true" keyProperty="userplanClassId">
+	    insert into course_userplan_class
+	    (
+	       `userplan_id`, 
+	       `userplan_class_no`, 
+	       `exam_schedule_id`, 
+	       `remark`,
+	       `school_id`,
+	       `create_time`, 
+	       `modify_time`, 
+	       `create_person`,
+	       `modify_person`, 
+	       `dr`,
+	       `status`,
+	       `dept_id`
+	    )
+	    values
+	    (
+	       #{userplanId}, 
+	       #{userplanClassNo},
+	       #{examScheduleId}, 
+	       #{remark}, 
+	       #{schoolId},
+	       #{createTime}, 
+	       #{modifyTime},
+	       #{createPerson}, 
+	       #{modifyPerson}, 
+	       #{dr}, 
+	       #{status},
+	       #{deptId}
+	     )
+</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseUserplanClassEntity">
+		update course_userplan_class 
+		<set>
+			<if test="userplanId != null">`userplan_id` = #{userplanId}, </if>
+			<if test="userplanClassNo != null">`userplan_class_no` = #{userplanClassNo}, </if>
+			<if test="examScheduleId != null">`exam_schedule_id` = #{examScheduleId}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="status != null">`status` = #{status},</if>
+			<if test="deptId != null">`dept_id` = #{deptId}</if>
+		</set>
+		where userplan_class_id = #{userplanClassId}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.CourseUserplanClassEntity">
+		UPDATE course_userplan_class 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND userplan_class_id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.CourseUserplanClassEntity">
+		UPDATE course_userplan_class 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND userplan_class_id IN 
+		<foreach item="userplanClassId" collection="ids" open="(" separator="," close=")">
+			#{userplanClassId}
+		</foreach>
+	</update>
+	<update id="updateBatch">
+	   update course_userplan_class set status = #{status} where userplan_class_id in
+	   <foreach item="userplanClassId" collection="list" open="(" separator="," close=")">
+	   	#{userplanClassId}
+		</foreach>
+	</update>
+	<!-- 审核 -->
+	<update id="audited">
+	   update course_userplan_class set status = #{status} where userplan_class_id =#{userplanClassId}
+	</update>
+    <update id="updateChangeByOrderNo" >
+        UPDATE course_userplan_class set dr = 1,modify_time = now() where userplan_id =#{userplanId}
+    </update>
+
+    <select id="queryCourseUserplanClass" resultType="long">
+        SELECT userplan_class_id from course_userplan_class where dr = 0 AND userplan_id =#{userplanId}
+    </select>
+
+
+</mapper>

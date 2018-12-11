@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>校区考勤报表</title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <table class="table table-condensed" border="0">
+                <div class="col-md-2">
+                    <select class="form-control" v-model="q.reportType">
+                        <option value="-1">所有报表</option>
+                        <option value="1">周度报表</option>
+                        <option value="0">月度报表</option>
+                    </select>
+                </div>
+                <!-- 班主任 -->
+                <div class="col-md-2">
+                    <input type="text" class="form-control" v-model="q.classTeacherName" readonly="readonly" placeholder="选择班主任" @click="classTeacherLayerShow">
+                </div>
+                        <!-- 时间 -->
+                        <!--<div class="col-md-3">
+                            <input type="text" class="datetimepicker_start" readonly="readonly"  @keyup.enter="query" placeholder="开始时间">
+                            -
+                            <input type="text" class="datetimepicker_end" readonly="readonly" @keyup.enter="query" placeholder="结束时间">
+                        </div>-->
+                <div class="col-md-3">
+                    <input type="text" class="datetimepicker_date" readonly="readonly"  @keyup.enter="query" placeholder="日期">
+                </div>
+                        <a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+                        <a class="btn btn-default" @click="clearQuery"><i class="fa fa-repeat"></i>&nbsp;重置</a>
+                        <a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;"><i class="glyphicon glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+</div>
+<script src="${rc.contextPath}/js/logAtten/schoolReport.js?_${date.systemTime}"></script>
+#parse("layer/teacherLay.html")
+</body>
+</html>

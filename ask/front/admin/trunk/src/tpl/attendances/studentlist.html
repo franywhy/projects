@@ -1,0 +1,62 @@
+<!--账号管理列表-->
+<form name="inputForm">
+<table width="100%">
+
+    <tr>
+        <td >课程名称</td>
+        <td>
+            <input class="input" name="nc_id" type="hidden" value=""  required/>
+            <%if(data[0]){%>
+            <input name="nc_course_name"  class="input" id="nc_course_name" type="text"  value="<%=data[0].nc_course_name%>" disabled required/>
+            <%}else{%>
+            <input name="nc_course_name"  class="input" type="text"  value="" disabled required/>
+            <%}%>
+        </td>
+    </tr>
+
+
+</table>
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">学员NCID</th>
+        <th class="auto">学员名称</th>
+        <th class="auto">电话</th>
+        <th class="auto">报读班型</th>
+        <th class="auto">已签到</th>
+        <th class="auto">微信同步考勤结果</th>
+        <th class="auto">请假</th>
+        <th class="auto">缺勤次数</th>
+        <th class="auto">是否重学</th>
+        <th class="auto">实际课次应收单据号</th>
+        <th class="auto">报名日期时间</th>
+        <th class="auto">备注</th>
+        <th class="auto">同步时间</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <td class="auto"><%=data[i].nc_student_id %></td>
+            <td class="auto"><%=data[i].nc_student_name%></td>
+            <td class="auto"><%=data[i].phone %></td>
+            <td class="auto"><%=data[i].class_type %></td>
+            <td class="auto"><%=data[i].is_sign %></td>
+            <td class="auto"><%=data[i].wechat_sync_msg %></td>
+            <td class="auto"><%=data[i].is_leave %></td>
+            <td class="auto"><%=data[i].leave_number %></td>
+            <td class="auto"><%=data[i].is_back %></td>
+            <td class="auto"><%=data[i].real_class_order_number%></td>
+            <td class="auto"><%=data[i].sign_time %></td>
+            <td class="auto"><%=data[i].remark %></td>
+            <td class="auto"><%=data[i].syn_time%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+</form>
+<!--/账号管理列表-->

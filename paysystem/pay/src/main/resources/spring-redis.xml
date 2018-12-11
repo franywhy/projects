@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+        default-lazy-init="true">
+
+	<bean id="redisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:hostName="${redis.host}"
+		p:port="${redis.port}"
+		p:Database="${redis.dbindex}"
+		p:timeout="${redis.timeout}"
+		/>
+
+	<bean id="mainRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+		p:connectionFactory-ref="redisConnectionFactory" />
+
+
+    <bean id="kgsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:Database="${redis.dbindex}"/>
+
+    <bean id="kgsUniqueRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="kgsConnectionFactory" />
+
+    <bean id="userKGS" class="io.renren.rest.persistent.HighLowKGS"
+          p:nameSpace="users"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10020000"/>
+    <bean id="orderNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+          p:nameSpace="orderNo"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="100000"/>
+          
+    <bean id="examRecordKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="examRecordNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="10000"/>
+	<!-- 资料库明细 -->       
+	 <bean id="courseMaterialDetailKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseMaterialDetailNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="10000"/>
+    <!-- 流程指南 -->       
+	 <bean id="courseGuideKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseGuideNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="10000"/>
+    <!-- 学习计划单号 -->      
+    <bean id="studyplanKGS" class="io.renren.rest.persistent.HighLowKGS"
+          p:nameSpace="studyplan"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="10001"/> 
+    <!-- appBanner排序 -->
+    <bean id="numKGS" class="io.renren.rest.persistent.HighLowKGS"
+          p:nameSpace="num"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="1"/>      
+    
+    <bean id="scoreRecordKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="scoreRecordNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="10000"/>    
+	<!-- 消息ID -->	   
+    <bean id="msgContentIdKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="msgContentId"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="10000"/>     
+          
+</beans>

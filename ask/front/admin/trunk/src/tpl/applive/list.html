@@ -1,0 +1,91 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">排序</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">直播间标题</th>
+        <th class="auto">直播间banner</th>
+        <th class="auto">直播url</th>
+        <th class="auto">直播间老师</th>
+        <th class="longtime">直播间老师头像</th>
+        <th class="auto">直播间适用人群</th>
+        <th class="longtime">直播开始时间</th>
+        <th class="auto">直播结束时间</th>
+        <th class="longtime">直播sdk-直播房间号</th>
+        <th class="auto">直播sdk-直播id</th>
+        <th class="longtime">直播sdk-直播域名</th>
+
+        <th class="auto">直播间平台</th>
+        <th class="auto">回放sdk-回放房间号</th>
+        <th class="auto">回放sdk-回放id</th>
+
+        <th class="auto">创建者</th>
+        <th class="auto">创建时间</th>
+        <th class="auto">修改时间</th>
+        <th class="auto">修改人</th>
+        <th class="auto">状态</th>
+        <th class="auto">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=data[i].order %></td>
+            <td class="auto"><%=data[i].live_title %></td>
+            <td class="auto"><%=data[i].live_banner_url %></td>
+            <td class="auto"><%=data[i].live_url %></td>
+            <td class="auto"><%=data[i].live_teacher_name %></td>
+            <td class="auto"><%=data[i].live_teacher_pic %></td>
+            <td class="auto"><%=data[i].live_applicable_people %></td>
+            <td class="longtime"><%=new Date(data[i].live_start_time).toLocaleString() %></td>
+            <td class="longtime"><%=new Date(data[i].live_end_time).toLocaleString() %></td>
+            <td class="auto"><%=data[i].live_num %></td>
+            <td class="auto"><%=data[i].live_id %></td>
+            <td class="auto"><%=data[i].live_domain %></td>
+            <td class="auto">
+                <%if(data[i].live_studio_type==1){%>
+                展示互动
+                <%}else if(data[i].live_studio_type==2){%>
+                保利威视
+                <%}else{%>
+                空
+                <%}%>
+            </td>
+            <td class="auto"><%=data[i].live_reply_room_number %></td>
+            <td class="auto"><%=data[i].live_reply_id %></td>
+            <td class="auto"><%=data[i].create_user_id %></td>
+            <td class="longtime"><%=new Date(data[i].create_time).toLocaleString() %></td>
+            <td class="longtime"><%=new Date(data[i].update_time).toLocaleString() %></td>
+            <td class="auto"><%=data[i].update_user_id %></td>
+            <td class="auto">
+                <%if(data[i].dr){%>
+                    下架
+                <%}else{%>
+                    上架
+                <%}%>
+            </td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <a class="d-button" href="#a=liveclasstab&_id=<%=data[i]._id%>&audit_flag=<%=data[i].audit_flag%>&upload_flag=<%=data[i].upload_flag%>&menu=liveclass&tab=item&live_class_id=<%=data[i]._id%>">详情</a>
+                <%if(data[i].upload_flag){%>
+                <%if(data[i].audit_flag){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.unaudit('<%=data[i]._id%>','<%=data[i].audit_flag%>')">反审核</button>
+                <%}else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.unsubmit('<%=data[i]._id%>','<%=data[i].upload_flag%>')">反提交</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.audit('<%=data[i]._id%>','<%=data[i].audit_flag%>')">审核</button>
+                <%}%>
+                <%}else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.submit('<%=data[i]._id%>','<%=data[i].upload_flag%>')">提交</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.stand('<%=data[i]._id%>','<%=data[i].dr%>')">上/下架</button>
+                <%}%>
+                <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

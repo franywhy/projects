@@ -1,0 +1,60 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">排序</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">直播课名称</th>
+        <th class="auto">说明</th>
+        <th class="auto">是否审核</th>
+        <th class="auto">审核人</th>
+        <th class="longtime">审核时间</th>
+        <th class="auto">是否提交</th>
+        <th class="auto">提交人</th>
+        <th class="longtime">提交时间</th>
+        <th class="auto">创建人</th>
+        <th class="longtime">创建时间</th>
+        <th class="auto">修改人</th>
+        <th class="longtime">修改时间</th>
+        <th class="auto">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=data[i].order %></td>
+            <td class="auto"><%=data[i].name %></td>
+            <td class="auto"><%=data[i].content %></td>
+            <td class="auto"><%=data[i].audit_flag %></td>
+            <td class="auto"><%=data[i].audit_user_id %></td>
+            <td class="longtime"><%=new Date(data[i].audit_time).toLocaleString() %></td>
+            <td class="auto"><%=data[i].upload_flag %></td>
+            <td class="auto"><%=data[i].upload_user_id %></td>
+            <td class="longtime"><%=new Date(data[i].upload_time).toLocaleString() %></td>
+            <td class="auto"><%=data[i].create_user_id %></td>
+            <td class="longtime"><%=new Date(data[i].create_time).toLocaleString() %></td>
+            <td class="auto"><%=data[i].update_user_id %></td>
+            <td class="longtime"><%=new Date(data[i].update_time).toLocaleString() %></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <a class="d-button" href="#a=liveclasstab&_id=<%=data[i]._id%>&audit_flag=<%=data[i].audit_flag%>&upload_flag=<%=data[i].upload_flag%>&menu=liveclass&tab=item&live_class_id=<%=data[i]._id%>">详情</a>
+                <%if(data[i].upload_flag){%>
+                <%if(data[i].audit_flag){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.unaudit('<%=data[i]._id%>','<%=data[i].audit_flag%>')">反审核</button>
+                <%}else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.unsubmit('<%=data[i]._id%>','<%=data[i].upload_flag%>')">反提交</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.audit('<%=data[i]._id%>','<%=data[i].audit_flag%>')">审核</button>
+                <%}%>
+                <%}else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.submit('<%=data[i]._id%>','<%=data[i].upload_flag%>')">提交</button>
+                <%}%>
+                <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

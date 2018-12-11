@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseUserplanServiceDao">
+
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		course_userplan_service.userplan_service_id AS userplanServiceId , 
+		course_userplan_service.userplan_id AS userplanId , 
+		course_userplan_service.type AS type ,
+		course_userplan_service.userplan_service_time AS userplanServiceTime ,
+		course_userplan_service.next_time AS nextTime ,
+		course_userplan_service.service_type_id AS serviceTypeId ,
+		course_userplan_service.service_type_content AS serviceTypeContent ,
+		course_userplan_service.service_fb_id AS serviceFbId ,
+		course_userplan_service.service_fb_content AS serviceFbContent ,
+		course_userplan_service.school_id AS schoolId ,
+		course_userplan_service.create_time AS createTime ,
+		course_userplan_service.modify_time AS modifyTime ,
+		course_userplan_service.create_person AS createPerson ,
+		course_userplan_service.modify_person AS modifyPerson ,
+		course_userplan_service.remark AS remark
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where 1=1
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		from course_userplan_service as course_userplan_service
+	</sql>
+	<sql id="select_column_join">
+		,
+		(select fb.feedback_type from mall_feedback_record fb where fb.id = course_userplan_service.service_fb_id) as serviceFbName,
+		(select sr.service_type from mall_service_record sr where sr.id = course_userplan_service.service_type_id) as serviceTypeName,
+		(select su.username from sys_user su where su.user_id = course_userplan_service.create_person) as createPersonName,
+		(select su.username from sys_user su where su.user_id = course_userplan_service.modify_person) as modifyPersonName
+	</sql>
+
+	<!--根据ID查询 -->
+	<select id="queryObject" resultType="io.renren.entity.CourseUserplanServiceEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND userplan_service_id = #{userplanServiceId}
+	</select>
+	<!--根据ID查询 -->
+	<select id="queryMap" resultType="map">
+		select
+		<include refid="base_column" />
+		<include refid="select_column_join" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND userplan_service_id = #{userplanServiceId}
+	</select>
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="io.renren.entity.CourseUserplanServiceEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		and course_userplan_service.userplan_id = #{userplanId}
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryListMap" resultType="map">
+		select
+		<include refid="base_column" />
+		<include refid="select_column_join" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		and course_userplan_service.userplan_id = #{userplanId}
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数 -->
+	<select id="queryTotal" resultType="int">
+		select count(1)
+		<include refid="base_from" />
+		<include refid="base_where" />
+	</select>
+	<!--新增 -->
+	<insert id="save" parameterType="io.renren.entity.CourseUserplanServiceEntity"
+		useGeneratedKeys="true" keyProperty="userplanServiceId">
+		insert into
+		course_userplan_service
+		(
+		`userplan_id`, `type`, `userplan_service_time`, `next_time`, `service_type_id`,
+		`service_type_content`, `service_fb_id`, `service_fb_content`,
+		`school_id`, `create_time`, `modify_time`, `create_person`,
+		`modify_person`, `remark` )
+		values
+		(
+		#{userplanId}, #{type}, #{userplanServiceTime}, #{nextTime}, #{serviceTypeId},
+		#{serviceTypeContent}, #{serviceFbId}, #{serviceFbContent},
+		#{schoolId}, #{createTime}, #{modifyTime}, #{createPerson},
+		#{modifyPerson}, #{remark} )
+	</insert>
+
+	<!--修改 -->
+	<update id="update" parameterType="io.renren.entity.CourseUserplanServiceEntity">
+		update course_userplan_service
+		<set>
+			<if test="userplanId != null">`userplan_id` = #{userplanId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="userplanServiceTime != null">`userplan_service_time` = #{userplanServiceTime}, </if>
+			<if test="nextTime != null">`next_time` = #{nextTime}, </if>
+			<if test="serviceTypeId != null">`service_type_id` = #{serviceTypeId}, </if>
+			<if test="serviceTypeContent != null">`service_type_content` = #{serviceTypeContent}, </if>
+			<if test="serviceFbId != null">`service_fb_id` = #{serviceFbId}, </if>
+			<if test="serviceFbContent != null">`service_fb_content` = #{serviceFbContent}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		<include refid="base_where" />
+		AND userplan_service_id = #{userplanServiceId}
+	</update>
+
+	<!--删除 -->
+	<delete id="delete">
+		DELETE FROM course_userplan_service
+		<include refid="base_where" />
+		AND userplan_service_id = #{id}
+	</delete>
+
+	<!--批量删除 -->
+	<delete id="deleteBatch">
+		DELETE FROM course_userplan_service
+		<include refid="base_where" />
+		AND userplan_service_id IN
+		<foreach item="userplanServiceId" collection="ids" open="("
+			separator="," close=")">
+			#{userplanServiceId}
+		</foreach>
+	</delete>
+</mapper>

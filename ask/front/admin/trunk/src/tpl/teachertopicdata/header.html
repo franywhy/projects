@@ -1,0 +1,23 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <span class="text"><%=pty.name%></span> </h2>
+<!--/通用应用头-->
+
+<div class="searchForm">
+    <form name="searchForm">
+
+        ID:
+        <input type="number" name="_id" size="20" />
+        手机号码:
+        <input type="text" name="username" size="20" />
+        昵称:
+        <input type="text" name="nick_name" size="20" />
+        <br/><br/>
+        抢答日期
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:00:00',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课程</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="show1">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("courses:course:list"))
+				<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+				<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+				<a class="btn btn-primary" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+				<a class="btn btn-primary" @click="save"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				<!--<a class="btn btn-primary" @click="unenable"><i class="fa fa-lock"></i>&nbsp;禁用</a>-->
+				<!--<a class="btn btn-primary" @click="enable"><i class="fa  fa-reply"></i>&nbsp;启用</a>-->
+				<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				<a class="btn btn-primary" @click="showZJ"><i class="fa fa-share-alt"></i>&nbsp;章节</a>
+				<a class="btn btn-primary" @click="checkKnowledge"><i class="fa fa-recycle"></i>&nbsp;知识点校验</a>
+				<!--<a class="btn btn-primary" @click="importExcelCourse"><i class="fa fa-recycle"></i>&nbsp;课程初始化导入</a>-->
+				<!--<a class="btn btn-primary" @click="importExcelKnowledge"><i class="fa fa-recycle"></i>&nbsp;章节知识点初始化导入</a>-->
+			#end
+			#if($shiro.hasPermission("courses:course:importExcel"))
+				<a class="btn btn-primary" @click="importExcelCourse"><i class="fa fa-recycle"></i>&nbsp;课程初始化导入</a>
+				<a class="btn btn-primary" @click="importExcelKnowledge"><i class="fa fa-recycle"></i>&nbsp;章节知识点初始化导入</a>
+			#end
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>		
+			<form class="form-inline" style="margin-top: 5px;">
+				<div class="form-group">
+					<label>课程ID:</label>
+					<input type="text" class="form-control" v-model.trim="q.courseId" placeholder="请输入课程ID" @keyup.enter="query">
+				</div>
+				<div class="form-group">
+					<label >课程编号:</label>
+					<input type="text" class="form-control" v-model.trim="q.courseNo" placeholder="请输入课程编号" @keyup.enter="query">
+				</div>
+				<div class="form-group">
+					<label >课程名称:</label>
+					<input type="text" class="form-control" v-model.trim="q.courseName" placeholder="请输入课程名称" @keyup.enter="query">
+				</div>
+				<div class="form-group">
+					<label>产品线:</label>
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="q.productName" @click="showQueryProductLay" placeholder="产品线" readonly="readonly"/>
+						<a class="btn btn-primary input-group-addon" @click="showQueryProductLay" title="产品线"><i class="fa fa-search"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearQueryProduct" title="清空"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>公司:</label>
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="q.deptName" placeholder="公司" readonly="readonly"/>
+						<a class="btn btn-primary input-group-addon" @click="showQueryDeptLay" title="公司"><i class="fa fa-search"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearQueryDept" title="清空"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="form-group">
+					<label >状态:</label>
+					<select  class="form-control" v-model.trim="q.status">
+						<option value="">全部</option>
+						<option value="1">启用</option>
+						<option value="0">禁用</option>
+					</select>
+				</div>
+				
+			</form>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <!-- 课程编辑 -->
+	<div v-show="show1_1">
+		<div class="panel-heading">{{title}}</div>
+		<!-- 章节按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="saveOrModify"><i class="fa fa-plus"></i>&nbsp;保存</a>
+			<a class="btn btn-warning" @click="showType(1);">返回</a>
+		</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">编号</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="courseObj.courseNo" placeholder="编号"/>
+						<a class="btn btn-primary input-group-addon" @click="checkCourseNo" title="校验重复性"><i class="fa fa-exclamation-circle"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="courseObj.courseName" placeholder="名称"/>
+				</div>
+				<div class="col-sm-2 control-label">产品线</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="courseObj.productName" @click="showProductLay" placeholder="产品线" readonly="readonly"/>
+						<a class="btn btn-primary input-group-addon" @click="showProductLay" title="产品线"><i class="fa fa-search"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearProduct" title="清空"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">公司</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" @click="showDeptLay" v-model.trim="courseObj.deptName" placeholder="公司" readonly="readonly"/>
+						<a class="btn btn-primary input-group-addon" @click="showDeptLay" title="公司"><i class="fa fa-search"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearDept" title="清空"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">备注</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="courseObj.remark" placeholder="备注"/>
+				</div>
+			</div>
+		</form>
+	</div>
+    
+    <!-- 章节列表 -->
+	<div v-show="show2">
+		<!-- 章节按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="zjReload"><i class="fa fa-search"></i>&nbsp;刷新</a>
+			<a class="btn btn-primary" @click="zAdd"><i class="fa fa-plus"></i>&nbsp;新增章</a>
+			<a class="btn btn-primary" @click="jAdd"><i class="fa fa-plus"></i>&nbsp;新增节</a>
+			<a class="btn btn-primary" @click="zjUpdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a class="btn btn-primary" @click="jUpdateParent"><i class="fa fa-pencil-square-o"></i>&nbsp;修改父节点</a>
+			<a class="btn btn-primary" @click="zjDelete"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<a class="btn btn-warning" @click="showType(1);"  style="float: right;">返回</a>
+		</div>
+		<!-- 章节表格 -->
+		<table id="zjTable" data-mobile-responsive="true" data-click-to-select="true">
+			<thead>
+				<tr>
+					<th data-field="selectItem" data-checkbox="true"></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	
+	<!-- 章编辑 -->
+	<div v-show="show3">
+		<div class="panel-heading">{{title}}</div>
+		<!-- 章节按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="zSaveOrModify"><i class="fa fa-plus"></i>&nbsp;保存</a>
+			<a class="btn btn-warning" @click="showType(2);">返回</a>
+		</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">上级</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="selectCourse.courseNameNo" readonly="readonly" />
+				</div>
+				<div class="col-sm-2 control-label">编号</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+                        <span class="input-group-addon" title="编码前缀" id="chapter_parent"></span>
+                        <input type="text" class="form-control" v-model.trim="zObj.chapterNo" id="demo" placeholder="请输入数字"/>
+						<a class="btn btn-primary input-group-addon" @click="checkChapterNo" title="校验重复性"><i class="fa fa-exclamation-circle"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="zObj.chapterName" />
+				</div>
+				<div class="col-sm-2 control-label">排序</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="zObj.orderNum" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 节编辑 -->
+	<div v-show="show5">
+		<div class="panel-heading">{{title}}</div>
+		<!-- 节按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="jSaveOrModify"><i class="fa fa-plus"></i>&nbsp;保存</a>
+			<a class="btn btn-warning" @click="showType(2);">返回</a>
+		</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">上级</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="jObj.chapterNameNo" readonly="readonly" />
+				</div>
+				<div class="col-sm-2 control-label">编号</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+                        <span class="input-group-addon" title="编码前缀" id="section_parent"></span>
+						<input type="text" class="form-control" v-model.trim="jObj.sectionNo" placeholder="请输入数字"/>
+						<a class="btn btn-primary input-group-addon" @click="checkSectionNo" title="校验重复性"><i class="fa fa-exclamation-circle"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="jObj.sectionName" />
+				</div>
+				<div class="col-sm-2 control-label">排序</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="jObj.orderNum" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="fileUploadLayer" style="display: none;">
+		<div class="panel-heading">批量上传(xls格式的文件)</div>
+		<input type="file" id="file_data" name="file_data"/>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/course-service/cscourse.js?_${date.systemTime}"></script>
+#parse("adaptive_layer/chapterListLay.html")
+#parse("layer/deptLay.html")
+#parse("layer/productLay.html")
+</body>
+</html>

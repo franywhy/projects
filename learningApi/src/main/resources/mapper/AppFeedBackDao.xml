@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.FeedBackDao">
+<insert id="saveFeedBack" parameterType="com.hq.learningapi.entity.AppFeedBackEntity" useGeneratedKeys="true" keyProperty="feedBackId" >
+    insert into app_feed_back (feed_back_id, user_mobile, feed_back_context,
+      picture, product_id, client,
+      version, create_time)
+    values (#{feedBackId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, #{feedBackContext,jdbcType=VARCHAR},
+      #{picture,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{client,jdbcType=VARCHAR},
+      #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+
+
+
+</mapper>

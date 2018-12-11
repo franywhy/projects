@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课程</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="show1">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("adaptive:adlcourse:list"))
+				<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+				<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+				<a class="btn btn-primary" @click="showZJ"><i class="fa fa-share-alt"></i>&nbsp;章节</a>
+				<a class="btn btn-primary" @click="showPhase"><i class="fa fa-sliders"></i>&nbsp;阶段</a>
+				<!-- <a class="btn btn-primary" @click="query"><i class="fa fa-recycle"></i>&nbsp;知识点校验</a> -->
+			#end
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>		
+			<form class="form-inline" style="margin-top: 5px;">
+				<div class="form-group">
+					<label>课程ID:</label>
+					<input type="text" class="form-control" v-model="q.courseId" placeholder="请输入课程ID" @keyup.enter="query">
+				</div>
+				<div class="form-group">
+					<label >课程编号:</label>
+					<input type="text" class="form-control" v-model="q.courseNo" placeholder="请输入课程编号" @keyup.enter="query">
+				</div>
+				<div class="form-group">
+					<label >课程名称:</label>
+					<input type="text" class="form-control" v-model="q.courseName" placeholder="请输入课程名称" @keyup.enter="query">
+				</div>
+			</form>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+    <!-- 章节列表 -->
+	<div v-show="show2">
+		<!-- 按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="zjReload"><i class="fa fa-search"></i>&nbsp;刷新</a>
+			<a class="btn btn-warning" @click="showType(1);"  style="float: right;">返回</a>
+		</div>
+		<!-- 表格 -->
+		<table id="zjTable" data-mobile-responsive="true" data-click-to-select="true">
+			<thead>
+				<tr>
+					<th data-field="selectItem" data-checkbox="true"></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+    <!-- 阶段列表 -->
+	<div v-show="show3">
+		<!-- 按钮 -->
+		<div class="grid-btn">
+            <a class="btn btn-default" @click="cleanQueryPhase">&nbsp;重置</a>
+			<a class="btn btn-primary" @click="phaseReload"><i class="fa fa-search"></i>&nbsp;查询</a>
+            <a class="btn btn-primary" @click="phaseEdit"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a class="btn btn-primary" @click="phaseSave"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a class="btn btn-primary" @click="phaseDel"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a class="btn btn-primary" @click="phaseDisable"><i class="fa fa-lock"></i>&nbsp;禁用</a>
+            <a class="btn btn-primary" @click="phaseEnable"><i class="fa  fa-reply"></i>&nbsp;启用</a>
+            <a class="btn btn-primary" @click="updatePhaceKnowledgeVersion"><i class="fa  fa-reply"></i>&nbsp;更新知识空间</a>
+            #if($shiro.hasPermission("adaptive:adlcourse:updatePhacVersion"))
+            <a class="btn btn-primary" @click="updatePhaceKnowledgeVersionUpdate"><i class="fa  fa-reply"></i>&nbsp;强制更新知识空间</a>
+            #end
+            <a class="btn btn-warning" @click="showType(1);"  style="float: right;">返回</a>
+		</div>
+        <form class="form-inline" style="margin-top: 5px;">
+            <div class="form-group">
+                <label>阶段名称:</label>
+                <input type="text" class="form-control" v-model="queryPhase.phaseName" placeholder="请输入阶段名称" onkeyup="value=value.trim()">
+            </div>
+            <div class="form-group">
+                <label >阶段编号:</label>
+                <input type="text" class="form-control" v-model="queryPhase.phaseNo" onkeyup="value=value.replace(/[^\w\/]/ig,'')"  placeholder="编码由字母和数字组成" >
+            </div>
+            <div class="form-group">
+                <label >考点:</label>
+                <div class="input-group m-b">
+                    <input type="text" class="form-control" v-model="queryPhase.keyPointName" @click="queryKeyPointShow" readonly="readonly" placeholder="点击选择"/>
+                    <a class="btn btn-primary input-group-addon" @click="queryKeyPointShow" title="选择考点"><i class="fa fa-folder-open"></i>&nbsp;</a>
+                    <a class="btn btn-primary input-group-addon" @click="queryClearKeyPointName" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+                </div>
+            </div>
+        </form>
+		<!-- 表格 -->
+		<table id="phaseGrid"></table>
+		<div id="phaseGridPager"></div>
+	</div>
+
+    <!-- 阶段编辑 -->
+    <div v-show="show4">
+        <div class="panel-heading">{{title}}</div>
+        <!-- 节按钮 -->
+        <div class="grid-btn">
+            <a class="btn btn-primary" @click="phaseSaveOrModify"><i class="fa fa-plus"></i>&nbsp;保存</a>
+            <a class="btn btn-warning" @click="showType(3);">返回</a>
+        </div>
+        <form class="form-horizontal">
+            <div class="form-group">
+            	<div class="col-sm-all"><label for="name">阶段基础信息</label></div>
+                <div class="col-sm-2 control-label">上级</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="selectCourse.courseName" readonly="readonly" />
+                </div>
+                <div class="col-sm-2 control-label">编号</div>
+                <div class="col-sm-10">
+                    <div class="input-group m-b">
+                        <input type="text" class="form-control" v-model="phaseObj.phaseNo" onkeyup="value=value.replace(/[^\w\/]/ig,'')" placeholder="编码由字母和数字组成" />
+                        <a class="btn btn-primary input-group-addon" @click="checkPhaseNo" title="校验重复性"><i class="fa fa-exclamation-circle"></i>&nbsp;</a>
+                    </div>
+                </div>
+                <div class="col-sm-2 control-label">名称</div>
+                <div class="col-sm-10">
+                    <div class="input-group m-b">
+                        <input type="text" class="form-control" v-model="phaseObj.phaseName" onkeyup="value=value.trim()"/>
+                        <a class="btn btn-primary input-group-addon" @click="checkPhaseName" title="校验重复性"><i class="fa fa-exclamation-circle"></i>&nbsp;</a>
+                    </div>
+                </div>
+                <div class="col-sm-2 control-label">考点</div>
+                <div class="col-sm-10">
+                    <div class="input-group m-b">
+                        <input type="text" class="form-control" v-model="phaseObj.keyPointName" @click="KeyPointShow" readonly="readonly" placeholder="点击选择"/>
+                        <a class="btn btn-primary input-group-addon" @click="KeyPointShow" title="选择考点"><i class="fa fa-folder-open"></i>&nbsp;</a>
+                        <a class="btn btn-primary input-group-addon" @click="clearKeyPointName" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+                    </div>
+                </div>
+                <div class="col-sm-2 control-label" title="支持多选">知识点</div>
+                <div class="col-sm-10">
+                        <input type="text" class="form-control" id="knowledgeListName"  @click="showPhaseKnowledgeLay" readonly="readonly" placeholder="点击选择"/>
+                </div>
+
+                <!--<div class="col-sm-all"><label>阶段课后资料</label></div>-->
+                <!--<div class="col-sm-2 control-label">资料名称</div>-->
+                <!--<div class="col-sm-10">-->
+					<!--<input type="text" class="form-control" v-model="phaseObj.phaseAfterFile.fileName" placeholder="请输入资料名称"/>-->
+				<!--</div>-->
+				<!--<div class="col-sm-2 control-label">资料地址</div>-->
+				<!--<div class="col-sm-10">-->
+					<!--<div class="input-group m-b">-->
+						<!--<input type="text" class="form-control" v-model="phaseObj.phaseAfterFile.fileUrl" placeholder="请输入资料地址"/>-->
+						<!--<a class="btn btn-primary input-group-addon" onclick="hq.core.upload(null,'vm.phaseObj.phaseAfterFile.fileUrl' , '资料');" title="上传资料"><i class="fa fa-cloud-upload"></i>&nbsp;</a>-->
+						<!--<a class="btn btn-primary input-group-addon" @click="clearAfterFile" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>-->
+					<!--</div>-->
+				<!--</div>-->
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="${rc.contextPath}/js/adaptive/adlcourse.js?_${date.systemTime}"></script>
+#parse("adaptive_layer/chapterListLay.html")
+#parse("adaptive_layer/adlConfigLay.html")
+#parse("adaptive_layer/adlSectionMutiSelectLay.html")
+#parse("../../statics/plugins/upload/upload.html")
+#parse("adaptive_layer/phaseKnowledgeLay.html")
+</body>
+</html>

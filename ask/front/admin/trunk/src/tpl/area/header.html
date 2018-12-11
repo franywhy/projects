@@ -1,0 +1,35 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        校区编号
+        <input id="code" type="text" name="code" value="" size="20"  />
+        名称
+        <input id="name" type="text" name="name" value="" size="20"  />
+        层级
+        <select id="level" name="level" >
+            <option value =""></option>
+            <option value ="3">大区</option>
+            <option value ="5">省</option>
+            <option value ="7">市</option>
+            <option value ="9">公司</option>
+            <option value ="11">校区</option>
+        </select>
+        负责人
+        <input id="handler" type="text" name="handler" value="" size="20"  />
+        所在地
+        <input id="address" type="text" name="address" value="" size="20"  />
+        <br>
+        同步时间
+        <input id="ssyn_time" type="text" name="ssyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'ssyn_time\')}'})"  />
+        到
+        <input id="esyn_time" type="text" name="esyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'esyn_time\')}'})" />
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头--> 

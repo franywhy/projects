@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallLiveRoomDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = m.product_id
+	</sql>
+	<select id="findLiveRoomList" resultType="io.renren.entity.MallLiveRoomEntity">
+		select * from mall_live_room where status = 1 and dr = 0
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryObject" resultType="io.renren.entity.MallLiveRoomEntity">
+		select 
+			m.*,
+			<include refid="join_productName"/> 
+		from mall_live_room m 
+			<include refid="join"/> 
+		where live_room_id = #{liveRoomId} and dr = 0 
+	</select>
+	
+	<select id="queryGenseeLiveNum" parameterType="string" resultType="string">
+		 SELECT DISTINCT(gensee_live_num) FROM mall_live_room WHERE gensee_live_id=#{liveId} LIMIT 1
+	</select>
+	
+    <select id="queryMid" resultType="io.renren.entity.MallLiveRoomEntity">
+		select * from `mall_live_room` where m_id = #{mId}
+		
+	</select>
+	<select id="queryList" resultType="io.renren.entity.MallLiveRoomEntity">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.creator) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modifier) as modifiedName,
+			<include refid="join_productName"/>
+		from mall_live_room m 
+			<include refid="join"/>
+		where dr = 0 
+			<if test="liveRoomName != null and liveRoomName.trim() != ''">
+				and m.live_room_name like concat('%',#{liveRoomName},'%') 
+			</if>
+			<if test="productName != null and productName.trim() != ''">
+				and sys_product.product_name like concat('%',#{productName},'%')
+			</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryListForCourseOLive" resultType="io.renren.entity.MallLiveRoomEntity">
+		select 
+			m.*,
+			(select aa.username from sys_user aa where aa.user_id = m.creator) as creationName,
+			(select bb.username from sys_user bb where bb.user_id = m.modifier) as modifiedName
+		from mall_live_room m where dr = 0 and status = 1
+			<if test="liveRoomName != null and liveRoomName.trim() != ''">
+				and `live_room_name` like concat('%',#{liveRoomName},'%') 
+			</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from mall_live_room m 
+			<include refid="join"/>
+		where dr = 0
+		<if test="liveRoomName != null and liveRoomName.trim() != ''">
+			and m.live_room_name like concat('%',#{liveRoomName},'%') 
+		</if>
+		<if test="productName != null and productName.trim() != ''">
+			and sys_product.product_name like concat('%',#{productName},'%')
+		</if>
+	</select>
+	<!-- 查询status=1，dr=0的直播间列表总数 -->
+	<select id="queryTotal1" resultType="int">
+		select count(1) from mall_live_room where dr = 0 and status = 1
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MallLiveRoomEntity" useGeneratedKeys="true" keyProperty="liveRoomId">
+		insert into mall_live_room
+		(
+			`school_id`,
+			`dr`, 
+			`live_room_name`, 
+			`live_room_remake`, 
+			`live_room_channel_id`, 
+			`live_room_channel_secretkey`,
+			`live_room_channel_password`, 
+			`status`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`,
+			`gensee_live_id`,
+			`gensee_live_num`,
+			`m_id`,
+			`product_id`
+		)
+		values
+		(
+			#{schoolId},
+			#{dr}, 
+			#{liveRoomName}, 
+			#{liveRoomRemake}, 
+			#{liveRoomChannelId}, 
+			#{liveRoomChannelSecretkey}, 
+			#{liveRoomChannelPassword}, 
+			#{status}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime},
+			#{genseeLiveId},
+			#{genseeLiveNum},
+			#{mId},
+			#{productId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.MallLiveRoomEntity">
+		update mall_live_room 
+		<set>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="liveRoomName != null">`live_room_name` = #{liveRoomName}, </if>
+			<if test="liveRoomRemake != null">`live_room_remake` = #{liveRoomRemake}, </if>
+			<if test="liveRoomChannelId != null">`live_room_channel_id` = #{liveRoomChannelId}, </if>
+			<if test="liveRoomChannelSecretkey != null">`live_room_channel_secretkey` = #{liveRoomChannelSecretkey}, </if>
+			<if test="liveRoomChannelPassword != null">`live_room_channel_password` = #{liveRoomChannelPassword}, </if>
+			<if test="genseeLiveId != null">`gensee_live_id` = #{genseeLiveId}, </if>
+			<if test="genseeLiveNum != null">`gensee_live_num` = #{genseeLiveNum}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		where live_room_id = #{liveRoomId}
+	</update>
+	<update id="updateBatch">
+	   update mall_live_room set status = #{status} where live_room_id in
+	   <foreach item="liveRoomId" collection="list" open="(" separator="," close=")">
+	   	#{liveRoomId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from mall_live_room where live_room_id = #{value}
+	</delete>
+	
+	
+	<!-- <delete id="deleteBatch">
+		delete from mall_live_room where live_room_id in 
+		<foreach item="liveRoomId" collection="array" open="(" separator="," close=")">
+			#{liveRoomId}
+		</foreach>
+	</delete> -->
+	<update id="deleteBatch">
+		update mall_live_room
+		<set>
+			dr = 1 
+		</set> 
+		where live_room_id in 
+		<foreach item="liveRoomId" collection="array" open="(" separator="," close=")">
+			#{liveRoomId}
+		</foreach>
+	</update>
+
+	<select id="queryByClassPlanLiveId" resultType="io.renren.entity.MallLiveRoomEntity">
+        SELECT mlr.*
+        FROM mall_live_room mlr, course_classplan_lives ccl
+        WHERE mlr.live_room_id = ccl.liveroom_id
+        AND mlr.`status` = 1
+        AND mlr.dr = #{dr}
+        AND ccl.classplan_live_id = #{classPlanLiveId}
+        AND ccl.dr = #{dr}
+    </select>
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysRoleProductDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		sys_role_product.id AS id , 
+		sys_role_product.role_id AS roleId ,
+		sys_role_product.product_id AS productId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1 = 1 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM sys_role_product AS sys_role_product
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.SysRoleProductEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.SysRoleProductEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save">
+		insert into sys_role_product
+		(
+			`role_id`, 
+			`product_id` 
+		)
+		values
+		<foreach collection="productIdList" item="productId" index="index" separator="," >
+		(
+			#{roleId}, 
+			#{productId} 
+		)
+		</foreach>
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.SysRoleProductEntity">
+		update sys_role_product 
+		<set>
+			<if test="roleId != null">`role_id` = #{roleId}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM sys_role_product WHERE role_id = #{value}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM sys_role_product 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<select id="queryProductIdList" resultType="Long"> 
+		select product_id from sys_role_product where role_id = #{value}
+	</select>
+</mapper>

@@ -1,0 +1,35 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="num">ID</th>
+            <th class="auto">登录名</th>
+			<th class="auto">昵称</th>
+			<th class="auto">岗位</th>
+            <th class="action action150">操作权限</th>
+       </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="num"><%=data[i]._id%></td>
+            <td class="auto"><%=data[i].name%></td>
+			<td class="auto"><%=data[i].nick_name%></td>
+			<td class="auto"><%=data[i].post_name%></td>
+            <td  class="action action150">
+                 <button class="d-button" onclick="Izb.controller.<%=pty.key%>.add_area('<%=data[i]._id%>')">添加校区</button>
+                 <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit_area('<%=data[i]._id%>')">修改校区</button>
+                 <button class="d-button" onclick="Izb.controller.<%=pty.key%>.add_teacher('<%=data[i]._id%>')">添加老师</button>
+                 <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit_teacher('<%=data[i]._id%>')">修改老师</button>
+                 <%if(data[i].credit_type == 1){%>
+                   <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit_area_admin('<%=data[i]._id%>',0)">取消全国权限</button>
+                 <%}else{%>
+                   <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit_area_admin('<%=data[i]._id%>',1)">添加全国权限</button>
+                 <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

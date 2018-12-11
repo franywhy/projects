@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="com.hq.learningapi.dao.SysConfigDao">
+
+	<!-- 根据key，查询value -->
+	<select id="queryByKey" parameterType="String" resultType="String">
+		select value from sys_config where `key` = #{key}
+	</select>
+    <!-- 获取购买须知-->
+    <select id="getPhurchaseNotes" resultType="string">
+        SELECT
+        `value`
+        FROM
+        sys_config
+        WHERE
+        `key` LIKE CONCAT('%', #{phurchaseNotes}, '%')
+    </select>
+	
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elise.datacenter.dao.FileDao">
+
+	<select id="queryObject" resultType="com.elise.datacenter.entity.FileEntity">
+		select id,
+		file_id ,
+		group_name ,
+		file_uri ,
+		file_extension as fileSuffix,
+		file_length,
+		is_permanant as isPermanent,
+		source,
+		create_time,
+		file_url as fileUrl
+		from hk_file_entity
+		where file_id = #{value} limit 1
+	</select>
+
+
+	<insert id="create" parameterType="com.elise.datacenter.entity.FileEntity"
+			useGeneratedKeys="true" keyProperty="id">
+		insert into hk_file_entity
+		(
+		`file_id`,
+		`group_name`,
+		`file_uri`,
+		`file_extension`,
+		`file_length`,
+		`is_permanant`,
+		`source`,
+		`create_time`,
+		`file_url`
+		)
+		values
+		(
+		#{fileId},
+		#{groupName},
+		#{fileUri},
+		#{fileSuffix},
+		#{fileLength},
+		#{isPermanent},
+		#{source},
+		#{createTime},
+		#{fileUrl}
+		)
+	</insert>
+
+
+	<delete id="deleteById">
+		delete from hk_file_entity where file_id = #{value}
+	</delete>
+
+
+</mapper>

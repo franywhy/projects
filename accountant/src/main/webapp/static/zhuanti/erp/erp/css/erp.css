@@ -1,0 +1,344 @@
+body{
+    background: #ffffff;
+    color: #333333;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.head{
+    font-size: 42px;
+    text-align: center;
+}
+.tit1{
+    font-size: 15px;
+    color: #999999;
+    text-align: center;
+}
+.tit2{
+    font-size: 17px;
+    text-align: center;
+}
+.w1200{
+    margin: 0 auto;
+}
+.padding-t-b{
+    padding-top: 80px;
+    padding-bottom: 90px;
+}
+.w100{
+    width: 100%;
+}
+a{
+    color: #333333;
+}
+.head-com{
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+.box-com{
+    padding: 13px;
+    background: #ffffff;
+    color: #999999;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    font-size: 14px;
+}
+.none {
+    display: none;
+}
+/*导航栏*/
+.head-nav{
+    height: 55px;
+    line-height: 55px;
+    box-sizing: border-box;
+}
+.head-nav .nav-l{
+    font-size: 20px;
+}
+.head-nav .nav-r ul li{
+   font-size: 14px;
+    cursor: pointer;
+}
+.head-nav .nav-r ul li.zi-xun{
+    width: 140px;
+    height: 35px;
+    line-height: 35px;
+    background: #ee613b;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-left: 35px;
+    opacity: 0.8;
+    transition: 0.3s all;
+    -webkit-transition: 0.3s all;
+    -moz-transition: 0.3s all;
+    -ms-transition: 0.3s all;
+}
+.head-nav .nav-r ul li.zi-xun:hover{
+    opacity: 1;
+}
+/*人才缺口300万，企业高薪招聘财务顾问！*/
+.main1 .w1200 .tit1{
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+.main1 .w1200 .tit2{
+    margin-top: 30px;
+}
+.main1 .w1200 .jing_yan{
+    text-align: center;
+}
+/*五阶段学习，成就财务信息化高手*/
+.main2{
+    background: url("../images/message.jpg") no-repeat center;
+    height: 800px;
+    box-sizing: border-box;
+}
+.main2 .w1200 .tit1{
+    margin-top: 20px;
+}
+/*八年以上名企老师授课，容易听懂学成快！*/
+.main3{
+    padding-top: 80px;
+    padding-bottom: 55px;
+}
+.main3 .w1200 .tit1{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.main3 .w1200 .foot-tit{
+    font-size: 12px;
+    text-align: center;
+    margin-top: 45px;
+    color: #999999;
+}
+.teacher ul li{
+    float: left;
+    width: 300px;
+    border-radius: 8px;
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    transition: all 0.3s linear;
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear ;
+}
+.teacher ul li.act1{
+    box-shadow: 0 0 50px #EAF5FC;
+    -webkit-box-shadow: 0 0 20px #EAF5FC;
+    -moz-box-shadow: 0 0 20px #EAF5FC;
+    transform: translateY(-5px);
+    -moz-transform: translateY(-5px);
+    -webkit-transform: translateY(-5px);
+
+}
+.teacher ul li.margin-l{
+    margin-left: 150px;
+}
+.teacher ul li dl{
+    padding-top: 48px;
+    padding-bottom: 55px;
+    background: url("../images/douhao.png") no-repeat;
+    background-position: 50px 50px;
+}
+.teacher ul li dl dt{
+    text-align: center;
+}
+
+.teacher ul li dl .name{
+    font-size: 24px;
+    color: #0E9BED;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+.teacher ul li dl .intro{
+    font-size: 14px;
+    text-align: center;
+    line-height: 20px;
+}
+/*毕业获两证，稳拿高薪职场敲门砖！*/
+.main4{
+    height: 800px;
+    background: url("../images/zhengshu.jpg") no-repeat center;
+    box-sizing: border-box;
+}
+.zh_sh{
+    top: 180px;
+    left: 764px;
+}
+.zh_sh .jy_zs{
+    margin-bottom: 40px;
+}
+.zh_sh .jy_zs .top_h,.zh_sh .gc_zs .top_h{
+    font-size: 20px;
+    font-weight: bold;
+}
+.zh_sh .jy_zs .zs_intro,.zh_sh .gc_zs .zs_intro{
+    font-size: 14px;
+    color: #999999;
+    line-height: 20px;
+}
+.zh_sh .jy_zs .xian,.zh_sh .gc_zs .xian{
+    width: 80px;
+    height: 2px;
+    background: #666666;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+/*定向推荐名企就业，上岗晋升快一步*/
+.main5 .tit1{
+    margin-top:20px;
+    margin-bottom: 70px;
+}
+.main5 .ming_qi{
+    text-align: center;
+}
+/*ERP财务信息化定向班优秀学员（部分）*/
+.main6{
+    background: #F1F5F9;
+    padding-top: 80px;
+    padding-bottom: 50px;
+}
+.main6 .student{
+    width: 1120px;
+    margin: 50px auto 0 auto;
+
+}
+.main6 .student li{
+    float: left;
+    width: 530px;
+    margin-bottom: 40px;
+}
+.main6 .student li.margin-l{
+    margin-left: 60px;
+}
+.main6 .student li .stu_intro{
+    margin-left: 30px;
+    margin-top: 15px;
+}
+.main6 .student li .stu_intro .stu_name{
+    font-size: 24px;
+}
+.main6 .student li .stu_intro .stu_com{
+    font-size: 14px;
+    text-shadow: 1px -1px 1px rgba(51,51,51,0.3);
+    font-style:italic;
+    margin-top: 5px;
+    margin-bottom: 13px;
+    font-weight: bold;
+}
+.main6 .student li .stu_intro .stu_m{
+    margin-bottom: 8px;
+}
+.main6 .student li .stu_intro .stu_m span{
+    display: inline-block;
+    width: 75px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #ffffff;
+    background: #0E9BED;
+    margin-right: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+/*免费预约体验课程，一分钟填表领取！*/
+.main7{
+    height: 626px;
+    background: url("../images/yuyue.jpg") no-repeat center;
+    box-sizing: border-box;
+}
+.main7 .head{
+    color: #ffffff;
+}
+.main7 .tit1{
+    color: #ffffff;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+.main7 form>div{
+    text-align: center;
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+.main7 form>div>span{
+    display: inline-block;
+    width: 95px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-color: #333333;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.main7 form>input{
+    display: block;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 14px;
+    width: 270px;
+    height: 50px;
+    line-height: 50px;
+    background-color: #ffffff;
+    color: #888888;
+    margin:0 auto 15px auto;
+    padding-left: 10px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border: 1px solid #888888;
+}
+.main7 form>.btn{
+    box-sizing: border-box;
+    font-size: 18px;
+    width: 270px;
+    height: 65px;
+    line-height: 65px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border: 1px solid #888888;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0 auto;
+    background-color: #66BB6A;
+    opacity: 0.8;
+    transition: all 0.3s linear;
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear ;
+}
+.main7 form>.btn:hover{
+    opacity: 1;
+}
+/*十五年风雨见证，满载荣誉前行！*/
+.main8 .tit1{
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+.main8 .w1200 ul li{
+    float: left;
+    width: 400px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+.main8 .w1200 ul li dl dd{
+    margin-top: 30px;
+    line-height: 30px;
+    font-size: 18px;
+}

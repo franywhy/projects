@@ -1,0 +1,26 @@
+<!--VIP统计-->
+<table width="100%" class="listTable tablesorter">
+<thead>
+    <tr>
+    		<th class="longtime">交易时间</th>
+            <th class="auto">普通VIP购买次数</th>
+            <th class="auto">星币收入</th>
+        <th class="auto">至尊VIP购买次数</th>
+            <th class="auto">星币收入</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+            <td><%=data[i].vip1?(data[i].vip1.count||0):0%></td>
+            <td><%=data[i].vip1?(data[i].vip1.cost||0):0%></td>
+			<td><%=data[i].vip2?(data[i].vip2.count||0):0%></td>
+            <td><%=data[i].vip2?(data[i].vip2.cost||0):0%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+
+

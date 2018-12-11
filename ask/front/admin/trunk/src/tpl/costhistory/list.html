@@ -1,0 +1,25 @@
+<!--海报列表--> 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="num">ID</th>
+        <th>类型</th>
+        <th>用户ID</th>
+        <th>消费星币</th>
+        <th>时间</th>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    <tr>
+        <td><%=data[i]._id%></td>
+        <td><%=data[i].type%></td>
+        <td><%=data[i].user_id%></td>
+        <td><%=data[i].cost%></td>
+        <td><%=new Date(data[i].timestamp).toLocaleString()%></td>
+    </tr>
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>
+<!--/海报列表--> 

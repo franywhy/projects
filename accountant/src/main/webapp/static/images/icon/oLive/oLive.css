@@ -1,0 +1,238 @@
+#gopng_teacher_outer {
+height: 19px;
+width: 14px;
+overflow: hidden;
+}
+#gopng_teacher {
+background: url(images/icon/oLive.png) -0px -0px no-repeat;
+_background: none;
+_padding-left: 0px;
+_margin-left: -0px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_face_outer {
+height: 18px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_face {
+background: url(images/icon/oLive.png) -14px -0px no-repeat;
+_background: none;
+_padding-left: 14px;
+_margin-left: -14px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_face-hover_outer {
+height: 18px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_face-hover {
+background: url(images/icon/oLive.png) -32px -0px no-repeat;
+_background: none;
+_padding-left: 32px;
+_margin-left: -32px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_flower_outer {
+height: 18px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_flower {
+background: url(images/icon/oLive.png) -50px -0px no-repeat;
+_background: none;
+_padding-left: 50px;
+_margin-left: -50px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_flower-hover_outer {
+height: 18px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_flower-hover {
+background: url(images/icon/oLive.png) -68px -0px no-repeat;
+_background: none;
+_padding-left: 68px;
+_margin-left: -68px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_change_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_change {
+background: url(images/icon/oLive.png) -86px -0px no-repeat;
+_background: none;
+_padding-left: 86px;
+_margin-left: -86px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_change-hover_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_change-hover {
+background: url(images/icon/oLive.png) -104px -0px no-repeat;
+_background: none;
+_padding-left: 104px;
+_margin-left: -104px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_big_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_big {
+background: url(images/icon/oLive.png) -122px -0px no-repeat;
+_background: none;
+_padding-left: 122px;
+_margin-left: -122px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_big-hover_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_big-hover {
+background: url(images/icon/oLive.png) -140px -0px no-repeat;
+_background: none;
+_padding-left: 140px;
+_margin-left: -140px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_lIcon1-hover_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_lIcon1-hover {
+background: url(images/icon/oLive.png) -158px -0px no-repeat;
+_background: none;
+_padding-left: 158px;
+_margin-left: -158px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_lIcon2_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_lIcon2 {
+background: url(images/icon/oLive.png) -176px -0px no-repeat;
+_background: none;
+_padding-left: 176px;
+_margin-left: -176px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_lIcon2-hover_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_lIcon2-hover {
+background: url(images/icon/oLive.png) -194px -0px no-repeat;
+_background: none;
+_padding-left: 194px;
+_margin-left: -194px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_lIcon3_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_lIcon3 {
+background: url(images/icon/oLive.png) -212px -0px no-repeat;
+_background: none;
+_padding-left: 212px;
+_margin-left: -212px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_lIcon3-hover_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_lIcon3-hover {
+background: url(images/icon/oLive.png) -230px -0px no-repeat;
+_background: none;
+_padding-left: 230px;
+_margin-left: -230px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_sound_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_sound {
+background: url(images/icon/oLive.png) -248px -0px no-repeat;
+_background: none;
+_padding-left: 248px;
+_margin-left: -248px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_sound-hover_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_sound-hover {
+background: url(images/icon/oLive.png) -266px -0px no-repeat;
+_background: none;
+_padding-left: 266px;
+_margin-left: -266px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}
+#gopng_lIcon1_outer {
+height: 17px;
+width: 18px;
+overflow: hidden;
+}
+#gopng_lIcon1 {
+background: url(images/icon/oLive.png) -284px -0px no-repeat;
+_background: none;
+_padding-left: 284px;
+_margin-left: -284px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="images/icon/oLive.png");
+}

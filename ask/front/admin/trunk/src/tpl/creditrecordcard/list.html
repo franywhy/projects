@@ -1,0 +1,45 @@
+<table width="100%" class="listTable tablesorter">
+	<thead>
+		<tr>
+			<th class="num">序号</th>
+			<th class="auto">科目</th>
+			<th class="auto">出勤实修学分</th>
+			<th class="auto">出勤应修学分</th>
+			<th class="auto">作业实修学分</th>
+			<th class="auto">作业应修学分</th>
+			<th class="auto">结课考核实修学分</th>
+			<th class="auto">结课考核应修学分</th>
+			<th class="auto">合计学分</th>
+			<th class="auto">是否合格</th>
+			<th class="auto">是否考核</th>
+			<!-- <th class="action action150">操作</th> -->
+		</tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i
+		<data.length;i++){%>
+		<tr did="<%=data[i].id%>">
+			<td class="auto"><%=i+1 %></td>
+			<td class="auto" name="subject_name"><%=data[i].subjectName%></td>
+			<td class="auto" name="attendance_actual_score"><%=data[i].attendanceActualScore%></td>
+			<td class="auto" name="attendance_claim_score"><%=data[i].attendanceClaimScore%></td>
+			<td class="auto" name="work_claim_score"><%=data[i].workActualScore%></td>
+			<td class="auto" name="work_claim_score"><%=data[i].workClaimScore%></td>
+			<td class="auto" name="exam_actual_score"><%=data[i].examActualScore%></td>
+			<td class="auto" name="exam_claim_score"><%=data[i].examClaimScore%></td>
+			<td class="auto" name="total_score"><%=data[i].totalScore%></td>
+			<%if(data[i].isPass==0){%>
+			<td class="auto" type="text" name="is_pass" >是</td>
+			<%}else{%>
+				<td class="auto" type="text" name="is_pass" >否</td>
+			<%}%>
+						<%if(data[i].isCheck==0){%>
+			<td class="auto" type="text" name="is_check" >是</td>
+			<%}else{%>
+				<td class="auto" type="text" name="is_check" >否</td>
+			<%}%>
+		</tr>
+		<%}%> 
+	</tbody>
+</table>
+<div class="appPager"></div>

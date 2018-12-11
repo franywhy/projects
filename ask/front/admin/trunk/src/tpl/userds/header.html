@@ -1,0 +1,72 @@
+<div class="tagArea">
+    <ul class="tagList">
+    	<%if(params.menu=='user'){%>
+        <li class="<%=params.tab=='show'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=show"><i></i><span>基本资料</span></a></li>
+        <li class="<%=params.tab=='pay_log'? 'cur':''%>"><a href="#a=userds&user_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=pay_log"><i></i><span>充值记录</span></a></li>
+        <%}%>
+	<!--	<li class="<%=params.tab=='buy_vip'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=buy_vip&type=buy_vip"><i></i><span>买VIP</span></a></li>
+        <li class="<%=params.tab=='buy_car'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=buy_car&type=buy_car"><i></i><span>买座驾</span></a></li>        
+        <li class="<%=params.tab=='grab_sofa'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=grab_sofa&type=grab_sofa"><i></i><span>抢沙发</span></a></li>
+        <li class="<%=params.tab=='song'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=song&type=song"><i></i><span>点歌</span></a></li>
+        <li class="<%=params.tab=='broadcast'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=broadcast&type=broadcast"><i></i><span>发广播</span></a></li>
+        <li class="<%=params.tab=='luck_log'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=luck_log"><i></i><span>中奖记录</span></a></li>
+		<li class="<%=params.tab=='send_gift'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=send_gift&type=send_gift"><i></i><span>送礼</span></a></li>
+        <li class="<%=params.tab=='rec_gift'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=rec_gift&type=rec_gift"><i></i><span>收礼</span></a></li>
+
+
+        
+        <%if(params.menu=='user'){%>
+        <li class="<%=params.tab=='exchange_log'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=exchange_log"><i></i><span>兑换</span></a></li>
+        <%}%>
+        <li class="<%=params.tab=='lottery_log'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=lottery_log"><i></i><span>抽奖记录</span></a></li>
+
+        <li class="<%=params.tab=='label'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=label&type=label"><i></i><span>爱签记录</span></a></li>
+        <li class="<%=params.tab=='special_gift'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=special_gift&type=special_gift"><i></i><span>奇迹礼物</span></a></li>
+
+        <li class="<%=params.tab=='send_fortune'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=send_fortune&type=send_fortune"><i></i><span>送财神</span></a></li>
+
+        <li class="<%=params.tab=='send_treasure'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=send_treasure&type=send_treasure"><i></i><span>送宝藏</span></a></li>
+
+        <li class="<%=params.tab=='football_log'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=football_log&type=football_log"><i></i><span>点球大战</span></a></li>
+        
+        <li class="<%=params.tab=='egg_log'? 'cur':''%>"><a href="#a=userds&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=egg_log&type=egg_log"><i></i><span>砸蛋</span></a></li>-->
+
+
+    </ul>
+    <div class="tag_r">
+        <input type="button" value="返回" class="d-button J_back" />
+    </div>
+</div>
+<%if(params.tab!='show'){%>
+<div class="searchForm">
+    <form name="searchForm">
+        <%if(params.menu!='user'){%>
+        用户ID
+        <input type="number" name="_id" size="10">
+        <%}%>
+
+        <%if(params.tab=="lottery_log"){%>
+        活动类型
+        <input type="text" name="active_name">
+        奖品名
+        <input type="text" name="award_name">
+        奖品类型
+        <select name="lottery_type">
+            <option value="">全部</option>
+            <option value="0">未中奖</option>
+            <option value="1">一等奖</option>
+            <option value="2">二等奖</option>
+            <option value="3">三等奖</option>
+            <option value="4">四等奖</option>
+        </select>
+        <%}%>
+
+        选择日期
+        <input id="stime" type="text" name="stime" value="" size="20" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})" />
+        <input class="d-button J_search" type="button" value="查询" />
+        <input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<%}%>

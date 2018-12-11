@@ -1,0 +1,16 @@
+{
+    "name": "admin",
+    "version": "2.0.0",
+    "description": "会计城后台",
+    "homepage": "http://admin.hqjy.com/",
+    "keywords": ["admin.hqjy.com"],
+    "appid":"@appid@",
+    "baseDomain":"@baseDomain@",
+    "adminDomain":"axdd.kjcity.com",
+    "appDomain":"@appDomain@",
+    "author": ["zhaokun <zhaokun@gmail.com>"],
+    "repository": {
+        "type": "git",
+        "url": "git@gitweb.izhubo.com:izhubo/admin.izhubo.com.git"
+    }
+}

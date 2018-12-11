@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+       
+    <!-- 资源文件-->   
+    <context:property-placeholder location="classpath:db.properties,classpath:rabbitmq.properties,classpath:redis.properties,classpath:config.properties" />
+    <util:properties id="application" location="classpath:config.properties" />
+
+    <!--资源文件 正式线  -->  
+    <!-- 
+    <context:property-placeholder location="classpath:properites/product/db.properties,classpath:properites/product/rabbitmq.properties,classpath:properites/product/redis.properties,classpath:properites/product/config.properties" />
+    <util:properties id="application" location="classpath:properites/product/config.properties" /> 
+    -->
+	<import resource="classpath:spring-mvc.xml"/>
+	<import resource="classpath:spring-jdbc.xml"/>
+	<import resource="classpath:spring-shiro.xml"/>
+	<import resource="classpath:spring-redis.xml"/>
+	<!-- 导入消息队列配置文件 -->
+	<!-- <import resource="classpath:rabbitmq.xml"/> -->
+	
+	<!-- <import resource="classpath:spring-redis.xml"/> -->
+</beans>

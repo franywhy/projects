@@ -1,0 +1,91 @@
+<!--vip卡片档案
+<form name="inputForm">
+    <table width="100%">
+
+        <tr>
+            <td >等级</td>
+            <td>
+                <select name="main_type_id" class="input" id="main_type_id" style="width: 182px"></select>
+
+                <input type="hidden" class="input" id="id" name="id"/>
+            </td>
+            <td >金额</td>
+            <td>
+                <input name="card_url" class="input" id="card_url" type="text"  readonly/>
+                <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('card_url');" />
+            </td>
+        </tr>
+
+        <tr>
+            <td >模板类型</td>
+            <td>
+                <input name="price" type="number" class="input" id="price" type="text" />
+            </td>
+            <td>权重 </td>
+            <td>
+                <input name="month_num" type="number" class="input" id="month_num" type="text"  />
+            </td>
+        </tr>
+
+        <tr>
+            <td >数量 </td>
+            <td>
+                <input name="begin_date" class="input" id="begin_date" type="text"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+            </td>
+
+        </tr>
+
+
+    </table>
+</form>-->
+<!--/vip卡片档案-->
+
+
+
+<!--vip卡片档案-->
+<form name="inputForm">
+    <h5>提现付款信息录入</h5>
+    <table width="100%">
+
+        <tr>
+            <td >支付备注</td>
+            <td>
+                <input class="input" name="_id" type="hidden" value=""  required/>
+                <input name="memo"  class="input" id="memo" type="text"  required/>
+
+            </td>
+            <td >付款账号</td>
+            <td>
+                <input name="payAccountNo"  class="input" id="payAccountNo" type="text" required value="ht@hengqijy.com" readonly/>
+            </td>
+        </tr>
+
+        <tr>
+            <td >付款账号对应的支付宝用户号</td>
+            <td>
+                <input name="payUserId"  class="input" id="payUserId" type="text" required/>
+            </td>
+            <td>付款账号姓名 </td>
+            <td>
+                <input name="payUserName"  class="input" id="payUserName" type="text" required readonly value="广州恒企投资管理有限公司" />
+            </td>
+        </tr>
+
+    </table>
+
+
+
+
+    <h5></h5>
+
+    <p>
+
+    </p>
+
+
+    <table id="payment-detail"></table>
+    <table id="payment-detail-list"></table>
+    <table id="payment-edit-list"></table>
+ </form>
+ <!--/vip卡片档案-->
+

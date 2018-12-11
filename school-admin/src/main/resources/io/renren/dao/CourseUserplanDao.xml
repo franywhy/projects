@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseUserplanDao">
+
+	
+	<!-- 查询学员规划下courseId课程没有排过课的学员规划信息 -->
+	<select id="queryUserplanInfoNotClassplanByCourseId" resultType="Map"  parameterType="long">
+		SELECT
+			course_userplan_detail.userplan_detail_id AS userplanDetailId,
+			course_userplan_detail.userplan_id AS userplanId,
+			course_userplan.dept_id AS deptId
+		FROM
+			course_userplan AS course_userplan,
+			mall_order AS mall_order,
+			course_userplan_detail AS course_userplan_detail
+		LEFT JOIN (
+			SELECT
+				course_userplan_class_detail.userplan_class_detail_id,
+				course_userplan_class_detail.userplan_detail_id
+			FROM
+				course_userplan_class_detail
+			JOIN course_userplan_class AS course_userplan_class ON (
+				course_userplan_class.userplan_class_id = course_userplan_class_detail.userplan_class_id
+				AND course_userplan_class.dr = 0
+			)
+			WHERE
+				course_userplan_class_detail.dr = 0
+		) AS courseUserplanClassDetail ON (
+			courseUserplanClassDetail.userplan_detail_id = course_userplan_detail.userplan_detail_id
+		)
+		WHERE
+			course_userplan_detail.dr = 0
+		AND course_userplan.user_plan_id = course_userplan_detail.userplan_id
+		AND mall_order.order_id = course_userplan.order_id
+		AND courseUserplanClassDetail.userplan_class_detail_id IS NULL
+		AND mall_order.dr = 0
+		AND course_userplan.dr = 0
+		AND course_userplan_detail.course_id = #{courseId}
+		<if test="classIds != null">
+			AND course_userplan.class_id IN
+            <foreach item="classId" collection="classIds" open="(" separator="," close=")">
+                #{classId}
+            </foreach>
+		</if>
+	</select>
+	<!-- 查询学员规划下courseId课程和选中班级没有排过课的学员规划信息 -->
+	<select id="queryUserplanInfoNotClassplanByCourseIdAndClassId" resultType="Map"  parameterType="long">
+		SELECT
+			course_userplan_detail.userplan_detail_id AS userplanDetailId,
+			course_userplan_detail.userplan_id AS userplanId,
+			course_userplan.dept_id AS deptId
+		FROM
+			course_userplan AS course_userplan,
+			mall_order AS mall_order,
+			course_userplan_detail AS course_userplan_detail
+		LEFT JOIN (
+			SELECT
+				course_userplan_class_detail.userplan_class_detail_id,
+				course_userplan_class_detail.userplan_detail_id
+			FROM
+				course_userplan_class_detail
+			JOIN course_userplan_class AS course_userplan_class ON (
+				course_userplan_class.userplan_class_id = course_userplan_class_detail.userplan_class_id
+				AND course_userplan_class.dr = 0
+			)
+			WHERE
+				course_userplan_class_detail.dr = 0
+		) AS courseUserplanClassDetail ON (
+			courseUserplanClassDetail.userplan_detail_id = course_userplan_detail.userplan_detail_id
+		)
+		WHERE
+			course_userplan_detail.dr = 0
+		AND course_userplan.user_plan_id = course_userplan_detail.userplan_id
+        <if test="classIds != null">
+            AND course_userplan.class_id IN
+            <foreach item="classId" collection="classIds" open="(" separator="," close=")">
+                #{classId}
+            </foreach>
+        </if>
+		AND mall_order.order_id = course_userplan.order_id
+		AND courseUserplanClassDetail.userplan_class_detail_id IS NULL
+		AND mall_order.dr = 0
+		AND course_userplan.dr = 0
+		AND course_userplan_detail.course_id = #{courseId}
+	</select>
+
+	<!-- 该考试时间段内 未生成学习计划 的学员规划 查询条件 -->
+	<sql id="un_userplanclass_join">
+		LEFT JOIN course_userplan_class userplan_class ON (
+			userplan_class.userplan_id = up.user_plan_id
+			AND userplan_class.exam_schedule_id = #{examScheduleId}
+			AND userplan_class.dr = 0
+		)
+	</sql>
+	<sql id="un_userplanclass_where">
+		AND userplan_class.userplan_class_id IS NULL
+	</sql>
+	
+	<!-- 根据排课计划id和班型ids获取要发送消息的人群 -->
+	<select id="getUsers" resultType="long"  parameterType="Map">
+		SELECT
+			DISTINCT(userplan.user_id)
+		FROM
+			course_userplan_class_detail AS userplan_class_detail ,
+			course_userplan_detail AS userplan_detail,
+			course_userplan AS userplan
+		WHERE
+			userplan_class_detail.classplan_id = #{classplanId}
+			and userplan_detail.userplan_detail_id = userplan_class_detail.userplan_detail_id
+			and userplan.user_plan_id = userplan_detail.userplan_id
+			and userplan.class_type_id in
+			<foreach item="item" collection="classtypeIds" open="(" separator="," close=")">
+	   			#{item}
+			</foreach>
+	</select>
+	<!-- 获取要发送消息的所有自考产品线用户 -->
+	<select id="getAllUsers" resultType="long"  parameterType="Map">
+		SELECT
+			 DISTINCT mall_order.user_id
+		FROM
+			mall_order AS mall_order
+		WHERE
+			mall_order.dr = 0
+			AND mall_order.product_id = 1
+	</select>
+	<select id="queryObject" resultType="io.renren.entity.CourseUserplanEntity">
+		select cu.* from course_userplan cu where cu.user_plan_id = #{value}
+	</select>
+	
+	<select id="queryUserPlanId" parameterType="string" resultType="string">
+		select user_plan_id from course_userplan where order_id = #{orderId} AND dr=0
+	</select>
+	
+	<select id="queryObjectMap" resultType="map">
+		select 
+			up.user_plan_id as userPlanId ,
+			up.user_id as userId ,
+			up.is_rep as isRep ,
+			up.is_match as isMatch ,
+			up.status as status ,
+			up.userplan_status as userplanStatus ,
+			up.graduate_time as graduateTime ,
+			up.exam_schedule_id as examScheduleId ,
+			up.order_id as orderId ,
+			up.class_id as classId ,
+			up.order_no as orderNo,
+			up.class_type_id as classTypeId,
+			up.commodity_id as commodityId,
+			<!-- 学员手机号码 -->
+			u.mobile as userMobile,
+			<!-- 学员名称 -->
+			u.nick_name as userName,
+			<!-- 商品名称 -->
+			(select mgood.name from mall_goods_info mgood where mgood.id = up.commodity_id) as commodityName,
+			<!-- 省份名称 -->
+			(select ma.area_name from mall_area ma where ma.area_id = up.area_id) as areaName,
+			<!-- 班型名称 -->
+			(select ct.classtype_name from mall_class_type ct where ct.classtype_id = up.class_type_id) as classTypeName,
+			<!-- 考试时段名称 -->
+			(select ec.schedule_name from mall_exam_schedule ec where ec.id = up.exam_schedule_id) as examScheduleName,
+			<!-- 班级名称 -->
+			mclass.class_name as className,
+			<!-- (select mclass.class_name from mall_class mclass good where mclass.class_id = up.class_id) as className, -->
+			<!-- 层次名称 -->
+			(select mlevel.level_name from mall_level mlevel where mlevel.level_id = up.level_id) as levelName,
+			<!-- 班主任名称 -->
+			(select steacher.nick_name from sys_user steacher where steacher.user_id = mclass.user_id) as teacherName,
+			<!-- 专业 -->
+			mp.profession_name as professionName
+		from course_userplan up 
+			JOIN users u ON(u.user_id = up.user_id)
+			JOIN mall_class mclass ON(mclass.class_id = up.class_id)
+			JOIN mall_profession mp ON(mp.profession_id = up.profession_id)
+			where 1=1
+			and up.dr = 0
+			and user_plan_id = #{userPlanId}
+	</select>
+
+	<select id="queryKJClassMessage" resultType="map">
+		SELECT
+			course_userplan.class_type_id AS classTypeId,
+			mall_class_type.classtype_name AS classTypeName,
+			course_userplan.user_id AS userId,
+			users.nick_name AS nickName,
+			users.mobile AS mobile,
+			mall_class.class_id AS classId,
+			mall_class.class_name AS className,
+			mall_class.user_id AS classTeacherId,
+			sys_user.nick_name AS classTeacerNickName,
+			sys_user.username AS classTeacherAccount,
+			course_userplan.commodity_id AS goodId,
+			course_userplan.order_no AS orderNo,
+			course_userplan.ts,
+            ifnull(mall_order.only_one,1) as onlyOne
+		FROM
+			course_userplan AS course_userplan,
+			mall_class_type AS mall_class_type,
+			mall_order AS mall_order,
+			users AS users,
+			mall_class AS mall_class,
+			sys_user AS sys_user
+		WHERE
+			mall_order.order_id = course_userplan.order_id
+		AND users.user_id = course_userplan.user_id
+		AND mall_class.class_id = course_userplan.class_id
+		AND mall_class_type.classtype_id = course_userplan.class_type_id
+		AND sys_user.user_id = mall_class.user_id
+		AND course_userplan.ts &gt; #{ts}
+		AND course_userplan.dr = 0
+		AND mall_order.dr = 0
+		AND course_userplan.product_id IN (2, 3, 6, 7)
+	</select>
+	<select id="queryXLXWClassMessage" resultType="map">
+		SELECT
+			course_userplan.class_type_id AS classTypeId,
+			mall_class_type.classtype_name AS classTypeName,
+			course_userplan.user_id AS userId,
+			users.nick_name AS nickName,
+			users.mobile AS mobile,
+			mall_class.class_id AS classId,
+			mall_class.class_name AS className,
+			mall_class.user_id AS classTeacherId,
+			sys_user.nick_name AS classTeacerNickName,
+			sys_user.username AS classTeacherAccount,
+			course_userplan.commodity_id AS goodId,
+			course_userplan.order_no AS orderNo,
+			course_userplan.ts,
+			ifnull(mall_order.only_one,1) as onlyOne
+		FROM
+			course_userplan AS course_userplan,
+			mall_class_type AS mall_class_type,
+			mall_order AS mall_order,
+			users AS users,
+			mall_class AS mall_class,
+			sys_user AS sys_user
+
+		WHERE
+			mall_order.order_id = course_userplan.order_id
+		AND users.user_id = course_userplan.user_id
+		AND mall_class.class_id = course_userplan.class_id
+		AND mall_class_type.classtype_id = course_userplan.class_type_id
+		AND sys_user.user_id = mall_class.user_id
+		AND course_userplan.ts &gt; #{ts}
+		AND course_userplan.dr = 0
+		AND mall_order.dr = 0
+		AND course_userplan.product_id = 3
+	</select>
+	<select id="queryCodeListByCommodityId" resultType="string">
+		select course_tk_code from goods_coursetk where commodity_id = #{goodId}
+	</select>
+	<select id="queryComnodityListByTkCode" resultType="long">
+		select commodity_id from goods_coursetk where course_tk_code = #{tkCode}
+	</select>
+	<select id="queryList" resultType="map">
+		select 
+			up.* 
+		from course_userplan up 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+		<select id="checkClassType" resultType="int">
+		select count(1) 
+		from course_userplan course_userplan
+		where  course_userplan.class_type_id=#{classtypeId}
+	</select>
+	<select id="checkProfession" resultType="int">
+		select count(1) 
+		from course_userplan course_userplan
+		where  course_userplan.profession_id=#{professionId}
+	</select>
+	<select id="queryList2" resultType="io.renren.pojo.CourseUserplanPOJO">
+		select 
+			up.user_plan_id as userPlanId ,
+			up.user_id as userId ,
+			up.is_rep as isRep ,
+			up.is_match as isMatch ,
+			up.status as status ,
+			up.userplan_status as userplanStatus ,
+			up.graduate_time as graduateTime ,
+			up.exam_schedule_id as examScheduleId ,
+			up.order_id as orderId ,
+			up.class_id as classId ,
+			up.order_no as orderNo,
+			up.class_type_id as classTypeId,
+			<!-- 学员手机号码 -->
+			u.mobile as userMobile,
+			<!-- 学员名称 -->
+			u.nick_name as userName,
+			<!-- 商品名称 -->
+			(select mgood.name from mall_goods_info mgood where mgood.id = up.commodity_id) as commodityName,
+			<!-- 省份名称 -->
+			(select ma.area_name from mall_area ma where ma.area_id = up.area_id) as areaName,
+			<!-- 班型名称 -->
+			(select ct.classtype_name from mall_class_type ct where ct.classtype_id = up.class_type_id) as classTypeName,
+			<!-- 考试时段名称 -->
+			(select ec.schedule_name from mall_exam_schedule ec where ec.id = up.exam_schedule_id) as examScheduleName,
+			<!-- 班级名称 -->
+			mclass.class_name as className,
+			<!-- 层次名称 -->
+			(select mlevel.level_name from mall_level mlevel where mlevel.level_id = up.level_id) as levelName,
+			<!-- 班主任名称 -->
+			sys_user.nick_name as teacherName,
+			<!-- (select steacher.nick_name from sys_user steacher where steacher.user_id = mclass.user_id) as teacherName, -->
+			<!-- 专业 -->
+			mp.profession_name as professionName
+		from course_userplan up 
+			<if test="examScheduleId != null and examScheduleId > 0">
+				<include refid="un_userplanclass_join" />
+			</if>
+			LEFT JOIN users u ON(u.user_id = up.user_id)
+			LEFT JOIN mall_class mclass ON(mclass.class_id = up.class_id)
+			LEFT JOIN sys_user sys_user ON(sys_user.user_id = mclass.user_id)
+			LEFT JOIN mall_profession mp ON(mp.profession_id = up.profession_id)
+		where 
+			1=1
+			<if test="examScheduleId != null and examScheduleId > 0">
+				<include refid="un_userplanclass_where" />
+			</if>
+			and up.dr = 0
+			and up.status = 1
+		<!-- 订单号 -->	
+		<if test="orderNo != null and orderNo.trim() != ''">
+			and up.order_no =#{orderNo}
+		</if>
+		<!-- 手机号 -->
+		<if test="userMobile != null and userMobile.trim() != ''">
+			and u.mobile = #{userMobile}
+		</if>
+		<!-- 班级名称 -->
+		<if test="className != null and className.trim() != ''">
+			and mclass.class_name like concat('%',#{className},'%') 
+		</if>
+		<!-- 班主任 -->
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and sys_user.nick_name like concat('%',#{teacherName},'%') 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<sql id="base_where">
+		<!-- 专业 -->	
+		<if test="professionId != null and professionId > 0">
+			and mp.profession_id  = #{professionId}
+		</if>
+		<!-- 学员ID -->	
+		<if test="userId != null and userId > 0">
+			and u.user_id = #{userId}
+		</if>
+		<!-- 学员手机号码 -->	
+		<if test="mobile != null and mobile.trim() != ''">
+			and u.mobile = #{mobile}
+		</if>
+		<!-- 学员昵称 -->	
+		<if test="nickName != null and nickName.trim() != ''">
+			and u.nick_name  like concat('%',#{nickName},'%') 
+		</if>
+		<!-- 班级 -->	
+		<if test="classId != null and classId > 0">
+			and up.class_id = #{classId}
+		</if>
+		<!-- 班主任 -->	
+		<if test="classTeacherId != null and classTeacherId> 0">
+			and mclass.user_id = #{classTeacherId}
+		</if>
+		<!-- 省份 -->	
+		<if test="areaId != null and areaId > 0">
+			and up.area_id = #{areaId}
+		</if>
+		<!-- 班型PK -->	
+		<if test="classTypeId != null and classTypeId > 0">
+			and up.class_type_id = #{classTypeId}
+		</if>
+		<!-- 层次PK -->	
+		<if test="levelId != null and levelId > 0">
+			and up.level_id = #{levelId}
+		</if>
+		<!-- 班型PK -->	
+		<if test="classTypeId != null and classTypeId > 0">
+			and up.class_type_id = #{classTypeId}
+		</if>
+		<!-- 订单号 -->	
+		<if test="orderNo != null and orderNo.trim() != ''">
+			and up.order_no = #{orderNo}
+		</if>
+		
+		<!-- 是否学习代替课程 -->	
+		<if test="isRep != null">
+			and up.is_rep = #{isRep} 
+		</if>
+		<!-- 专业对口 -->	
+		<if test="isMatch != null">
+			and up.is_match = #{isMatch} 
+		</if>
+		<!-- 学员规划状态 -->	
+		<if test="userplanStatus != null">
+			and up.userplan_status = #{userplanStatus} 
+		</if>
+		<!-- 学员规划状态 -->	
+		<if test="deptId != null">
+			and up.dept_id = #{deptId} 
+		</if>
+		<if test="deptIdList != null and deptIdList.size() > 0">
+			and up.dept_id IN
+            <foreach collection="deptIdList" item="deptId" open="(" separator="," close=")">
+                #{deptId}
+            </foreach>
+		</if>
+	</sql>
+	
+	<select id="queryListMap" resultType="map">
+		select 
+			up.user_plan_id as userPlanId ,
+			up.user_id as userId ,
+			up.is_rep as isRep ,
+			up.is_match as isMatch ,
+			up.status as status ,
+			up.userplan_status as userplanStatus ,
+			up.graduate_time as graduateTime ,
+			up.exam_schedule_id as examScheduleId ,
+			up.order_id as orderId ,
+			up.class_id as classId ,
+			up.order_no as orderNo,
+			up.class_type_id as classTypeId,
+			<!-- 学员手机号码 -->
+			u.mobile as userMobile,
+			<!-- 学员名称 -->
+			u.nick_name as userName,
+			<!-- 商品名称 -->
+			(select mgood.name from mall_goods_info mgood where mgood.id = up.commodity_id) as commodityName,
+			<!-- 省份名称 -->
+			(select ma.area_name from mall_area ma where ma.area_id = up.area_id) as areaName,
+			<!-- 班型名称 -->
+			(select ct.classtype_name from mall_class_type ct where ct.classtype_id = up.class_type_id) as classTypeName,
+			<!-- 考试时段名称 -->
+			(select ec.schedule_name from mall_exam_schedule ec where ec.id = up.exam_schedule_id) as examScheduleName,
+			<!-- 班级名称 -->
+			mclass.class_name as className,
+			<!-- 层次名称 -->
+			(select mlevel.level_name from mall_level mlevel where mlevel.level_id = up.level_id) as levelName,
+			<!-- 班主任名称 -->
+			(select steacher.nick_name from sys_user steacher where steacher.user_id = mclass.user_id) as teacherName,
+			<!--部门-->
+			(select sys_dept.name from sys_dept AS sys_dept where sys_dept.dept_id = up.dept_id) as deptName,
+			<!-- 专业 -->
+			mp.profession_name as professionName
+		from course_userplan up 
+			LEFT JOIN users u ON(u.user_id = up.user_id)
+			LEFT JOIN mall_class mclass ON(mclass.class_id = up.class_id)
+			LEFT JOIN mall_profession mp ON(mp.profession_id = up.profession_id)
+			where up.dr = 0
+		<!-- ================================================= 不定条件查询 ================================================ -->	
+		
+		<include refid="base_where"/>
+		<!-- 产品线 -->	
+		<if test="productId != null">
+			and up.product_id = #{productId} 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		from course_userplan up 
+			LEFT JOIN users u ON(u.user_id = up.user_id)
+			LEFT JOIN mall_class mclass ON(mclass.class_id = up.class_id)
+			LEFT JOIN mall_profession mp ON(mp.profession_id = up.profession_id)
+			where up.dr = 0
+		<!-- ================================================= 不定条件查询 ================================================ -->	
+		<include refid="base_where"/>
+	</select>
+	<!-- 弹框总数 -->
+	<select id="queryTotal2" resultType="int">
+		select count(1) 
+		from course_userplan up
+		<if test="examScheduleId != null and examScheduleId > 0">
+			<include refid="un_userplanclass_join" />
+		</if>
+		LEFT JOIN users u ON(u.user_id = up.user_id)
+		LEFT JOIN mall_class mclass ON(mclass.class_id = up.class_id)
+		LEFT JOIN sys_user sys_user ON(sys_user.user_id = mclass.user_id)
+		LEFT JOIN mall_profession mp ON(mp.profession_id = up.profession_id)
+		where 1=1
+		<if test="examScheduleId != null and examScheduleId > 0">
+			<include refid="un_userplanclass_where" />
+		</if>
+		and up.dr = 0
+		and up.status = 1
+		<!-- 订单号 -->	
+		<if test="orderNo != null and orderNo.trim() != ''">
+			and up.order_no = #{orderNo}
+		</if>
+		<!-- 手机号 -->
+		<if test="userMobile != null and userMobile.trim() != ''">
+			and u.mobile = #{userMobile}
+		</if>
+		<!-- 班级名称 -->
+		<if test="className != null and className.trim() != ''">
+			and mclass.class_name like concat('%',#{className},'%') 
+		</if>
+		<!-- 班主任 -->
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and sys_user.nick_name like concat('%',#{teacherName},'%') 
+		</if>
+	</select>
+	<insert id="save" parameterType="io.renren.entity.CourseUserplanEntity" useGeneratedKeys="true" keyProperty="userPlanId">
+		insert into course_userplan
+		(
+			`user_plan_id`, 
+			`user_id`, 
+			`commodity_id`, 
+			`area_id`, 
+			`class_id`, 
+			`is_rep`, 
+			`is_match`, 
+			`class_type_id`, 
+			`status`, 
+			`create_person`, 
+			`creation_time`, 
+			`modify_person`, 
+			`modified_time`, 
+			`school_id`, 
+			`dr`, 
+			`order_id`, 
+			`order_no`, 
+			`userplan_status`, 
+			`graduate_time`, 
+			`level_id`, 
+			`exam_schedule_id`,
+			`profession_id`,
+			`dept_id`,
+			`product_id`
+		)
+		values
+		(
+			#{userPlanId}, 
+			#{userId}, 
+			#{commodityId}, 
+			#{areaId}, 
+			#{classId}, 
+			#{isRep}, 
+			#{isMatch}, 
+			#{classTypeId}, 
+			#{status}, 
+			#{createPerson}, 
+			#{creationTime}, 
+			#{modifyPerson}, 
+			#{modifiedTime}, 
+			#{schoolId}, 
+			#{dr}, 
+			#{orderId}, 
+			#{orderNo}, 
+			#{userplanStatus}, 
+			#{graduateTime}, 
+			#{levelId}, 
+			#{examScheduleId},
+			#{professionId},
+			#{deptId},
+			#{productId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.CourseUserplanEntity">
+		update course_userplan 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="areaId != null">`area_id` = #{areaId}, </if>
+			<if test="classId != null">`class_id` = #{classId}, </if>
+			<if test="isRep != null">`is_rep` = #{isRep}, </if>
+			<if test="isMatch != null">`is_match` = #{isMatch}, </if>
+			<if test="classTypeId != null">`class_type_id` = #{classTypeId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="orderId != null">`order_id` = #{orderId}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="userplanStatus != null">`userplan_status` = #{userplanStatus}, </if>
+			<if test="graduateTime != null">`graduate_time` = #{graduateTime}, </if>
+			<if test="examScheduleId != null">`exam_schedule_id` = #{examScheduleId}, </if>
+			<if test="levelId != null">`level_id` = #{levelId}, </if>
+			<if test="professionId != null">`profession_id` = #{professionId}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		where user_plan_id = #{userPlanId}
+	</update>
+	<!-- 根据订单id修改学员规划班级 -->
+	<update id="updateByOrderId" parameterType="io.renren.entity.CourseUserplanEntity">
+		update course_userplan 
+		<set>
+			<if test="userPlanId != null">`user_plan_id` = #{userPlanId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="areaId != null">`area_id` = #{areaId}, </if>
+			<if test="classId != null">`class_id` = #{classId}, </if>
+			<if test="isRep != null">`is_rep` = #{isRep}, </if>
+			<if test="isMatch != null">`is_match` = #{isMatch}, </if>
+			<if test="classTypeId != null">`class_type_id` = #{classTypeId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="userplanStatus != null">`userplan_status` = #{userplanStatus}, </if>
+			<if test="graduateTime != null">`graduate_time` = #{graduateTime}, </if>
+			<if test="examScheduleId != null">`exam_schedule_id` = #{examScheduleId}</if>
+		</set>
+		where order_id = #{orderId}
+	</update>
+	<update id="updateBatch">
+	   update course_userplan set status = #{status} where user_plan_id in
+	   <foreach item="userPlanId" collection="list" open="(" separator="," close=")">
+	   	#{userPlanId}
+		</foreach>
+	</update>
+	
+	<update id="updateCommon" parameterType="map">
+		update course_userplan 
+		<set>
+			<!-- 修改班级 -->
+			<if test="classId != null">`class_id` = #{classId}, </if>
+			<!-- 修改学习代替课程 -->
+			<if test="isRep != null">`is_rep` = #{isRep}, </if>
+			<!-- 修改专业对口 -->
+			<if test="isMatch != null">`is_match` = #{isMatch}, </if>
+			<!-- 记录修改人信息 -->
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime} </if>
+			<!-- <if test="userplanStatus != null">`userplan_status` = #{userplanStatus}, </if>
+			<if test="graduateTime != null">`graduate_time` = #{graduateTime}, </if>
+			<if test="examScheduleId != null">`exam_schedule_id` = #{examScheduleId}</if> -->
+		</set>
+		where user_plan_id = #{userPlanId} 
+		and dr = 0 
+		and status = 1
+	</update>
+	<update id="updateClass" parameterType="io.renren.entity.CourseUserplanEntity">
+		update course_userplan 
+		<set>
+			<if test="classId != null">`class_id` = #{classId}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime} </if>
+		</set>
+		where user_plan_id = #{userPlanId} 
+		and dr = 0 
+		and status = 1
+	</update>
+	
+	
+	<update id="delete">
+		update course_userplan set dr=1 where user_plan_id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		update course_userplan set dr=1 where user_plan_id in 
+		<foreach item="idVal" collection="ids" open="(" separator="," close=")">
+			#{idVal}
+		</foreach>
+	</update>
+	
+	<select id="queryUserplanByOrderId" resultType="int">
+		SELECT count(1) FROM course_userplan WHERE order_id = #{orderId} AND dr = 0
+	</select>
+	
+	<update id="updateUserplanByOrderId" parameterType="io.renren.entity.CourseUserplanEntity">
+		update course_userplan 
+		<set>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="professionId != null">`profession_id` = #{professionId}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime} </if>
+		</set>
+		where order_id = #{orderId} 
+		and dr = 0 
+	</update>
+
+	<select id="queryUserplanObjectByOrderId" resultType="io.renren.entity.CourseUserplanEntity">
+		select * from course_userplan where order_id = #{orderId} and dr = 0
+	</select>
+	
+	<update id="deleteByOrderId">
+		update course_userplan set dr = 1,modified_time = now() where order_id =#{orderId}
+	</update>
+
+    <select id="queryKJClassMessageByGoods" resultType="map">
+        SELECT
+        course_userplan.class_type_id AS classTypeId,
+        mall_class_type.classtype_name AS classTypeName,
+        course_userplan.user_id AS userId,
+        users.nick_name AS nickName,
+        users.mobile AS mobile,
+        mall_class.class_id AS classId,
+        mall_class.class_name AS className,
+        mall_class.user_id AS classTeacherId,
+        sys_user.nick_name AS classTeacerNickName,
+        sys_user.username AS classTeacherAccount,
+        course_userplan.commodity_id AS goodId,
+        course_userplan.order_no AS orderNo,
+        course_userplan.ts,
+        ifnull(mall_order.only_one,1) as onlyOne
+        FROM
+        course_userplan AS course_userplan,
+        mall_class_type AS mall_class_type,
+        mall_order AS mall_order,
+        users AS users,
+        mall_class AS mall_class,
+        sys_user AS sys_user
+        WHERE
+        mall_order.order_id = course_userplan.order_id
+        <if test="commodityIdList !=null and commodityIdList.size > 0">
+            AND course_userplan.commodity_id IN
+            <foreach item="commodityId" collection="commodityIdList" open="(" separator="," close=")">
+                #{commodityId}
+            </foreach>
+        </if>
+        AND users.user_id = course_userplan.user_id
+        AND mall_class.class_id = course_userplan.class_id
+        AND mall_class_type.classtype_id = course_userplan.class_type_id
+        AND sys_user.user_id = mall_class.user_id
+        <if test="startDate !=null and endDate != null">
+            AND course_userplan.ts &gt;=  #{startDate}
+            AND course_userplan.ts  &lt;=  #{endDate}
+        </if>
+        AND course_userplan.dr = 0
+        AND mall_order.dr = 0
+        AND course_userplan.product_id IN (2, 3, 6, 7)
+    </select>
+
+    <select id="queryUserplanDetailIdByOrderId" resultType="map">
+    SELECT
+			course_userplan_detail.userplan_detail_id AS userplanDetailId,
+			course_userplan_detail.userplan_id AS userplanId,
+			course_userplan.dept_id AS deptId
+		FROM
+			course_userplan AS course_userplan,
+			mall_order AS mall_order,
+			course_userplan_detail AS course_userplan_detail
+		LEFT JOIN (
+			SELECT
+				course_userplan_class_detail.userplan_class_detail_id,
+				course_userplan_class_detail.userplan_detail_id
+			FROM
+				course_userplan_class_detail
+			JOIN course_userplan_class AS course_userplan_class ON (
+				course_userplan_class.userplan_class_id = course_userplan_class_detail.userplan_class_id
+				AND course_userplan_class.dr = 0
+			)
+			WHERE
+				course_userplan_class_detail.dr = 0
+		) AS courseUserplanClassDetail ON (
+			courseUserplanClassDetail.userplan_detail_id = course_userplan_detail.userplan_detail_id
+		)
+		WHERE
+			course_userplan_detail.dr = 0
+		AND course_userplan.user_plan_id = course_userplan_detail.userplan_id
+		AND mall_order.order_id = course_userplan.order_id
+		AND courseUserplanClassDetail.userplan_class_detail_id IS NULL
+		AND mall_order.dr = 0
+		AND course_userplan.dr = 0
+		AND course_userplan_detail.course_id = #{courseId}
+        AND course_userplan.order_id = #{orderId}
+    </select>
+</mapper>

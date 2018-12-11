@@ -1,0 +1,96 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+            <th class="longNum">ID</th>
+            <th class="icon">头像</th>
+			<th class="short">昵称</th>
+			<th class="short">用户账号</th>
+            <th class="short"  style=" width:150px;">用户类型</th>
+            <th class="short"  style=" width:150px;">用户状态</th>
+            <th class="short">学员权限</th>
+            <th class="short">抢答权限</th>
+            <th class="short">招生权限</th>
+            <th class="short"  style=" width:150px;">注册信息</th>
+            <th class="short" style=" width:150px;">登录信息</th>
+            <th class="short" style=" width:150px;">首次登陆信息</th>
+            <th class="short" style=" width:150px;">修改备注</th>
+
+
+			<%if(Izb.user.checkLimits('user',Izb.enumList.menuType.all)){%>
+            <th class="action action250">操作</th>
+			<%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){
+        var starLvObj = Izb.common.getLevel(data[i].finance && data[i].finance.bean_count_total ? data[i].finance.bean_count_total:0 ,false),
+        	richLVObj = Izb.common.getLevel(data[i].finance && data[i].finance.coin_spend_total ? data[i].finance.coin_spend_total:0,true);
+		%>
+        <tr>
+            <td class="num"><%=data[i]._id%></td>
+			<td class="icon"><img height="32px" width="32px"  src="<%=data[i].pic%>" alt="<%=data[i].nick_name%>" /></td>
+            <td class="short"><%=data[i].nick_name%></td>
+            <td class="short"><%=data[i].bag%></td>
+
+
+            <td class="short"><%=['','运营','老师','学员','客服','经纪人'][data[i].priv]%></td>
+            <td class="short"><%=data[i].status?"正常":"冻结"%></td>
+            <td class="short"><%-data[i].priv0==1?'<span class="red">开通</span>':"关闭"%></td>
+            <td class="short"><%-data[i].priv1==1?'<span class="red">开通</span>':"关闭"%></td>
+            <td class="short"><%-data[i].priv2==1?'<span class="red">开通</span>':"关闭"%></td>
+
+			<td class="short">注册时间:<br><%=new Date(data[i].timestamp).toLocaleString()%><br>渠道:<%=data[i].qd%></td>
+            <%if(data[i].login){%>
+            <td class="short">登录时间:<br><%=new Date(data[i].login.timestamp).toLocaleString()%><br>ip:<%=data[i].login.ip%><br>uid:<%=data[i].login.uid%></td>
+            <%}else{%>
+            <td class="short"></td>
+            <%}%>
+
+            <%if(data[i].first_login){%>
+            <td class="short">登录时间:<br><%=new Date(data[i].first_login.timestamp).toLocaleString()%><br>ip:<%=data[i].first_login.ip%><br>uid:<%=data[i].first_login.uid%></td>
+            <%}else{%>
+            <td class="short"></td>
+            <%}%>
+            <td class="short"><%=data[i].remark%></td>
+
+			<%if(Izb.user.checkLimits('user',Izb.enumList.menuType.all)){%>
+            <td class="action">
+            	<%if(pty.key=='user'){%>
+
+                <button class="d-button" onclick="Izb.controller.user.editRemark('<%=data[i]._id%>');">备注</button>
+                <button class="d-button" onclick="Izb.controller.user.edit_name_pic('<%=data[i]._id%>');">编辑昵称头像</button>
+                <button class="d-button" onclick="Izb.controller.user.reset_psw('<%=data[i].tuid%>');">重置密码</button>
+				<button class="d-button" onclick="Izb.controller.user.freeze('<%=data[i]._id%>',<%=(1-data[i].status) %>);"><%=data[i].status ? '冻结账号'  : '解冻账号' %></button>
+                <a class="d-button" href="#a=userds&_id=<%=data[i]._id%>&menu=user&tab=show">用户详情</a><br /><br />
+                <%}%>
+				<div style="height:1px;">&nbsp;</div>
+				<%if(data[i].priv==2){%>
+
+					<%if(data[i].priv0==0){%>
+						<button class="d-button" onclick="Izb.controller.user.editPXY('<%=data[i]._id%>' , 1);">开通学员权限</button>
+					<%}else if(data[i].priv0==1){%>
+						<button class="d-button" onclick="Izb.controller.user.editPXY('<%=data[i]._id%>' , 0);">开通学员权限</button>
+					<%}%>
+
+					<%if(data[i].priv1==0){%>
+						<button class="d-button" onclick="Izb.controller.user.editPQD('<%=data[i]._id%>' , 1);">开通抢答权限</button>
+					<%}else if(data[i].priv1==1){%>
+						<button class="d-button" onclick="Izb.controller.user.editPQD('<%=data[i]._id%>' , 0);">关闭抢答权限</button>
+					<%}%>
+
+					<%if(data[i].priv2==0){%>
+						<button class="d-button" onclick="Izb.controller.user.editPZS('<%=data[i]._id%>' , 1);">开通招生权限</button>
+					<%}else if(data[i].priv2==1){%>
+						<button class="d-button" onclick="Izb.controller.user.editPZS('<%=data[i]._id%>' , 0);">关闭招生权限</button>
+					<%}%>
+
+                <%}%>
+			</td>
+			<%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

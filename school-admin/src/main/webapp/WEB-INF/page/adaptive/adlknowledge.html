@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>知识点</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	
+	<!-- 顶部按钮 -->
+	<div style="overflow: hidden;" v-show="show1">
+		<input type="text" class="form-control" v-model.trim="selectCourseName" readonly="readonly"  @click="adlCourseLayShow" placeholder="选择课程" style="background-color: white;width: 400px;float: left;">
+ 		<input class="btn btn-default" style="float: left;margin-left: 10px" type="button" value="选择课程" @click="adlCourseLayShow" />
+	</div>	
+	
+	<!-- 底部 -->
+	<div style="margin-top: 20px;" v-show="show2">
+		<!-- 左侧树 -->
+		<div style="float: left;width:300px">
+			<ul id="courseTree" class="ztree"></ul>
+		</div>
+		<!-- 右侧列表 -->
+		<div style="float: left; width:800px ;position: relative;"  style="display: none" >
+			<div style="width:100%;">
+				<div style="margin: 0px; margin-bottom: 5px;">
+					<div class="form-group col-sm-2">
+						<input type="text" class="form-control" v-model.trim="q.knowledgeName" @keyup.enter="query" placeholder="请输入知识点名称" >
+					</div>
+					<div class="form-group col-sm-2">
+						<input type="text" class="form-control" v-model.trim="q.knowledgeNo" @keyup.enter="query" placeholder="请输入知识点编号">
+					</div>
+					<div class="form-group col-sm-2">
+						<input type="text" class="form-control" v-model.trim="q.keyPointName" @click="knowldgeKeyPointQueryShow" placeholder="点击选择重点" readonly="readonly">
+					</div>
+					#if($shiro.hasPermission("adaptive:adlknowledge:list"))
+						<a class="btn btn-default" @click="clearQuery"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+						<a class="btn btn-primary" @click="query" ><i class="fa fa-search"></i>&nbsp;查询</a>
+					#end
+					<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+					
+				</div>
+				<br/>
+			 	<div style="margin-bottom: 5px; ">
+					<a class="btn btn-primary" @click="update"><i class="fa fa-file-video-o"></i>&nbsp;资料</a>
+					<a class="btn btn-primary" @click="importExcel"><i class="fa fa-file-excel-o"></i>&nbsp;Excel批量导入视频</a>
+                    <a class="btn btn-primary" onclick="vm.multiUpload('资料');" title="上传资料"><i class="fa fa-cloud-upload"></i>&nbsp;上传文件</a>
+			 	</div>
+			    <table id="jqGrid"></table>
+			    <div id="jqGridPager"></div>
+			</div>
+		</div>
+	</div>
+	<!-- 新增 -->
+	<div v-show="show3">
+		<div class="panel-heading">{{title}}</div>
+		<!-- 章节按钮 -->
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="save"><i class="fa fa-plus"></i>&nbsp;保存</a>
+			<a class="btn btn-warning" @click="goBack">返回</a>
+		</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-all"><label for="name">知识点基础信息</label></div>
+				<div class="col-sm-2 control-label" title="课程">课程</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.courseName" readonly="readonly" />
+				</div>
+				<div class="col-sm-2 control-label">节</div>
+				<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.sectionName" readonly="readonly"/>
+				</div>
+				<div class="col-sm-2 control-label" title="新增时系统自动生成">编号</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.knowledgeNo" readonly="readonly"/>
+				</div>
+				<div class="col-sm-2 control-label">名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.knowledgeName" readonly="readonly"/>
+				</div>
+				<div class="col-sm-2 control-label">难度</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.levelName" readonly="readonly" />
+				</div>
+				<div class="col-sm-2 control-label">考点</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.keyPointName" readonly="readonly"/>
+				</div>
+				<div class="col-sm-2 control-label" title="支持多选">题型</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.questiontypeName" readonly="readonly"/>
+				</div>
+				<!--<div class="col-sm-2 control-label" title="支持多选">包含知识点</div>-->
+				<!--<div class="col-sm-10">-->
+					<!--<input type="text" class="form-control" v-model.trim="knowledgeObj.childListName" readonly="readonly"/>-->
+				<!--</div>-->
+				<div class="col-sm-all"><label for="name">知识点资料</label></div>
+				<div class="col-sm-2 control-label">资料名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.adlKnowledgeFile.fileName" placeholder="请输入资料名称"/>
+				</div>
+				<div class="col-sm-2 control-label">资料地址</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.adlKnowledgeFile.fileUrl" placeholder="请输入资料地址"/>
+						<a class="btn btn-primary input-group-addon" onclick="hq.core.upload(null,'vm.knowledgeObj.adlKnowledgeFile.fileUrl' , '资料');" title="上传资料"><i class="fa fa-cloud-upload"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearFile" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-all"><label for="name">知识点视频</label></div>
+				<div class="col-sm-2 control-label">视频</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.adlKnowledgeVideo.polyvVid" @click="selectVideo" readonly="readonly" placeholder="点击选择视频"/>
+						<a class="btn btn-primary input-group-addon" @click="selectVideo" title="选择视频"><i class="fa fa-video-camera"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearVideo" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">视频名称</div>
+				<div class="col-sm-10">
+					<div class="input-group m-b">
+						<input type="text" class="form-control" v-model.trim="knowledgeObj.adlKnowledgeVideo.polyvName" placeholder="点击选择"/>
+						<a class="btn btn-primary input-group-addon" @click="selectVideo" title="选择视频"><i class="fa fa-video-camera"></i>&nbsp;</a>
+						<a class="btn btn-primary input-group-addon" @click="clearPolyvName" title="清除"><i class="fa fa-trash-o"></i>&nbsp;</a>
+					</div>
+				</div>
+				<div class="col-sm-2 control-label">视频时长</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model.trim="knowledgeObj.adlKnowledgeVideo.polyvDuration" readonly="readonly"/>
+				</div>
+				<div class="col-sm-2 control-label">视频图片</div>
+				<div class="col-sm-10">
+					<img style="maxWidth:370px;maxHeigth:200px;minWidth:37px;minHeigth:20px;" alt="视频封面图片" v-bind:title="knowledgeObj.adlKnowledgeVideo.screenShot" v-bind:src="knowledgeObj.adlKnowledgeVideo.screenShot" onclick="hq.core.upload(null,'vm.knowledgeObj.adlKnowledgeVideo.screenShot');"/>
+					<span class="help-block" onclick="hq.core.upload(null,'vm.knowledgeObj.adlKnowledgeVideo.screenShot');"><i class="fa fa-info-circle"></i>封面默认用视频封面，点击上传自定义封面图片</span>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="fileUploadLayer" style="display: none;">
+		<div class="panel-heading">批量上传</div>
+		<input type="file" id="file_data" name="file_data" accept=".xls"/>
+	</div>
+</div>
+<script src="${rc.contextPath}/js/adaptive/adlknowledge.js?_${date.systemTime}"></script>
+
+#parse("adaptive_layer/adlCourseLay.html")
+#parse("adaptive_layer/adlConfigLay.html")
+#parse("adaptive_layer/adlConfigMutiSelectLay.html")
+#parse("adaptive_layer/adlKnowleTreeLay.html")
+#parse("adaptive_layer/adlCourseTreeLay.html")
+#parse("layer/polyVideoLay.html")
+#parse("../../statics/plugins/upload/upload.html")
+</body>
+</html>

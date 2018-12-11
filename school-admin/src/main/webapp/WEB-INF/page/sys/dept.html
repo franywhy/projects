@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>部门管理</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("sysdept:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("sysdept:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("sysdept:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+		</div>
+	    <table id="deptTable" data-mobile-responsive="true" data-click-to-select="true">
+			<thead>
+			<tr>
+				<th data-field="selectItem" data-checkbox="true"></th>
+			</tr>
+			</thead>
+		</table>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">部门id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysDept.deptId" placeholder="部门id"/>
+			    </div>
+			</div>
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">上级部门id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysDept.parentId" placeholder="上级部门id"/>
+			    </div>
+			</div>
+		
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">部门名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysDept.name" placeholder="部门名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">上级部门</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" style="cursor:pointer;" v-model="sysDept.parentName" @click="deptTree" readonly="readonly" placeholder="一级部门"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">NC部门ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysDept.ncId" placeholder="NC_ID"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">NC上级部门ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysDept.ncParentId" placeholder="NC上级部门ID"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">排序</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="sysDept.orderNum" placeholder="排序"/>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+<!-- 选择部门 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+	<ul id="deptTree" class="ztree"></ul>
+</div>
+<script src="${rc.contextPath}/js/sys/dept.js?_${date.systemTime}"></script>
+</body>
+</html>

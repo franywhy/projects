@@ -1,0 +1,16 @@
+<form name="inputForm">
+<table class="inputForm" cellpadding="10">
+<% var userInfo = Izb.user.getUserInfo();%>
+        <tr>
+            <td>帐号:</td>
+            <td>
+			<%=userInfo.name%>
+             </td>
+        </tr>
+        <tr>
+            <td>密码:</td>
+            <td><input class="input" type="password" name="password" value="" />
+                * 不改为空!</td>
+        </tr>
+</table>
+</form>

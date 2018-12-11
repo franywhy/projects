@@ -1,0 +1,19 @@
+#jsp页面配置
+spring: 
+  #mvc: 
+    #view:
+     # prefix: /WEB-INF/
+      #suffix: .jsp
+  profiles: 
+    active:
+    - dev
+#加载mybatis文件xml
+mybatis:
+  mapper-locations:
+  - classpath:mybatis/*.xml
+#端口
+server:
+  port: 8089
+  context-path: /
+  
+    

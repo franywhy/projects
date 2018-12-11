@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CoursesDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = c.product_id
+	</sql>
+	<!-- 课程列表 -->
+	<select id="queryListGrid" resultType="map">
+	   select 
+	   	   c.course_id as courseId,
+	   	   c.course_no as courseNo,
+	   	   c.course_name as courseName,
+	   	   c.course_lb as courseLb,
+	   	   c.course_type as courseType,
+	   	   c.exam_type as examType,
+	   	   c.course_credit as courseCredit,
+	   	   c.course_eq as courseEq,
+	   	   c.listen_url as listenUrl
+	   from courses c where c.dr = 0
+	</select>
+	
+	<!-- 课程列表总数 -->
+	<select id="queryListGridTotal" resultType="int">
+	   select count(*) from courses where dr = 0
+	</select>
+    <select id="querySelectionList" resultType="io.renren.pojo.SelectionItem">
+	   select course_id value, course_name name from courses where dr = 0
+	</select>
+	
+	<select id="queryObject" resultType="io.renren.entity.CoursesEntity">
+		select c.*,
+		(select cu.username from sys_user cu where cu.user_id = c.creator) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = c.creator) as modifiedName,
+		<include refid="join_productName"/>
+		from courses c 
+			<include refid="join"/>
+		where c.course_id = #{courseId} and c.dr = 0
+	</select>
+	
+	<select id="queryMid" resultType="io.renren.entity.CoursesEntity">
+	     SELECT course_id FROM `courses` WHERE m_id=#{mId}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.CoursesEntity">
+		select 
+		c.* ,
+		(select cu.username from sys_user cu where cu.user_id = c.creator) as creationName,
+		(select mu.username from sys_user mu where mu.user_id = c.modifier) as modifiedName,
+		<include refid="join_productName"/>
+		from courses c 
+			<include refid="join"/>
+		where c.dr = 0
+		<if test="courseName != null and courseName.trim() != ''">
+			and c.`course_name` like concat('%',#{courseName},'%') 
+		</if>	
+		<if test="courseNo != null and courseNo.trim() != ''">
+			and c.`course_no` like concat('%',#{courseNo},'%') 
+		</if>	
+		<if test="productId != null">
+			and c.`product_id` = #{productId}
+		</if>	
+		order by c.course_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryPOJOList" resultType="io.renren.pojo.course.CoursesPOJO">
+		select 
+		c.* ,
+		(SELECT count(1) FROM course_record_detail AS course_record_detail_z where course_record_detail_z.course_id = c.course_id AND course_record_detail_z.type = 0) as z_record_num,
+		(SELECT count(1) FROM course_record_detail AS course_record_detail_j where course_record_detail_j.course_id = c.course_id AND course_record_detail_j.type = 1) as j_record_num,
+		(SELECT count(1) FROM course_live_details AS course_live_details where course_live_details.course_id = c.course_id) as live_num,
+		<include refid="join_productName"/>
+		from courses c 
+			<include refid="join"/>
+		where c.dr = 0
+		<if test="courseName != null and courseName.trim() != ''">
+			and c.`course_name` like concat('%',#{courseName},'%') 
+		</if>	
+		<if test="courseNo != null and courseNo.trim() != ''">
+			and c.`course_no` like concat('%',#{courseNo},'%') 
+		</if>	
+		<if test="productId != null">
+			and c.`product_id` = #{productId}
+		</if>	
+		order by c.course_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from courses where dr = 0
+		<if test="courseName != null and courseName.trim() != ''">
+			and `course_name` like concat('%',#{courseName},'%') 
+		</if>	
+		<if test="courseNo != null and courseNo.trim() != ''">
+			and `course_no` like concat('%',#{courseNo},'%') 
+		</if>
+		<if test="productId != null">
+			and `product_id` = #{productId}
+		</if>
+	</select>
+	<select id="getCourseIdBycourseNo" resultType="long">
+		select courses.course_id from courses courses where courses.dr = 0 and courses.course_no = #{courseNo}
+	</select> 
+		<select id="countCourseIdBycourseNo" resultType="int">
+		select count(courses.course_id) from courses courses where courses.dr = 0 and courses.course_no = #{courseNo}
+	</select> 
+	<insert id="save" parameterType="io.renren.entity.CoursesEntity" useGeneratedKeys="true" keyProperty="courseId">
+		insert into courses
+		(
+			`course_name`, 
+			`course_no`, 
+			`course_lb`, 
+			`course_type`, 
+			`exam_type`, 
+			`course_credit`, 
+			`course_eq`, 
+			`listen_url`, 
+			`creator`, 
+			`creation_time`, 
+			`school_id`, 
+			`dr` ,
+			`product_id`,
+			`status`
+		)
+		values
+		(
+			#{courseName}, 
+			#{courseNo}, 
+			#{courseLb}, 
+			#{courseType}, 
+			#{examType}, 
+			#{courseCredit}, 
+			#{courseEq}, 
+			#{listenUrl}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{schoolId}, 
+			#{dr},
+			#{productId},
+			#{status}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.CoursesEntity">
+		update courses 
+		<set>
+			<if test="courseName != null">`course_name` = #{courseName}, </if>
+			<if test="courseNo != null">`course_no` = #{courseNo}, </if>
+			<if test="courseLb != null">`course_lb` = #{courseLb}, </if>
+			<if test="courseType != null">`course_type` = #{courseType}, </if>
+			<if test="examType != null">`exam_type` = #{examType}, </if>
+			<if test="courseCredit != null">`course_credit` = #{courseCredit}, </if>
+			<if test="courseEq != null">`course_eq` = #{courseEq}, </if>
+			<if test="listenUrl != null">`listen_url` = #{listenUrl}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="status != null">`status` = #{status}</if>
+		</set>
+		where course_id = #{courseId}
+	</update>
+	<update id="updateBatch">
+	   update courses set status = #{status} where course_id in
+	   <foreach item="courseId" collection="list" open="(" separator="," close=")">
+	   	#{courseId}
+		</foreach>
+	</update>
+	<update id="delete">
+		update courses 
+		<set>
+			dr = 1 
+		</set>
+		where course_id = #{value}
+	</update>
+	<update id="deleteBatch">
+		update courses 
+		<set>
+			dr = 1 
+		</set>
+		where course_id in 
+		<foreach item="courseId" collection="array" open="(" separator="," close=")">
+			#{courseId}
+		</foreach>
+	</update>
+	
+	<select id="queryObjectbyCourseId" resultType="io.renren.entity.CoursesEntity">
+		select c.* from courses c where c.course_id = #{courseId} and c.dr = 0
+	</select>
+	
+	<select id="queryMapByCourseId" resultType="java.util.Map">
+		SELECT c.course_no AS courseNo, b.business_id AS businessId FROM courses c LEFT JOIN sys_business_product b ON c.product_id = b.product_id
+		WHERE c.course_id = #{courseId} AND c.dr = 0
+	</select>
+	
+</mapper>

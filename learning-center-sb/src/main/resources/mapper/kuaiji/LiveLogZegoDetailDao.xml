@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.kuaiji.dao.LiveLogZegoDetailDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	live_log_zego_detail.id AS id , 	live_log_zego_detail.user_id AS userId , 	live_log_zego_detail.user_nickname AS userNickname , 	live_log_zego_detail.user_role AS userRole , 	live_log_zego_detail.session_id AS sessionId , 	live_log_zego_detail.room_id AS roomId , 	live_log_zego_detail.room_seq AS roomSeq , 	live_log_zego_detail.room_name AS roomName , 	live_log_zego_detail.login_time AS loginTime , live_log_zego_detail.logout_time AS logoutTime ,	live_log_zego_detail.timestamp AS timestamp , 	live_log_zego_detail.nonce AS nonce , 	live_log_zego_detail.sigaure AS sigaure , 	live_log_zego_detail.into_out AS intoOut 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE live_log_zego_detail.school_id = #{schoolId} 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM live_log_zego_detail AS live_log_zego_detail
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="com.hq.learningcenter.kuaiji.entity.LiveLogZegoDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="com.hq.learningcenter.kuaiji.entity.LiveLogZegoDetailEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="com.hq.learningcenter.kuaiji.entity.LiveLogZegoDetailEntity">
+		insert into live_log_zego_detail
+		(
+		`id`, `user_id`, `user_nickname`, `user_role`, `session_id`, `room_id`,
+		`room_seq`, `room_name`, `login_time`, `logout_time`,`timestamp`, `nonce`,
+		`sigaure`, `into_out` )
+		values
+		(
+		#{id}, #{user_account}, #{user_nickname}, #{user_role}, #{session_id}, #{room_id},
+		#{room_seq}, #{room_name}, #{login_time}, #{logout_time}, #{timestamp}, #{nonce},
+		#{sigaure}, #{intoOut} )
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="com.hq.learningcenter.kuaiji.entity.LiveLogZegoDetailEntity">
+		update live_log_zego_detail 
+		<set>
+			<if test="userId != null">`user_id` = #{user_account}, </if>
+			<if test="userNickname != null">`user_nickname` = #{user_nickname}, </if>
+			<if test="userRole != null">`user_role` = #{user_role}, </if>
+			<if test="sessionId != null">`session_id` = #{session_id}, </if>
+			<if test="roomId != null">`room_id` = #{room_id}, </if>
+			<if test="roomSeq != null">`room_seq` = #{room_seq}, </if>
+			<if test="roomName != null">`room_name` = #{room_name}, </if>
+			<if test="loginTime != null">`login_time` = #{login_time}, </if>
+			<if test="logoutTime != null">`logout_time` = #{logout_time}, </if>
+			<if test="timestamp != null">`timestamp` = #{timestamp}, </if>
+			<if test="nonce != null">`nonce` = #{nonce}, </if>
+			<if test="sigaure != null">`sigaure` = #{sigaure}, </if>
+			<if test="intoOut != null">`into_out` = #{intoOut}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM live_log_zego_detail 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM live_log_zego_detail 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseAbnormalAbandonExamDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_abnormal_abandon_exam.id AS id , 	
+	course_abnormal_abandon_exam.creater AS creater , 	
+	course_abnormal_abandon_exam.create_time AS createTime , 	
+	course_abnormal_abandon_exam.update_person AS updatePerson , 	
+	course_abnormal_abandon_exam.update_time AS updateTime , 	
+	course_abnormal_abandon_exam.invoices_number AS invoicesNumber , 
+	course_abnormal_abandon_exam.product_id AS productId , 	
+	course_abnormal_abandon_exam.status AS status , 	
+	course_abnormal_abandon_exam.dr AS dr , 	
+	course_abnormal_abandon_exam.reason AS reason , 	
+	course_abnormal_abandon_exam.remark AS remark , 	
+	course_abnormal_abandon_exam.registration_id AS registrationId 	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE  course_abnormal_abandon_exam.dr=0 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM course_abnormal_abandon_exam AS course_abnormal_abandon_exam
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+			
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseAbnormalAbandonExamEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>		
+		AND id = #{id}				
+	</select>
+	<!-- 分页查询 -->
+	<select id="queryPOJOList" resultType="io.renren.pojo.CourseAbnormalAbandonExamPOJO">
+		
+		SELECT
+			course_abnormal_abandon_exam.id as id,
+			course_abnormal_abandon_exam.invoices_number as invoicesNumber,	
+			course_userplan.order_no,
+			mall_class_type.classtype_name as classTypeName,
+			course_abnormal_registration.course_id,
+			courses.course_name as courseName,
+			mall_area0.area_name as applyProvince,			
+			course_abnormal_registration.registration_no as registrationNo,
+			mall_area.area_name as registerProvince,
+			mall_profession.profession_name as professionName,
+			mall_level.level_name as levelName,
+			mall_class.class_name as className,
+			sys_user.nick_name as teacherName,
+			users.nick_name as studentName,
+			users.mobile as mobile,
+			mall_exam_schedule.schedule_name as scheduleName,
+			mall_exam_schedule.schedule_date as scheduleDate,
+			course_abnormal_abandon_exam.product_id,
+			sys_product.product_name as productName,
+			course_abnormal_abandon_exam.reason as reason,
+			course_abnormal_abandon_exam.remark as remark,
+			course_abnormal_abandon_exam.create_time as createTime,
+			course_abnormal_abandon_exam.update_person as updatePerson,
+			course_abnormal_abandon_exam.update_time as updateTime,
+			course_abnormal_abandon_exam.`status`,
+			course_abnormal_abandon_exam.dr 
+		FROM
+				course_abnormal_abandon_exam AS course_abnormal_abandon_exam 
+				LEFT JOIN course_abnormal_registration AS course_abnormal_registration on course_abnormal_registration.id = course_abnormal_abandon_exam.registration_id
+				LEFT JOIN course_userplan AS course_userplan ON course_abnormal_registration.user_plan_id = course_userplan.user_plan_id	
+				LEFT JOIN mall_class_type AS mall_class_type ON mall_class_type.classtype_id = course_userplan.class_type_id
+				LEFT JOIN mall_area AS mall_area0 ON mall_area0.area_id = course_userplan.area_id 
+				LEFT JOIN mall_profession AS mall_profession on mall_profession.profession_id = course_userplan.profession_id
+				LEFT JOIN mall_level AS mall_level on mall_level.level_id = course_userplan.level_id
+				LEFT JOIN sys_product AS sys_product on sys_product.product_id = course_userplan.product_id
+				LEFT JOIN mall_class AS mall_class ON mall_class.class_id = course_userplan.class_id
+				LEFT JOIN sys_user as sys_user on sys_user.user_id = mall_class.user_id
+				LEFT JOIN users AS users on users.user_id = course_userplan.user_id
+				LEFT JOIN courses AS courses ON course_abnormal_registration.course_id = courses.course_id
+			  LEFT JOIN mall_area AS mall_area ON mall_area.area_id = course_abnormal_registration.bk_area_id 
+			  LEFT JOIN mall_exam_schedule as mall_exam_schedule on mall_exam_schedule.id = course_abnormal_registration.exam_schedule_id		
+		WHERE
+			course_abnormal_abandon_exam.dr = 0
+			AND course_abnormal_registration.dr = 0			
+			AND course_abnormal_registration.status = 2			
+			AND course_userplan.dr = 0
+			AND course_abnormal_abandon_exam.registration_id=course_abnormal_registration.id
+		<!-- 班型名称 -->						
+		<if test="classTypeName != null and classTypeName.trim() != ''">
+			AND mall_class_type.classtype_name like concat('%',#{classTypeName},'%') 
+		</if>
+		<!-- 班级名称 -->
+		  <if test="className != null and className.trim() != ''">
+			and mall_class.class_name like concat('%',#{className},'%') 
+		</if> 
+		<!-- 班主任 -->
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and sys_user.nick_name like concat('%',#{teacherName},'%') 
+		</if>
+		<!-- 课程名称 -->
+		<if test="courseName != null and courseName.trim() != ''">
+			and courses.course_name like concat('%',#{courseName},'%') 
+		</if>
+		<!-- 专业 -->
+		<if test="professionName != null and professionName.trim() != ''">
+			and mall_profession.profession_name like concat('%',#{professionName},'%') 
+		</if>
+		<!-- 报读省份 -->
+		<if test="applyProvince != null and applyProvince.trim() != ''">
+			and mall_area0.area_name like concat('%',#{applyProvince},'%') 
+		</if>
+		<!-- 报考省份 -->
+		<if test="registerProvince != null and registerProvince.trim() != ''">
+			and mall_area.area_name like concat('%',#{registerProvince},'%') 
+		</if>
+		<!-- 考试时间 -->
+		<if test="scheduleName != null and scheduleName.trim() != ''">
+			and mall_exam_schedule.schedule_name like concat('%',#{scheduleName},'%') 
+		</if>
+		<!-- 姓名 -->
+		<if test="studentName != null and studentName.trim() != ''">
+			and users.nick_name like concat('%',#{studentName},'%') 
+		</if>		
+		<!-- 层次 -->
+		<if test="levelName != null and levelName.trim() != ''">
+			and mall_level.level_name like concat('%',#{levelName},'%') 
+		</if>
+		<!-- 手机号 -->
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile like concat('%',#{mobile},'%') 
+		</if>
+		<!-- 状态 -->
+		<if test="status != null and status != '-1'">
+			and course_abnormal_abandon_exam.status = #{status}
+		</if> 
+		    ORDER BY id DESC
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>		
+	</select>
+	
+	
+	<!-- 根据报考id查询一条数据 -->
+	<select id="queryByRegistrationId" resultType="io.renren.entity.CourseAbnormalAbandonExamEntity">
+		select 
+			courseAbnormalAbandonExam.* 
+		from
+			course_abnormal_abandon_exam  as courseAbnormalAbandonExam 
+		WHERE  
+		courseAbnormalAbandonExam.dr=0
+		<if test="registrationId != null ">
+			AND courseAbnormalAbandonExam.registration_id = #{registrationId}
+		</if>
+		<if test="status != null and status != '-1'">
+			AND courseAbnormalAbandonExam.status = #{status}
+		</if>
+		<if test="statusNo != null and statusNo != -1" >
+			AND courseAbnormalAbandonExam.status != #{statusNo}
+		</if>
+		
+	</select>
+	<!-- 根据报考单号查询一条数据 -->
+	<select id="queryByRegistrationNo" resultType="io.renren.pojo.CourseAbnormalRegistrationPOJO1">
+		select * FROM course_abnormal_registration WHERE  registration_no = #{registrationNo} 																		  		
+	</select>
+	<!-- 根据订单号查询唯一一条数据 -->
+	<select id="queryByOrderNo" parameterType="String" resultType="io.renren.pojo.CourseAbnormalRegistrationPOJO1">
+		select * FROM course_abnormal_registration WHERE  order_no = #{orderNo} limit 1
+	</select>
+	<!-- 根据订单号 课程 报考时间 报考省份查询 -->
+	<select id="queryByNo" resultType="io.renren.pojo.CourseAbnormalRegistrationPOJO1">
+		SELECT
+			re.id,
+			re.product_id,
+			courses.course_name as courseName,	
+			areabk.area_name as registerProvince,
+			exc.schedule_name as scheduleName				
+		FROM
+			course_abnormal_registration AS re,
+			mall_order AS ord,	
+			courses AS courses,		
+			mall_area AS areabk,
+			mall_area AS areabd,
+			mall_exam_schedule AS exc
+		WHERE
+			re.dr=0
+		AND	re.order_no = ord.order_no
+		AND re.course_id = courses.course_id		
+		AND re.bk_area_id = areabk.area_id
+		AND ord.area_id = areabd.area_id
+		AND exc.id = re.exam_schedule_id 
+		AND re.status = 2
+		AND re.order_no = #{orderNo}
+		AND courses.course_name = #{courseName}
+		AND areabk.area_name = #{registerProvince} 
+		AND exc.schedule_name = #{scheduleName} 
+		Limit 1	  
+	</select>
+	
+	<!--分页总数-->
+	<select id="queryTotal" resultType="int">
+		SELECT
+			count(*)
+		FROM
+				course_abnormal_abandon_exam AS course_abnormal_abandon_exam 
+				LEFT JOIN course_abnormal_registration AS course_abnormal_registration on course_abnormal_registration.id = course_abnormal_abandon_exam.registration_id
+				LEFT JOIN course_userplan AS course_userplan ON course_abnormal_registration.user_plan_id = course_userplan.user_plan_id	
+				LEFT JOIN mall_class_type AS mall_class_type ON mall_class_type.classtype_id = course_userplan.class_type_id
+				LEFT JOIN mall_area AS mall_area0 ON mall_area0.area_id = course_userplan.area_id 
+				LEFT JOIN mall_profession AS mall_profession on mall_profession.profession_id = course_userplan.profession_id
+				LEFT JOIN mall_level AS mall_level on mall_level.level_id = course_userplan.level_id
+				LEFT JOIN sys_product AS sys_product on sys_product.product_id = course_userplan.product_id
+				LEFT JOIN mall_class AS mall_class ON mall_class.class_id = course_userplan.class_id
+				LEFT JOIN sys_user as sys_user on sys_user.user_id = mall_class.user_id
+				LEFT JOIN users AS users on users.user_id = course_userplan.user_id
+				LEFT JOIN courses AS courses ON course_abnormal_registration.course_id = courses.course_id
+			  LEFT JOIN mall_area AS mall_area ON mall_area.area_id = course_abnormal_registration.bk_area_id 
+			  LEFT JOIN mall_exam_schedule as mall_exam_schedule on mall_exam_schedule.id = course_abnormal_registration.exam_schedule_id		
+		WHERE
+			course_abnormal_abandon_exam.dr = 0
+			AND course_abnormal_registration.dr = 0			
+			AND course_abnormal_registration.status = 2			
+			AND course_userplan.dr = 0
+			AND course_abnormal_abandon_exam.registration_id=course_abnormal_registration.id
+			<!-- 班型名称 -->						
+		<if test="classTypeName != null and classTypeName.trim() != ''">
+			AND mall_class_type.classtype_name like concat('%',#{classTypeName},'%') 
+		</if>
+		<!-- 班级名称 -->
+		  <if test="className != null and className.trim() != ''">
+			and mall_class.class_name like concat('%',#{className},'%') 
+		</if> 
+		<!-- 班主任 -->
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and sys_user.nick_name like concat('%',#{teacherName},'%') 
+		</if>
+		<!-- 课程名称 -->
+		<if test="courseName != null and courseName.trim() != ''">
+			and courses.course_name like concat('%',#{courseName},'%') 
+		</if>
+		<!-- 专业 -->
+		<if test="professionName != null and professionName.trim() != ''">
+			and mall_profession.profession_name like concat('%',#{professionName},'%') 
+		</if>
+		<!-- 报读省份 -->
+		<if test="applyProvince != null and applyProvince.trim() != ''">
+			and mall_area0.area_name like concat('%',#{applyProvince},'%') 
+		</if>
+		<!-- 报考省份 -->
+		<if test="registerProvince != null and registerProvince.trim() != ''">
+			and mall_area.area_name like concat('%',#{registerProvince},'%') 
+		</if>
+		<!-- 考试时间 -->
+		<if test="scheduleName != null and scheduleName.trim() != ''">
+			and mall_exam_schedule.schedule_name like concat('%',#{scheduleName},'%') 
+		</if>
+		<!-- 姓名 -->
+		<if test="studentName != null and studentName.trim() != ''">
+			and users.nick_name like concat('%',#{studentName},'%') 
+		</if>		
+		<!-- 层次 -->
+		<if test="levelName != null and levelName.trim() != ''">
+			and mall_level.level_name like concat('%',#{levelName},'%') 
+		</if>
+		<!-- 手机号 -->
+		<if test="mobile != null and mobile.trim() != ''">
+			and users.mobile like concat('%',#{mobile},'%') 
+		</if>
+		<!-- 状态 -->
+		<if test="status != null and status != '-1'">
+			and course_abnormal_abandon_exam.status = #{status}
+		</if> 	   						
+	</select>
+	<!-- 判断状态 -->
+	<select id="queryEntityByRegistrationId" resultType="io.renren.entity.CourseAbnormalAbandonExamEntity">
+		SELECT
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		AND course_abnormal_abandon_exam.`registration_id` = #{registrationId}
+		AND course_abnormal_abandon_exam.`status` = #{status}
+		LIMIT 1
+
+	</select>	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseAbnormalAbandonExamEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into course_abnormal_abandon_exam
+		(
+				`creater`, 				
+				`create_time`, 				
+				`update_person`, 				
+				`update_time`, 				
+				`invoices_number`, 												
+				`product_id`, 				
+				`status`, 				
+				`dr`, 				
+				`reason`, 				
+				`remark`, 				
+				`registration_id`		
+				)
+		values
+		(
+				#{creater}, 																			
+				#{createTime}, 																			
+				#{updatePerson}, 																			
+				#{updateTime}, 																			
+				#{invoicesNumber}, 																																										
+				#{productId}, 																			
+				#{status}, 																			
+				0, 																			
+				#{reason}, 																			
+				#{remark}, 																			
+				#{registrationId}									
+				)
+	</insert>
+	
+	<insert id="saveExamEntity" parameterType="io.renren.entity.CourseAbnormalAbandonExamEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into course_abnormal_abandon_exam
+		(
+				`creater`, 				
+				`create_time`, 				
+				`update_person`, 				
+				`update_time`, 				
+				`invoices_number`, 												
+				`product_id`, 				
+				`status`, 				
+				`dr`, 				
+				`reason`, 				
+				`remark`, 				
+				`registration_id`		
+				)
+		values
+		(
+				#{creater}, 																			
+				#{createTime}, 																			
+				#{updatePerson}, 																			
+				#{updateTime}, 																			
+				#{invoicesNumber}, 																																										
+				#{productId}, 																			
+				#{status}, 																			
+				0, 																			
+				#{reason}, 																			
+				#{remark}, 																			
+				#{registrationId}									
+				)
+	</insert>
+	
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseAbnormalAbandonExamEntity">
+		update course_abnormal_abandon_exam 
+		<set>
+			<if test="creater != null">`creater` = #{creater}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updatePerson != null">`update_person` = #{updatePerson}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="invoicesNumber != null">`invoices_number` = #{invoicesNumber}, </if>			
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="reason != null">`reason` = #{reason}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="registrationId != null">`registration_id` = #{registrationId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+			
+	<!-- 审核通过状态 -->
+	<update id="updatePassStatus">
+		update course_abnormal_abandon_exam
+		<set>		
+		status = #{status},update_person = #{updatePerson},update_time = #{updateTime}
+		</set>
+		where id in
+		<foreach item="id" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	<!-- 作废状态 -->
+	<update id="updateCancelStatus">
+		update course_abnormal_abandon_exam				
+		set status = #{status},update_person = #{updatePerson},update_time = #{updateTime} where id in
+		<foreach item="id" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<update id="updateStatus">
+		update course_abnormal_abandon_exam				
+		set status = #{status},update_person = #{updatePerson} where id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	
+</mapper>

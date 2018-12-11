@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.dao.TeachEvaluateMapper" >
+  <resultMap id="BaseResultMap" type="com.school.entity.TeachEvaluate" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="topic_id" property="topicId" jdbcType="VARCHAR" />
+    <result column="topic_type" property="topicType" jdbcType="BIGINT" />
+    <result column="stage_code" property="stageCode" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="file_key" property="fileKey" jdbcType="VARCHAR" />
+    <result column="material_score" property="materialScore" jdbcType="INTEGER" />
+    <result column="content_score" property="contentScore" jdbcType="INTEGER" />
+    <result column="teach_style_score" property="teachStyleScore" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, score, content, user_id, topic_id, topic_type, stage_code, create_time, status, 
+    file_key, material_score, content_score, teach_style_score
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.school.entity.TeachEvaluateExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from teach_evaluate
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from teach_evaluate
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from teach_evaluate
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.school.entity.TeachEvaluateExample" >
+    delete from teach_evaluate
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.school.entity.TeachEvaluate" >
+    insert into teach_evaluate (id, score, content, 
+      user_id, topic_id, topic_type, 
+      stage_code, create_time, status, 
+      file_key, material_score, content_score, 
+      teach_style_score)
+    values (#{id,jdbcType=BIGINT}, #{score,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=BIGINT}, #{topicId,jdbcType=VARCHAR}, #{topicType,jdbcType=BIGINT}, 
+      #{stageCode,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
+      #{fileKey,jdbcType=VARCHAR}, #{materialScore,jdbcType=INTEGER}, #{contentScore,jdbcType=INTEGER}, 
+      #{teachStyleScore,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.school.entity.TeachEvaluate" >
+    insert into teach_evaluate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="topicId != null" >
+        topic_id,
+      </if>
+      <if test="topicType != null" >
+        topic_type,
+      </if>
+      <if test="stageCode != null" >
+        stage_code,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="fileKey != null" >
+        file_key,
+      </if>
+      <if test="materialScore != null" >
+        material_score,
+      </if>
+      <if test="contentScore != null" >
+        content_score,
+      </if>
+      <if test="teachStyleScore != null" >
+        teach_style_score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="topicId != null" >
+        #{topicId,jdbcType=VARCHAR},
+      </if>
+      <if test="topicType != null" >
+        #{topicType,jdbcType=BIGINT},
+      </if>
+      <if test="stageCode != null" >
+        #{stageCode,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="fileKey != null" >
+        #{fileKey,jdbcType=VARCHAR},
+      </if>
+      <if test="materialScore != null" >
+        #{materialScore,jdbcType=INTEGER},
+      </if>
+      <if test="contentScore != null" >
+        #{contentScore,jdbcType=INTEGER},
+      </if>
+      <if test="teachStyleScore != null" >
+        #{teachStyleScore,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.school.entity.TeachEvaluateExample" resultType="java.lang.Integer" >
+    select count(*) from teach_evaluate
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update teach_evaluate
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.score != null" >
+        score = #{record.score,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.topicId != null" >
+        topic_id = #{record.topicId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topicType != null" >
+        topic_type = #{record.topicType,jdbcType=BIGINT},
+      </if>
+      <if test="record.stageCode != null" >
+        stage_code = #{record.stageCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.fileKey != null" >
+        file_key = #{record.fileKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialScore != null" >
+        material_score = #{record.materialScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.contentScore != null" >
+        content_score = #{record.contentScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.teachStyleScore != null" >
+        teach_style_score = #{record.teachStyleScore,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update teach_evaluate
+    set id = #{record.id,jdbcType=BIGINT},
+      score = #{record.score,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      topic_id = #{record.topicId,jdbcType=VARCHAR},
+      topic_type = #{record.topicType,jdbcType=BIGINT},
+      stage_code = #{record.stageCode,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=TINYINT},
+      file_key = #{record.fileKey,jdbcType=VARCHAR},
+      material_score = #{record.materialScore,jdbcType=INTEGER},
+      content_score = #{record.contentScore,jdbcType=INTEGER},
+      teach_style_score = #{record.teachStyleScore,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.school.entity.TeachEvaluate" >
+    update teach_evaluate
+    <set >
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="topicId != null" >
+        topic_id = #{topicId,jdbcType=VARCHAR},
+      </if>
+      <if test="topicType != null" >
+        topic_type = #{topicType,jdbcType=BIGINT},
+      </if>
+      <if test="stageCode != null" >
+        stage_code = #{stageCode,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="fileKey != null" >
+        file_key = #{fileKey,jdbcType=VARCHAR},
+      </if>
+      <if test="materialScore != null" >
+        material_score = #{materialScore,jdbcType=INTEGER},
+      </if>
+      <if test="contentScore != null" >
+        content_score = #{contentScore,jdbcType=INTEGER},
+      </if>
+      <if test="teachStyleScore != null" >
+        teach_style_score = #{teachStyleScore,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.school.entity.TeachEvaluate" >
+    update teach_evaluate
+    set score = #{score,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      topic_id = #{topicId,jdbcType=VARCHAR},
+      topic_type = #{topicType,jdbcType=BIGINT},
+      stage_code = #{stageCode,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      file_key = #{fileKey,jdbcType=VARCHAR},
+      material_score = #{materialScore,jdbcType=INTEGER},
+      content_score = #{contentScore,jdbcType=INTEGER},
+      teach_style_score = #{teachStyleScore,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

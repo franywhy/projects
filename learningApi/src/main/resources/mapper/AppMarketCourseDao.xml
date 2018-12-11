@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.AppMarketCourseDao">
+	<select id="queryProductIdListByBisinessId" resultType="long">
+		select
+			product_id
+		from
+			sys_business_product
+		where
+			business_id = #{businessId}
+	</select>
+	
+	<select id="queryCourseList" resultType="map">
+		select
+			id as id,
+			name as courseName,
+			pic as pic,
+			app_url as appUrl,
+			order_num as orderNum,
+			is_share as isShare,
+			class_way as classWay,
+			suitable_object as suitableObject
+		from
+			mall_market_course
+		where
+			dr = 0 and level = 2 and status = 1 
+			and product_id in
+			<foreach item="productId" collection="productList" open="(" separator="," close=")">
+	            #{productId}
+	        </foreach>
+	        ORDER BY mall_market_course.order_num ASC
+	</select>
+	<select id="queryMostHotCourseList" resultType="map">
+		select
+			id as id,
+			name as courseName,
+			pic as pic,
+			app_url as appUrl,
+			order_num as orderNum,
+			is_share as isShare,
+			class_way as classWay,
+			suitable_object as suitableObject
+		from
+			mall_market_course
+		where
+			dr = 0 and level = 2 and status = 1
+        <if test="productList.size() > 0">
+			and product_id in
+			<foreach item="productId" collection="productList" open="(" separator="," close=")">
+	            #{productId}
+	        </foreach>
+        </if>
+	        ORDER BY mall_market_course.order_num ASC
+	        LIMIT 4
+	</select>
+	
+	<select id="queryParentCourseList" resultType="com.hq.learningapi.pojo.PcMarketParentCoursePOJO">
+		select
+			id as id,
+			name as classifyName,
+			level as level
+		from
+			mall_market_course
+		where
+			dr = 0 and level = 1 and status = 1 
+			and product_id in
+			<foreach item="productId" collection="productList" open="(" separator="," close=")">
+	            #{productId}
+	        </foreach>
+	</select>
+	
+	<select id="queryCourseListByParentId" resultType="map">
+		select
+			id as id,
+			name as courseName,
+			pic as pic,
+			pc_url as pcUrl,
+			order_num as orderNum,
+			is_share as isShare,
+			class_way as classWay,
+			suitable_object as suitableObject
+		from
+			mall_market_course
+		where
+			dr = 0 and level = 2 and status = 1 and
+			parent_id = #{parentId}
+			order by order_num asc
+	</select>
+	
+</mapper>

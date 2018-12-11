@@ -1,0 +1,76 @@
+﻿
+.zeng_msgbox_layer, .zeng_msgbox_layer .gtl_ico_succ, .zeng_msgbox_layer .gtl_ico_fail,.gtl_ico_fail1, .zeng_msgbox_layer .gtl_ico_hits, .zeng_msgbox_layer .gtl_ico_clear, .zeng_msgbox_layer .gtl_end
+        {
+            display: inline-block;
+            height: 45px;
+            line-height: 45px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #606060;
+            background-image: url("/images/gb_tip_layer.png");
+            _background-image: url("/images/gb_tip_layer_ie6.png");
+            background-repeat: no-repeat;
+        }
+        
+        .zeng_msgbox_layer_wrap{width:100%;position:fixed;_position:absolute;top:45%;left:42px;text-align:center;z-index:65533}
+
+        .zeng_msgbox_layer
+        {
+            background-position: 0 -161px;
+            background-repeat: repeat-x;
+            padding: 0 18px 0 9px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .zeng_msgbox_layer .gtl_ico_succ
+        {
+            background-position: -6px 0;
+            left: -45px;
+            top: 0;
+            width: 45px;
+            position: absolute;
+            
+        }
+        .zeng_msgbox_layer .gtl_end
+        {
+            background-position: 0 0;
+            position: absolute;
+            right: -6px;
+            top: 0;
+            width: 6px;
+        }
+        .zeng_msgbox_layer .gtl_ico_fail
+        {
+            background-position: -6px -108px;
+            position: absolute;
+            left: -45px;
+            top: 0;
+            width: 45px;
+        }
+        .zeng_msgbox_layer .gtl_ico_hits
+        {
+            background-position: -6px -54px;
+            position: absolute;
+            left: -45px;
+            top: 0;
+            width: 45px;
+        }
+        
+        /*弹出层*/
+#myHiddenDiv {display:none;}
+.popup { border:1px solid #ccc; background:url(/images/b1-bg08.gif) repeat-x left top #fff;padding-bottom:20px;}
+.popup a:hover{ text-decoration:none; color:#fff;}
+.popup-header {padding-top:10px; height:32px; line-height:32px;}
+.popup-header h2 {font-size:14px; width:100%; text-align:center;}
+.popup-body { width:100%; padding-top:8px; }
+.popup-body strong{ display:block; text-align:center; font-size:14px; font-weight:normal; margin-bottom:5px;}
+.con{ padding:10px; width:800px; height:250px; margin:0 auto 10px auto; overflow:auto; border:1px solid #F0F0F0;}
+.con p{ text-indent:2em; line-height:18px; margin-bottom:10px;}
+.con b{ text-indent:2em;}
+a.close{ display:inline-block;color:#fff;text-decoration:none;font-size:12px;font-weight:700; background:url(/images/b1-bg07.gif) no-repeat; width:156px; height:24px; line-height:24px; text-align:center; margin: 20px 0 0 350px; }
+.agree{ background:url(/images/b1-bg04.gif) no-repeat; display:inline-block;padding: -5px 0 0 10px; width:600px; font-weight:normal; height:32px; line-height:32px;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0){ .search_btn {height:41px; margin-top:0px;} 
+.container .left_nav dl li.w_99{ display:block; width:100%;}
+#remmindBox p{margin:10px 0;}
+#remmindBox p#remind{margin:0 10px; line-height:20px;}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>跨域回调</title>
+
+    <script type="text/javascript">
+        console.log( window.document.location.href);
+        var fileInfo = window.document.location.href.split(";");
+        console.log(fileInfo);
+        //获取参数
+        var layer_index = getParameter(fileInfo[0],"layer_index");
+        var cb_vue = getParameter(fileInfo[2],"cb_vue");
+        var file_name = getParameter(fileInfo[1],"file_name");
+        var cb_input_id = getParameter(fileInfo[2],"cb_input_id");
+        var code = getParameter(fileInfo[2],"code");
+        var names = '';
+        var urls = '';
+        if(code == 200){
+            for(var i = 2; i < fileInfo.length - 1; i++){
+                var file = fileInfo[i];
+                var code = getParameter(file,"code");
+                var name = getParameter(file,"name");
+                var url = getParameter(file,"url");
+                names += decodeURI(name,"UTF-8")+",";
+                urls += url +",";
+            }
+            if(cb_vue != null && cb_vue !=''){
+                //回调函数
+                eval("window.parent." + cb_vue+'="'+urls+'"');
+            }
+            if(file_name != null && file_name !=''){
+                //回调函数
+                eval("window.parent." + file_name+'="'+names+'"');
+            }
+            if(cb_input_id != null && cb_input_id !=''){
+                //回填地址
+                window.parent.document.getElementById(cb_input_id).value = urls;
+            }
+            /*if(file_name != null && file_name !=''){
+                //回填地址
+                window.parent.document.getElementById(file_name).value = names;
+            }*/
+            //关闭浮层
+            window.parent.hq.core.upload.close(layer_index);
+        }else {
+            alert("上传图片失败!")
+        }
+
+        function getParameter(locString,param) {
+            var rs = new RegExp("(^|)" + param + "=([^&]*)(&|$)", "gi").exec(locString), tmp;
+            if (tmp = rs) {
+                return tmp[2];
+            }
+            return "";
+        }
+    </script>
+
+</head>
+<body>
+上传回调页面
+</body>
+</html>

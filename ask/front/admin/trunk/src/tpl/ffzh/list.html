@@ -1,0 +1,123 @@
+<!--付费转化汇总--> 
+<%
+	var isHZ = !params._id,
+		isMobile = (params.client!=1);
+%>
+<table width="100%" class="listTable">
+ 	<thead>
+ 	<tr>
+			<%if(isHZ){%>
+			<th class="longtime" rowspan="2">渠道名称</th>
+			<%}else{%>
+			<th class="longtime" rowspan="2">日期</th>
+			<%}%>
+			<%if(isMobile){%>
+			<th class="num" rowspan="2">激活数</th>
+			<%}%>			
+			<th class="num" rowspan="2">注册数</th>					
+			<th class="short" colspan="3">当日转化</th>
+			<th class="short" colspan="3">3日转化</th>
+			<th class="short" colspan="3">7日转化</th>
+			<th class="short" colspan="3">30日转化</th>			
+    </tr>
+ 	<tr>
+		<th>金额</th>
+		<th>人数</th>
+		<th>人均</th>
+		<th>金额</th>
+		<th>人数</th>
+		<th>人均</th>
+		<th>金额</th>
+		<th>人数</th>
+		<th>人均</th>
+		<th>金额</th>
+		<th>人数</th>
+		<th>人均</th>
+	</tr>
+	</thead>
+	<tbody>
+	    <% 
+		var t_reg = 0,t_pay = 0, t_active=0,
+			t_day_1_cny = 0,t_day_1_pay = 0, t_day_1_avg=0,
+			t_day_3_cny = 0,t_day_3_pay = 0, t_day_3_avg=0,
+			t_day_7_cny = 0,t_day_7_pay = 0, t_day_7_avg=0,
+			t_day_30_cny = 0,t_day_30_pay = 0, t_day_30_avg=0;
+		%>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<%if(isHZ){%>
+			<td class="longtime"><a href="#a=qdfhzh&_id=<%=data[i].qd%>&client=<%=params.client%>&tab=<%=params.tab%>&menu=<%=params.menu%>&channel=<%=data[i].name%>&stime=<%=Izb.ui.getFirstDay()%>&etime=<%=Izb.ui.getLastDay(true)%>"><%=data[i].name%></a></td>
+			<%}else{%>
+			<td class="longtime"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+			<%}%>
+			<%	
+				var s_reg = $.isNumeric(data[i].reg) ? data[i].reg : 0,
+					s_pay = $.isNumeric(data[i].pay) ? data[i].pay : 0,
+                    s_active = $.isNumeric(data[i].active) ? data[i].active : 0;
+				var day_1 = data[i]["1_day"],
+					day_1_cny = day_1 ? (data[i]["1_day"].cny || 0) : 0,
+					day_1_pay = data[i]["1_day"] ? (data[i]["1_day"].pay || 0) : 0,
+					day_1_avg = (day_1_pay == 0) ? 0 : (day_1_cny/day_1_pay).toFixed(2);
+				var day_3 = data[i]["3_day"],
+					day_3_cny = day_3 ? (data[i]["3_day"].cny || 0) : 0,
+					day_3_pay = data[i]["3_day"] ? (data[i]["3_day"].pay || 0) : 0,
+					day_3_avg = (day_3_pay == 0) ? 0 : (day_3_cny/day_3_pay).toFixed(2);
+				var day_7 = data[i]["7_day"],
+					day_7_cny = day_7 ? (data[i]["7_day"].cny || 0) : 0,
+					day_7_pay = data[i]["7_day"] ? (data[i]["7_day"].pay || 0) : 0,
+					day_7_avg = (day_7_pay == 0) ? 0 : (day_7_cny/day_7_pay).toFixed(2);
+				var day_30 = data[i]["30_day"],
+					day_30_cny = day_30 ? (data[i]["30_day"].cny || 0) : 0,
+					day_30_pay = data[i]["30_day"] ? (data[i]["30_day"].pay || 0) : 0,
+					day_30_avg = (day_30_pay == 0) ? 0 : (day_30_cny/day_30_pay).toFixed(2);
+			%>
+			<%
+				t_reg += (s_reg-0);t_pay += (s_pay-0);t_active+=(s_active-0);
+				t_day_1_cny +=(day_1_cny-0);t_day_1_pay +=(day_1_pay-0);
+				t_day_3_cny+=(day_3_cny-0);t_day_3_pay+=(day_3_pay-0);
+				t_day_7_cny+=(day_7_cny-0);t_day_7_pay+=(day_7_pay-0);
+				t_day_30_cny+=(day_30_cny-0);t_day_30_pay+=(day_30_pay-0);
+			%>
+			<%if(isMobile){%>
+            <td class="num"><%=s_active%></td>
+			<%}%>
+			<td class="num"><%=s_reg %></td>
+			<td class="short"><%=day_1_cny %></td>
+			<td class="short"><%=day_1_pay %></td>
+			<td class="short"><%=day_1_avg %></td>
+			<td class="short"><%=day_3_cny %></td>
+			<td class="short"><%=day_3_pay %></td>
+			<td class="short"><%=day_3_avg %></td>
+			<td class="short"><%=day_7_cny %></td>
+			<td class="short"><%=day_7_pay %></td>
+			<td class="short"><%=day_7_avg %></td>
+			<td class="short"><%=day_30_cny %></td>
+			<td class="short"><%=day_30_pay %></td>
+			<td class="short"><%=day_30_avg %></td>
+        </tr>
+		<%}%>
+    </tbody>
+	<tfooter>
+        <tr>
+			<th class="short">总计</th>            
+			<%if(isMobile){%>
+			<th class="short"><%=t_active%></th>
+			<%}%>
+			<th class="short"><%=t_reg%></th>
+			<th class="short"><%=t_day_1_cny%></th>
+			<th class="short"><%=t_day_1_pay%></th>
+			<th class="short"><%=t_day_1_pay==0 ? 0 : (t_day_1_cny/t_day_1_pay).toFixed(2)%></th>
+			<th class="short"><%=t_day_3_cny%></th>
+			<th class="short"><%=t_day_3_pay%></th>
+			<th class="short"><%=t_day_3_pay==0 ? 0 : (t_day_3_cny/t_day_3_pay).toFixed(2)%></th>
+			<th class="short"><%=t_day_7_cny%></th>
+			<th class="short"><%=t_day_7_pay%></th>
+			<th class="short"><%=t_day_7_pay==0 ? 0 : (t_day_7_cny/t_day_7_pay).toFixed(2)%></th>
+			<th class="short"><%=t_day_30_cny%></th>
+			<th class="short"><%=t_day_30_pay%></th>
+			<th class="short"><%=t_day_30_pay==0 ? 0 : (t_day_30_cny/t_day_30_pay).toFixed(2)%></th>
+        </tr>
+    </tfooter>
+</table>
+<div class="appPager"></div>
+<!--/付费转化汇总--> 

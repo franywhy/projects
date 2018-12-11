@@ -1,0 +1,47 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">考勤单号</th>
+        <th class="auto">考勤人数</th>
+        <th class="auto">考勤时间</th>
+        <th class="auto">校区名称</th>
+        <th class="auto">课程科目</th>
+        <th class="auto">教师名称</th>
+        <th class="auto">教室</th>
+        <th class="auto">课次</th>
+        <th class="auto">备注</th>
+        <th class="auto">状态</th>
+        <th class="auto">同步时间</th>
+        <th class="auto">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <td class="auto"><%=data[i].nc_code %></td>
+            <td class="auto"><%=data[i].attendance_number %></td>
+            <td class="auto"><%=data[i].attendance_time %></td>
+            <td class="auto"><%=data[i].nc_school_name %></td>
+            <td class="auto"><%=data[i].nc_course_name %></td>
+            <td class="auto"><%=data[i].nc_teacher_name %></td>
+            <td class="auto"><%=data[i].room %></td>
+            <td class="auto"><%=data[i].sessions %></td>
+            <td class="auto"><%=data[i].remark %></td>
+            <td class="auto"><%=data[i].status %></td>
+            <td class="auto"><%=data[i].syn_time %></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.student('<%=data[i].nc_id%>')">学员信息</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详细</button>
+                <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

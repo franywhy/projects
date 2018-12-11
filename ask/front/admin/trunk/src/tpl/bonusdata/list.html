@@ -1,0 +1,54 @@
+<!--用户信息列表-->
+<table width="100%" class="listTable tablesorter">
+   <thead>
+    <tr>
+        <th >序号</th>
+        <th >红包总额</th>
+        <th >红包数</th>
+        <th >打赏总额</th>
+        <th >打赏数</th>
+        <th >教师获取金额</th>
+        <th >平台获取金额</th>
+        <th >日期</th>
+    </tr>
+	</thead>
+
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1%></td>
+            <td class="auto"><%=data[i].bunus_money%></td>
+            <td class="auto"><%=data[i].bunus_count%></td>
+            <td class="auto"><%=data[i].tip_money%></td>
+            <td class="auto"><%=data[i].tip_count%></td>
+            <td class="auto"><%=data[i].tip_money / 2%></td>
+            <td class="auto"><%=data[i].tip_money / 2%></td>
+            <td class="auto"><%=new Date(data[i].gtime).format("yyyy-MM-dd")%></td>
+        </tr>
+		<%}%>
+    </tbody>
+
+    <tfoot >
+        <tr>
+            <td class="short"  style="color:red">当前页合计：</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_bunus_money%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_bunus_count%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_tip_money%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_tip_count%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_tip_money / 2%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red; font-weight:bold;" align="right"><%=page_sum_tip_money / 2%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="short" style="color:red">合计：</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=bunus_money_all%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=bunus_count_all%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=tip_money_all%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=tip_count_all%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=tip_money_all / 2%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color:red ;font-weight:bold;" align="right"><%=tip_money_all / 2%> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+    </tfoot>
+
+</table>
+<div class="appPager"></div>
+<!--/用户信息列表-->

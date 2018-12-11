@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningcenter.school.dao.LcMenuDao">
+
+	<select id="queryLcMenu" resultType="com.hq.learningcenter.school.pojo.LcMenuPOJO">
+		SELECT
+			lc_menu. NAME AS name,
+			lc_menu.url AS url
+		FROM
+			lc_menu AS lc_menu,
+			sys_business AS sys_business,
+			lc_business_menu AS lc_business_menu
+		WHERE
+			lc_menu.lc_menu_id = lc_business_menu.menu_id
+		AND sys_business.business_id = lc_business_menu.business_id
+		AND sys_business.business_id = #{businessId}
+		ORDER BY
+			lc_menu.order_num,
+			lc_menu.lc_menu_id
+	</select>
+
+
+	<select id="queryLcUsermenu" resultType="com.hq.learningcenter.school.pojo.LcMenuPOJO">
+		SELECT
+			lc_menu. NAME AS name,
+			lc_menu.url AS url,
+			lc_menu.pic as pic
+		FROM
+			lc_app_usermenu AS lc_menu
+		WHERE
+			lc_menu.dr = 0
+			AND  business_id = #{businessId}
+		ORDER BY
+			lc_menu.order_num
+	</select>
+
+</mapper>

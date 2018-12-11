@@ -1,0 +1,14 @@
+s<div class="tagArea">
+	<ul class="tagList">
+		<li class="<%=params.type=="0"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=0"><i></i><span>海报</span></a></li>
+        <li class="<%=params.type=="1"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=1"><i></i><span>站点预设背景</span></a></li>
+        <li class="<%=params.type=="2"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=2"><i></i><span>手机广告</span></a></li>
+        <li class="<%=params.type=="3"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=3"><i></i><span>快播广告</span></a></li>
+        <li class="<%=params.type=="4"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=4"><i></i><span>快播主播</span></a></li>
+        <li class="<%=params.type=="5"? "cur":""%>"><a href="#a=poster&menu=<%=params.menu%>&type=5"><i></i><span>首页活动</span></a></li>
+	</ul>
+	<div class="tag_r"><%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+		<input type="button" class="d-button d-state-highlight J_add" value="添加<%=['海报','站点预设背景','手机广告','快播广告','快播主播','首页活动'][(params.type||0)]%>"   />
+	<%}%>
+	</div>
+</div>

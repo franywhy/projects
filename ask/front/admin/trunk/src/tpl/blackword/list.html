@@ -1,0 +1,12 @@
+<!--海报列表--> 
+
+<ul class="blackWordList">
+<% for(var i=0; i< data.length; i++){ %>
+<li>
+<%=data[i]._id%> 
+<a class="del" href="javascript:Izb.controller.blackword.del('<%=data[i]._id%>');">×</a>
+</li>
+<%}%>
+</ul>
+<div class="appPager"></div>
+<!--/海报列表--> 

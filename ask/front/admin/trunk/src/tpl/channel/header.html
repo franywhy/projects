@@ -1,0 +1,25 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+<!--/通用应用头--> 
+<form name="searchForm">	
+	渠道号
+	<input type="text" name="_id" size="20" />
+    渠道名
+	<input type="text" name="name" size="20" />
+    
+	<select name="parent_flag" id="parent_flag">
+		<option value="0">全部渠道</option>
+		<option value="-1" selected="selected">父渠道</option>
+		<option value="1">子渠道</option>
+	</select>
+    
+
+    	<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    <br /><br />
+</form> 

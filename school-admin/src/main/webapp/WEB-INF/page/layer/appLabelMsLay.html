@@ -1,0 +1,28 @@
+<div id="appLabelMsLayDiv" style="display: none">
+<!-- 标签查询条件 -->
+<table  border="0">
+    <tr class="row" >
+        <td class=""><label for="name">产品线</label></td>
+        <td >
+                <div class="col-sm-10">
+                    <select class="form-control" id="qproductId" placeholder="产品线" style="width:150px">
+                        <option value= -1 selected="selected" >全部</option>
+                        <option value= 1 >自考</option>
+                        <option value= 0 >会计</option>
+                    </select>
+                </div>
+        </td>
+        <td class=""><label for="name">标签名称</label></td>
+        <td >
+            <input type="text" class="form-control" id="qlabelName" placeholder="标签名称">
+        </td>
+        <!-- 按钮 -->
+        <td class="grid-btn">
+            <a class="btn btn-default" onclick="appLabelMsLay.reload();">查询</a>
+        </td>
+    </tr>
+</table>
+<table id="appLabelMsLay_jqGrid" ></table>
+<table id="appLabelMsLay_jqGridPager" ></table>
+</div>
+<script src="${rc.contextPath}/js/layer/appLabelMsLay.js?_${date.systemTime}"></script>

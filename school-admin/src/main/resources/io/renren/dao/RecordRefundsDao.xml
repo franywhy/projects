@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatif.org//DTD Mapper 3.0//EN" "http://mybatif.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.RecordRefundsDao">
+<!-- 这个是单表的查询的 -->
+		<sql id="simple_column">
+	
+f.record_refunds_id recordRefundsId , 
+f.record_id recordId, 
+f.order_id orderId,
+f.user_id userId, 
+f.refunds_date refundsDate, 
+f.refunds_reason refundsReason, 
+f.refunds_result refundsResult, 
+f.apply_status applyStatus, 
+f.sync_time syncTime, 
+f.nc_drawback_id ncDrawbackId, 
+f.nc_id ncId, 
+f.create_time createTime, 
+f.ts ts  
+
+	
+	
+	</sql>
+		
+		
+		
+		
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	
+f.record_refunds_id recordRefundsId , 
+f.record_id recordId, 
+f.order_id orderId,
+mall_order.order_no orderNo,
+f.user_id userId,
+u.nick_name name, 
+u.sex sex,   
+u.mobile mobile, 
+f.refunds_date refundsDate, 
+f.refunds_reason refundsReason, 
+f.refunds_result refundsResult, 
+f.apply_status applyStatus, 
+f.sync_time syncTime, 
+f.nc_drawback_id ncDrawbackId, 
+f.nc_id ncId, 
+f.create_time createTime, 
+f.ts ts ,
+sys_user.user_id teacherId,
+sys_user.nick_name teacherName,
+mall_class.class_id classId,
+mall_class.class_name className
+
+	
+	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="simple_from">
+    	 from record_refunds f
+	</sql>
+	
+		<!-- 通用from -->
+	<sql id="base_from">
+	    from record_refunds as f left join users u on f.user_id=u.user_id 
+	     left join mall_order mall_order on mall_order.order_id=f.order_id  
+		left join mall_class on mall_class.class_id=mall_order.class_id
+		left join sys_user on sys_user.user_id=mall_class.user_id
+	
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.RecordReFundsEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND f.record_refunds_id = #{recordRefundsId}
+	</select>
+
+<!--单表的查询-->
+	<select id="simpleQueryList" resultType="io.renren.entity.RecordReFundsEntity">
+		select
+		<include refid="simple_column" />
+		<include refid="simple_from" />
+		<include refid="base_where" />
+		<if test="applyStatus != null  ">
+			and f.apply_status =#{applyStatus}
+		</if>
+<if test="ncId != null and ncId.trim() != ''">
+			and f.nc_id =#{ncId}
+		</if>
+		<if test="ncDrawbackId != null and ncDrawbackId.trim() != ''">
+			and f.nc_drawback_id =#{ncDrawbackId}
+		</if>
+		order by f.record_refunds_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+</select>
+
+
+
+	<!--分页列表 -->
+	<select id="queryList" resultType="io.renren.entity.RecordReFundsEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		<if test="applyStatus != null and applyStatus != -1">
+			and f.apply_status =#{applyStatus}
+		</if>
+
+		<if test="name != null and name.trim() != ''">
+			and u.nick_name like concat('%',#{name},'%')
+		</if> 
+		<if test="mobile != null and mobile.trim() != ''">
+			and u.mobile like concat('%',#{mobile},'%')
+		</if>
+		
+		<if test="ncId != null and ncId.trim() != ''">
+			and f.nc_id =#{ncId}
+		</if>
+		
+		<if test="ncDrawbackId != null and ncDrawbackId.trim() != ''">
+			and f.nc_drawback_id =#{ncDrawbackId}
+		</if> 
+		<if test="teacherId != null">
+		and	sys_user.user_id=#{teacherId}
+		</if>
+	 
+		<if test="teacherName != null and teacherName.trim() != ''">
+
+		and	sys_user.nick_name =#{teacherName}
+		</if>
+	 
+		<if test="classId != null and classId.trim() != ''">
+		and	mall_class.class_id =#{classId}
+		</if>
+	 
+		<if test="className != null and className.trim() != ''">
+
+		and	mall_class.class_name=#{className}
+		</if>
+ 		<if test="orderNo != null and orderNo.trim() != ''">
+		and	mall_order.order_no=#{orderNo}
+		</if>
+		order by f.refunds_date desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		 from record_refunds as f left join users u on f.user_id=u.user_id 
+	     left join mall_order mall_order on mall_order.order_id=f.order_id  
+		left join mall_class on mall_class.class_id=mall_order.class_id
+	 
+		<include refid="base_where"/>
+		<if test="applyStatus != null  and applyStatus != -1">
+			and f.apply_status =#{applyStatus}
+		</if>
+		<if test="name != null and name.trim() != ''">
+			and u.nick_name like concat('%',#{name},'%')
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and u.mobile like concat('%',#{mobile},'%')
+		</if>
+		<if test="ncId != null and ncId.trim() != ''">
+			and f.nc_id =#{ncId}
+		</if>
+		<if test="ncDrawbackId != null and ncDrawbackId.trim() != ''">
+			and f.nc_drawback_id =#{ncDrawbackId}
+		</if>
+
+	 
+		<if test="teacherId != null">
+			and mall_class.user_id=#{teacherId}
+		</if>
+	 
+		<!-- <if test="teacherName != null and teacherName.trim() != ''">
+
+			and sys_user.nick_name =#{teacherName}
+		</if> -->
+	 
+		<if test="classId != null and classId.trim() != ''">
+		and 	mall_class.class_id =#{classId}
+		</if>
+	 
+		<if test="className != null and className.trim() != ''">
+
+			and mall_class.class_name=#{className}
+		</if>
+
+		
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.RecordReFundsEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into record_refunds
+	(
+	`record_refunds_id`,`order_id`,`user_id`,
+	`record_id`,
+	`refunds_date`,
+	`refunds_reason`,
+	`refunds_result`,
+	`apply_status`,
+	`sync_time`,
+	`nc_drawback_id`,
+	`nc_id`,
+	`create_time`,
+	`ts`
+	)
+	values
+	(
+	#{recordRefundsId},	#{orderId},	#{userId},
+	#{recordId},
+	#{refundsDate},
+	#{refundsReason},
+	#{refundsResult},
+	#{applyStatus},
+	#{syncTime},
+	#{ncDrawbackId},
+	#{ncId},
+	#{createTime},
+	#{ts}
+	)
+</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.RecordReFundsEntity">
+		update record_refunds 
+		<set> 
+<if test="recordId != null">`record_id` = #{recordId}, </if>
+<if test="orderId != null">`order_id` = #{orderId}, </if>
+<if test="userId != null">`user_id` = #{userId}, </if>
+<if test="refundsDate != null">`refunds_date` = #{refundsDate}, </if>
+<if test="refundsReason != null">`refunds_reason` = #{refundsReason}, </if>
+<if test="refundsResult != null">`refunds_result` = #{refundsResult}, </if>
+<if test="applyStatus != null">`apply_status` = #{applyStatus}, </if>
+<if test="syncTime != null">`sync_time` = #{syncTime}, </if>
+<if test="ncDrawbackId != null">`nc_drawback_id` = #{ncDrawbackId}, </if>
+<if test="ncId != null">`nc_id` = #{ncId}, </if>
+<if test="createTime != null">`create_time` = #{createTime}, </if>
+<if test="ts != null">`ts` = #{ts} </if>
+
+
+		</set>
+		<include refid="base_where"/>
+		AND record_refunds_id = #{recordRefundsId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM record_refunds 
+		<include refid="base_where"/>
+		AND record_refunds_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM record_refunds 
+		<include refid="base_where"/> 
+		AND record_refunds_id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{recordRefundsId}
+		</foreach>
+	</delete> 
+</mapper>

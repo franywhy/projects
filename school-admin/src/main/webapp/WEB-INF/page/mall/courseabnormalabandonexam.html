@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>弃考档案表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<div class="form-group">
+			 	<table class="table table-condensed" border="0">
+						<tr border="0">
+							<td><label for="name">班型:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.classTypeName" @keyup.enter="query" readonly="readonly"
+								placeholder="班型名称" @click="classTypeLayerShow"></td>
+							
+							<td><label for="name">班级:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.className" @keyup.enter="query" readonly="readonly"
+								placeholder="班级名称" @click="classLayerShow"></td>
+							
+							<td><label for="name">班主任:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.teacherName" @keyup.enter="query" readonly="readonly"
+								placeholder="班主任" @click="teacherLayerShow"></td>
+							
+							<td><label for="name">课程名称:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.courseName" @keyup.enter="query" readonly="readonly"
+								placeholder="课程名称"  @click="courseLayerShow"></td>							
+							
+							<td><label for="name">报读省份:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.applyProvince" @keyup.enter="query" readonly="readonly"
+								placeholder="报读省份" @click="areaLayerShowA" ></td>
+							
+							<td><label for="name">报考省份:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.registerProvince" @keyup.enter="query" readonly="readonly"
+								placeholder="报考省份" @click="areaLayerShowB" ></td>
+						</tr>
+						<tr border="0">	
+							<td><label for="name">专业:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.professionName" @keyup.enter="query" readonly="readonly"
+								placeholder="专业" @click="professionLayerShow"></td>					
+						 	
+						 	<td><label for="name">报考时间:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.scheduleName" @keyup.enter="query" readonly="readonly"
+								placeholder="报考时间" @click="examScheduleLayShow"></td>
+						 	
+						 	<td><label for="name">姓名:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.studentName" @keyup.enter="query" placeholder="姓名"></td>
+						 	
+						 	<td><label for="name">手机号:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.mobile" @keyup.enter="query" placeholder="手机号"></td>
+						 	
+						 	<td><label for="name">层次:</label></td>
+							<td><input type="text" class="form-control" v-model.trim="q.levelName" @keyup.enter="query" readonly="readonly"
+								 placeholder="层次" @click="levelLayShow"></td>
+							
+							<td><label for="name">状态:</label></td>
+							<td>
+								<select name="status" form="query" class="form-control" v-model.trim="q.status">
+									<option v-for="option in statusOptionsSelect" v-bind:value="option.value">  
+    						 			{{ option.text }}  
+  						 			</option> 						 			
+								</select>
+							</td>														
+						</tr>
+											
+					</table>
+					
+				<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+				<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>								
+				#if($shiro.hasPermission("courseabnormalabandonexam:save"))
+				<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				#end											
+				<a class="btn btn-primary" @click="cancel"><i class="fa fa-trash-o"></i>&nbsp;作废</a>
+				<a class="btn btn-primary" @click="pass"><i class="fa fa-play"></i>&nbsp;审核</a>
+				<a class="btn btn-primary" @click="antiAudit"><i class="fa fa-play"></i>&nbsp;反审核</a>
+				<a class="btn btn-primary" @click="importExcel"><i class="fa fa-upload"></i>&nbsp;批量导入</a>									
+                <a class="btn btn-primary" @click="downTemplate"><i class="fa fa-pencil-square-o"></i>&nbsp;下载模板</a>
+                <a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>												
+			</div>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+   
+     <!-- 上传文件弹窗 -->
+    <div id="fileUploadLayer" style="display: none;">
+    	<div class="panel-heading">批量上传</div>
+    	<input type="file" id="file_data" name="file_data" accept=".xls"/>
+	</div>
+	
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+				<div class="form-group" style="display: none">
+					<div class="col-sm-2 control-label">主键</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							   v-model.trim="courseAbnormalAbandonExam.id" placeholder="主键" />
+					</div>
+				</div>
+									
+				<!-- <div class="form-group">
+					<div class="col-sm-2 control-label">产品线id</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model.trim="courseAbnormalAbandonExam.productId" placeholder="产品线id" />
+					</div>
+				</div> -->
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报考单号</div>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" v-model.trim="courseAbnormalAbandonExam.registrationNo" readonly="readonly"
+							 placeholder="选择报考单号" @click="selRegister"/>
+					</div>
+					<!-- <a class="btn btn-default" @click="selRegister" v-show="showRegisterBtn">选择报考单号</a> -->
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">订单号</div>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" v-model.trim="courseAbnormalAbandonExam.orderNo" readonly="readonly"
+						placeholder="订单号" @click="selRegister"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label">课程</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="courseAbnormalAbandonExam.courseName" readonly="readonly"
+						placeholder="课程" @click="selRegister"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报考省份</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="courseAbnormalAbandonExam.registerProvince" readonly="readonly"
+						placeholder="报考省份" @click="selRegister"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报考时间</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="courseAbnormalAbandonExam.scheduleDate" readonly="readonly"
+						placeholder="报考时间" @click="selRegister"/>
+					</div>
+				</div>						
+								
+				<div class="form-group">
+					<div class="col-sm-2 control-label">原因</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="courseAbnormalAbandonExam.reason" placeholder="原因" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">备注</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model.trim="courseAbnormalAbandonExam.remark" placeholder="备注" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate"
+						value="确定" /> &nbsp;&nbsp;<input type="button"
+						class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>				
+		</div>				
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/courseabnormalabandonexam.js?_${date.systemTime}"></script>
+#parse("layer/courseLay.html")
+#parse("layer/teacherLay.html")
+#parse("layer/areaLay.html")
+#parse("layer/classLay.html")
+#parse("layer/classTypeLay.html")
+#parse("layer/professionLay.html")
+#parse("layer/levelLay.html")
+#parse("layer/userInfoLay.html")
+#parse("layer/examScheduleLay.html")
+#parse("layer/registrationLay.html")
+
+</body>
+</html>

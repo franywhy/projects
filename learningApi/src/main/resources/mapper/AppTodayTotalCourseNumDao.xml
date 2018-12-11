@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.AppTodayTotalCourseNumDao">
+
+	<select id="queryUserplanIdListByUserId" resultType="long">
+		select
+			user_plan_id
+		from
+			course_userplan
+		where
+			user_id = #{userId} and dr = 0
+	</select>
+	
+	<select id="queryClassTypeIdByUserplanId" resultType="long">
+		select
+			class_type_id
+		from
+			course_userplan
+		where
+			user_plan_id = #{userplanId} and dr = 0
+	</select>
+	
+	<select id="queryUserplanDetailIdListByUserplanId" resultType="long">
+		select
+			userplan_detail_id
+		from
+			course_userplan_detail
+		where
+			userplan_id = #{userplanId} and dr = 0
+	</select>
+	
+	<select id="queryClassplanIdByUserplanDetailId" resultType="string">
+		select
+			course_classplan.classplan_id AS classplanId
+		from
+			course_userplan_class_detail AS course_userplan_class_detail,
+			course_userplan_class AS course_userplan_class,
+			course_classplan as course_classplan
+		where
+			course_userplan_class_detail.userplan_detail_id = #{userplanDetailId}
+			and course_userplan_class_detail.dr = 0
+			
+			and course_userplan_class.userplan_class_id = course_userplan_class_detail.userplan_class_id
+			and course_userplan_class.dr = 0
+			and course_userplan_class.`status` = 1
+			
+			and course_classplan.classplan_id = course_userplan_class_detail.classplan_id
+			and course_classplan.dr = 0
+			and course_classplan.`status` = 1
+			and course_classplan.is_audited = 1
+			
+			ORDER BY course_userplan_class_detail.`timestamp` DESC 
+			LIMIT 1
+	</select>
+	
+	<select id="queryCourseNumByClassplanIdAndToday" resultType="int">
+		select
+			count(1)
+		from
+			course_classplan_lives
+		where
+			classplan_id = #{classplanId} and day_time = #{today}
+			and live_class_type_ids like concat('%',#{classTypeId},'%')
+	</select>
+
+</mapper>

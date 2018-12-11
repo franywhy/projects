@@ -1,0 +1,32 @@
+<div class="tagArea">
+	<ul class="tagList">
+        <li class="<%=!params.type ? "cur":""%>"><a href="#a=costhistory"><i></i><span>全部</span></a></li>    
+        <li class="<%=params.tab=='send_gift'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=send_gift&type=send_gift"><i></i><span>送礼</span></a></li>
+
+        <li class="<%=params.tab=='song'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=song&type=song"><i></i><span>点歌</span></a></li>
+        <li class="<%=params.tab=='label'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=label&type=label"><i></i><span>爱签记录</span></a></li>
+        <li class="<%=params.tab=='grab_sofa'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=grab_sofa&type=grab_sofa"><i></i><span>抢沙发</span></a></li>
+
+        <li class="<%=params.tab=='level_up'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=level_up&type=level_up"><i></i><span>接生</span></a></li>
+
+        <li class="<%=params.tab=='open_egg'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=open_egg&type=open_egg"><i></i><span>砸蛋</span></a></li>
+
+         <li class="<%=params.tab=='broadcast'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=broadcast&type=broadcast"><i></i><span>发广播</span></a></li>
+        <li class="<%=params.tab=='buy_vip'? 'cur':''%>"><a href="#a=costhistory&_id=<%=params._id||params.user_id%>&menu=<%=params.menu%>&tab=buy_vip&type=buy_vip"><i></i><span>买VIP</span></a></li> 
+
+
+    </ul>
+</div>
+<div class="searchForm">
+    <form name="searchForm">
+        用户ID
+        <input type="number" name="_id" size="10">
+          选择日期
+        <input id="stime" type="text" name="stime" value="" size="20" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})" />
+        <input class="d-button J_search" type="button" value="查询" />
+        <input class="d-button J_reset" type="reset" name="" value="重置">
+            </form>
+</div>
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.LiveLogDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	live_log.live_log_id AS liveLogId , 	live_log.live_id AS liveId , 	live_log.live_num AS liveNum , 	live_log.user_id AS userId , 	live_log.business_id AS businessId , 	live_log.watch_duration AS watchDuration , 	live_log.live_start_time AS liveStartTime , 	live_log.live_end_time AS liveEndTime , 	live_log.live_duration AS liveDuration , 	live_log.attend_30 AS attend30 , 	live_log.version_code AS versionCode , 	live_log.business_type AS businessType , 	live_log.school_id AS schoolId , 	live_log.m_id AS mId , 	live_log.create_time AS createTime 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM live_log AS live_log
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  live_log_id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.LiveLogEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND live_log_id = #{liveLogId}
+	</select>
+	<!-- 查询是否存在这条记录 -->
+	<select id="liveLogExist" parameterType="string" resultType="int">
+	    SELECT COUNT(live_log_id) FROM `live_log` WHERE m_id=#{mId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.LiveLogEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.LiveLogEntity" useGeneratedKeys="true" keyProperty="liveLogId">
+		insert into live_log
+		(		`live_id`, 				`live_num`, 				`user_id`, 				`business_id`, 				`watch_duration`, 				`live_start_time`, 				`live_end_time`, 				`live_duration`, 				`attend_30`, 				`version_code`, 				`business_type`, 				`school_id`, 				`m_id`, 				`create_time`		)
+		values
+		(
+			#{liveId}, 																			#{liveNum}, 																			#{userId}, 																			#{businessId}, 																			#{watchDuration}, 																			#{liveStartTime}, 																			#{liveEndTime}, 																			#{liveDuration}, 																			#{attend30}, 																			#{versionCode}, 																			#{businessType}, 																			#{schoolId}, 																			#{mId}, 																			#{createTime}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.LiveLogEntity">
+		update live_log 
+		<set>
+			<if test="liveId != null">`live_id` = #{liveId}, </if>
+			<if test="liveNum != null">`live_num` = #{liveNum}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="businessId != null">`business_id` = #{businessId}, </if>
+			<if test="watchDuration != null">`watch_duration` = #{watchDuration}, </if>
+			<if test="liveStartTime != null">`live_start_time` = #{liveStartTime}, </if>
+			<if test="liveEndTime != null">`live_end_time` = #{liveEndTime}, </if>
+			<if test="liveDuration != null">`live_duration` = #{liveDuration}, </if>
+			<if test="attend30 != null">`attend_30` = #{attend30}, </if>
+			<if test="versionCode != null">`version_code` = #{versionCode}, </if>
+			<if test="businessType != null">`business_type` = #{businessType}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="mId != null">`m_id` = #{mId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		<include refid="base_where"/>
+		AND live_log_id = #{liveLogId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM live_log 
+		<include refid="base_where"/>
+		AND live_log_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM live_log 
+		<include refid="base_where"/> 
+		AND live_log_id IN 
+		<foreach item="liveLogId" collection="ids" open="(" separator="," close=")">
+			#{liveLogId}
+		</foreach>
+	</delete>
+</mapper>

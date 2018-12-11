@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.LogLabelBonusRelationRecordDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.LogLabelBonusRelationRecordEntity" id="logLabelBonusRelationRecordMap">
+        <result property="id" column="id"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="modifyTime" column="modify_time"/>
+		<result property="labelId" column="label_id"/>
+        <result property="tipName" column="tip_name"/>
+        <result property="satisyMoney" column="satisy_money"/>
+        <result property="verySatisyMoney" column="very_satisy_money"/>
+        <result property="modifyReason" column="modify_reason"/>
+        <result property="dr" column="dr"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.LogLabelBonusRelationRecordEntity">
+		select * from log_label_bonus_relation_record where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.LogLabelBonusRelationRecordEntity">
+		select * from log_label_bonus_relation_record
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from log_label_bonus_relation_record 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.LogLabelBonusRelationRecordEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into log_label_bonus_relation_record
+		(
+			`creator`, 
+			`modifier`,
+			`label_id`,
+			`tip_name`,
+			`satisy_money`, 
+			`very_satisy_money`, 
+			`modify_reason`, 
+			`dr`,
+			`remark`
+		)
+		values
+		(
+			#{creator}, 
+			#{modifier},
+			#{labelId},
+			#{tipName},
+			#{satisyMoney}, 
+			#{verySatisyMoney}, 
+			#{modifyReason}, 
+			0,
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.LogLabelBonusRelationRecordEntity">
+		update log_label_bonus_relation_record 
+		<set>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="tipName != null">`tip_name` = #{tipName}, </if>
+			<if test="satisyMoney != null">`satisy_money` = #{satisyMoney}, </if>
+			<if test="verySatisyMoney != null">`very_satisy_money` = #{verySatisyMoney}, </if>
+			<if test="modifyReason != null">`modify_reason` = #{modifyReason}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="queryPOJOList" resultType="io.renren.pojo.LogLabelBonusRelationRecordPOJO">
+	SELECT
+		log.id,
+		log.modifier,
+		sys.nick_name,
+		log.modify_time,
+		log.tip_name,
+		log.satisy_money,
+		log.very_satisy_money,
+		log.modify_reason,
+		log.remark
+	FROM
+		log_label_bonus_relation_record AS log
+	LEFT JOIN sys_user AS sys ON log.modifier = sys.user_id
+
+	WHERE
+		log.dr = 0
+		<if test="labelId != null">
+			AND log.label_id = #{labelId}
+		</if>
+	order by log.id desc
+	</select>
+
+	<select id="queryPOJOListTotal" resultType="int">
+		SELECT
+		count(*)
+		FROM
+		log_label_bonus_relation_record AS log
+		LEFT JOIN sys_user AS sys ON log.modifier = sys.user_id
+
+		WHERE
+		log.dr = 0
+		<if test="labelId != null">
+			AND log.label_id = #{labelId}
+		</if>
+	</select>
+
+</mapper>

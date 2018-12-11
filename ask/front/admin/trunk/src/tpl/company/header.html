@@ -1,0 +1,22 @@
+<!--公司档案页头-->
+<h2 class="appTitle">
+    <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+    <input type="button" class="d-button d-state-highlight J_add" value="添加<%=pty.itemName%>" />
+    <%}%>
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        公司编号
+        <input type="text" name="company_code" size="20" />
+        公司名称
+        <input type="text" name="company_name" size="20" />
+        类型
+        <select name="company_type">
+            <option selected="selected" value="">请选择</option>
+            <option value="0">平台</option>
+            <option value="1">公司</option>
+        </select>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/公司档案页头-->

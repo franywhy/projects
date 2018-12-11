@@ -1,0 +1,173 @@
+var pkg = require('../package.json');
+
+fis.config.set("project", {
+    md5Length: 6,
+    md5Connector: '-'
+});
+
+fis.config.merge({
+    modules: {
+        lint: {
+            js: 'jshint',
+            css: 'csslint'
+        }
+    },
+    settings: {
+        lint: {
+            jshint: {
+                i18n: 'zh-CN',
+                bitwise: false, //允许使用位操作
+                camelcase: false, //允许所有变量的声明使用驼峰式或大小写加下划线
+                curly: true, //循环或者条件语句需要在大括号里面
+                eqeqeq: false, //不用 === 和!== 代替== 和 !=
+                es3: false, //不使用es3规范
+                forin: false, //允许在for in 循环里面不出现hasOwnProperty，
+                freeze: false, //允许扩展Array,String等的原型链
+                immed: false, //匿名调用(function(){}());
+                indent: false, //强制代码使用特定的tab宽度
+                latedef: true, //在变量定义之前禁止使用该变量
+                newcap: false, //对于首字母大写的函数（声明的类），强制使用new
+                noarg: true, //禁止使用arguments.caller and arguments.callee
+                noempty: true, //禁止出现空代码块
+                nonew: true, //禁止使用构造函数时不把结果赋给一个变量
+                plusplus: false, //允许使用++ --
+                quotmark: false, //true指不想引入任何一种具体的引号风格，但想保持一致。single指单引号，double指只允许双引号 false 不检验
+                unused: false, //禁止出现为使用过的变量出现
+                undef: false, //所有的非全局变量，在使用前都被声明。 如果你不在一个本地作用域内使用var的方式来声明变量，Javascript会把它放到全局作用域下面。这样会很容易引起错误
+                strict: false, //使用es5的严格语法
+                trailing: false, //发现代码的尾部有空行会报错
+                multistr: true, // 允许使用\ 连接多行string
+                maxparams: false, //true是 设置一个函数最多允许的参数个数 jsHint为3
+                maxdepth: false, //true允许控制代码的嵌套层次 jsHint为3
+                maxstatements: false, //true 限制函数中语句 jsHint为4
+                white: false,
+                eqnull: true, //允许== undefined null
+                sub: true, //可以使用a['b']或 a.b
+                scripturl: true, //url里面可以出现javascript:;
+                evil: true, //允许使用eval方法
+                laxbreak: true //允许不安全的换行
+            },
+            csslint: {
+                //报告为“WARNING”的规则ID列表，支持数组或以“,”分隔的字符串    
+                warnings: ['import', 'zero-units', 'shorthand', 'empty-rules', 'known-properties'],
+                //报告为“ERROR”的规则ID列表，支持数组或以“,”分隔的字符串
+                errors: [],
+                //若ie值为false，则忽略所有与IE兼容性相关的校验规则
+                ie: true,
+                //要忽略的规则ID列表，支持数组或以“,”分隔的字符串
+                ignore: ['ids',
+                    'fallback-colors',
+                    'unique-headings',
+                    'qualified-headings',
+                    'underscore-property-hack',
+                    'star-property-hack',
+                    'vendor-prefix',
+                    'outline-none',
+                    'display-property-grouping',
+                    'adjoining-classes',
+                    'regex-selectors',
+                    'universal-selector',
+                    'font-sizes',
+                    'important'
+                ]
+            }
+
+        }
+    }
+});
+
+
+fis.config.set("roadmap", {
+    domain: "http://ttapp.app1101168695.twsapp.com/" + pkg.name,
+ 
+    path: [{
+    	reg: "map.json",
+    	release: false
+    }, {
+    	reg: "editor/**",
+    	useLint: false
+    }, {
+        reg: '**.ico',
+        useHash: false
+    }]
+});
+
+/*
+fis.config.set("pack", {
+    'pkg/main.js': []
+});
+*/
+
+fis.config.set('settings.preprocessor.replace.appid', pkg.appid);
+fis.config.set('settings.preprocessor.replace.baseDomain', pkg.baseDomain);
+fis.config.set('settings.preprocessor.replace.adminDomain', pkg.adminDomain);
+fis.config.set('settings.preprocessor.replace.appDomain', pkg.appDomain);
+fis.config.set('modules.preprocessor.js', 'replace');
+fis.config.set('modules.preprocessor.css', 'replace');
+fis.config.set('modules.preprocessor.html', 'replace');
+
+
+fis.config.set('modules.postpackager', function(ret, conf, settings, opt) {
+    var ns = fis.config.get('namespace');
+    var connector = fis.config.get('namespaceConnector', ':');
+    var startReg = /<!--\s*build:(\w+)(?:\(([^\)]+?)\))?\s+(\/?([^\s]+?))\s*-->/gim;
+    var endReg = /<!--\s*endbuild\s*-->/gim;
+
+    //重组打包对象
+    var pkgs = {};
+    fis.util.map(ret.pkg, function(subpath, pkg, index) {
+        pkgs[pkg.id] = ret.map.pkg[(ns ? ns + connector : '') + 'p' + index];
+    });
+
+    //concat
+    fis.util.map(ret.src, function(subpath, file) {
+        //html类文件，才需要做替换
+        if (file.isHtmlLike) {
+            var content = file.getContent();
+            var html = [];
+            var sections = content.split(endReg);
+            for (var i = 0, l = sections.length; i < l; ++i) {
+                if (sections[i].match(startReg)) {
+                    var section = sections[i].split(startReg);
+                    //输出开始内容
+                    html.push(section[0]);
+                    //有打包对象,则进行替换
+                    var pkg = pkgs[section[3]];
+                    if (pkg) {
+                        if ("js" == pkg.type) {
+                            html.push('<script src="' + pkg.uri + '"></script>');
+                        } else if ("css" == pkg.type) {
+                            html.push('<link rel="stylesheet" href="' + pkg.uri + '"/>');
+                        }
+                        continue;
+                    }
+                    //输出原标签
+                    html.push(section[5]);
+                } else {
+                    //输出结束内容
+                    html.push(sections[i]);
+                }
+            }
+            file.setContent(html.join(''));
+        }
+    });
+
+});
+
+
+fis.config.set("deploy", {
+    online: [{
+        to: '../build/website/',
+        replace: {
+            from: "@VERSION@",
+            to: pkg.version
+        }
+    }, {
+        to: '../build/assets/',
+        include: /^.*\.(?:xml|js|css|svg|tif|tiff|wbmp|png|bmp|fax|gif|ico|jfif|jpe|jpeg|jpg|woff|cur|swf|manifest)/i,
+        replace: {
+            from: "@VERSION@",
+            to: pkg.version
+        }
+    }]
+});

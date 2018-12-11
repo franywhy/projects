@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文件提交</title>
+<script type="text/javascript" src="${rc.contextPath}/statics/plugins/upload/upload.js"></script>
+</head>
+<body>
+	
+	<div id="div_iframe" style="display:none">
+		<form id="uploadForm" enctype="multipart/form-data" name="tmp_upload" method="post" action="1" target="tmp_iframe">
+			<input type="text" value="" name="redirectUrl" id="redirectUrl" style="display:none"/>
+			<input type="text" value="1" name="sourceId" style="display:none"/>
+			<input type="text" value="1" name="errorFile" id = "errorFile" style="display:none"/>
+			<input name="file" type="file" id="file" multiple="multiple" />
+		</form>
+		<iframe name="tmp_iframe" id="tmp_iframe" style="display:none"></iframe>
+	</div>
+</body>
+</html>

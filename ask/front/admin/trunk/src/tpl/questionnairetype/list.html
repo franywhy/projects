@@ -1,0 +1,36 @@
+<!--问卷调查类型档案列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+			<th class="short">问卷类型编号</th>
+            <th class="short">问卷类型名称</th>
+            <th class="short">种类</th>
+            <th class="short">创建时间</th>
+            <th class="short">操作</th>
+        </tr>
+	</thead>
+	<tbody>
+        <% for(var i=0; i< data.length; i++){ %>
+        <tr>
+            <td  class="short"><%=data[i].type_code||""%></td>
+            <td  class="short"><%=data[i].type_name||""%></td>
+            <td  class="short"><%if(data[i].class=='0'){%>
+                 课程
+                <%}else{%>
+                 老师
+                <%}%>
+            </td>
+            <td  class="short"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+            <td class="short">
+            <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">查看</button>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit( '<%=data[i]._id %>' )">改</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删</button>
+            <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/问卷调查类型档案列表-->

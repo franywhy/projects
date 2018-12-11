@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ContractDetailDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	cd.id as id,
+cd.contract_record_id as contractRecordId, 
+cd.subject_name as subjectName,
+<!--  cd.subject_id as subjectId, 
+cd.bid as bid, -->
+cd.dcost as dcost,
+cd.ddiscount as ddiscount,
+cd.dnshoulddcost as dnshoulddcost,
+cd.dr as dr
+
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM contract_detail AS cd
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.ContractDetail">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.ContractDetail">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		where 1 = 1 and cd.dr=0
+		<if test="contractRecordId != null and contractRecordId != ''">
+			and cd.contract_record_id =#{contractRecordId}
+		</if>
+		
+		<if test="id != null and id.trim() != ''">
+			and cd.id =#{id}
+		</if>
+		 
+		
+	<!-- 	<if test="operation != null and operation.trim() != ''">
+			and cr.operation like concat('%',#{operation},'%')
+		</if> -->
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	 
+ 
+	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.ContractDetail" useGeneratedKeys="true" keyProperty="id">
+	insert into contract_detail
+	(
+`id`,
+`contract_record_id`, 
+`subject_name`, 
+`dcost`,
+`ddiscount`,
+`dnshoulddcost`,
+`dr` 
+
+	)
+	values
+	(
+		#{id}, 
+#{contractRecordId},  
+#{subjectName},  
+#{dcost}, 
+#{ddiscount}, 
+#{dnshoulddcost}, 
+#{dr}
+
+
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.ContractDetail">
+		update contract_detail 
+		<set>
+ <if test='id != null'>`id` = #{id}, </if>
+ <if test='contractRecordId != null'>`contract_record_id` = #{contractRecordId}, </if>
+ 
+ <if test='subjectName != null'>`subject_name` = #{subjectName}, </if> 
+  
+ <if test='dcost != null'>`dcost` = #{dcost}, </if>
+ <if test='ddiscount != null'>`ddiscount` = #{ddiscount}, </if>
+ <if test='dnshoulddcost != null'>`dnshoulddcost` = #{dnshoulddcost}, </if>
+ <if test='dr != null'>`dr` = #{dr}  </if>
+
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	
+	
+	<!--软删除-->
+	<update id="setDr" parameterType="io.renren.entity.ContractDetail">
+		update contract_detail 
+		<set>
+ `dr` = 1
+
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM contract_detail 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM contract_detail 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	
+	 
+	
+	
+</mapper>

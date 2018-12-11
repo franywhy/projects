@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.AdaptiveGoodsDao">
+
+    <select id="queryGoodId" resultType="long">
+        SELECT mall_good_id FROM adaptive_goods WHERE  dr = 0
+    </select>
+
+    <select id="isExistOrder" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            mall_order
+        WHERE
+            dr = 0
+        AND user_id = #{userId}
+        AND commodity_id IN
+        <foreach item="goodId" collection="goodIdList" open="(" separator="," close=")">
+            #{goodId}
+        </foreach>
+    </select>
+</mapper>

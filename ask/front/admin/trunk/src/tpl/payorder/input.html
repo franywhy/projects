@@ -1,0 +1,68 @@
+<!--订单管理输入-->
+<form name="inputForm">
+    <input name="_id" hidden="hidden"/>
+    <input type="hidden" id="item_id" name="item_id" value=""/>
+    <input type="hidden"  id="item_pic_url" name="item_pic_url" value=""/>
+    <input type="hidden"  id="item_price" name="item_price" value=""/>
+    <input type="hidden"  id="item_detail" name="item_detail" value=""/>
+    <table style="height:80px;" id="table">
+        <tr><td>
+            选择学员<span class="red">*</span>:
+        </td>
+            <td>
+                <input class="input" name="select_user_name" id="select_user_name" type="text"  value="" size="30"  required  onClick=" Izb.controller.payorder.showuserlist();"/>
+                <input class="hidden" name="user_id" id="user_id" type="text" value="" />
+            </td>
+            <td >类型</td>
+            <td>
+                <select class="input" id="item_type" name="item_type">
+                    <!--<option value="0">不包就业课程</option>-->
+                    <option value="1">包就业课程</option>
+                    <option value="2">vip用户</option>
+                    <option value="3">公开课</option>
+                </select></td>
+        </tr>
+        <tr><% var type=$.parseParam(location.hash).item_type; if(type!=2){%>
+            <td>
+                商品名称<span class="red">*</span>:
+            </td>
+            <td>
+                <input class="input" type="text"  id="item_name" name="item_name" value="" size="30" required onClick=" Izb.controller.payorder.showitemlist();"/>
+                <input type="hidden"  id="item_num"  name="item_num" value="" />
+            </td>
+        </tr>
+        <%} else {%>
+        <tr>
+            <td>
+                商品数量<span class="red">*</span>:
+            </td>
+            <td>
+                <input type="hidden"  name="item_name" value="vip会员"/>
+                <input class="input" type="text"  name="item_num" value="" size="12" required/>
+            </td>
+        </tr>
+        <%}%>
+    </table>
+</form>
+<!--/订单管理输入
+    推广渠道来源 comefrom
+    是否到账  comfirm_state
+    提交时间 create_time
+    是否为内部充值 is_backend
+    商品有效期开始时间 item_begin_time
+    商品描述 item_detail
+    商品有效期结束时间 item_end_time
+    商品id  item_id
+    商品名称   item_name
+    商品数量  item_num
+    商品图片url  item_pic_url
+    商品类型  item_type
+    订单金额  money
+    订单号  order_no
+    订单状态  order_state
+    支付类型  pay_type
+    订单结算状态  Statement_state1
+    就业结算状态  Statement_state2
+    支付渠道订单号  thirdpart_orderno
+    学员id   user_id
+-->

@@ -1,0 +1,52 @@
+<!--签约申请列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+			<th style="width:120px;">申请时间</th>
+            <th class="num" style=" width:100px;">用户ID</th>
+            <th class="short">家族名称</th>
+            <th class="short">徽章名称</th>
+            <th class="short">徽章标识</th>
+            <th>家族公告</th>
+             <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+             <th class="action" style="width:120px;">操作</th>
+             <%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<td><%=new Date(data[i].timestamp).toLocaleString()%></td>
+            <td class="num"><a href="javascript:Izb.controller.user.show('<%=data[i]._id%>')"><%=data[i]._id%></a></td>
+       
+            <td class="short"><%=data[i].family_name  %></td>
+            <td class="short"><%=data[i].badge_name %></td> 
+            <td class="short"><img height="32px" width="32px"  src="<%=data[i].family_pic%>" alt="<%=data[i].badge_name%>" /></td> 
+            <td><%=data[i].family_notice %></td> 
+            
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+
+			<%if(data[i].status==1){%>
+				未通过
+			<%}%>
+			<%if(data[i].status==2){%>
+				 已通过
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.close('<%=data[i]._id%>')">解约</button>
+
+			<%}%>
+			<!--<%if(data[i].status==3){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.setStatus('<%=data[i]._id%>', 2)">通过</button>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.setStatus('<%=data[i]._id%>', 1)">不通过</button>
+			<%}%>-->
+			<%if(data[i].status==4){%>
+				 解约
+			<%}%>
+			</td>
+            <%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/签约申请列表-->

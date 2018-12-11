@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.RegistrationScoreDao">
+			
+	<!--报考档案根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.RegistrationScoreEntity">
+		select * from registration_score where id = #{id}    			
+	</select>		
+	
+	<!--报考档案分页列表-->
+	<select id="queryList" resultType="io.renren.entity.RegistrationScoreEntity">
+		select * from registration_score
+		where dr = 0 
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and `teacher_name` like concat('%',#{teacherName},'%')
+		</if>
+		<if test="course != null and course.trim() != ''">
+			and `course` like concat('%',#{course},'%')
+		</if>
+		<if test="studentMobile != null and studentMobile.trim() != ''">
+			and `student_mobile` like concat('%',#{studentMobile},'%')
+		</if>
+		<if test="className != null and className.trim() != ''">
+			and `class_name` like concat('%',#{className},'%')
+		</if>
+			order by creation_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>		
+	</select>
+	
+	<!--成绩档案分页列表-->
+	<select id="queryListScore" resultType="io.renren.entity.RegistrationScoreEntity">
+		select * from registration_score
+		where dr = 0 and type = 1
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and `teacher_name` like concat('%',#{teacherName},'%')
+		</if>
+		<if test="course != null and course.trim() != ''">
+			and `course` like concat('%',#{course},'%')
+		</if>
+		<if test="studentMobile != null and studentMobile.trim() != ''">
+			and `student_mobile` like concat('%',#{studentMobile},'%')
+		</if>
+		<if test="className != null and className.trim() != ''">
+			and `class_name` like concat('%',#{className},'%')
+		</if>
+		<if test="status != null">
+			and `status` = #{status}
+		</if>
+			order by creation_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>		
+	</select>
+	<!--报考档案分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from registration_score
+		where dr = 0 type = 0
+		<if test="teacherName != null and teacherName.trim() != ''">
+			and `teacher_name` like concat('%',#{teacherName},'%')
+		</if>
+		<if test="course != null and course.trim() != ''">
+			and `course` like concat('%',#{course},'%')
+		</if>
+		<if test="studentMobile != null and studentMobile.trim() != ''">
+			and `student_mobile` like concat('%',#{studentMobile},'%')
+		</if>
+		<if test="className != null and className.trim() != ''">
+			and `class_name` like concat('%',#{className},'%')
+		</if>
+	</select>
+	
+	
+	<!--新增-->
+	<insert id="saveBatch" >
+		insert into registration_score
+		(
+			`student_name`, 				
+			`student_mobile`, 				
+			`class_name`, 				
+			`teacher_name`, 				
+			`course`, 				
+			`type`, 				
+			`examination_time`, 				
+			`registration_time`, 				
+			`apply_province`, 				
+			`registration_province`, 				
+			`score`, 				
+			`status`, 				
+			`remark`, 				
+			`creator`, 				
+			`creation_time`, 				
+			`modifier`, 				
+			`modified_time`, 				
+			`dr`		
+		)values	
+			<foreach collection="list" item="item" index="index" separator="," >
+			(
+			#{item.studentName}, 																			
+			#{item.studentMobile}, 																			
+			#{item.className}, 																			
+			#{item.teacherName}, 																			
+			#{item.course}, 																			
+			#{item.type}, 																			
+			#{item.examinationTime}, 																			
+			#{item.registrationTime}, 																			
+			#{item.applyProvince}, 																			
+			#{item.registrationProvince}, 																			
+			#{item.score}, 																			
+			#{item.status}, 																			
+			#{item.remark}, 																			
+			#{item.creator}, 																			
+			#{item.creationTime}, 																			
+			#{item.modifier}, 																			
+			#{item.modifiedTime}, 																			
+			#{item.dr}									
+			)
+			</foreach>
+	</insert>
+	<!-- 保存  -->
+	<insert id="save" parameterType="io.renren.entity.RegistrationScoreEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into registration_score
+		(
+			`student_name`, 				
+			`student_mobile`, 				
+			`class_name`, 				
+			`teacher_name`, 				
+			`course`, 				
+			`type`, 				
+			`examination_time`, 				
+			`registration_time`, 				
+			`apply_province`, 				
+			`registration_province`, 				
+			`score`, 				
+			`status`, 				
+			`remark`, 				
+			`creator`, 				
+			`creation_time`, 				
+			`modifier`, 				
+			`modified_time`, 				
+			`dr`		
+		)values		
+			(
+			#{studentName}, 																			
+			#{studentMobile}, 																			
+			#{className}, 																			
+			#{teacherName}, 																			
+			#{course}, 																			
+			#{type}, 																			
+			#{examinationTime}, 																			
+			#{registrationTime}, 																			
+			#{applyProvince}, 																			
+			#{registrationProvince}, 																			
+			#{score}, 																			
+			#{status}, 																			
+			#{remark}, 																			
+			#{creator}, 																			
+			#{creationTime}, 																			
+			#{modifier}, 																			
+			#{modifiedTime}, 																			
+			0									
+			)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.RegistrationScoreEntity">
+		update registration_score 
+		<set>
+			<if test="studentName != null">`student_name` = #{studentName}, </if>
+			<if test="studentMobile != null">`student_mobile` = #{studentMobile}, </if>
+			<if test="className != null">`class_name` = #{className}, </if>
+			<if test="teacherName != null">`teacher_name` = #{teacherName}, </if>
+			<if test="course != null">`course` = #{course}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="examinationTime != null">`examination_time` = #{examinationTime}, </if>
+			<if test="registrationTime != null">`registration_time` = #{registrationTime}, </if>
+			<if test="applyProvince != null">`apply_province` = #{applyProvince}, </if>
+			<if test="registrationProvince != null">`registration_province` = #{registrationProvince}, </if>
+			<if test="score != null">`score` = #{score}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>		
+		where id = #{id}
+	</update>
+	
+	<!--删除-->
+	<!-- <update id="delete" parameterType="io.renren.entity.RegistrationScoreEntity">
+		UPDATE registration_score set dr = 1 where id = #{id}
+	</update> -->
+	
+	<!--删除-->
+	<delete id="delete" parameterType="io.renren.entity.RegistrationScoreEntity">
+		delete from registration_score where id = #{id}				
+	</delete>
+	
+	<!--批量删除-->
+	<!-- <update id="deleteBatch" parameterType="io.renren.entity.RegistrationScoreEntity">
+		UPDATE registration_score set dr = 1 where id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update> -->
+	
+	<!--批量删除-->	
+	<delete id="deleteBatch" parameterType="io.renren.entity.RegistrationScoreEntity">
+		delete from registration_score where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 更新审核状态 -->
+	<delete id="updateStatusBatch">
+		update registration_score
+		set status = #{status}
+		where id in
+		<foreach item="id" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,38 @@
+<!--banner管理-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">图片</th>
+        <th class="auto">跳转地址</th>
+        <th class="auto">排序序号</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+
+
+            <td class="pic"><img src="<%=data[i].pic %>" onclick="javascript:window.open('<%=data[i].pic %>')" style="height:50px;"></td>
+
+            <td class="auto">
+                <button class="d-button" onclick="javascript:window.open('<%=data[i].url %>')">跳  转</button>&nbsp;&nbsp;
+                <%=data[i].url %>
+            </td>
+            <td class="auto"><%=data[i].sort %></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详细</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/banner管理-->

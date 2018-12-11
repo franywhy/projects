@@ -1,0 +1,25 @@
+<!--奖池信息列表-->
+<div>奖池当前余额：<span id="pool_num"></span></div><br />
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="longtime">日期</th>
+            <th class="auto">进入金额(元)</th>
+            <th class="auto">出奖金额(元)</th>
+            <th class="auto">净流入(元)</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+         <td class="longtime"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+		 <td class="auto"><%=Izb.common.getMoney(data[i]['in'])%></td>
+		 <td class="auto"><%=Izb.common.getMoney(data[i]['out']) %></td>
+            <td class="auto"><%=Izb.common.getMoney(data[i]['in'] -data[i]['out']) %></td>
+        </tr>
+		<%}%>
+    </tbody>
+
+</table>
+<div class="appPager"></div>
+<!--/奖池信息列表-->

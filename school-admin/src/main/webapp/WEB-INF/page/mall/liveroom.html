@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>直播间档案表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("mall:liveroom:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.liveRoomName" @keyup.enter="query" placeholder="直播间名称">
+			</div>
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.productName" @keyup.enter="query" placeholder="产品线名称">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("mall:liveroom:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("mall:liveroom:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("mall:liveroom:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("mall:liveroom:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+			#end
+			#if($shiro.hasPermission("mall:liveroom:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+						
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallLiveRoom.liveRoomId" placeholder=""/>
+			    </div>
+		    </div>					    			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallLiveRoom.liveRoomName" placeholder="直播间名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallLiveRoom.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+			    </div>
+			</div>
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间频道号</div>
+			   	<div class="col-sm-10">
+			      <input type="number" class="form-control" v-model="mallLiveRoom.liveRoomChannelId" placeholder="直播间频道号"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间频道密钥</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallLiveRoom.liveRoomChannelSecretkey" placeholder="直播间频道密钥"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">直播间频道密码</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="mallLiveRoom.liveRoomChannelPassword" placeholder="直播间频道密码"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">展示互动直播id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="mallLiveRoom.genseeLiveId" placeholder="展示互动直播id" />
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">展示互动直播房间号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="mallLiveRoom.genseeLiveNum" placeholder="展示互动直播房间号" />
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">直播间描述</div>
+				<div class="col-sm-10">
+					<textarea class="form-control" v-model="mallLiveRoom.liveRoomRemake" style="width:371px;height:100px;" placeholder="直播间描述不得超过50个字">
+               		</textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">是否禁用</div> 
+				<label class="radio-inline">
+				  <input type="radio" name="status" value="0" v-model="mallLiveRoom.status"/> 禁用
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="status" value="1" v-model="mallLiveRoom.status"/> 启用
+				</label>
+			</div>							    		    								    			
+
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/liveroom.js?_${date.systemTime}"></script>
+#parse("layer/productLay.html")
+</body>
+</html>

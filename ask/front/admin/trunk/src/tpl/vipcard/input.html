@@ -1,0 +1,49 @@
+<!--vip卡片档案-->
+<form name="inputForm">
+    <table width="100%">
+
+        <tr>
+            <td >频道</td>
+            <td>
+                <select name="main_type_id" class="input" id="main_type_id" style="width: 182px"></select>
+
+                <input type="hidden" class="input" id="_id" name="_id"/>
+            </td>
+            <td >图片</td>
+            <td>
+                <input name="card_url" class="input" id="card_url" type="text"  readonly/>
+                <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('card_url');" />
+            </td>
+        </tr>
+
+        <tr>
+            <td >价格</td>
+            <td>
+                <input name="price" type="number" class="input" id="price" type="text" />
+            </td>
+            <td>有效月数 </td>
+            <td>
+                <input name="month_num" type="number" class="input" id="month_num" type="text"  />
+            </td>
+        </tr>
+
+        <tr>
+            <td >开始时间 </td>
+            <td>
+                <input name="begin_date" class="input" id="begin_date" type="text"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+            </td>
+            <td>失效时间 </td>
+            <td>
+                <input name="end_date" class="input" id="end_date" type="text" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+            </td>
+        </tr>
+
+        <tr>
+            <td >描述</td>
+            <td colspan="3">
+                <input type="text" class="input" id="memo" style="width: 440px;height:50px" name="memo" value=""/>
+            </td>
+        </tr>
+    </table>
+</form>
+<!--/vip卡片档案-->

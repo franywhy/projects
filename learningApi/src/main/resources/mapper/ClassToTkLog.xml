@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.ClassToTkLogDao">
+    <insert id="save" parameterType="com.hq.learningapi.entity.ClassToTkLogEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into class_to_tk_log
+        (
+        `createTime`,
+        `user_mobile`,
+        `user_id`,
+        `good_id`,
+        `push_json`,
+        `remark`
+        )
+        values
+        (
+        #{createtime},
+        #{userMobile},
+        #{userId},
+        #{goodId},
+        #{pushJson},
+        #{remark}
+        )
+    </insert>
+
+
+</mapper>

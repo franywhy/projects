@@ -1,0 +1,31 @@
+<form name="inputForm">
+    <input name="_id" hidden="hidden"/>
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:60px;">标题</td>
+            <td>
+                <input class="input" type="text" name="title" id="title" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">图片</td>
+            <td>
+                <input class="input" type="text" name="pic" id="pic" required/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('pic', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">H5链接</td>
+            <td>
+                <input class="input" type="text" name="url"  id="url" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">倒计时/秒</td>
+            <td>
+                <!--<input class="input" type="number" name="countdown"  id="countdown" required/>-->
+                <input class="input" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="countdown"  id="countdown" required/>
+            </td>
+        </tr>
+    </table>
+</form>

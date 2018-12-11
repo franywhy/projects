@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>统考成绩</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+ 		
+			<table class="table table-condensed" border="0">
+				<tr border="0"> 
+					<td><label for="name">姓名:</label></td>
+					<td><input type="text" class="form-control"  v-model.trim="q.name" id="name"></td>
+					<td><label for="name">班级:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.className" readonly="readonly" placeholder="点击选择班级" @click="classLayerShow"></td>
+					<td><a class="btn btn-primary" @click="query">查询</a></td>
+					<td><a class="btn btn-primary" @click="queryClear">清空条件</a></td>
+					<td><a class="btn btn-danger" @click="exportData" style="float: right"><i class="fa fa-plus"></i>&nbsp;导出</a></td>
+				</tr>
+			</table>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+     
+</div>
+
+<script src="${rc.contextPath}/js/student/recordsign.js?_${date.systemTime}"></script> 
+#parse("layer/classLay.html")
+</body>
+</html>

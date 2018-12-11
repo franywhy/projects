@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>跨域回调</title>
+
+<script type="text/javascript">
+	console.log( window.document.location.href);
+     var data = getParameter("data");
+     var code = getParameter("code");
+     var cb_input_id = getParameter("cb_input_id");
+     var cb_vue = getParameter("cb_vue");
+     var layer_index = getParameter("layer_index");
+     if(code == 200){
+    	 if(cb_vue != null && cb_vue !=''){
+    		//回调函数
+    		eval("window.parent." + cb_vue+'="'+data+'"');
+    	 }
+    	 if(cb_input_id != null && cb_input_id !=''){
+    		//回填地址
+	    	window.parent.document.getElementById(cb_input_id).value = data;
+    	 }
+    	// window.parent.vm.users.nickName = data;
+	    //	var x = window.parent.document.getElementById(cb_input_id).value = data;
+    	//关闭浮层
+         window.parent.hq.core.upload.close(layer_index);
+     }else{
+    	 alert("上传图片失败!");
+     }
+     
+     function getParameter(param) {
+    	    var locString = String(window.document.location.href);
+    	    var rs = new RegExp("(^|)" + param + "=([^&]*)(&|$)", "gi").exec(locString), tmp;
+    	    if (tmp = rs) {
+    	        return tmp[2];
+    	    }
+    	    return "";
+    	}
+</script>
+
+</head>
+<body>
+上传回调页面
+</body>
+</html>

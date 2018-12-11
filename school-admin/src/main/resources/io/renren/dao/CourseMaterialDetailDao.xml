@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseMaterialDetailDao">
+	<!-- 关联产品表字段 -->
+	<sql id="join_productName">
+		sys_product.product_name AS productName
+	</sql>
+	<!-- 关联产品表 -->
+	<sql id="join">
+		LEFT JOIN sys_product AS sys_product ON sys_product.product_id = course_material_detail.product_id
+	</sql>
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_material_detail.detail_id AS detailId , 	
+	course_material_detail.detail_name AS detailName , 	
+	course_material_detail.material_type_id AS materialTypeId , 	
+	course_material_detail.content_html AS contentHtml , 	
+	course_material_detail.url AS url , 	
+	course_material_detail.read_num AS readNum , 	
+	course_material_detail.order_num AS orderNum , 	
+	course_material_detail.create_person AS createPerson , 	
+	course_material_detail.creation_time AS creationTime , 	
+	course_material_detail.modify_person AS modifyPerson , 	
+	course_material_detail.modified_time AS modifiedTime , 	
+	course_material_detail.school_id AS schoolId 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 	
+    </sql>
+    <sql id="other_where">
+   		<if test="detailName != null and detailName.trim() != ''">
+			and course_material_detail.detail_name like concat('%',#{detailName},'%') 
+		</if>
+		<if test="materialTypeId != null">
+			and course_material_detail.material_type_id=#{materialTypeId}
+		</if>
+		<if test="materialId != null">
+			and material_type.material_id=#{materialId}
+		</if>
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_material_detail as course_material_detail
+	</sql>
+	<!-- join其他表格 -->
+	<sql id="join_other_colum">
+    	JOIN course_material_type material_type ON material_type.material_type_id = course_material_detail.material_type_id 
+	</sql>
+	<sql id="other_colum">
+		(select course_material_type.material_type_name from course_material_type course_material_type where course_material_type.material_type_id = course_material_detail.material_type_id) AS materialTypeName,
+		(select course_material.material_name from course_material_type course_material_type,course_material course_material where course_material_type.material_type_id = course_material_detail.material_type_id and course_material_type.material_id=course_material.material_id) AS materialName,
+		(select course_material.material_id from course_material_type course_material_type,course_material course_material where course_material_type.material_type_id = course_material_detail.material_type_id and course_material_type.material_id=course_material.material_id) AS materialId, 
+		(select user.username from sys_user user where user.user_id = course_material_detail.create_person) AS createdName,
+		(select user.username from sys_user user where user.user_id = course_material_detail.modify_person) AS modifiedName 
+	</sql>
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseMaterialDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND detail_id = #{detailId}
+	</select>
+	<select id="countMaterialDetail" >
+		select (*) 
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND detail_id = #{materialDetailId}
+	</select>
+	<!--根据MaterialID查询-->
+	<select id="queryObjectByMaterialTypeId" resultType="io.renren.entity.CourseMaterialDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND material_type_id = #{material_type_id}
+	</select>
+	<!--修改时 回传信息-->
+	<select id="queryObjectById" resultType="io.renren.entity.CourseMaterialDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		,
+		<include refid="other_colum"/>
+		,
+		<include refid="join_productName"/>
+		<include refid="base_from"/>
+		<include refid="join"/>
+		<include refid="base_where"/>
+		
+		AND detail_id = #{detailId}
+	</select>
+	<!--分页列表-->
+	<select id="queryListMap" resultType="map">
+		select
+		<include refid="base_column"/>
+		,
+		<include refid="other_colum"/>
+		,
+		<include refid="join_productName"/>
+		<include refid="base_from"/> 
+		<include refid="join_other_colum"/>
+		<include refid="join"/> 
+		<include refid="base_where"/>
+		<include refid="other_where"/>
+		     order by course_material_detail.order_num desc
+		<if test="offset != null and limit != null">
+			 limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseMaterialDetailEntity" >
+		insert into course_material_detail
+		(
+		        `detail_id`, 	
+				`detail_name`, 				
+				`material_type_id`, 				
+				`content_html`, 				
+				`url`, 				
+				`read_num`, 				
+				`order_num`, 				
+				`create_person`, 				
+				`creation_time`, 				
+				`modify_person`, 				
+				`modified_time`, 				
+				`school_id`,
+				`product_id`		
+		)
+		values
+		(
+		        #{detailId}, 	
+				#{detailName}, 																		
+				#{materialTypeId}, 																			
+				#{contentHtml}, 																			
+				#{url}, 																			
+				#{readNum}, 																			
+				#{orderNum}, 																			
+				#{createPerson}, 																			
+				#{creationTime}, 																			
+				#{modifyPerson}, 																			
+				#{modifiedTime}, 																			
+				#{schoolId},
+				#{productId}									
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseMaterialDetailEntity">
+		update course_material_detail 
+		<set>
+			<if test="detailName != null">`detail_name` = #{detailName}, </if>
+			<if test="materialTypeId != null">`material_type_id` = #{materialTypeId}, </if>
+			<if test="contentHtml != null">`content_html` = #{contentHtml}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="readNum != null">`read_num` = #{readNum}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<!-- <if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if> -->
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND detail_id = #{detailId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM course_material_detail 
+		<include refid="base_where"/>
+		AND detail_id = #{detailId}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM course_material_detail 
+		<include refid="base_where"/> 
+		AND detail_id IN 
+		<foreach item="detailId" collection="ids" open="(" separator="," close=")">
+			#{detailId}
+		</foreach>
+	</delete>
+</mapper>

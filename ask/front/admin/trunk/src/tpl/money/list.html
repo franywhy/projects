@@ -1,0 +1,78 @@
+<!--提现申请列表-->
+
+<div id="listSummary" class="listSummary">从<%=params.stime || '上线' %>到<%=params.etime || '今天'%>，提现人数为<strong><%=count%></strong>人，提现总额为<strong><%=exchange_total%></strong>元。</div>
+<div id="bacthOperation" style=" text-align:right;margin-top:-30px;padding-bottom:10px;">
+    <input type="button" value="通过" class="d-button j-pass" />
+        <input type="button" value="不通过" class="d-button j-nopass" />
+</div>
+<div class="autoTable">
+<table width="100%" class="listTable tablesorter">
+    <thead>
+        <tr>
+            <th ><input type="checkbox" value="" id="j-selectAll" />
+        <label for="j-selectAll">全选</label></th>
+            <th class="longtime">申请时间</th>
+            <th class="num">主播ID</th>
+            <th class="short">真实姓名</th>
+            <th class="short">昵称</th>
+            <th class="short">经纪人</th>
+            <th class="short">提现金额(元)</th>
+            <th class="auto">电话</th>
+            <th class="auto">身份证</th>
+            <th class="short">开户行</th>
+            <th class="short">支行名称</th>
+            <th class="short">开户地</th>
+            <th class="auto">开户号</th>
+            <th class="auto">卡号</th>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <th class="action">操作</th>
+            <%}%>
+        </tr>
+    </thead>
+    <tbody>
+        <%for(var i=0;i
+        <data.length;i++){%>
+            <tr>
+                <td><input type="checkbox" value="<%=data[i]._id%>" class="itemid" /></td>
+                <td class="longtime"><%=new Date(data[i].timestamp).toLocaleString()%></td>
+                <td class="num"><a href="javascript:Izb.controller.star.show('<%=data[i].user_id%>');"><%=data[i].user_id%></a></td>
+                <td class="short"><%=data[i].real_name%></td>
+                <td class="short"><%=data[i].nick_name%></td>
+                <td class="short"><%=data[i].broker%></td>
+                <td class="short"><%=data[i].exchange%></td>
+                <td><%=data[i].tel%></td>
+                <td><%=data[i].sfz%></td>
+                <td class="short">
+                    <%=data[i].bank%>
+                </td>
+                <td><%=data[i].bank_name%></td>
+                <td class="short">
+                    <%=data[i].bank_location%>
+                </td>
+                <td class="auto">
+                    <%=data[i].bank_user_name%>
+                </td>
+                <td class="auto">
+                    <%=data[i].bank_id%>
+                </td>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <td class="action">
+                    <%if(data[i].status == 0){%>
+                    <button class="d-button" onclick="Izb.controller.<%=pty.key%>.update({_id:'<%=data[i]._id%>',status:1});">通过</button>
+                    <button class="d-button" onclick="Izb.controller.<%=pty.key%>.update({_id:'<%=data[i]._id%>',status:2});">不通过</button>
+                    <%}%>
+                    <%if(data[i].status == 1){%>
+                    已处理
+                    <%}%>
+                    <%if(data[i].status == 2){%>
+                    未通过
+                    <%}%>
+                </td>
+                <%}%>
+            </tr>
+            <%}%>
+    </tbody>
+</table>
+    </div>
+<div class="appPager"></div>
+<!--/提现申请列表-->

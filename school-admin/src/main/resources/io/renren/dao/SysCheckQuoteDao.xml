@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysCheckQuoteDao">
+
+	<select id="checkQuote" resultType="int">
+		select count(1) 
+		from ${tableName} stable
+		where  stable.${columnName}=#{value}
+		<if test="dbs != null and dbs == true ">and stable.dr = 0</if>
+	</select>
+	
+	<select id="checkClassType" resultType="int">
+		select count(1) 
+		from ${tableName} stable
+		where  stable.${columnName} = #{value}
+		<if test="dbs != null and dbs == true ">and stable.dr = 0</if>
+	</select>
+	
+	<select id="syncDate" resultType="string">
+		select sys_mq_sync.sync_time 
+		from sys_mq_sync sys_mq_sync
+		where  sys_mq_sync.table_name=#{value} 
+	</select>
+	<update id="updateSyncTime" parameterType="map">
+		update sys_mq_sync 
+		<set>
+			`sync_time` = now()
+		</set>
+		where sys_mq_sync.table_name=#{value} 
+	</update>
+	
+</mapper>

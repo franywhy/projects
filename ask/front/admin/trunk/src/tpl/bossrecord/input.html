@@ -1,0 +1,24 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:60px;">总裁昵称</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="boss_name" id="boss_name" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">总裁头像</td>
+            <td>
+                <input class="input" type="text" name="boss_pic" id="boss_pic"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('boss_pic', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">简介</td>
+            <td>
+                <textarea name="boss_info" class="input" cols="80" rows="3"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

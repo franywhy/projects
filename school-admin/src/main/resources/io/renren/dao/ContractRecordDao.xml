@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ContractRecordDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	cr.id as id,
+	cr.order_id as orderId,
+	cr.user_id as userId,
+	cr.real_name as realName,
+	cr.id_card as idCard,
+	cr.mobile as mobile,
+	cr.status as status,
+	cr.contract_id as contractId,
+	cr.template_id as templateId,
+	cr.signer_id as signerId,
+	cr.teacher_name as teacherName,
+	cr.sex as sex,
+	cr.bdyx as bdyx,
+	cr.record as record,
+	cr.zy as zy,
+	cr.qq as qq,
+	cr.emergency_pro as emergencyPro,
+	cr.emergency_call as emergencyCall,
+	cr.province_name as provinceName,
+	cr.vbill_code as vbillCode,
+	cr.class_name as className,
+	cr.regdate as regdate,
+	cr.create_time as createTime,
+	cr.ts as ts,
+	cr.dr as dr,
+	cr.product_id as productId,
+	cr.nc_id as ncId,
+	cr.pay_name payName,
+	cr.reg_money regMoney,
+	cr.sync_time syncTime,
+	cr.company_id companyId,
+	cr.course_name courseName
+
+	
+	
+	
+	
+	
+	
+	
+	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM contract_record AS cr
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.ContractRecord">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.ContractRecord">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		where 1 = 1 
+		<if test="username != null and username.trim() != ''">
+			and cr.real_name =#{username}
+		</if>
+		
+		<if test="ncId != null and ncId.trim() != ''">
+			and cr.nc_id =#{ncId}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and cr.mobile =#{mobile}
+		</if>
+		<if test="idCard != null and idCard.trim() != ''">
+			and cr.id_card =#{idCard}
+		</if>
+		<if test="orderId != null and orderId.trim() != ''">
+			and cr.order_id =#{orderId}
+		</if>
+		<if test="dr2 !=null">
+		and cr.dr in (0,2)
+		</if>
+		<if test="dr2 ==null">
+		and cr.dr = 0
+		</if>
+		
+		
+		
+	<!-- 	<if test="operation != null and operation.trim() != ''">
+			and cr.operation like concat('%',#{operation},'%')
+		</if> -->
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		where 1 = 1
+		<if test="username != null and username.trim() != ''">
+			and cr.real_name like concat('%',#{username},'%')
+		</if>
+		<!-- <if test="operation != null and operation.trim() != ''">
+			and cr.operation like concat('%',#{operation},'%')
+		</if> -->
+	</select>
+	  
+	<insert id="savebackId" parameterType="io.renren.entity.ContractRecord" useGeneratedKeys="true" keyProperty="id">
+	<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+  </selectKey>
+	insert into contract_record
+	(
+		`id`,
+`order_id`,
+`user_id`,
+`real_name`,
+`id_card`,
+`mobile`,
+`status`,
+`contract_id`,
+`template_id`,
+`signer_id`,
+`teacher_name`,
+`sex`,
+`bdyx`,
+`record`,
+`zy`,
+`qq`,
+`emergency_pro`,
+`emergency_call`,
+`province_name`,
+`vbill_code`,
+`class_name`,
+`regdate`,
+`create_time`,
+`ts`,sync_time,
+`dr`,
+`product_id`,nc_id,pay_name,reg_money,course_name,company_id
+
+	)
+	values
+	(
+		#{id}, 
+#{orderId}, 
+#{userId}, 
+#{realName}, 
+#{idCard}, 
+#{mobile}, 
+#{status}, 
+#{contractId}, 
+#{templateId}, 
+#{signerId}, 
+#{teacherName}, 
+#{sex}, 
+#{bdyx}, 
+#{record}, 
+#{zy}, 
+#{qq}, 
+#{emergencyPro}, 
+#{emergencyCall}, 
+#{provinceName}, 
+#{vbillCode}, 
+#{className}, 
+#{regdate}, 
+#{createTime}, 
+#{ts}, #{syncTime},
+#{dr}, 
+#{productId},
+#{ncId},
+#{payName},
+#{regMoney},#{courseName},#{companyId}
+
+	)
+	</insert>
+	
+	
+	<!--修改-->
+	<update id="setDr" parameterType="io.renren.entity.ContractRecord">
+		update contract_record 
+		<set>
+		 dr=1
+ 
+ 
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	
+	
+	
+	
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.ContractRecord">
+		update contract_record 
+		<set>
+		 <if test="id != null">`id` = #{id}, </if>
+ <if test="orderId != null">`order_id` = #{orderId}, </if>
+ <if test="userId != null">`user_id` = #{userId}, </if>
+ <if test="realName != null">`real_name` = #{realName}, </if>
+ <if test="idCard != null">`id_card` = #{idCard}, </if>
+ <if test="mobile != null">`mobile` = #{mobile}, </if>
+ <if test="status != null">`status` = #{status}, </if>
+ <if test="contractId != null">`contract_id` = #{contractId}, </if>
+ <if test="templateId != null">`template_id` = #{templateId}, </if>
+ <if test="signerId != null">`signer_id` = #{signerId}, </if>
+ <if test="teacherName != null">`teacher_name` = #{teacherName}, </if>
+ <if test="sex != null">`sex` = #{sex}, </if>
+ <if test="bdyx != null">`bdyx` = #{bdyx}, </if>
+ <if test="record != null">`record` = #{record}, </if>
+ <if test="zy != null">`zy` = #{zy}, </if>
+ <if test="qq != null">`qq` = #{qq}, </if>
+ <if test="emergencyPro != null">`emergency_pro` = #{emergencyPro}, </if>
+ <if test="emergencyCall != null">`emergency_call` = #{emergencyCall}, </if>
+ <if test="provinceName != null">`province_name` = #{provinceName}, </if>
+ <if test="vbillCode != null">`vbill_code` = #{vbillCode}, </if>
+ <if test="className != null">`class_name` = #{className}, </if>
+ <if test="regdate != null">`regdate` = #{regdate}, </if>
+ <if test="createTime != null">`create_time` = #{createTime}, </if>
+ <if test="ts != null">`ts` = #{ts}, </if>
+ <if test="dr != null">`dr` = #{dr}, </if>
+ <if test="productId != null">`product_id` = #{productId},  </if>
+ <if test="ncId != null">`nc_id` = #{ncId}, </if>
+ <if test="payName != null">`pay_name` = #{payName},</if>
+ <if test="regMoney != null">`reg_money` = #{regMoney}, </if>
+  <if test="syncTime != null">`sync_time` = #{syncTime}, </if>
+  <if test="companyId != null">`company_id` = #{companyId}, </if>
+  
+  <if test="courseName != null">`course_name` = #{courseName}  </if>
+ 
+ 
+ 
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM contract_record 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM contract_record 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	
+	
+	<!--修改为己签-->
+	<update id="setStatus" parameterType="io.renren.entity.ContractRecord">
+	<if test="contractId != null">  
+		update contract_record 
+		<set>
+		  status=1
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id} and contract_id=#{contractId}
+		</if>
+	</update>
+	  
+	
+		<!--修改-->
+	<update id="updateByContract" parameterType="io.renren.entity.ContractRecord">
+		update contract_record 
+		<set>
+			 <if test="status != null">`status` = #{status}, </if>
+		</set>
+		<include refid="base_where"/>
+			<if test="contractId != null">
+				and `contract_id` = #{contractId}
+			</if>
+	</update>
+</mapper>

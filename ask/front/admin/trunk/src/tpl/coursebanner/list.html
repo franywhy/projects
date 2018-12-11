@@ -1,0 +1,89 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">排序</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">活动名称</th>
+        <th class="auto">恒企在线显示标志</th>
+        <th class="auto">会答显示标志</th>
+
+        <th class="auto">PC-小图</th>
+        <th class="auto">PC-大图</th>
+        <th class="auto">APP-大图</th>
+
+        <th class="auto">状态</th>
+        <th class="auto">是否默认</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=data[i].order %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto"><%=data[i].name %></td>
+            <td class="auto">
+                <button class="d-button" onclick="javascript:window.open('<%=data[i].pc_url %>')">跳  转</button>&nbsp;&nbsp;
+                <%if(data[i].pc_is_show){%>
+                <%if(data[i].pc_is_show==0){%>
+                pc不显示
+                <%}%>
+                <%if(data[i].pc_is_show==1){%>
+                pc显示
+                <%}}else{%>
+                pc不显示
+                <%}%>
+            </td>
+            <td class="auto">
+                <button class="d-button" onclick="javascript:window.open('<%=data[i].app_url %>')">跳  转</button>&nbsp;&nbsp;
+                <%if(data[i].app_is_show){%>
+                <%if(data[i].app_is_show==0){%>
+                app不显示
+                <%}%>
+                <%if(data[i].app_is_show==1){%>
+                app显示
+                <%}}else{%>
+                app不显示
+                <%}%>
+            </td>
+
+            <td class="pic"><img src="<%=data[i].pc_icon %>" onclick="javascript:window.open('<%=data[i].pc_icon %>')" style="height:50px;"></td>
+            <td class="pic"><img src="<%=data[i].pc_pic %>" onclick="javascript:window.open('<%=data[i].pc_pic %>')" style="height:50px;"></td>
+            <td class="pic"><img src="<%=data[i].app_pic %>" onclick="javascript:window.open('<%=data[i].app_pic %>')" style="height:50px;"></td>
+
+            <td class="auto">
+                <%if(data[i].dr){%>
+                <%if(data[i].dr==0){%>
+                启用
+                <%}%>
+                <%if(data[i].dr==1){%>
+                删除
+                <%}}else{%>
+                启用
+                <%}%>
+            </td>
+            <td class="auto">
+            <%if(data[i].is_default){%>
+            <%if(data[i].is_default==0){%>
+            否
+            <%}%>
+            <%if(data[i].is_default==1){%>
+            是
+            <%}}else{%>
+            否
+            <%}%>
+            </td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详情</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删除</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

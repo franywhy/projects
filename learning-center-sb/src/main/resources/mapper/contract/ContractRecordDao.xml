@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.learningcenter.contract.dao.ContractRecordDao" >
+    <select id="querySignerId" resultType="Long">
+		select
+		signer_id as signerId
+		from contract_record
+		where contract_record.user_id = #{userId}
+		limit 1
+	</select>
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="com.hq.learningcenter.contract.pojo.ContractRecordPOJO">
+		select *,contract_template.templateId from contract_record
+		left join contract_template on contract_record.template_id = contract_template.id
+		where user_id = #{userId}
+		and status = 0
+		and contract_record.dr = 0
+		and contract_record.product_id IN
+		(
+			select
+			product_id
+			from sys_business_product
+			where business_id = #{businessId}
+		)
+	</select>
+	<update id="updateStatus">
+		update contract_record
+		<set>
+			status = 1
+		</set>
+		where  contract_id =#{contractId}
+	</update>
+	<update id="update">
+		update contract_record
+		<if test="signerId != null">
+			<set>
+			signer_id = #{signerId}
+			</set>
+		</if>
+		<if test="contractId != null">
+			<set>
+				contract_id = #{contractId}
+			</set>
+		</if>
+		where 1=1
+        <if test="id != null">and  id =#{id}</if>
+        <if test="userId != null">and  user_id =#{userId}</if>
+	</update>
+	<select id="getContractSignNum" resultType="int">
+		select 
+			count(1)
+		from 
+			contract_record
+		where 1 = 1 and dr = 0
+		<if test="userId != null and userId != '' ">
+			and user_id = #{userId}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="businessId != null and businessId != ''">
+			and 
+			product_id in 
+			(
+				select product_id from sys_business_product where business_id = #{businessId}
+			)
+		</if>
+	</select> 
+	
+</mapper>

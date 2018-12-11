@@ -1,0 +1,45 @@
+<!--签约申请列表-->
+<table  class="listTable tablesorter" width="100%" >
+    <thead>
+    <tr>
+            <th class="num">主播ID</th>
+			<th>图片</th>
+            <th style="width:60px;">状态</th>
+             <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+             <th class="action" style="width:160px;">操作</th>
+             <%}%>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+			<td><%=data[i]._id%></td>
+			<td>
+                <a href="<%=data[i].audit_pic_url%>" target="viewpic" title="新窗口查看"><img src="<%=data[i].audit_pic_url%>" style="height:50px;"/></a>
+            </td>
+            <td>
+                <%if(data[i].audit_pic_status==3){%>
+                未处理
+                <%}else if(data[i].audit_pic_status==2){%>
+                <span style="color:#278300;">通过</span>
+                <%}else if(data[i].audit_pic_status==1){%>
+                <span style="color:#F00;">未通过</span>
+                <%}%>
+            </td>
+            
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+            <td class="action">
+                <% if(data[i].audit_pic_status!=2){%>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.setCoverpicStatus('<%=data[i]._id%>',2)">通过</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.setCoverpicStatus('<%=data[i]._id%>',1)">未通过</button>
+                <%}%>
+			<!--<button class="d-button" onClick="Izb.controller.<%=pty.key%>.del_photo('<%=data[i].user_id%>','<%=data[i]._id%>')">删</button>-->
+			</td>
+            <%}%>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+  
+<div class="appPager"></div>
+<!--/签约申请列表-->

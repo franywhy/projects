@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+        default-lazy-init="true">
+
+ <bean id="mainJedisPoolConfig"
+           class="redis.clients.jedis.JedisPoolConfig"
+           p:maxActive="${redis.pool.maxActive}"
+           p:maxIdle="${redis.pool.maxIdle}"
+           p:maxWait="${redis.pool.maxWait}"
+           p:testOnBorrow="${redis.pool.testOnBorrow}"
+           p:testOnReturn="${redis.pool.testOnReturn}"/>
+
+
+    <bean id="redisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:timeout="${redis.timeout}"  p:poolConfig-ref="mainJedisPoolConfig"/>
+
+    <bean id="liveConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.mem.host}" p:port="${redis.mem.port}"/>
+
+    <bean id="chatJedisPoolConfig"
+          class="redis.clients.jedis.JedisPoolConfig"
+          p:maxActive="${chat.pool.maxActive}"
+          p:maxIdle="${chat.pool.maxIdle}"
+          p:maxWait="${chat.pool.maxWait}"
+          p:testOnBorrow="${redis.pool.testOnBorrow}"
+          p:testOnReturn="${redis.pool.testOnReturn}"/>
+
+
+ 
+    <bean id="chatConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.chat.host}" p:port="${redis.chat.port}"  p:poolConfig-ref="chatJedisPoolConfig"/>
+<!--   -->  
+    <bean id="kgsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.kgs.host}" p:port="${redis.kgs.port}"/>
+
+    <bean id="mainRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="redisConnectionFactory" />
+
+    <bean id="liveRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="liveConnectionFactory" />
+     
+    <bean id="chatRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="chatConnectionFactory" />
+
+  
+ 
+</beans>

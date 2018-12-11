@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.CourseAbnormalOrderDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_abnormal_order.id AS id ,course_abnormal_order.start_time AS startTime ,course_abnormal_order.expect_end_time AS expectEndTime ,
+	course_abnormal_order.end_time AS endTime , course_abnormal_order.audit_status AS auditStatus , 	course_abnormal_order.abnormal_reason AS abnormalReason ,
+	course_abnormal_order.remark AS remark,mall_order.order_name AS orderName
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+		FROM course_abnormal_order AS course_abnormal_order
+		left join mall_order  on course_abnormal_order.order_id=mall_order.order_id
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		WHERE 1=1
+		<if test="auditStatus != null">and course_abnormal_order.audit_status = #{auditStatus} </if>
+		<if test="userId != null">and mall_order.user_id = #{userId} </if>
+		and course_abnormal_order.product_id IN
+		(
+		select
+		product_id
+		from sys_business_product
+		where business_id = #{businessId}
+		)
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		ORDER BY  id DESC
+	</sql>
+	<select id="queryPojoList" resultType="com.hq.learningcenter.school.pojo.CourseAbnormalOrderPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="verifyStatus" resultType="com.hq.learningcenter.school.pojo.CourseAbnormalOrderPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		where course_abnormal_order.audit_status != 1
+		<if test="orderId != null">and course_abnormal_order.order_id = #{orderId} </if>
+		<if test="startTime != null">
+			and (course_abnormal_order.end_time  &gt;= #{startTime}
+				or course_abnormal_order.end_time is null
+			)
+		</if>
+		<if test="id != null">
+			and course_abnormal_order.id != #{id}
+		</if>
+		limit 0, 1
+	</select>
+	<insert id="save" parameterType="com.hq.learningcenter.school.entity.CourseAbnormalOrderEntity">
+		insert into course_abnormal_order
+		(
+				`abnormal_type`, 				`order_id`, 				`start_time`, 				`expect_end_time`, 				`end_time`,				`abnormal_reason`,				`audit_status`, 				`remark`, 				`create_person`, 				`modify_person`, 				`modified_time`, 				`update_person`, 				`update_time`, 				`orderno`	, 				`product_id`	)
+		values
+		(
+				#{abnormalType}, 				 #{orderId}, 				#{startTime}, 				#{expectEndTime}, 				#{endTime},				#{abnormalReason},				#{auditStatus}, 				#{remark}, 				#{createPerson}, 				#{modifyPerson}, 				#{modifiedTime}, 				#{updatePerson}, 				#{updateTime}, 				#{orderno}	, 				#{productId}		)
+	</insert>
+	<!--作废-->
+	<update id="updateCancel">
+		update course_abnormal_order
+		<set>
+			audit_status = #{auditStatus},update_person = #{updatePerson},update_time = #{updateTime}
+		</set>
+		where  id =#{id}
+	</update>
+	<select id="queryOrderPOJOList" resultType="map">
+		select
+		mall_order.order_id AS orderId,order_name AS orderName,mall_order.order_no AS orderNo
+		from mall_order
+		right JOIN course_userplan on course_userplan.order_id = mall_order.order_id
+		where mall_order.user_id = #{userId}
+		and  course_userplan.dr = 0
+		and pay_status = 2
+		and mall_order.product_id IN
+		(
+			select
+			product_id
+			from sys_business_product
+			where business_id = #{businessId}
+		)
+	</select>
+	<select id="queryProductId" resultType="Long">
+		select
+		product_id
+		from mall_order
+		where mall_order.order_id = #{orderId}
+	</select>
+</mapper>

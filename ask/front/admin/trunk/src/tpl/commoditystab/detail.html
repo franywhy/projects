@@ -1,0 +1,166 @@
+<form name="detailForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:60px;">编号</td>
+            <td>
+                <input class="input" type="hidden" name="_id"  id="_id"/>
+                <input class="input" type="text" name="code"  id="code" value="<%=data[0].code%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">NC名称</td>
+            <td>
+                <input class="input" type="text" name="nc_name"  id="nc_name" value="<%=data[0].nc_name%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">显示价格</td>
+            <td>
+                <input class="input" type="text" name="titles" id="titles" value="<%=data[0].titles%>" disabled="true" />
+            </td>
+            <td style="width:60px;">原价</td>
+            <td>
+                <input class="input" type="text" name="original_price" id="original_price" value="<%=data[0].original_price%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">首付款</td>
+            <td>
+                <input class="input" type="text" name="firstpay" id="firstpay" value="<%=data[0].firstpay%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">教学方式</td>
+            <td>
+                <input class="input" type="text" name="teach_type" id="teach_type" value="<%=data[0].teach_type%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">是否需要排课</td>
+            <td>
+                <%if(data[0].is_sort_course==1){%>
+                <input class="input"  type="text" name="is_sort_course" value="是" disabled="true"/>
+                <%}else{%>
+                <input class="input"  type="text" name="is_sort_course" value="否" disabled="true"/>
+                <%}%>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">名称</td>
+            <td>
+                <input class="input" type="text" name="name" id="name" value="<%=data[0].name%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">商品简称</td>
+            <td>
+                <input class="input" type="text" name="short_name" id="short_name" value="<%=data[0].short_name%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">适用对象</td>
+            <td>
+                <input class="input" type="text" name="reader" id="reader" value="<%=data[0].short_name%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">标签</td>
+            <td>
+                <input class="input" type="text" name="labels" id="labels" value="<%=data[0].labels%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">学习周期</td>
+            <td>
+                <input class="input" type="text" name="learntime" id="learntime" value="<%=data[0].learntime%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">上课方式</td>
+            <td>
+                <input class="input" type="text" name="classmode" id="classmode" value="<%=data[0].classmode%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">可使用积分</td>
+            <td>
+                <input class="input" type="text" name="paypoints" id="paypoints" value="<%=data[0].paypoints%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">赠送积分</td>
+            <td>
+                <input class="input" type="text" name="points" id="points" value="<%=data[0].points%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">商品类型</td>
+            <td>
+                <%if(data[0].type==1){%>
+                <input class="input" type="text"  name="type" value="会计上岗" disabled="true"/>
+                <%}else if(data[0].type==2){%>
+                <input class="input" type="text"  name="type" value="会计考证" disabled="true"/>
+                <%}else if(data[0].type==3){%>
+                <input class="input" type="text"  name="type" value="会计学历" disabled="true"/>
+                <%}else if(data[0].type==4){%>
+                <input class="input" type="text"  name="type" value="经营会计" disabled="true"/>
+                <%}else{%>
+                <input class="input" type="text"  name="type" value="未分类" disabled="true"/>
+                <%}%>
+            </td>
+            <td style="width:60px;">是否上架</td>
+            <td>
+                <%if(data[0].is_shelves==1){%>
+                <input class="input" type="text"  name="is_shelves" value="是" disabled="true"/>
+                <%}else{%>
+                <input class="input" type="text"  name="is_shelves" value="否" disabled="true"/>
+                <%}%>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">上架时间</td>
+            <td>
+                <input class="input" type="text" name="up_shelves_time" id="up_shelves_time" value="<%=new Date(data[0].up_shelves_time).toLocaleString()%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">下架时间</td>
+            <td>
+                <input class="input" type="text" name="down_shelves_time" id="down_shelves_time" value="<%=new Date(data[0].down_shelves_time).toLocaleString()%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">试听地址web</td>
+            <td>
+                <input class="input" type="text" name="try_video" id="try_video" value="<%=data[0].try_video%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">试听地址app</td>
+            <td>
+                <input class="input" type="text" name="try_video_app" id="try_video_app" value="<%=data[0].try_video_app%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">简介</td>
+            <td>
+                <input class="input" type="text" name="summary" id="summary" value="<%=data[0].summary%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">修改人</td>
+            <td>
+                <input class="input" type="text" name="update_user" id="update_user" value="<%=data[0].update_user%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">修改时间</td>
+            <td>
+                <input class="input" type="text" name="update_time" id="update_time" value="<%=new Date(data[0].update_time).toLocaleString()%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">提交人</td>
+            <td>
+                <input class="input" type="text" name="upload_user" id="upload_user" value="<%=data[0].upload_user%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">提交时间</td>
+            <td>
+                <input class="input" type="text" name="upload_time" id="upload_time" value="<%=new Date(data[0].upload_time).toLocaleString()%>" disabled="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:60px;">审核人</td>
+            <td>
+                <input class="input" type="text" name="audit_user" id="audit_user" value="<%=data[0].audit_user%>" disabled="true"/>
+            </td>
+            <td style="width:60px;">审核时间</td>
+            <td>
+                <input class="input" type="text" name="audit_time" id="audit_time" value="<%=new Date(data[0].audit_time).toLocaleString()%>" disabled="true"/>
+            </td>
+        </tr>
+
+    </table>
+</form>

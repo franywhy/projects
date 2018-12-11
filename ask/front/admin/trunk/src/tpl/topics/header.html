@@ -1,0 +1,69 @@
+<!--提现申请设置页头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export">
+    <span class="text"><%=pty.name%></span> </h2>
+<div class="searchForm">
+    <form name="searchForm">
+        学生id
+        <input type="text" name="author_id" size="10" />
+        &nbsp;&nbsp;老师id
+        <input type="text" name="teach_id" size="10" />
+        &nbsp;&nbsp;问题内容
+        <input type="text" name="content" size="50" />
+        <br/>
+        <br/>
+        问题状态
+        <select name="type">
+            <option value="" selected>==所有==</option>
+            <option value="0" >待抢答</option>
+            <option value="1">问题超时</option>
+            <option value="2">聊天中</option>
+            <option value="3">问题已结束</option>
+        </select>
+
+        &nbsp;&nbsp;评价状态
+        <select name="evaluation_type">
+            <option value="" selected>==所有==</option>
+            <option value="0" >未评价</option>
+            <option value="1">不满意</option>
+            <option value="2">满意</option>
+            <option value="3">非常满意</option>
+        </select>
+
+        &nbsp;&nbsp;红包状态
+        <select name="buns_states">
+            <option value="" selected>==所有==</option>
+            <option value="0" >未打开</option>
+            <option value="1">已打开</option>
+        </select>
+
+        &nbsp;&nbsp;结束触发
+        <select name="end_type">
+            <option value="" selected>==所有==</option>
+            <option value="0" >学生结束</option>
+            <option value="1">老师结束</option>
+            <option value="2">问题超时</option>
+        </select>
+
+        &nbsp;&nbsp;打赏
+        <select name="tip_kd">
+            <option value="" selected>==所有==</option>
+            <option value="0" >否</option>
+            <option value="1">是</option>
+        </select>
+
+        <br/>
+        <br/>
+
+        问题创建时间
+        <input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+        到
+        <input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+
+        <br/>
+        <br/>
+
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/提现申请设置页头-->

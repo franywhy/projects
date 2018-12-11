@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseMaterialTypeDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	course_material_type.material_type_id AS materialTypeId , 	course_material_type.material_id AS materialId , 	course_material_type.material_type_name AS materialTypeName , 	course_material_type.create_person AS createPerson , 	course_material_type.creation_time AS creationTime , 	course_material_type.modify_person AS modifyPerson , 	course_material_type.modified_time AS modifiedTime , 	course_material_type.school_id AS schoolId , 	course_material_type.order_num AS orderNum 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_material_type as course_material_type
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryList" resultType="io.renren.entity.CourseMaterialTypeEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<!-- <include refid="base_where"/> -->
+		where material_id = #{materialId}
+	</select>
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="io.renren.pojo.coursematerial.CourserMaterialTypePOJO">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		where material_type_id = #{materialTypeId}
+	</select>
+	<select id="countMaterialType" >
+		select (*) 
+		<include refid="base_from"/>
+		where material_type_id = #{materialTypeId}
+	</select>
+	<!--分页列表-->
+	<select id="queryObject" resultType="io.renren.entity.CourseMaterialTypeEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseMaterialTypeEntity" useGeneratedKeys="true" keyProperty="materialTypeId">
+		insert into course_material_type
+		(
+				`material_id`, 				
+				`material_type_name`, 				
+				`create_person`, 				
+				`creation_time`, 				
+				`modify_person`, 				
+				`modified_time`, 				
+				`school_id`, 				
+				`order_num`		)
+		values
+		(
+				#{materialId}, 																			
+				#{materialTypeName}, 																			
+				#{createPerson}, 																			
+				#{creationTime}, 																			
+				#{modifyPerson}, 																			
+				#{modifiedTime}, 																			
+				#{schoolId}, 																			
+				#{orderNum}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseMaterialTypeEntity">
+		update course_material_type 
+		<set>
+			<!-- <if test="materialId != null">`material_id` = #{materialId}, </if> -->
+			<if test="materialTypeName != null">`material_type_name` = #{materialTypeName}, </if>
+			<!-- <if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if> -->
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<!-- <if test="schoolId != null">`school_id` = #{schoolId}, </if> -->
+			<if test="orderNum != null">`order_num` = #{orderNum}</if>
+		</set>
+		<!-- <include refid="base_where"/> -->
+		where material_type_id = #{materialTypeId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" >
+		DELETE FROM course_material_type 
+		<include refid="base_where"/>
+		AND material_type_id = #{value}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM course_material_type 
+		<include refid="base_where"/> 
+		AND material_id IN 
+		<foreach item="materialTypeId" collection="ids" open="(" separator="," close=")">
+			#{materialTypeId}
+		</foreach>
+	</delete>
+	<delete id="deleteBatchNotIn">
+		delete from course_material_type where material_id = #{materialId} 
+		<if test="ids != null and ids.size() > 0 ">
+			and material_type_id not in 
+			<foreach item="item" collection="ids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+	</delete>
+</mapper>

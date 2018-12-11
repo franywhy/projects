@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.CourseAbnormallRegistrationDao">
+    <!-- 通用查询表头 -->
+    <sql id="base_column">
+            course_abnormal_registration.id as id,
+            course_abnormal_registration.registration_no as registerPK,
+            course_abnormal_registration.`status` as `status`,
+            mall_order.order_name AS orderName,
+            courses.course_name as courseName,
+            mall_area.area_name as registerProinve,
+            mall_exam_schedule.schedule_date as scheduleDate
+    </sql>
+    <!-- 通用查询条件 -->
+    <sql id="base_where">
+        WHERE 1=1
+        <if test="auditStatus != null">and course_abnormal_registration.status = #{auditStatus} </if>
+        <if test="userId != null">and mall_order.user_id = #{userId} </if>
+        and course_abnormal_registration.product_id IN
+        (
+        select
+        product_id
+        from sys_business_product
+        where business_id = #{businessId}
+        )
+    </sql>
+    <!-- 通用from -->
+    <sql id="base_from">
+         FROM `course_abnormal_registration`  course_abnormal_registration
+LEFT JOIN mall_order mall_order ON course_abnormal_registration.order_no = mall_order.order_no
+LEFT JOIN courses courses ON course_abnormal_registration.course_id = courses.course_id
+LEFT JOIN mall_area mall_area ON course_abnormal_registration.bk_area_id = mall_area.area_id
+LEFT JOIN mall_exam_schedule mall_exam_schedule ON course_abnormal_registration.exam_schedule_id = mall_exam_schedule.id
+    </sql>
+    <!-- 通用排序 -->
+    <sql id="base_order">
+        ORDER BY  id DESC
+    </sql>
+
+    <!--根据ID查询-->
+    <select id="queryPojoObject" resultType="com.hq.learningcenter.school.pojo.CourseAbnormallRegistrationPOJO">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        where  id = #{id}
+    </select>
+    <!--根据ID查询-->
+    <select id="verifyStatus" resultType="com.hq.learningcenter.school.pojo.CourseAbnormallRegistrationPOJO">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+    </select>
+    <!--分页列表-->
+    <select id="queryPojoList" resultType="com.hq.learningcenter.school.pojo.CourseAbnormallRegistrationPOJO">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        <include refid="base_order"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <!--未登记成绩报考列表-->
+    <select id="queryExamPojoList" resultType="com.hq.learningcenter.school.pojo.CourseAbnormallRegistrationPOJO">
+        select DISTINCT
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        LEFT JOIN  examination_result examination_result ON course_abnormal_registration.id = examination_result.registration_id
+        <include refid="base_where"/>
+        AND (
+            examination_result.registration_id IS NULL
+            OR (
+                examination_result.dr = 1
+                AND examination_result.registration_id NOT IN (
+                    SELECT
+                    aa.registration_id AS aa_registration_id
+                    FROM
+                    examination_result aa
+                    WHERE
+                    aa.registration_id = examination_result.registration_id
+                    AND dr = 0
+                )
+            )
+        )
+        and course_abnormal_registration.dr=0
+        and course_abnormal_registration.status=2
+        <include refid="base_order"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <!--新增-->
+    <insert id="save" parameterType="com.hq.learningcenter.school.entity.CourseAbnormalRegistrationEntity" useGeneratedKeys="true" keyProperty="id">
+    insert into course_abnormal_registration
+    (
+    `creater`,
+    `create_time`,
+    `update_person`,
+    `update_time`,
+    `registration_no`,
+    `order_no`,
+    `user_plan_id`,
+    `course_id`,
+    `bk_area_id`,
+    `exam_schedule_id`,
+    `registration_number`,
+    `registration_time`,
+    `product_id`,
+    `status`,
+    `dr`,
+    `remark`
+    )
+    values
+    (
+    #{creater},
+    #{createTime},
+    #{updatePerson},
+    #{updateTime},
+    #{registrationNo},
+    #{orderNo},
+    #{userPlanId},
+    #{courseId},
+    #{bkAreaId},
+    #{examScheduleId},
+    #{registrationNumber},
+    #{registrationTime},
+    #{productId},
+    #{status},
+    #{dr},
+    #{remark}
+    )
+    </insert>
+    <!--批量反审核或作废-->
+    <update id="updateCancel">
+        update course_abnormal_registration
+        <set>
+            status = #{auditStatus},update_person = #{updatePerson},update_time = #{updateTime}
+        </set>
+        where  id =#{id}
+    </update>
+
+    <!-- 根据订单查询规划id -->
+    <select id="queryUserPlanId" parameterType="string" resultType="string">
+        select user_plan_id from course_userplan where order_id = #{orderId}
+        and  dr = 0
+    </select>
+    <!-- 根据学员规划ID查询课程列表 -->
+    <select id="courseListByUserPlanId" resultType="map">
+        select
+        ud.course_id as courseId,
+        c.course_name as courseName
+        from course_userplan_detail ud
+        JOIN courses c ON c.course_id = ud.course_id
+        where ud.userplan_id = #{userPlanId}
+        and ud.dr = 0
+        order by ud.course_id desc
+    </select>
+
+	<select id="queryAreaList" resultType="map">
+        SELECT
+        mall_area.area_id AS id ,
+		mall_area.area_name AS areaName ,
+		mall_area.status AS status ,
+		mall_area.school_id AS schoolId
+		from mall_area as mall_area
+		WHERE  1=1
+        <if test="areaName!=null and areaName.trim()!=''">
+            AND `area_name` like concat('%',#{areaName},'%')
+        </if>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+	<select id="queryScheduleList" resultType="map">
+        SELECT mall_exam_schedule.id AS id,
+        mall_exam_schedule.schedule_name as scheduleName,
+        mall_exam_schedule.schedule_date as scheduleDate,
+        mall_exam_schedule.product_id AS productId
+        FROM `mall_exam_schedule` mall_exam_schedule
+        WHERE dr = 0
+    </select>
+
+    <select id="checkRegisterPK" resultType="int">
+      SELECT count(1) FROM course_abnormal_registration WHERE dr = 0
+      AND registration_number = #{registerPK}
+    </select>
+
+    <select id="getMessageByOrderId" resultType="com.hq.learningcenter.school.pojo.OrderPOJO">
+      SELECT
+        mall_order.product_id as productId,mall_order.order_no as orderNo,course_userplan.user_plan_id as userPlanId
+        FROM `mall_order`  mall_order
+        LEFT JOIN course_userplan course_userplan  ON mall_order.order_id = course_userplan.order_id
+		where mall_order.dr = 0 AND course_userplan.dr = 0 AND mall_order.order_id = #{orderId}
+    </select>
+
+
+    <select id="checkRegisteration"  resultType="long">
+        SELECT  id FROM course_abnormal_registration
+             WHERE dr = 0
+        <if test="statuValueNo != null " >
+            AND `status` != #{statuValueNo}
+        </if>
+        <if test="statuValue != null " >
+            AND `status` = #{statuValue}
+        </if>
+            AND order_no = #{orderNo}
+            AND exam_schedule_id = #{scheduleId}
+            AND course_id =#{courseId}
+            AND bk_area_id = #{areaId}
+    </select>
+    <select id="queryRegisterCount"  resultType="int">
+        select count(*) from course_abnormal_registration a left join course_abnormal_registration b
+        on a.order_no=b.order_no
+        and a.course_id=b.course_id
+        and a.user_plan_id=b.user_plan_id
+        and a.dr=0
+		and a.status=2
+        where b.id=#{id}
+    </select>
+</mapper>

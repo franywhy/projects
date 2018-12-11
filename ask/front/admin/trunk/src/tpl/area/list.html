@@ -1,0 +1,42 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">校区编号</th>
+        <th class="auto">名称</th>
+        <th class="auto">父节点编号</th>
+        <th class="auto">父节点名称</th>
+        <th class="auto">所在地</th>
+        <th class="auto">负责人</th>
+        <th class="auto">联系人</th>
+        <th class="auto">联系人电话</th>
+        <th class="auto">邮箱</th>
+        <th class="auto">是否删除</th>
+        <th class="longtime">同步时间</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto"><%=data[i].code %></td>
+            <td class="auto"><%=data[i].name %></td>
+            <td class="auto"><%=data[i].parent_nc_code %></td>
+            <!--<td class="auto"><%if(data[i].sex==1){ return '男'}else if(data[i].sex==2){return '女'}else{return '保密'} %></td>-->
+            <td class="auto"><%=data[i].parent_nc_name %></td>
+            <td class="auto"><%=data[i].address %></td>
+            <td class="auto"><%=data[i].header %></td>
+            <td class="auto"><%=data[i].link_name %></td>
+            <td class="auto"><%=data[i].telephone %></td>
+            <td class="auto"><%=data[i].email %></td>
+            <td class="auto"><%=data[i].isdelete %></td>
+            <td class="longtime"><%=new Date(data[i].syn_time).toLocaleString()%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

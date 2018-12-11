@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.CourseUserplanDao">
+    
+    <select id="queryList" resultType="Long">
+       select user_plan_id
+       from course_userplan
+       where user_id = #{userId}
+       and order_id = #{orderId}
+       and dr = #{dr}
+       and `status` = #{status}
+    </select>
+
+    <select id="queryUserPlanEntity" resultType="com.hq.learningcenter.school.entity.CourseUserplanEntity">
+      select SQL_CACHE user_plan_id,
+             commodity_id,
+             class_id,
+             is_rep,
+             is_match,
+             class_type_id,
+	         level_id,
+	         profession_id,
+	         product_id
+      from   course_userplan
+      where user_id = #{userId}
+      and dr = #{dr}
+      and status = #{status}
+      and order_id= #{orderId}
+      and product_id = #{productId}
+    </select>
+
+    <select id="queryUserPlan4Push" resultType="com.hq.learningcenter.school.entity.CourseUserplanEntity">
+        select user_plan_id,
+        class_type_id
+        from   course_userplan
+        where user_id = #{userId}
+        and dr = #{dr}
+        and status = #{status}
+    </select>
+
+	<select id="queryCourseName" resultType="String">
+		select 
+		concat(mct.classtype_name ,' (', mp.profession_name , ml.level_name,')') as courseName
+		from   course_userplan cu,mall_class_type mct,mall_level ml,mall_profession mp
+		where user_id = #{userId}
+		and cu.dr = #{dr} 
+		and cu.`status` = #{status}
+		and cu.order_id= #{orderId}
+		and mct.classtype_id = cu.class_type_id
+		and mct.dr=#{dr} 
+		and mct.`status`=#{status}
+		and ml.level_id = cu.level_id
+		and mp.profession_id = cu.profession_id
+		and mp.dr=#{dr} 
+		and mp.`status`=#{status}
+	</select>
+	
+	<select id="query" resultType="com.hq.learningcenter.school.entity.CourseUserplanEntity">
+		select SQL_CACHE course_userplan.*
+		from course_userplan ,sys_business_product
+		where course_userplan.product_id = sys_business_product.product_id 
+		and user_plan_id = #{userplanId}
+		and business_id = #{businessId}
+		
+	</select>
+</mapper>

@@ -1,0 +1,297 @@
+html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+#container {
+    /*position: absolute;*/
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.button-group {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 12px;
+    padding: 10px;
+}
+
+.button-group .button {
+    height: 28px;
+    line-height: 28px;
+    background-color: #0D9BF2;
+    color: #FFF;
+    border: 0;
+    outline: none;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+.button-group .inputtext {
+    height: 26px;
+    line-height: 26px;
+    border: 1px;
+    outline: none;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+/*
+.tip {
+   position: absolute;
+   bottom: 30px;
+   right: 10px;
+   background-color: #FFF;
+   text-align: center;
+   border: 1px solid #ccc;
+   line-height: 30px;
+   border-radius: 3px;
+   padding: 0 5px;
+   font-size: 12px;
+}
+*/
+#tip {
+    background-color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: absolute;
+    font-size: 12px;
+    right: 10px;
+    top: 20px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    line-height: 30px;
+}
+
+/*
+#tip input[type='button'] {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #0D9BF2;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 3px;
+    outline: none;
+    border: 0;
+}
+*/
+.amap-info-content {
+    font-size: 12px;
+}
+
+#myPageTop {
+    /*position: absolute;*/
+    top: 5px;
+    right: 10px;
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #ccc;
+    margin: 10px auto;
+    padding:6px;
+    font-family: "Microsoft Yahei", "氓戮庐猫陆炉茅鈥衡�γ┞烩��", "Pinghei";
+    font-size: 14px;
+}
+#myPageTop label {
+    margin: 0 20px 0 0;
+    color: #666666;
+    font-weight: normal;
+}
+#myPageTop input {
+    width: 170px;
+}
+#myPageTop .column2{
+    padding-left: 25px;
+}
+.mainCon .Breadcrumb a{
+    color:#333333;
+}
+
+.tcdPageCode{position: absolute;padding: 15px 20px;bottom:0px;text-align: center;color: #ccc;}
+.tcdPageCode a{display: inline-block;color: #27ae61;display: inline-block;height: 25px; line-height: 25px;  padding: 0 10px;border: 1px solid #ddd; margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode a:hover{text-decoration: none;border: 1px solid #27ae61;}
+.tcdPageCode span{color:#666;}
+.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca; border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode span.disabled{ display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px; color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode input{ display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px; border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;width:35px}
+
+#panel1 {
+    position: absolute;
+    background-color: white;
+    max-height: 80%;
+    overflow-y: auto;
+    top: 210px;
+    right: 10px;
+    width: 315px;
+    border: solid 1px silver;
+}
+#panel2 {
+    position: absolute;
+    background-color: white;
+    max-height: 80%;
+    overflow-y: auto;
+    top: 210px;
+    right: 10px;
+    width: 315px;
+    border: solid 1px silver;
+}
+.traffic {
+    padding: 10px 0px 10px 15px; top: 0px;
+    position: absolute;
+    background-color: white;
+    max-height: 80%;
+    overflow-y: auto;
+    top: 10px;
+    right: 10px;
+    width: 300px;
+    border: solid 1px silver;
+}
+.tabs_con .inpL .inp_start,.tabs_con .inpL .inp_end,.tabs_con .inpR a,.way_con .way_h4,.way_con .start_on,.way_con .end_on,.way_con .way_line em,.way_con .way_line_on em,.line_con .start_p,.line_con .end_p,.line_con .walk_p,.line_con .subway_p,.line_con .bus_p,.way_con .car_p{ background:url(../images/store_bg01.png) no-repeat;}
+.no{ display: none;}
+.way_tabs{ margin:10px 0 0 0; height:30px; }
+.way_tabs li{ height:26px; overflow:hidden; padding:0 25px; float:left; color:#333; line-height:26px; font-size:13px; cursor:pointer; letter-spacing:5px; position:relative; margin-left:-1px;  border:1px solid #c5c5c5;}
+.way_tabs li.on{background:url(../images/room_mapico.jpg) repeat-x 0 -1349px;}
+.tabs_con .inpL{ width:240px; overflow:hidden; float:left;}
+.tabs_con .inpL input{ width:198px; height:28px; overflow:hidden; padding:0 5px 0 35px; line-height:28px; margin-top:10px; border:none; font-size:13px;}
+.tabs_con .inpL .inp_start{ background-position:0 -844px;}
+.tabs_con .inpL .inp_end{ background-position: 0 -882px;}
+.tabs_con .inpR{ width:20px; overflow:hidden; float:left; margin-top:20px;}
+.tabs_con .inpR a{ display:block; width:20px; height:48px; overflow:hidden; background-position: -238px -854px;}
+.tabs_con .btn_way{ clear:both;}
+.cxlx_a{ display:inline-block; padding:0 8px; height:24px; overflow:hidden; margin:10px 0 10px 174px; color:#fff; line-height:24px; background-color: #ff7011;text-decoration:none; }
+.cxlx_a:hover{ background-color: #f46506; color:#fff;}
+.way_con{ width:265px;}
+.way_con .way_h4{ height:33px; clear:both; background-position: 0 -920px ; background-color:#fee6ce;  padding-left:36px; line-height:33px; font-size:14px; color:#333; }
+.way_con .addr{ padding:8px 20px 8px 36px;}
+.way_con .addr:hover{ background-color:#ebe9e9;}
+.way_con .addr h5{ line-height:18px; font-size:13px; font-weight:bold; color:#333;}
+.way_con .addr p{ color:#666; line-height:16px;}
+.way_con .start_on{ background-position: 7px -956px;}
+.way_con .end_on{ background-position: -272px -764px;}
+.way_con .start_on:hover,.way_con .end_on:hover{ background-color:#fff;}
+.way_con .way_tab2{ height:22px; }
+.way_con .way_tab2 li{ float:left; display:inline; width:60px; overflow:hidden; position:relative; margin-left:-1px; text-align:center; border:1px solid #ddd; height:24px; line-height:24px; color:#666; cursor:pointer;}
+.way_con .way_tab2 li.on{ background-color:#666; color:#fff;}
+.way_con .way_line{ padding:5px; height:100%; overflow:hidden; margin-top:10px; position:relative; cursor:pointer;}
+.way_con .way_line:hover{background-color:#fee6ce;}
+.way_con .way_line_on{ background-color:#fee6ce;}
+.way_con .way_line span{ float:left; width:21px; height:24px; overflow:hidden; background:url(../images/way_list.png) no-repeat; font:bold 12px/20px "Arial"; color:#fff; text-align:center; display:inline-block; margin:3px 10px 0 0;}
+.way_con .way_line h4{ font-size:14px; color:#333; margin:0 20px 0 31px;}
+.way_con .way_line p{ line-height:18px; color:#999; margin:0 20px 0 31px;}
+.way_con .way_line em{ float:right; width:11px; height:11px; overflow:hidden; background-position: -157px -771px; position:absolute; top:15px; right:10px; cursor:pointer;}
+.way_con .way_line_on em{ background-position: -157px -793px;}
+.line_con p{ padding-left:35px; margin-top:7px;  padding-bottom:3px;}
+.line_con .start_p{ line-height:24px; background-position: 5px -961px; font-weight:bold; color:#03a093;}
+.line_con .end_p{ line-height:24px; background-position: -274px -770px; font-weight:bold; color:#f98d00;}
+.line_con .walk_p{ line-height:18px; color:#666; background-position: -277px -1147px;}
+.line_con .subway_p{ line-height:18px; color:#666; background-position: -278px -1227px;}
+.line_con .bus_p{ line-height:18px; color:#666; background-position: -279px -1306px;}
+.way_con .car_p{ line-height:18px; color:#666; background-position: -278px -1583px;  padding-left:25px; margin:10px 0 5px 0;}
+.line_con p b{ margin:0 3px;}
+.distance{ height:28px; line-height:28px; background-color:#fee6ce; padding:0 10px; color:#333;}
+.distance b{ font-family:"Arial"; color:#f98d00; margin:0 5px;}
+.line_con .car_dl{ line-height:24px; color:#666; padding-left:15px; clear:both; margin:7px 0 3px 0; cursor:pointer;}
+.line_con .car_dl dt{ float:left;}
+.line_con .car_dl dd{ margin-left:19px;}
+.line_con .car_dl:hover{ background-color:#f5f5f5;}
+
+.map-h1{
+    font-size: 42px;
+    text-align: center;
+    padding: 70px 0 30px 0
+}
+.map-top{
+    margin-bottom: 10px;
+    background: #fff;
+    padding: 10px 40px;
+}   
+.map-top .map-left-dl,
+.map-top .map-right-dl{
+    float: left;
+}
+.map-top .map-left-dl{
+    width: 237px;
+    position: relative;
+}
+.map-top .map-left-dl .map-left-dt{
+    width: 181px;
+    height: 48px;
+    border: 1px solid #18aa1f;
+    color: #18aa1f;
+    line-height: 48px;
+    padding: 0 36px 0 18px;
+    font-size: 14px;
+    background:url(/static/images/icon/drap.png) 202px center no-repeat;
+    cursor:pointer; 
+}
+
+.map-top .map-left-dl .map-left-dd-box{
+    position: absolute;
+    border: 1px solid #ddd;
+    border-top: 1px  solid #18aa1f;
+    width: 235px;
+    background: #fff;
+    margin-top: -1px;
+    display: none
+;
+    z-index: 666;
+}
+.map-top .map-left-dl:hover .map-left-dd-box{
+    display: block
+}
+.map-top .map-left-dl .map-left-dd-box .map-left-dd{
+    width: 199px;
+    padding: 0 18px 0 18px;
+    font-size: 14px;
+    line-height: 48px;
+    height: 48px;
+    color: #333
+}
+.map-top .map-left-dl .map-left-dd-box .map-left-dd:hover{
+    background: #eaeaea;
+    cursor: pointer;
+}
+.map-right-dl{
+    width: 824px;
+    margin-right: -35px;
+    margin-top: 0;
+    margin-left: 59px;
+}
+.map-right-dl .map-right-dd{
+    float: left;
+    margin-right: 10px;
+    font-size: 14px;
+    line-height: 24px;
+    
+    cursor: pointer;
+    padding: 0 15px;
+    margin-bottom: 10px;
+}
+.map-right-dl .map-right-dd:hover,
+.map-right-dl .map-right-dd.act{
+    /*color: #18aa1f*/
+    color: #fff;
+    background:  #18aa1f;
+    border-radius: 3px
+}
+.map-sl-a{
+    width: 100%;
+    display: block;
+    outline: none;
+    height: 100%
+}
+.Campus-A-con .C-A-right-con-box .C-A-right-con-ol{
+    height: 690px !important;   
+}

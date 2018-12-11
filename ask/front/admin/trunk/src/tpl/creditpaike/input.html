@@ -1,0 +1,12 @@
+<!--vip卡片档案-->
+<form name="inputForm"  style="width:800px;height:800px ">
+    <table width="100%" id="creditpaike-detail-query-table">
+        <tr>
+            <td >年月
+                <input name="dbilldate"  class="input" id="dbilldate" type="text"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM'})" />
+                <input type="button"  value="查询" onclick="Izb.controller.creditpaike.queryDetail()">
+            </td>
+        </tr>
+    </table>
+    <table id="creditpaike-detail"></table>
+ </form>

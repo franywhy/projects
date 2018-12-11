@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Example-js</title>
+    <link rel="stylesheet" href="tips.css" />
+    <script type="text/javascript" src="@baseDomain@/base/scripts/jquery.js"></script>
+    <script type="text/javascript" src="tips.js"></script>
+    <script>
+    function clickme(i) {
+        var tip = "",type="";
+        switch (i) {
+            case 1:
+                tip = "服务器繁忙，请稍后再试。";
+                type = "info";
+                break;
+            case 4:
+                tip = "设置成功！";
+                type = "succeed";
+                break;
+            case 5:
+                tip = "数据拉取失败";
+                type = "error";
+                break;
+            case 6:
+                tip = "正在加载中，请稍后...";
+                type = "loading";
+                break;
+        }
+        $.tips.show(tip,type);
+    }
+
+    function clickhide() {
+        $.tips.hide();
+    }
+
+    function clickautohide(i) {
+        var tip = "",type="";
+        switch (i) {
+            case 1:
+                tip = "服务器繁忙，请稍后再试。";
+                type = "info";
+                break;
+            case 4:
+                tip = "设置成功！";
+                type = "succeed";
+                break;
+            case 5:
+                tip = "数据拉取失败";
+                type = "error";
+                break;
+            case 6:
+                tip = "正在加载中，请稍后...";
+                type = "loading";
+                break;
+        }
+        $.tips.show(tip,type,3);
+    }
+    </script>
+</head>
+
+<body>
+    <p>4种不同提示图标</p>
+    <input type="button" value="图标1" onclick="clickme(1)" />
+    <input type="button" value="图标4" onclick="clickme(4)" />
+    <input type="button" value="图标5" onclick="clickme(5)" />
+    <input type="button" value="图标6" onclick="clickme(6)" />
+    <p>隐藏</p>
+    <input type="button" value="隐藏" onclick="clickhide()" />
+    <p>3秒后自动隐藏</p>
+    <input type="button" value="图标1" onclick="clickautohide(1)" />
+    <input type="button" value="图标4" onclick="clickautohide(4)" />
+    <input type="button" value="图标5" onclick="clickautohide(5)" />
+    <input type="button" value="图标6" onclick="clickautohide(6)" />
+</body>
+
+</html>

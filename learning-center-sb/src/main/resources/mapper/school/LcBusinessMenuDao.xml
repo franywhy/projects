@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningcenter.school.dao.LcBusinessMenuDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	lc_business_menu.lc_business_menu_id AS lcBusinessMenuId , 	lc_business_menu.business_id AS businessId , 	lc_business_menu.menu_id AS menuId , 	lc_business_menu.jsonSetting AS jsonsetting , 	lc_business_menu.remark AS remark , 	lc_business_menu.creator AS creator , 	lc_business_menu.create_time AS createTime , 	lc_business_menu.modifier AS modifier , 	lc_business_menu.modified_time AS modifiedTime 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from lc_business_menu as lc_business_menu
+	</sql>
+	
+	<!--根据businessID查询-->
+	<select id="queryByBusinesId" resultType="com.hq.learningcenter.school.entity.LcBusinessMenuEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		where business_id = #{businessId}
+	</select>
+</mapper>

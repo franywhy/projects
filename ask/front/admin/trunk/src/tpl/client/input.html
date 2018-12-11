@@ -1,0 +1,42 @@
+<!--客户端编辑-->
+
+<form name="inputForm">
+	<input name="_id" value="download" type="hidden" />
+    名称:
+    <input type="text" class="input" name="name" value="" size="50" />
+    <br />
+    <br />
+    版本号:
+    <input type="text" class="input" name="ver" value="" size="50" />
+    <br />
+    <br />
+    大小:
+    <input type="text" class="input" name="size" value="" size="50" />
+    <br />
+    <br />
+    更新日期:
+    <input type="text" class="input" name="sj" value="" size="50" readonly onClick="WdatePicker({dateFmt:'yyyy年MM月dd日'})"  />
+    <br />
+    <br />
+    二维码:
+    <input name="img_url" class="input" type="text" size="50" />
+    <input type="button" class="d-button" value="上传文件" onClick="Izb.ui.upload('img_url', 'download_info');" />
+    <br />
+    <br />
+    客户端下载链接:<br />
+    <input name="down_url" class="input" type="text" value="" size="80"/>
+    <br />
+    <br />
+    客户端下载链接(第三方推广):<br />
+    <input name="mobile_down_url" class="input" type="text" value="" size="80"/>
+    <br />
+    <br />
+    图片描述：<br />
+    <textarea name="pic_des" class="input" cols="80" rows="3"></textarea>
+    <br />
+    <br />
+    简介:<br />
+    <textarea name="des" class="input" cols="80" rows="10"></textarea>
+</form>
+<br />
+<!--/客户端编辑-->

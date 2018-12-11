@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>报考登记</title>
+#parse("sys/header.html")
+</head>
+<body>
+<!-- <div class="form-group" style="float:right;margin:0 auto">
+		<button class="btn btn-primary btn-md" onclick="return exportFile();">
+			<i class="fa fa-play"></i>&nbsp;下载模板
+		</button>
+		<a href="${rc.contextPath}/course/courseexamrecord/exportExcelCourseExamRecordTemplate">导出数据</a>
+	</div> -->
+	  <!-- <input type ="file" id="file_data" name= "myfile" style=" display: none" />  
+      <div class ="form-group">  
+             <label for ="importPicName"> 导入:</label >  
+             <input type ="text" class="input-large" id= "importPicName" />  
+             <a class ="btn btn-primary btn-md" onclick= "$('#file_data').click();" > 打开</ a>  
+      </div >  -->
+      
+<!-- <div class="form-group" style="float:right;">
+		      <form name="form_uploadImg" action=""  enctype="multipart/form-data">  
+				 <input id="file_data" class="btn btn-primary btn-md" type="file"  value="浏览文件" name="file_data" style="height:35px;width:200px;display:inline;">
+				 <input class="btn btn-primary btn-md" type="button" id="buttonUpload" onclick="$('#file_data').click();" value="导入" />  
+				 <a class="btn btn-primary" onclick="return ajaxFileUpload();"><i class="fa fa-plus"></i>&nbsp;导入</a>
+		      </form>  
+</div> -->
+
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("courseexamrecord:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.examRecordNo" @keyup.enter="query" placeholder="报考登记单号">
+			</div>
+			<a class="btn btn-default" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("courseexamrecord:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("courseexamrecord:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a class="btn btn-primary" @click="onlook"><i class="fa fa-pencil-square-o"></i>&nbsp;查看</a>
+			#end
+			#if($shiro.hasPermission("courseexamrecord:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("courseexamrecord:accept") || $shiro.hasPermission("courseexamrecord:reaccept"))
+			<a class="btn btn-primary" @click="audit"><i class="fa fa-question-circle"></i>&nbsp;审核</a>
+			#end
+			#if($shiro.hasPermission("courseexamrecord:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+			#end
+			#if($shiro.hasPermission("courseexamrecord:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+			#end
+		   <!--  <a href="${rc.contextPath}/course/courseexamrecord/exportExcelCourseExamRecordTemplate">导出数据</a> -->
+		    <a class="btn btn-primary" @click="exportTemplate"><i class="fa fa-download"></i>&nbsp;下载报考登记模板</a>
+		     <a class="btn btn-primary" @click="uploadExcelMethod"><i class="fa fa-upload"></i>&nbsp;导入数据</a>
+		     <a class="btn btn-primary" @click="exportScoreTemplate"><i class="fa fa-download"></i>&nbsp;下载分数登记模板</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="updateshowList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseExamRecord.examRecordId" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">单号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" disabled="disabled" class="form-control" v-model="courseExamRecord.examRecordNo" placeholder="单号"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseProductLine.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="remark" class="form-control" v-model="courseExamRecord.remark" placeholder="备注"/>
+			    </div>
+			</div>
+			
+			<!-- ---------------------------------ITEM 子表--------------------------------- -->
+			<div class="form-group">
+				<div class="col-sm-2 control-label">报考登记详情</div>
+                    <div id="itemButton" >
+					    <a class="btn btn-primary" @click="iadd"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					    <a class="btn btn-primary" @click="iupdate"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+                        <a class="btn btn-primary" @click="idel"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                    </div>
+				    <table id="detailGrid"></table>
+				    <div id="detailGridPager"></div>
+			</div>
+
+
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" id="okBtn" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>&nbsp;&nbsp;
+				#if($shiro.hasPermission("courseexamrecord:accept"))
+				<input type="button" id="acceptBtn" class="btn btn-primary" @click="accept" value="通过"/>&nbsp;&nbsp;
+				#end
+				#if($shiro.hasPermission("courseexamrecord:reaccept"))
+				<input type="button" id="reacceptBtn" class="btn btn-primary" @click="reaccept" value="不通过"/>&nbsp;&nbsp;
+				#end
+				<input type="button" class="btn btn-warning" @click="reload" value="返回"/>&nbsp;&nbsp;
+			</div>
+		</form>
+	</div>
+
+    <div v-show="onlookshowList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseExamRecord.examRecordId" placeholder="主键"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">单号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" disabled="disabled" class="form-control" v-model="courseExamRecord.examRecordNo" placeholder="单号"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">产品线</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseProductLine.productName" readonly="readonly" placeholder="点击选择产品线" @click="selectProduct"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" id="remark2" class="form-control" v-model="courseExamRecord.remark" placeholder="备注"/>
+			    </div>
+			</div>
+
+			<!-- ---------------------------------ITEM 子表--------------------------------- -->
+			<div class="form-group ">
+                <div class="col-sm-1 control-label"></div>
+                <div class="form-group col-sm-2">
+                        <input type="text" class="form-control" v-model="q.userName" @keyup.enter="iquery" placeholder="学员名称">
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <input type="text" class="form-control" v-model="q.userMobile" @keyup.enter="iquery" placeholder="学员手机">
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <!--<input type="text" class="form-control" v-model="q.examareaName" @click="queryExamareaShow" placeholder="报考省份">-->
+                        <select class="form-control" v-model="q.examareaId" @keyup.enter="iquery">
+                            <option value="">全部省份</option>
+                            <option v-for="option in selectData.areaList" v-bind:value="option.value">{{ option.name }}</option>
+                        </select>
+                    </div>
+                <a class="btn btn-primary" @click="iquery"><i class="fa fa-search"></i>&nbsp;查询</a>
+				    <table id="detailGrid2"></table>
+				    <div id="detailGridPager2"></div>
+			</div>
+
+
+			<div class="form-group">
+				<div class="col-sm-10 control-label"></div>
+				<input type="button" class="btn btn-warning" @click="reload" value="返回"/>&nbsp;&nbsp;
+			</div>
+		</form>
+	</div>
+
+	<!-- 子表弹窗 -->
+	<div id="detailLayer" style="display: none;">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-2">
+						<input disabled="disabled" type="text" class="form-control" v-model="detail.userplan.userName" placeholder="学员名称"/>
+					</div>
+					<a class="btn btn-primary" @click="useplanShow"><i class="fa"></i>&nbsp;学员规划</a>
+				</div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-2">
+                        <input type="text" class="form-control" v-model="detail.userplan.areaName" readonly="readonly" placeholder="报名省份"/>
+                    </div>
+                    <a class="btn btn-primary"><i class="fa"></i>&nbsp;报名省份</a>
+                </div>
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-2">
+						<input disabled="disabled" type="text" class="form-control" v-model="detail.userplan.courseName" placeholder="课程名称"/>
+					</div>
+					<a class="btn btn-primary" @click="useplanDetailShow"><i class="fa"></i>&nbsp;规划课程</a>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-2">
+						<input disabled="disabled" type="text" class="form-control" v-model="detail.userplan.examareaName" placeholder="报考省份"/>
+					</div>
+					<a class="btn btn-primary" @click="examareaShow"><i class="fa"></i>&nbsp;报考省份(可换)</a>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">备注</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="detail.userplan.remark" placeholder="备注"/>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 报考省份修改弹窗 -->
+	<div id="detailUpdateLayer" style="display: none;">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="form-group">
+                    <a class="btn btn-primary" @click="examareaShow"><i class="fa"></i>&nbsp;报考省份</a>
+                    <div class="col-sm-6 col-sm-offset-2">
+                        <input disabled="disabled" type="text" class="form-control" v-model="detail.userplan.examareaName" placeholder="点击按钮选择报考省份"/>
+                    </div>
+				</div>
+
+			</div>
+		</form>
+	</div>
+
+	<!-- 学员规划弹窗 -->
+	<div id="userplanlayer" style="display: none;">
+		<table id="userplanGrid"></table>
+		<div id="userplanGridPager"></div>
+	</div>
+	<!-- 学员规划-课程弹窗 -->
+	<div id="userplanDetaillayer" style="display: none;">
+		<table id="upDetailGrid"></table>
+		<div id="upDetailGridPager"></div>
+	</div>
+
+		<!-- 上传文件弹窗 -->
+		<div id="uploadExcel" style="display: none;">
+			<form name="form_uploadImg" action="" enctype="multipart/form-data">
+				<input id="file_data"  type="file"  name="file_data" style="height: 35px; width: 200px;" /> 
+			</form>
+		</div>
+	</div>
+
+<script src="${rc.contextPath}/js/course/courseexamrecord.js?_${date.systemTime}"></script>
+#parse("layer/userplanLay2.html")
+#parse("layer/userplanDetailLay.html")
+#parse("layer/productLay.html")
+#parse("layer/areaLay.html")
+</body>
+</html>

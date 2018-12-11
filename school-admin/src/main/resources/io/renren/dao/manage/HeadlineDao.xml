@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.dao.manage.HeadlineDao" >
+
+  <!-- 关联产品表字段 -->
+  <sql id="join_productName">
+    sys_product.product_name AS productName
+  </sql>
+  <!-- 关联产品表 -->
+  <sql id="join">
+    LEFT JOIN sys_product AS sys_product ON sys_product.product_id = headline.product_id
+  </sql>
+
+  <sql id="base_column" >
+    headline.headline_id, headline.title, headline.subtitle,
+    headline.card_banner_url, headline.content_type, headline.voice_title,
+    headline.content_html, headline.content_url, headline.labels,
+    headline.read_number, headline.comment_number, headline.product_id, headline.school_id,
+    headline.push_status, headline.push_time, headline.push_find_msg_id, headline.app_status,
+    headline.creation_time, headline.modified_time, headline.creator, headline.modifier,
+    headline.card_banner_type,headline.content_total_time
+  </sql>
+  <!-- 通用查询条件 -->
+  <sql id="base_where">
+    where 1=1
+  </sql>
+  <!-- 通用from -->
+  <sql id="base_from">
+    from headline as headline
+  </sql>
+
+  <!--根据ID查询-->
+  <select id="queryMsgMap" resultType="java.util.Map">
+    select
+      headline_id AS headlineId,
+      title AS title,
+      card_banner_url AS cardBannerUrl,
+      content_type AS contentType,
+      app_status AS appStatus,
+      push_find_msg_id AS pushFindMsgId,
+      push_time AS pushTime,
+      card_banner_type AS cardBannerType,
+      content_total_time AS contentTotalTime,
+      subtitle AS  subtitle
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND headline_id = #{headlineId}
+  </select>
+
+  <!--根据ID查询-->
+  <select id="queryPojoObject" resultType="io.renren.pojo.manage.HeadlinePOJO">
+    select
+    <include refid="base_column"/>
+    ,
+    (select cu.username from sys_user cu where cu.user_id = headline.creator) as creationName,
+    (select mu.username from sys_user mu where mu.user_id = headline.modifier) as modifiedName,
+    <include refid="join_productName"/>
+    <include refid="base_from"/>
+    <include refid="join"/>
+    <include refid="base_where"/>
+    AND headline_id = #{headlineId}
+  </select>
+
+  <!--分页列表-->
+  <select id="queryPojoList" resultType="io.renren.pojo.manage.HeadlinePOJO">
+    select
+    <include refid="base_column"/>
+    ,
+    (select cu.username from sys_user cu where cu.user_id = headline.creator) as creationName,
+    (select mu.username from sys_user mu where mu.user_id = headline.modifier) as modifiedName,
+    <include refid="join_productName"/>
+    <include refid="base_from"/>
+    <include refid="join"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="title != null and title.trim() != ''">
+      and `title` like concat('%',#{title},'%')
+    </if>
+    order by creation_time desc
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <!--分页总数-->
+  <select id="queryTotal" resultType="int">
+    select count(1)
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    AND dr = 0
+    <if test="title != null and title.trim() != ''">
+        and `title` like concat('%',#{title},'%')
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="io.renren.entity.manage.Headline" >
+    insert into headline (headline_id, title, subtitle, 
+      card_banner_url, content_type, voice_title,
+      content_html, content_url, labels, 
+      read_number, comment_number, product_id, school_id,
+      push_status, push_time, push_find_msg_id, app_status,
+      creation_time, modified_time, creator, modifier, dr,card_banner_type,content_total_time)
+    values (#{headlineId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, 
+      #{cardBannerUrl,jdbcType=VARCHAR}, #{contentType,jdbcType=TINYINT}, #{voiceTitle,jdbcType=VARCHAR},
+      #{contentHtml,jdbcType=VARCHAR}, #{contentUrl,jdbcType=VARCHAR}, #{labels,jdbcType=VARCHAR}, 
+      #{readNumber,jdbcType=INTEGER}, #{commentNumber,jdbcType=INTEGER}, #{productId,jdbcType=BIGINT},
+      #{schoolId,jdbcType=VARCHAR},
+      #{pushStatus,jdbcType=TINYINT}, #{pushTime,jdbcType=TIMESTAMP}, #{pushFindMsgId,jdbcType=VARCHAR},
+      #{appStatus,jdbcType=TINYINT},
+      #{creationTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP},
+      #{creator,jdbcType=BIGINT}, #{modifier,jdbcType=BIGINT},
+      #{dr,jdbcType=TINYINT},#{cardBannerType},#{contentTotalTime})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="io.renren.entity.manage.Headline" >
+    update headline
+    set title = #{title,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      card_banner_url = #{cardBannerUrl,jdbcType=VARCHAR},
+      content_type = #{contentType,jdbcType=TINYINT},
+      voice_title = #{voiceTitle,jdbcType=VARCHAR},
+      content_html = #{contentHtml,jdbcType=VARCHAR},
+      content_url = #{contentUrl,jdbcType=VARCHAR},
+      labels = #{labels,jdbcType=VARCHAR},
+      read_number = #{readNumber,jdbcType=INTEGER},
+      comment_number = #{commentNumber,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=BIGINT},
+      school_id = #{schoolId,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=TINYINT},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      push_find_msg_id = #{pushFindMsgId,jdbcType=VARCHAR},
+      app_status = #{appStatus,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=BIGINT},
+      modifier = #{modifier,jdbcType=BIGINT},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT},
+      card_banner_type= #{cardBannerType},
+      content_total_time = #{contentTotalTime}
+    where headline_id = #{headlineId,jdbcType=BIGINT}
+  </update>
+
+  <!--批量删除-->
+  <update id="deleteBatch">
+    update headline set dr = 1 where headline_id in
+    <foreach item="headlineId" collection="list" open="(" separator="," close=")">
+      #{headlineId}
+    </foreach>
+  </update>
+
+  <!-- 更新推送状态 -->
+  <update id="updatePushStatus">
+    update headline set push_status = #{pushStatus}, push_time = #{pushTime}, push_find_msg_id = #{pushFindMsgId}, app_status = #{appStatus}
+    where headline_id = #{headlineId}
+  </update>
+
+  <!-- 批量更新状态 -->
+  <update id="updateBatch">
+    update headline set app_status = #{appStatus} where headline_id in
+    <foreach item="headlineId" collection="list" open="(" separator="," close=")">
+      #{headlineId}
+    </foreach>
+  </update>
+
+    <select id="queryCountByPushTime" resultType="string">
+         SELECT  push_time FROM headline WHERE  push_time  BETWEEN #{startTime} AND #{endTime} ORDER BY push_time desc limit 1
+    </select>
+</mapper>

@@ -1,0 +1,15 @@
+From 10.0.98.12:5000/jdk:8
+
+VOLUME /tmp
+
+VOLUME /logs
+
+WORKDIR /home/service/ssocenter
+
+EXPOSE 8084
+
+CMD ["java","-jar","-XX:+PrintGCDetails","-Xloggc:gc.log","-Xms256m","-Xmx512m","-Xss256K","-XX:MetaspaceSize=32m","-XX:MaxMetaspaceSize=64m","-XX:PretenureSizeThreshold=819200","-XX:+UseAdaptiveSizePolicy","ssc.jar","--spring.config.location=application.yml"]
+
+ADD ./config/application-test.yml /home/service/ssocenter/application.yml
+
+ADD ./target/singlesignoncenter-1.0-SNAPSHOT.jar /home/service/ssocenter/ssc.jar

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.learningapi.dao.MallLiveRoomDao">
+
+    <select id="queryLiveRoomChannelId" resultType="Long">
+       select live_room_channel_id
+       from mall_live_room
+       where live_room_id = #{liveRoomId}
+    </select>
+
+    <select id="queryByClassPlanDetailId" resultType="map">
+        SELECT mlr.*
+        FROM mall_live_room mlr, course_classplan_lives ccl
+        WHERE mlr.live_room_id = ccl.liveroom_id
+        AND mlr.school_id = #{schoolId}
+        AND mlr.`status` = 1
+        AND mlr.dr = #{dr}
+        AND ccl.classplan_live_id = #{classPlanDetailId}
+        AND ccl.school_id = #{schoolId}
+        AND ccl.dr = #{dr}
+    </select>
+
+    <select id="queryByOliveId" resultType="map">
+        SELECT mlr.*
+        FROM mall_live_room mlr, course_olive co
+        WHERE mlr.live_room_id = co.live_room_id
+        AND mlr.`status` = 1
+        AND mlr.dr = #{dr}
+        AND co.olive_id = #{oliveId}
+    </select>
+</mapper>

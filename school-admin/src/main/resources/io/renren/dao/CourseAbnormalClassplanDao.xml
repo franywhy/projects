@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseAbnormalClassplanDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+	<sql id="BASE_COLUMN">
+		course_abnormal_classplan.id AS id,
+		course_abnormal_classplan.abnormal_classplan_no AS abnormalClassplanNo,
+		course_abnormal_classplan.student_id AS studentId,
+		course_abnormal_classplan.abnormal_type AS abnormalType,
+		course_abnormal_classplan.course_id AS courseId,
+		course_abnormal_classplan.classplan_id AS classplanId,
+		course_abnormal_classplan.audit_status AS auditStatus,
+		course_abnormal_classplan.abnormal_reason AS abnormalReason,
+		course_abnormal_classplan.remark AS remark,
+		course_abnormal_classplan.create_time AS createTime,
+		course_abnormal_classplan.create_person AS createPerson,
+		course_abnormal_classplan.modify_person AS modifyPerson,
+		course_abnormal_classplan.modified_time AS modifiedTime,
+		course_abnormal_classplan.update_person AS updatePerson,
+		course_abnormal_classplan.update_time AS updateTime
+	</sql>
+	<sql id="BASE_FROM">
+		FROM course_abnormal_classplan AS course_abnormal_classplan
+	</sql>
+	<sql id="BASE_WHERE">
+		WHERE 1 = 1
+		<if test="studentId != null and studentId > 0">
+			AND course_abnormal_classplan.`student_id` = #{studentId}
+		</if>
+		<if test="abnormalType != null">
+			AND course_abnormal_classplan.`abnormal_type` = #{abnormalType}
+		</if>
+		<if test="auditStatus != null">
+			AND course_abnormal_classplan.`audit_status` = #{auditStatus}
+		</if>
+		<if test="abnormalClassplanNo != null and abnormalClassplanNo.trim() != ''">
+			AND course_abnormal_classplan.`abnormal_classplan_no` = #{abnormalClassplanNo}
+		</if>
+		<if test="classplanId != null and classplanId.trim() != ''">
+			AND course_abnormal_classplan.`classplan_id` = #{classplanId}
+		</if>
+	</sql>
+
+	<sql id="COLUMN_OTHER">
+		<include refid="COLUMN_COURSE_CLASSPLAN"/>
+		,
+		<include refid="COLUMN_COURSE_USERS"/>
+		,
+		<include refid="COLUMN_COURSE_COURSES"/>
+	</sql>
+	<sql id="COLUMN_COURSE_CLASSPLAN">
+		course_classplan.classplan_name AS classplanName
+	</sql>
+	<sql id="COLUMN_COURSE_USERS">
+		users.mobile AS studentMobile,
+		users.nick_name AS studentName
+	</sql>
+	<sql id="COLUMN_COURSE_COURSES">
+		courses.course_name AS courseName
+	</sql>
+
+	<sql id="JOIN_OTHER">
+		<include refid="LEFT_JOIN_COURSE_CLASSPLAN"/>
+		<include refid="LEFT_JOIN_USERS"/>
+		<include refid="LEFT_JOIN_COURSES"/>
+	</sql>
+	<!--关联排课表-->
+	<sql id="LEFT_JOIN_COURSE_CLASSPLAN">
+		LEFT JOIN course_classplan AS course_classplan ON (course_abnormal_classplan.classplan_id = course_classplan.classplan_id)
+	</sql>
+	<!--关联用户表-->
+	<sql id="LEFT_JOIN_USERS">
+		LEFT JOIN users AS users ON (course_abnormal_classplan.student_id = users.user_id)
+	</sql>
+	<!--关联课程表-->
+	<sql id="LEFT_JOIN_COURSES">
+		LEFT JOIN courses AS courses ON (course_abnormal_classplan.course_id = courses.course_id)
+	</sql>
+
+	<!--关联用户表-->
+	<sql id="WHERE_OTHER">
+		<if test="studentMobile != null and studentMobile.trim() != ''">
+			AND users.`mobile` = #{studentMobile}
+		</if>
+	</sql>
+
+	<select id="queryObject" resultType="io.renren.pojo.CourseAbnormalClassplanPOJO">
+		SELECT
+		<include refid="BASE_COLUMN"/>
+		,
+		<include refid="COLUMN_OTHER"/>
+		<include refid="BASE_FROM"/>
+		<include refid="JOIN_OTHER"/>
+		<!--<include refid="BASE_WHERE"/>-->
+		WHERE course_abnormal_classplan.id = #{id}
+	</select>
+
+	<select id="queryList" parameterType="io.renren.pojo.query.CourseAbnormalClassplanQuery" resultType="io.renren.pojo.CourseAbnormalClassplanPOJO">
+		select
+        <include refid="BASE_COLUMN"/>
+		,
+		<include refid="COLUMN_OTHER"/>
+        <include refid="BASE_FROM"/>
+		<include refid="JOIN_OTHER"/>
+        <include refid="BASE_WHERE"/>
+		<include refid="WHERE_OTHER"/>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                ORDER BY ${sidx} ${order}
+            </when>
+			<otherwise>
+                ORDER BY id DESC
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="io.renren.pojo.query.CourseAbnormalClassplanQuery" resultType="int">
+		SELECT count(1)
+        <include refid="BASE_FROM"/>
+		<include refid="JOIN_OTHER"/>
+        <include refid="BASE_WHERE"/>
+		<include refid="WHERE_OTHER"/>
+	</select>
+
+	<select id="queryTotalByClassplans" resultType="int">
+		SELECT count(1)
+		<include refid="BASE_FROM"/>
+		WHERE course_abnormal_classplan.student_id = #{userId}
+		AND course_abnormal_classplan.classplan_id in
+		<foreach item="classplanId" collection="classplanIds" open="(" separator="," close=")">
+			#{classplanId}
+		</foreach>
+		AND course_abnormal_classplan.abnormal_type = #{courseAbormalType}
+		AND course_abnormal_classplan.audit_status = 2
+	</select>
+
+	<select id="queryObjectByClassplan" resultType="io.renren.entity.CourseAbnormalClassplanEntity">
+		SELECT
+			<include refid="BASE_COLUMN"/>
+			<include refid="BASE_FROM"/>
+		WHERE course_abnormal_classplan.student_id = #{userId}
+		AND course_abnormal_classplan.classplan_id = #{classplanId}
+		AND course_abnormal_classplan.audit_status = 2
+		ORDER BY course_abnormal_classplan.id DESC
+		LIMIT 1
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.CourseAbnormalClassplanEntity">
+		INSERT INTO course_abnormal_classplan
+		(
+			`id`, 
+			`abnormal_classplan_no`,
+			`student_id`,
+			`abnormal_type`,
+			`course_id`,
+			`classplan_id`, 
+			`audit_status`, 
+			`abnormal_reason`, 
+			`remark`, 
+			`create_person`,
+			`modify_person`, 
+			`modified_time`, 
+			`update_person`
+		)
+		VALUES
+		(
+			#{id}, 
+			#{abnormalClassplanNo},
+			#{studentId},
+			#{abnormalType},
+			#{courseId},
+			#{classplanId}, 
+			#{auditStatus}, 
+			#{abnormalReason}, 
+			#{remark}, 
+			#{createPerson},
+			#{modifyPerson}, 
+			#{modifiedTime}, 
+			#{updatePerson}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.CourseAbnormalClassplanEntity">
+		UPDATE course_abnormal_classplan
+		<set>
+			<if test="studentId != null">`student_id` = #{studentId}, </if>
+			<if test="abnormalType != null">`abnormal_type` = #{abnormalType}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+			<if test="auditStatus != null">`audit_status` = #{auditStatus}, </if>
+			<if test="abnormalReason != null">`abnormal_reason` = #{abnormalReason}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="updatePerson != null">`update_person` = #{updatePerson} </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<update id="updateCancle" parameterType="long">
+		UPDATE course_abnormal_classplan
+		<set>
+			`audit_status` = 1
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateAdopt" parameterType="long">
+		update course_abnormal_classplan
+		<set>
+			`audit_status` = 2,
+			`modify_person` = #{modifyPerson},
+			`modified_time` = #{modifiedTime}
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteBatch">
+		delete from course_abnormal_classplan where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryCourseClassplanEntityByCourseName" resultType="io.renren.entity.CourseClassplanEntity">
+		SELECT *
+		FROM course_classplan AS course_classplan
+		LEFT JOIN courses AS courses ON (courses.course_id = course_classplan.course_id)
+		WHERE courses.course_name = #{courseName}
+		AND course_classplan.dr = 0
+		ORDER BY course_classplan.classplan_id DESC
+		LIMIT 1
+	</select>
+
+</mapper>

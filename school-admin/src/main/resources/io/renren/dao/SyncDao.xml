@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SyncDao">
+	<!-- 根据mongodbId查询是否存在相同课程 -->
+	<select id="syncQueryCourseByMid" resultType="int">
+		select count(1)
+		from courses
+		where m_id = #{mId}
+	</select>
+	
+	<!--查询所有不为空back_url字段-->
+	<select id="queryBackUrlInfo" resultType="string">
+	   SELECT back_url FROM `course_classplan_lives` WHERE back_url IS NOT NULL AND back_url !=''
+	</select>
+	<!-- 修改排课信息 -->
+	<update id="updateCourseClassPlanLives" parameterType="io.renren.entity.CourseClassplanLivesEntity">
+	   UPDATE `course_classplan_lives` SET back_id=#{backId} ,back_type=#{backType} WHERE back_url=#{backUrl}
+	</update>
+	
+	<!--数据同步-排课 -->
+	<insert id="sysnCourseClassplanSave" parameterType="io.renren.pojo.classplan.ClassplanPOJO"
+		useGeneratedKeys="true" keyProperty="classplanId">
+		insert into
+		course_classplan
+		(
+		`classplan_id`, `classplan_name`, `course_id`,
+		`classplan_live_detail`, `remark`,
+		`start_time`, `teacher_id`,
+		`timetable_id`, `live_room_id`,
+		`studio_id`, `creator`,
+		`creation_time`, `modifier`, `modified_time`,
+		`school_id`, `dr`,
+		`status`, `is_audited`, `is_open`, `material_id` )
+		values
+		(
+		#{classplanId}, #{classplanName}, #{courseId}, #{classplanLiveDetail},
+		#{remark},
+		#{startTime}, #{teacherId}, #{timetableId}, #{liveRoomId},
+		#{studioId}, #{creator}, #{creationTime}, #{modifier},
+		#{modifiedTime}, #{schoolId}, 0, #{status}, #{isAudited}, #{isOpen},
+		#{materialId} )
+	</insert>
+	<!-- 同步数据—学习计划主表 -->
+	<insert id="courseUserplanClassSave" parameterType="io.renren.entity.CourseUserplanClassEntity"
+		useGeneratedKeys="true" keyProperty="userplanClassId">
+		insert into course_userplan_class
+		(
+		`userplan_id`, `userplan_class_no`, `exam_schedule_id`, `remark`,
+		`school_id`,
+		`create_time`, `modify_time`, `create_person`,
+		`modify_person`, `dr`,
+		`status`,`m_id` )
+		values
+		(
+		#{userplanId},
+		#{userplanClassNo}, #{examScheduleId}, #{remark}, #{schoolId},
+		#{createTime}, #{modifyTime}, #{createPerson}, #{modifyPerson}, 0,
+		#{status},#{mId} )
+	</insert>
+     <!-- 同步数据—学习计划子表 -->
+	<insert id="courseUserplanClassDetailSave" parameterType="io.renren.entity.CourseClassplanLivesEntity"
+		useGeneratedKeys="true" keyProperty="userplanClassDetailId">
+		insert into
+		course_userplan_class_detail
+		(
+		`userplan_class_id`, `userplan_detail_id`, `classplan_id`, `timestamp`, `remark`, `dr`,
+		`school_id`, `order_num` )
+		values
+		(
+		#{userplanClassId}, #{userplanDetailId}, #{classplanId}, #{timestamp}, #{remark}, 0,
+		#{schoolId}, #{orderNum} )
+	</insert>
+
+	<!--数据同步-排课子表 -->
+	<insert id="sysnCourseClassplanLivesSave" parameterType="io.renren.entity.CourseClassplanLivesEntity">
+		insert
+		into course_classplan_lives
+		(
+		`classplan_live_id`, `classplan_id`,
+		`classplan_live_name`, `classplan_live_time_detail`,
+		`day_time`,
+		`start_time`, `end_time`, `time_bucket`, `liveroom_id`,
+		`studio_id`,
+		`back_url`, `teacher_id`, `live_class_type_ids`,
+		`order_num`,
+		`course_live_detail_id`, `create_person`,
+		`creation_time`,
+		`modify_person`, `modified_time`, `school_id`,
+		`course_id`, `dr`,
+		`file_url`, `m_id`,
+		`back_id`, `back_type`)
+		values
+		(
+		#{classplanLiveId}, #{classplanId},
+		#{classplanLiveName}, #{classplanLiveTimeDetail},
+		#{dayTime},
+		#{startTime}, #{endTime}, #{timeBucket}, #{liveroomId},
+		#{studioId},
+		#{backUrl}, #{teacherId}, #{liveClassTypeIds},
+		#{orderNum},
+		#{courseLiveDetailId}, #{createPerson}, #{creationTime},
+		#{modifyPerson}, #{modifiedTime}, #{schoolId}, #{courseId}, 0,
+		#{fileUrl}, #{mId},
+		#{backId}, #{backType} )
+	</insert>
+	<!-- 数据同步-课程 -->
+	<insert id="syncCourseSave" parameterType="io.renren.entity.CoursesEntity"
+		useGeneratedKeys="true" keyProperty="courseId">
+		insert into courses
+		(
+		`course_name`,
+		`course_no`,
+		`course_lb`,
+		`course_type`,
+		`exam_type`,
+		`course_credit`,
+		`course_eq`,
+		`listen_url`,
+		`creator`,
+		`creation_time`,
+		`school_id`,
+		`dr`,
+		`m_id`
+		)
+		values
+		(
+		#{courseName},
+		#{courseNo},
+		#{courseLb},
+		#{courseType},
+		#{examType},
+		#{courseCredit},
+		#{courseEq},
+		#{listenUrl},
+		#{creator},
+		#{creationTime},
+		#{schoolId},
+		#{dr},
+		#{mId}
+		)
+	</insert>
+	<!-- 数据同步-课程-基础课时 -->
+	<insert id="syncCourseLiveDetailSave" parameterType="io.renren.entity.CourseLiveDetailsEntity"
+		useGeneratedKeys="true" keyProperty="liveId">
+		insert into course_live_details
+		(
+		`live_name`,
+		`live_class_type_ids`,
+		`school_id`,
+		`course_id`,
+		`order_num`,
+		`m_id`
+		)
+		values
+		(
+		#{liveName},
+		#{liveClassTypeIds},
+		#{schoolId},
+		#{courseId},
+		#{orderNum},
+		#{mId}
+		)
+	</insert>
+
+</mapper>

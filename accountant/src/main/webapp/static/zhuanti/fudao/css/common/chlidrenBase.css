@@ -1,0 +1,292 @@
+/*--------------------------------------------------------------------
+----------------------------------------------------------------------
+ @Author's huangxuejie 
+ @---Date 2015-06-10
+ @---该样式为子页面头部的透明那块的公共样式
+----------------------------------------------------------------------
+--------------------------------------------------------------------*/
+
+ h1, h2, h3, h4, h5, h6{
+ 	font-weight: normal;
+ }
+ .fixed-bg{
+ 	position: fixed;
+ 	z-index: 99990;
+ 	width: 100%;
+ 	height: 100%;
+ 	background-color: #000000;
+ 	filter:alpha(opacity=70); /*IE滤镜，透明度50%*/
+
+	-moz-opacity:0.7; /*Firefox私有，透明度50%*/
+
+	opacity:0.7;/*其他，透明度50%*/
+	display: none;
+ 
+ 	top: 0;
+}
+.btn-dlong{
+	width: 250px;
+	height: 91px;
+	background: url(../images/bg/dlong.png) no-repeat left center;
+	bottom: -40px;
+	right: 70px;
+	cursor: pointer;
+}
+ .delong-box{
+ 	position: fixed;
+ 	z-index: 99999;
+ 	width: 500px;
+ 	left: 50%;
+ 	margin-left: -250px;
+ 	top: 50%;
+ 	margin-top: -100px;
+ 	height: 100px;
+ 	/*background-color: #ffffff;*/
+	/*border:1px solid #000000;*/
+	display: none;
+ }
+ .voide-box{
+ 	position: fixed;
+ 	z-index: 99999;
+ 	width: 720px;
+ 	left: 50%;
+ 	margin-left: -360px;
+ 	top: 200px;
+ 	height: 405px;
+ 	background-color: #ffffff;
+	border:1px solid #000000;
+	display: none;
+ }
+.head-bg{
+	width: 100%;
+	height: 474px;
+	background-repeat: no-repeat;
+	background-position: center center; 
+	 background-size: cover;
+	 position: relative;
+	 z-index: 999;
+}
+.head.bg-opacity{
+	background:rgba(255, 255, 255, 0.7)!important;
+	background:transparent; 
+	
+}
+.head.bg-opacity .w-auto-Center{
+	position:relative;
+} /*实现IE文字不透明*/ 
+
+.header.bg-opacity{
+	background:rgba(0, 0, 0, 0.2)!important;
+	background:transparent;
+}
+.header.bg-opacity .w-auto-Center{
+} /*实现IE文字不透明*/ 
+
+.bg-opacity .left-nav .nav-school-selcet .school-pinyin{
+	color: #d2d2d2;
+}
+
+.head-bg-opacity.ie9next{
+	filter:Alpha(opacity=70);
+	opacity: 0;
+	background-color: #f4f4f4;
+    height: 35px;
+    line-height: 35px;
+    width: 100%;
+    top: 0;
+    z-index: 0;
+    left: 0;
+}
+.headder-bg-opacity.ie9next{
+	filter:Alpha(opacity=20);
+	opacity: 0;
+	background-color: #000000;
+    width: 100%;
+    top: 35px;
+    left: 0; 
+    height: 40px;
+    padding: 38px 0 28px;
+    z-index: 0;
+}
+.headder-nav-bg-opacity.ie9next{
+	filter:Alpha(opacity=20);
+	opacity: 0;
+	background-color: #000000;
+    height: 42px;
+    line-height: 42px;
+    width: 100%;
+    top: 145px;
+    left: 0; 
+    z-index: 0;
+}
+/**/
+
+.header-nav{
+	width: 100%;
+	background-color: #000000;
+	background:rgba(0, 0, 0, 0.2)!important;
+	background:transparent; 
+    zoom: 1;
+	height: 42px;
+	line-height: 42px;
+	margin-top: 2px;
+	position: relative;
+	display: block;
+	z-index: 0;
+	float: left;
+}
+.header-nav .h-nav-a{
+	width: 100%;
+	height: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.header-nav .h-nav-a ul{
+	width: auto;
+	white-space: nowrap;
+}
+.header-nav .h-nav-a a{
+	display: inline-block !important;
+	height: 42px !important;
+	line-height: 42px !important;
+	padding: 0 15px !important;
+	color: #ffffff !important;
+	font-size: 15px !important;
+	margin-right: 0px !important;
+}
+.header-nav .h-nav-a a:hover{
+	background-color: #01ad59 !important;
+}
+
+
+
+/*--------------头部的底部导航-------------------*/
+.header-bottom-nav {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	left: 0;
+	bottom: 0;
+}
+.header-bottom-nav .nav-bg{
+	width: 100%;
+	height: 50px;
+	background-color: #000000;
+	opacity: 0.5;
+	z-index: 0;
+	left: 0;
+}
+.header-bottom-nav.fixedScroll{
+	position: fixed;
+	left: 0;
+	top: 0;
+}
+.header-bottom-nav .nav-info{
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	position: relative;
+}
+.header-bottom-nav .w-auto-Center{
+	z-index: 1;
+	position: relative;
+
+}
+.header-bottom-nav .nav-info .nav-left-kcName{
+	width: 220px;
+	height: 50px;
+	float: left;
+}
+.header-bottom-nav .nav-info .nav-left-kcName a{
+	display: inline-block;
+	font-size: 18px;
+	color: #ffffff;
+}
+.header-bottom-nav .nav-info .nav-left-kcName a:hover,
+.header-bottom-nav .nav-info .h-b-nav-a a:hover{
+	color: #f18101;
+}
+.header-bottom-nav .nav-info .nav-right{
+	float: right;
+}
+.header-bottom-nav .nav-info .h-b-nav-a {
+	width: 780px;
+	float: right;
+	text-align: right;
+}
+.header-bottom-nav .nav-info .h-b-nav-a a{
+	font-size: 14px;
+	color: #ffffff;
+	padding: 0 8px;
+	display: inline-block;
+	height: 50px;
+	margin-left: 15px;
+	font-family: "微软雅黑";
+}
+.header-bottom-nav .nav-info .h-b-nav-a a.active{
+	color: #f18101;
+
+}
+.header-bottom-nav .nav-info .h-b-nav-a a.btn-baoming{
+	height: 32px;
+	line-height: 32px;
+	margin-top: 9px;
+	background-color: #f18101;
+	color: #ffffff;
+	padding: 0 30px;
+	border-radius: 5px;
+}
+.header-bottom-nav .nav-info .h-b-nav-a a.btn-baoming:hover{
+	background-color: #ff6600;
+}
+
+
+
+/*---------------------头部公告内容--------------------*/
+.header-gg-tip.absolute{
+	left: 50%;
+	margin-left: -500px;
+	top: 220px;
+	z-index: 1;
+}
+.header-gg-tip .tip-boxCon{
+	width: 330px;
+	height: 150px;
+	background-color: #ffffff;
+	padding: 10px 15px;
+	overflow: hidden;
+}
+.header-gg-tip .tip-boxCon h2{
+	font-size: 20px;
+	color: #555555;
+	font-weight: 100;
+	padding-bottom: 5px;
+}
+.header-gg-tip .tip-boxCon p{
+	width: 100%;
+	overflow: hidden;
+	height: 75px;
+	font-size: 14px;
+	color: #888888;
+	line-height: 20px;
+}
+.header-gg-tip .tip-boxCon .btn-a{
+	width: 95px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+}
+.header-gg-tip .tip-boxCon .btn-a a{
+	display:block;
+	width: 95px;
+	height: 26px;
+	line-height: 26px;
+	border:1px solid #f29440;
+	border-radius: 3px;
+	color: #f29440;
+}
+.header-gg-tip .tip-boxCon .btn-a a:hover{
+	background-color: #f29440;
+	color: #ffffff;
+}
+/*------------------------以上部分可以单独分离出来，如果有需要----------------------*/

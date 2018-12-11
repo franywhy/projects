@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseExamScheduleDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	    course_exam_schedule.course_exam_id AS courseExamId ,
+	    course_exam_schedule.school_id AS schoolId , course_exam_schedule.dr AS dr , 
+	    course_exam_schedule.create_person AS createPerson ,
+	    course_exam_schedule.create_time AS createTime ,
+	    course_exam_schedule.modify_person AS modifyPerson ,
+	    course_exam_schedule.modify_time AS modifyTime ,
+	    course_exam_schedule.status AS status , 
+	    course_exam_schedule.remark AS remark , 
+	    course_exam_schedule.course_id AS courseId ,
+	    course_exam_schedule.area_id AS areaId ,
+	    course_exam_schedule.exam_schedule_id AS examScheduleId ,
+	    course_exam_schedule.exam_date AS examDate ,
+	    course_exam_schedule.exam_bucket AS examBucket
+    </sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where course_exam_schedule.dr=0 	
+    </sql>
+    
+	<!-- 通用from -->
+	<sql id="base_from">
+    	from course_exam_schedule as course_exam_schedule
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseExamScheduleEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND course_exam_id = #{courseExamId}
+	</select>
+	
+	<!--根据ID查询-->
+	<select id="queryPojoObject" resultType="io.renren.pojo.CourseExamSchedulePOJO">
+		select 
+      	<include refid="base_column"/>
+      	,
+      	(select cu.username from sys_user cu where cu.user_id = course_exam_schedule.create_person) AS creationName,
+		(select cm.username from sys_user cm where cm.user_id = course_exam_schedule.modify_person) AS modifiedName,
+		(select co.course_name from courses co where co.course_id = course_exam_schedule.course_id) AS courseName,
+		(select ma.area_name from mall_area ma where ma.area_id = course_exam_schedule.area_id) AS areaName,
+		(select me.schedule_name from mall_exam_schedule me where me.id = course_exam_schedule.exam_schedule_id) AS examScheduleName
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND course_exam_id = #{courseExamId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseExamScheduleEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryPojoList" resultType="io.renren.pojo.CourseExamSchedulePOJO">
+		select
+		<include refid="base_column"/>
+		,
+		(select cu.username from sys_user cu where cu.user_id = course_exam_schedule.create_person) AS creationName,
+		(select cm.username from sys_user cm where cm.user_id = course_exam_schedule.modify_person) AS modifiedName,
+		(select co.course_name from courses co where co.course_id = course_exam_schedule.course_id) AS courseName,
+		(select ma.area_name from mall_area ma where ma.area_id = course_exam_schedule.area_id) AS areaName,
+		(select me.schedule_name from mall_exam_schedule me where me.id = course_exam_schedule.exam_schedule_id) AS examScheduleName
+		<include refid="base_from"/> 
+		JOIN courses cr ON(cr.course_id = course_exam_schedule.course_id)
+		<include refid="base_where"/>
+		<!-- 课程 -->
+		<if test="courseName != null and courseName.trim() != ''">
+			and cr.course_name like concat('%',#{courseName},'%')
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		JOIN courses cr ON(cr.course_id = course_exam_schedule.course_id)
+		<include refid="base_where"/>
+		<if test="courseName != null and courseName.trim() != ''">
+			and cr.course_name like concat('%',#{courseName},'%')
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseExamScheduleEntity" useGeneratedKeys="true" keyProperty="courseExamId">
+	    insert into course_exam_schedule
+	    (
+	       `school_id`, 
+	       `dr`, 
+	       `create_person`, 
+	       `create_time`, 
+	       `modify_person`, 
+	       `modify_time`,
+	       `status`, 
+	       `remark`, 
+	       `course_id`, 
+	       `area_id`, 
+	       `exam_schedule_id`,
+	       `exam_date`, 
+	       `exam_bucket` 
+	    )
+	    values
+	    (
+	       #{schoolId}, 
+	       #{dr}, 
+	       #{createPerson}, 
+	       #{createTime}, 
+	       #{modifyPerson}, 
+	       #{modifyTime},
+	       #{status}, 
+	       #{remark}, 
+	       #{courseId}, 
+	       #{areaId}, 
+	       #{examScheduleId},
+	       #{examDate}, 
+	       #{examBucket} 
+	    )
+    </insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseExamScheduleEntity">
+		update course_exam_schedule 
+		<set>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="areaId != null">`area_id` = #{areaId}, </if>
+			<if test="examScheduleId != null">`exam_schedule_id` = #{examScheduleId}, </if>
+			<if test="examDate != null">`exam_date` = #{examDate}, </if>
+			<if test="examBucket != null">`exam_bucket` = #{examBucket}</if>
+		</set>
+		<include refid="base_where"/>
+		AND course_exam_id = #{courseExamId}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.CourseExamScheduleEntity">
+		UPDATE course_exam_schedule 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND course_exam_id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.CourseExamScheduleEntity">
+		UPDATE course_exam_schedule 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND course_exam_id IN 
+		<foreach item="courseExamId" collection="ids" open="(" separator="," close=")">
+			#{courseExamId}
+		</foreach>
+	</update>
+</mapper>

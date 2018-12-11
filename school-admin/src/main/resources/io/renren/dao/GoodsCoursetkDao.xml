@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.GoodsCoursetkDao">
+	
+	<select id="queryTotalByCommodityId" resultType="int">
+		select count(1) from goods_coursetk where commodity_id = #{commodityId}
+	</select>
+	
+	<select id="queryCodeListByCommodityId" resultType="string">
+		select course_tk_code from goods_coursetk where commodity_id = #{commodityId}
+	</select>
+	
+	<select id="queryTotalByMap" resultType="int">
+		select count(1) from goods_coursetk where commodity_id = #{commodityId} and course_tk_code = #{tkCourseCode}
+	</select>
+	
+	<insert id="save" parameterType="io.renren.entity.GoodsCoursetkEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into goods_coursetk
+		(
+		`commodity_id`,
+		`course_tk_id`,
+		`course_tk_code`
+		)
+		values
+		(
+		#{commodityId},
+		0,
+		#{courseTkCode}
+		)
+	</insert>
+	<delete id="deleteByCommodityId">
+		delete from goods_coursetk where commodity_id = #{commodityId}
+	</delete>
+</mapper>

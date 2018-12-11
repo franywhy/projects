@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MsgContentCommonDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		msg_content_common.common_id AS commonId ,
+		msg_content_common.user_id AS userId , 
+		msg_content_common.content_id AS contentId , 
+		msg_content_common.school_id AS schoolId
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	from msg_content_common as msg_content_common
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.MsgContentCommonEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND common_id = #{commonId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.MsgContentCommonEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MsgContentCommonEntity" useGeneratedKeys="true" keyProperty="commonId">
+		insert into msg_content_common
+		(
+			`user_id`, 
+			`content_id`, 
+			`school_id` 
+		)
+		values
+		(
+			#{userId}, 
+			#{contentId}, 
+			#{schoolId} 
+		)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.MsgContentCommonEntity">
+		update msg_content_common 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="contentId != null">`content_id` = #{contentId}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND common_id = #{commonId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM msg_content_common 
+		<include refid="base_where"/>
+		AND common_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM msg_content_common 
+		<include refid="base_where"/> 
+		AND common_id IN 
+		<foreach item="commonId" collection="ids" open="(" separator="," close=")">
+			#{commonId}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,42 @@
+<!--学员就业登记输入-->
+<form name="inputForm">
+    <input name="_id" hidden="hidden"/>
+    <table  style="height:200px;"  width='750'>
+    <tr><td>
+        所属就业老师<span class="red">*</span>:
+    </td>
+        <td>
+            <select id="teacher_id" name="teacher_id" class="input J_teacher_id" style="width:183px" data-options="required:true">
+            </select>
+        </td>
+        <td>
+            选择学员<span class="red">*</span>:
+        </td>
+        <td>
+            <input class="input" name="select_user_name" id="select_user_name" type="text"  value="" size="20" readonly required  onClick=" Izb.controller.employmentregistration.showuserlist();"/>
+            <input class="hidden" name="user_id" id="user_id" type="text" value="" />
+        </td>
+    </tr>
+    <tr>
+        <td>订单编号<span class="red">*</span>:</td>
+        <td>
+            <!--<select id="order_no" name="order_no" class="input J_order_no" style="width:183px" data-options="required:true">-->
+            <!--</select>-->
+            <input class="input" name="order_no" id="order_no" type="text"  value="" size="20" readonly required   onClick=" Izb.controller.employmentregistration.showmytemp();"/>
+        </td>
+        <td>附件<span class="red">*</span>:</td>
+        <td colspan="3">
+            <input class="input" name="attachment" id="attachment" type="text" value="" size="20" readonly required />
+            <input type="button" class="d-button" value="上传附件" onClick="Izb.ui.upload('attachment', 'tasks','/upload_doc.json');" />
+        </td>
+    </tr>
+     <tr><td td colspan="4"> &nbsp;</td></tr>
+     <tr>
+        <td td colspan="2"> <input type="button" class="d-button" value="新增就业明细" onClick="Izb.controller.employmentregistration.addDetail();" /></td>
+     </tr>
+       <tr><td td colspan="4"> &nbsp;</td></tr>
+     <tr><td colspan="4"><div id="container"></div><td></tr>
+    </table>
+</form>
+<!--/学员就业登记输入-->
+

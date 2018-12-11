@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseUserplanDetailDao">
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		course_userplan_detail.userplan_class_detail_id,
+		course_userplan_detail.userplan_class_id,
+		course_userplan_detail.userplan_detail_id,
+		course_userplan_detail.classplan_id,
+		course_userplan_detail.timestamp,
+		course_userplan_detail.remark,
+		course_userplan_detail.dr,
+		course_userplan_detail.school_id,
+		course_userplan_detail.order_num,
+		course_userplan_detail.ts
+	</sql>
+	<!-- 展示互动-安卓端-用户观看记录-获取排课信息 -->
+	<select id="getCourseClassPlanInfoGSync" resultType="map">
+		SELECT
+			course_classplan_lives.classplan_live_id AS classplanLiveId,
+			course_classplan_lives.classplan_id AS classplanId,
+			ABS(
+				(UNIX_TIMESTAMP(course_classplan_lives.start_time) * 1000) - #{startTime}
+			) AS MSA
+		FROM
+			course_classplan_lives AS course_classplan_lives
+		WHERE
+			course_classplan_lives.back_id = #{backId}
+		ORDER BY
+			MSA ASC
+		LIMIT 1
+	</select>
+	
+	<!-- 展示互动-安卓端-用户观看记录-获取排课信息 -->
+	<select id="getUserIdGSync" resultType="long">
+		SELECT
+			users.user_id AS userId
+		FROM
+			course_userplan_class_detail AS course_userplan_class_detail
+		JOIN course_userplan_detail as course_userplan_detail on course_userplan_detail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id
+		JOIN course_userplan as course_userplan on course_userplan.user_plan_id = course_userplan_detail.userplan_id
+		JOIN users as users on users.user_id = course_userplan.user_id
+		WHERE
+			course_userplan_class_detail.classplan_id = #{classplanId}
+		AND users.nick_name = #{userName}
+	</select>
+	<!-- 根据学员规划子表ID查询课程信息 -->
+	<select id="selectCourseNameByUserPlanDetailId" resultType="map">
+		select 
+			course.course_id as courseId,
+			course.course_name as courseName,
+			course.course_no as courseNo
+		from course_userplan_detail course_userplan_detail
+		join courses course on course.course_id = course_userplan_detail.course_id 
+		where course_userplan_detail.userplan_detail_id = #{userplanDetailId} 
+	</select>
+	
+	<!-- 根据学员规划ID查询课程列表 -->
+	<select id="courseUserPlanEntityLisrt" resultType="io.renren.entity.CourseUserplanDetailEntity">
+		select 
+			ud.*
+		from course_userplan_detail ud 
+		where ud.userplan_id = #{userPlanId} 
+		and ud.dr = 0
+	</select>
+	
+	<!-- 根据商品ID和地区ID 查询某商品下某一地区所有的课程===生成学员规划的子表课程 -->
+	<select id="queryAllcourseListByCommodityId" resultType="map">
+		SELECT 
+			gd.id as id,
+			gd.mall_area_id as areaId,
+			gd.course_id as courseId,
+			gd.is_substituted as isSubstituted,
+			gd.is_substitute as isSubstitute,
+			gd.is_united_exam as isUnitedExam,
+			gd.is_suitable as isSuitable,
+			c.course_name as courseName,
+			c.course_no as courseNo
+		FROM mall_goods_details gd JOIN courses c ON(c.course_id = gd.course_id)
+		WHERE gd.mall_goods_id = #{commodityId} 
+		AND gd.mall_area_id = #{areaId}
+		AND gd.dr = 0
+	</select>
+	
+	<!-- 根据商品ID查询课程列表 -->
+	<select id="courseListByCommodityId" resultType="map">
+		select 
+			gd.id as id,
+			gd.mall_area_id as areaId,
+			gd.course_id as courseId,
+			gd.is_substituted as isSubstituted,
+			gd.is_substitute as isSubstitute,
+			gd.is_united_exam as isUnitedExam,
+			gd.is_suitable as isSuitable,
+			(select ma.area_name from mall_area ma where ma.area_id = gd.mall_area_id) as areaName,
+			c.course_name as courseName,
+			c.course_no as courseNo
+		from mall_goods_details gd JOIN courses c ON(c.course_id = gd.course_id)
+		where gd.mall_goods_id = #{commodityId} 
+		and gd.mall_area_id = #{areaId}
+		and gd.dr = 0
+		<!-- 考英语二:学习英语二课程;不学习英语二代替课程 -->
+		<if test="examEn2">
+			and gd.is_substitute = 0
+		</if>
+		<!-- 不考英语二 :不学习英语二课程;学习英语二代替课程-->
+		<if test="!examEn2">
+			and gd.is_substituted = 0
+		</if>
+		<!-- 专业对口:不需要学习不对口课程 -->
+		<if test="targetGrade">
+			and gd.is_suitable = 0
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 根据商品ID查询课程数量 -->
+	<select id="courseTotalByCommodityId" resultType="int">
+		select 
+			count(1)
+		from mall_goods_details gd JOIN courses c ON(c.course_id = gd.course_id)
+		where gd.mall_goods_id = #{commodityId} 
+		and gd.mall_area_id = #{areaId}
+		<!-- 考英语二:学习英语二课程;不学习英语二代替课程 -->
+		<if test="examEn2">
+			and gd.is_substitute = 0
+		</if>
+		<!-- 不考英语二 :不学习英语二课程;学习英语二代替课程-->
+		<if test="!examEn2">
+			and gd.is_substituted = 0
+		</if>
+		<!-- 专业对口:不需要学习不对口课程 -->
+		<if test="targetGrade">
+			and gd.is_suitable = 0
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<!-- 根据学员规划ID查询课程列表 -->
+	<select id="courseListByUserPlanId" resultType="map">
+		select 
+			ud.userplan_detail_id as id,
+			ud.area_id as areaId,
+			ud.course_id as courseId,
+			ud.is_substituted as isSubstituted,
+			ud.is_substitute as isSubstitute,
+			ud.is_united_exam as isUnitedExam,
+			ud.is_suitable as isSuitable,
+			ud.is_pass as isPass,
+			(select ma.area_name from mall_area ma where ma.area_id = ud.area_id) as areaName,
+			c.course_name as courseName,
+			c.course_no as courseNo<!-- ,
+			cuc.userplan_class_no AS userplanClassNo,
+            cud.userplan_class_detail_id AS userplanClassDetailId,
+            cud.`timestamp` AS timeStamps,
+            cc.classplan_name AS classPlanName -->
+		from course_userplan_detail ud 
+		JOIN courses c ON(c.course_id = ud.course_id)
+		<!-- JOIN course_userplan_class_detail cud ON (ud.userplan_detail_id=cud.userplan_class_detail_id)
+        JOIN course_userplan_class cuc ON (cud.userplan_class_id=cuc.userplan_class_id)
+        JOIN course_classplan cc ON (ud.course_id=cc.course_id) -->
+		where ud.userplan_id = #{userPlanId} 
+		and ud.dr = 0
+		<!-- and cuc.dr=0
+        and cuc.`status`=1 -->
+		<!-- 考英语二:学习英语二课程;不学习英语二代替课程 -->
+		<if test="examEn2 != null and examEn2">
+			and ud.is_substitute = 0
+		</if>
+		<!-- 不考英语二 :不学习英语二课程;学习英语二代替课程-->
+		<if test="examEn2 != null and !examEn2">
+			and ud.is_substituted = 0
+		</if>
+		<!-- 专业对口:不需要学习不对口课程 -->
+		<if test="targetGrade != null and targetGrade">
+			and ud.is_suitable = 0
+		</if>
+		<!-- 排除已选课程 -->
+		<if test="null != userplanDetailIds and userplanDetailIds.length > 0">
+			AND ud.userplan_detail_id not IN
+			<foreach item="id" collection="userplanDetailIds" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+		order by ud.userplan_detail_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<!-- order by cud.`timestamp` desc
+			limit 1 -->
+	</select>
+	<!-- 根据学员规划ID遍历查询查询课程列表 -->
+	<!-- <select id="queryOtherById" resultType="map">
+		select 
+			ud.userplan_detail_id as id,
+			ud.area_id as areaId,
+			ud.course_id as courseId,
+			ud.is_substituted as isSubstituted,
+			ud.is_substitute as isSubstitute,
+			ud.is_united_exam as isUnitedExam,
+			ud.is_suitable as isSuitable,
+			ud.is_pass as isPass,
+			(select ma.area_name from mall_area ma where ma.area_id = ud.area_id) as areaName,
+			c.course_name as courseName,
+			c.course_no as courseNo ,
+			cuc.userplan_class_no AS userplanClassNo,
+            cud.userplan_class_detail_id AS userplanClassDetailId,
+            cud.`timestamp` AS timeStamps,
+          cc.classplan_name AS classPlanName
+		from course_userplan_detail ud 
+		JOIN courses c ON(c.course_id = ud.course_id)
+		JOIN course_userplan_class_detail cud ON (ud.userplan_detail_id=cud.userplan_class_detail_id)
+        JOIN course_userplan_class cuc ON (cud.userplan_class_id=cuc.userplan_class_id)
+        JOIN course_classplan cc ON (ud.course_id=cc.course_id)
+		where 
+		ud.userplan_detail_id =#{id}
+        AND cuc.dr=0
+        ORDER BY cud.`timestamp` 
+        LIMIT 1
+	</select>-->
+	<!-- <select id="queryOtherById" resultType="map">
+		select 
+			cuc.userplan_class_no AS userplanClassNo,
+            cud.userplan_class_detail_id AS userplanClassDetailId,
+            cud.`timestamp` AS timeStamps,
+            cc.classplan_name AS classPlanName,
+            cuc.dr,
+            cuc.`status`
+		from course_userplan_detail ud 
+		JOIN courses c ON(c.course_id = ud.course_id)
+		JOIN course_userplan_class_detail cud ON (ud.userplan_detail_id=cud.userplan_class_detail_id)
+        JOIN course_userplan_class cuc ON (cud.userplan_class_id=cuc.userplan_class_id)
+        JOIN course_classplan cc ON (ud.course_id=cc.course_id)
+		where 
+		ud.userplan_detail_id =#{id}
+        AND cuc.dr=0
+        GROUP BY cc.classplan_name
+        ORDER BY cud.`timestamp` 
+        LIMIT 1
+	</select> -->
+	<select id="queryOtherById" resultType="map">
+		SELECT
+course_classplan.classplan_name AS classPlanName,
+course_userplan_class_detail.`timestamp` AS timeStamps,
+course_userplan_class.userplan_class_no AS userplanClassNo,
+course_userplan_class.userplan_class_id AS userplanClassId,
+course_userplan_class_detail.userplan_class_detail_id as userplanClassDetailId
+FROM
+	course_userplan_class_detail AS course_userplan_class_detail,
+	course_userplan_class AS course_userplan_class
+	,course_classplan as course_classplan
+WHERE
+	course_userplan_class_detail.userplan_detail_id = #{id}
+AND course_userplan_class_detail.dr = 0
+
+AND course_userplan_class.userplan_class_id = course_userplan_class_detail.userplan_class_id
+AND course_userplan_class.dr = 0
+AND course_userplan_class.`status` = 1
+
+and course_classplan.classplan_id = course_userplan_class_detail.classplan_id
+and course_classplan.dr = 0
+and course_classplan.`status` = 1
+and course_classplan.is_audited = 1
+
+ORDER BY course_userplan_class_detail.`timestamp` DESC 
+LIMIT 1
+	</select>
+	
+	
+	<!-- 根据学员规划ID查询子表下拉列表 -->
+	<select id="queryListByUserplanId" resultType="map">
+		select 
+			ud.userplan_detail_id as userplanDetailId,
+			ud.area_id as areaId,
+			ud.course_id as courseId,
+			ud.is_substituted as isSubstituted,
+			ud.is_substitute as isSubstitute,
+			ud.is_united_exam as isUnitedExam,
+			ud.is_suitable as isSuitable,
+			ud.is_pass as isPass,
+			c.course_name as courseName,
+			c.course_no as courseNo,
+			cp.classplan_id AS classplanId,
+			cp.classplan_name AS classplanName
+		from course_userplan_detail ud 
+		JOIN courses c ON(c.course_id = ud.course_id)
+		JOIN course_userplan cu ON(cu.user_plan_id = ud.userplan_id)
+		JOIN course_classplan cp ON(cp.course_id = ud.course_id)
+		where ud.userplan_id = #{userPlanId} 
+		AND ud.dr = 0
+		<!-- 考英语二:学习英语二课程;不学习英语二代替课程 -->
+		<if test="examEn2">
+			AND ud.is_substitute = 0
+		</if>
+		<!-- 不考英语二 :不学习英语二课程;学习英语二代替课程-->
+		<if test="!examEn2">
+			AND ud.is_substituted = 0
+		</if>
+		<!-- 专业对口:不需要学习不对口课程 -->
+		<if test="targetGrade">
+			AND ud.is_suitable = 0
+		</if>
+		AND cp.status = 1
+		AND cp.is_audited = 1
+		AND cp.dr = 0
+		<!-- 根据排课名字 -->
+		<if test="classplanName != null and classplanName.trim() != ''">
+			AND cp.classplan_name like concat('%',#{classplanName},'%') 
+		</if>
+		<!-- 根据课程名称 -->
+		<if test="courseName != null and courseName.trim() != ''">
+			AND c.course_name like concat('%',#{courseName},'%') 
+		</if>
+		<!-- 根据课程编号 -->
+		<if test="courseNo != null and courseNo.trim() != ''">
+			AND c.course_no = #{courseNo}
+		</if>
+		AND 0 &lt; (
+			SELECT COUNT(1) from course_classplan cc WHERE 	cc.course_id = ud.course_id
+			AND cc. STATUS = 1
+			AND cc.dr = 0
+			LIMIT 0,1
+		)
+		and 0=(select count(1)
+               from course_score_record_detail srd 
+               JOIN course_score_record sr ON srd.score_record_id = sr.score_record_id
+               WHERE 1=1
+               and srd.course_id = ud.course_id
+               and srd.user_id = cu.user_id
+               and srd.passed = 1
+              )
+        <!-- 排除已选课程 -->
+		<if test="null != classplanIds and classplanIds.length > 0">
+			AND cp.classplan_id not IN
+			<foreach item="id" collection="classplanIds" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 根据学员规划ID查询课程数量 -->
+	<select id="queryTotalByUserplanId" resultType="int">
+		select count(1) 
+		from course_userplan_detail ud 
+		JOIN courses c ON(c.course_id = ud.course_id)
+		JOIN course_userplan cu ON(cu.user_plan_id = ud.userplan_id)
+		JOIN course_classplan cp ON(cp.course_id = ud.course_id)
+		where ud.userplan_id = #{userPlanId} 
+		AND ud.dr = 0
+		<!-- 考英语二:学习英语二课程;不学习英语二代替课程 -->
+		<if test="examEn2">
+			AND ud.is_substitute = 0
+		</if>
+		<!-- 不考英语二 :不学习英语二课程;学习英语二代替课程-->
+		<if test="!examEn2">
+			AND ud.is_substituted = 0
+		</if>
+		<!-- 专业对口:不需要学习不对口课程 -->
+		<if test="targetGrade">
+			AND ud.is_suitable = 0
+		</if>
+		AND cp.status = 1
+		AND cp.is_audited = 1
+		AND cp.dr = 0
+		<!-- 根据排课名字 -->
+		<if test="classplanName != null and classplanName.trim() != ''">
+			AND cp.classplan_name like concat('%',#{classplanName},'%') 
+		</if>
+		<!-- 根据课程名称 -->
+		<if test="courseName != null and courseName.trim() != ''">
+			AND c.course_name like concat('%',#{courseName},'%') 
+		</if>
+		<!-- 根据课程编号 -->
+		<if test="courseNo != null and courseNo.trim() != ''">
+			AND c.course_no = #{courseNo}
+		</if>
+		AND 0 &lt; (
+			SELECT COUNT(1) from course_classplan cc WHERE 	cc.course_id = ud.course_id
+			AND cc. STATUS = 1
+			AND cc.dr = 0
+			LIMIT 0,1
+		)
+		and 0=(select count(1)
+               from course_score_record_detail srd 
+               JOIN course_score_record sr ON srd.score_record_id = sr.score_record_id
+               WHERE 1=1
+               and srd.course_id = ud.course_id
+               and srd.user_id = cu.user_id
+               and srd.passed = 1
+              )
+        <!-- 排除已选课程 -->
+		<if test="null != classplanIds and classplanIds.length > 0">
+			AND cp.classplan_id not IN
+			<foreach item="id" collection="classplanIds" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+	</select>
+	
+	<!-- 根据学员规划ID查询课程列表 -->
+	<select id="courseTotalByUserPlanId" resultType="int">
+		select 
+			count(1)
+		from course_userplan_detail ud JOIN courses c ON(c.course_id = ud.course_id)
+		where ud.userplan_id = #{userPlanId} 
+		and ud.dr = 0
+		<!-- 考英语二:学习英语二课程;不学习英语二代替课程 -->
+		<if test="examEn2">
+			and ud.is_substitute = 0
+		</if>
+		<!-- 不考英语二 :不学习英语二课程;学习英语二代替课程-->
+		<if test="!examEn2">
+			and ud.is_substituted = 0
+		</if>
+		<!-- 专业对口:不需要学习不对口课程 -->
+		<if test="targetGrade">
+			and ud.is_suitable = 0
+		</if>
+		<!-- 排除已选课程 -->
+		<if test="null != userplanDetailIds and userplanDetailIds.length > 0">
+			AND ud.userplan_detail_id not IN
+			<foreach item="id" collection="userplanDetailIds" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+	</select>
+	<!-- 检测某区域下是否有相同的课程 -->
+	<select id="checkAreaAndCourse" resultType="int">
+		select 
+			count(1)
+		from course_userplan_detail ud
+		where 
+		 ud.dr = 0
+		and ud.area_id=#{areaId}
+		and ud.course_id=#{courseId}
+		and ud.userplan_id=#{userplanId}
+	</select>
+	<select id="queryObject" resultType="io.renren.entity.CourseUserplanDetailEntity">
+		select * from course_userplan_detail where userplan_detail_id = #{value}
+	</select>
+	
+	<select id="queryUserplanDetailId" resultType="string">
+		SELECT userplan_detail_id FROM course_userplan_detail WHERE userplan_id =#{userPlanId} AND course_id =#{courseId} AND dr = 0
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.CourseUserplanDetailEntity">
+		select
+			<include refid="base_column"/>
+		from
+		course_userplan_detail course_userplan_detail
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from course_userplan_detail 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.CourseUserplanDetailEntity" useGeneratedKeys="true" keyProperty="userplanDetailId">
+		insert into course_userplan_detail
+		(
+			`userplan_id`, 
+			`course_id`, 
+			`area_id`, 
+			`is_pass`, 
+			`is_substituted`, 
+			`is_substitute`, 
+			`is_united_exam`, 
+			`is_suitable`,
+			`school_id`
+		)
+		values
+		(
+			#{userplanId}, 
+			#{courseId}, 
+			#{areaId}, 
+			#{isPass}, 
+			#{isSubstituted}, 
+			#{isSubstitute}, 
+			#{isUnitedExam}, 
+			#{isSuitable},
+			#{schoolId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.CourseUserplanDetailEntity">
+		update course_userplan_detail 
+		<set>
+			<if test="userplanId != null">`userplan_id` = #{userplanId}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="isPass != null">`is_pass` = #{isPass}, </if>
+			<if test="isSubstituted != null">`is_substituted` = #{isSubstituted}, </if>
+			<if test="isSubstitute != null">`is_substitute` = #{isSubstitute}, </if>
+			<if test="isUnitedExam != null">`is_united_exam` = #{isUnitedExam}, </if>
+			<if test="isSuitable != null">`is_suitable` = #{isSuitable}</if>
+		</set>
+		where userplan_detail_id = #{userplanDetailId}
+	</update>
+	<update id="updateBatch">
+	   update course_userplan_detail set status = #{status} where userplan_detail_id in
+	   <foreach item="userplanDetailId" collection="list" open="(" separator="," close=")">
+	   	#{userplanDetailId}
+		</foreach>
+	</update>
+	
+	<update id="delete">
+		update course_userplan_detail set dr=1 where userplan_detail_id = #{value}
+	</update>
+	
+	<update id="deleteBatch">
+		update course_userplan_detail set dr=1 where userplan_detail_id in 
+		<foreach item="idVal" collection="userplanDetailId" open="(" separator="," close=")">
+			#{idVal}
+		</foreach>
+	</update>
+	<!-- 数据同步 -->
+	<select id="queryOneByUserPlanId" resultType="io.renren.entity.CourseUserplanDetailEntity">
+		select * from course_userplan_detail where userplan_id = ${userplanId} limit 1
+	</select>
+	
+	<update id="updateAreaId">
+		update course_userplan_detail set area_id = #{areaId} where userplan_id = #{userPlanId}
+	</update>
+</mapper>

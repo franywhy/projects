@@ -1,0 +1,12 @@
+server:
+  port: 8103
+spring:
+  profiles:
+    active: pro
+task:
+  pool:
+    corePoolSize: 100
+    maxPoolSize: 200
+    keepAliveSeconds: 60
+    queueCapacity: 1000
+    threadNamePrefix: myThreadPool

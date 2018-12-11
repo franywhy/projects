@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+<title>休学失联记录单</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("courseabnormalorder:list"))
+			<table  class="table table-condensed" border="0">
+                <tr border="0">
+                    <td><label for="name">类型</label></td>
+                    <td>
+                        <select class="form-control" v-model="qCourseAbnormalOrder.abnormalType" @keyup.enter="query">
+                            <option value="">全部</option>
+                            <option v-for="option in selectData.abnormalTypeList" v-bind:value="option.value">{{ option.name }}</option>
+                        </select>
+                    </td>
+                    <td><label for="name">班型</label></td>
+                    <td>
+                        <input type="text" class="form-control" id="query-classTypeName"  v-model="qCourseAbnormalOrder.classTypeName" @keyup.enter="query" readonly="readonly" placeholder="点击选择班型" @click="classTypeLayerShow">
+                    </td>
+                    <td><label for="name">班主任</label></td>
+                    <td>
+                        <input type="text" class="form-control" id="query-classTeacherName" v-model="qCourseAbnormalOrder.classTeacherName" readonly="readonly" placeholder="选择班主任" @click="classTeacherLayerShow">
+                    </td>
+                    <td><label for="name">班级:</label></td>
+                    <td><input type="text" class="form-control" v-model="qCourseAbnormalOrder.className" readonly="readonly" placeholder="点击选择班级" @click="classLayerShow"></td>
+                    <td><label for="name">专业</label></td>
+                    <td>
+                        <input type="text" class="form-control"  id="query-professionName" v-model="qCourseAbnormalOrder.professionName" readonly="readonly" placeholder="选择专业" @click="professionLayerShow">
+                    </td>
+                </tr>
+				<tr border="0">
+					<td><label for="name">省份</label></td>
+					<td>
+						<input type="text" class="form-control" id="query-areaName" v-model="qCourseAbnormalOrder.areaName" readonly="readonly" placeholder="选择省份" @click="areaLayerShow">
+					</td>
+					<td><label for="name">层次</label></td>
+					<td>
+						<input type="text" class="form-control"  id="query-levelName" v-model="qCourseAbnormalOrder.levelName" readonly="readonly" placeholder="选择层次" @click="levelLayerShow">
+					</td>
+                    <td><label for="name">单号</label></td>
+                    <td><input type="text" class="form-control" v-model="qCourseAbnormalOrder.orderNo" @keyup.enter="query" placeholder="单号"></td>
+                    <td><label for="name">订单号</label></td>
+                    <td><input type="text" class="form-control" v-model="qCourseAbnormalOrder.mallOrderNo" @keyup.enter="query" placeholder="订单号"></td>
+                    <td><label for="name">姓名</label></td>
+                    <td><input type="text" class="form-control" v-model="qCourseAbnormalOrder.nickName" @keyup.enter="query" placeholder="学员姓名"></td>
+				</tr>
+				<tr border="0">
+					<td><label for="name">手机号码</label></td>
+					<td><input type="text" class="form-control" v-model="qCourseAbnormalOrder.mobile" @keyup.enter="query" placeholder="手机号码"></td>
+					<td><label for="name">状态</label></td>
+					<td>
+						<select class="form-control" v-model="qCourseAbnormalOrder.auditStatus" @keyup.enter="query">
+							<option value="">全部</option>
+							<option v-for="option in selectData.auditStatusList" v-bind:value="option.value">{{ option.name }}</option>
+						</select>
+					</td>
+					<td><label for="name">预计时间起始:</label></td>
+					<td nowrap="nowrap" colspan=2>
+						<input type="text" class="insertTime" id="qStartTime" readonly="readonly" v-model="qCourseAbnormalOrder.startTime" @keyup.enter="query" placeholder="预计开始时间">
+						-
+						<input type="text" class="insertTime" id="qEndTime" readonly="readonly" v-model="qCourseAbnormalOrder.endTime" @keyup.enter="query" placeholder="预计结束时间">
+					</td>
+				</tr>
+			</table>
+			<a class="btn btn-default" @click="clearQcousrAbnormalOrder">重置</a>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+            #if($shiro.hasPermission("courseabnormalorder:save"))
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            #end
+			<!--#if($shiro.hasPermission("courseabnormalorder:update"))-->
+			<!--<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>-->
+			<!--#end-->
+			#if($shiro.hasPermission("courseabnormalorder:updateCancel"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;作废</a>
+			#end
+            #if($shiro.hasPermission("courseabnormalorder:auditPass"))
+            <a class="btn btn-primary" @click="auditPass"><i class="fa fa-pencil-square-o"></i>&nbsp;审核</a>
+            #end
+            #if($shiro.hasPermission("courseabnormalorder:updateAuditCancel"))
+            <a class="btn btn-primary" @click="auditCancel"><i class="fa fa-pencil-square-o"></i>&nbsp;反审核</a>
+            #end
+			#if($shiro.hasPermission("courseabnormalorder:importExcel"))
+			<a class="btn btn-primary" @click="importExcel"><i class="fa fa-recycle"></i>&nbsp;批量导入</a>
+			#end
+			#if($shiro.hasPermission("courseabnormalorder:downExcelTemplate"))
+			<a class="btn btn-primary" @click="downExcelTemplate"><i class="fa fa-pencil-square-o"></i>&nbsp;模板下载</a>
+			#end
+            #if($shiro.hasPermission("courseabnormalorder:saveResumeClasses"))
+            <a class="btn btn-primary" @click="resumeClasses"><i class="fa fa-pencil-square-o"></i>&nbsp;复课</a>
+            #end
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="showAddOrUpdate" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+		<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">pk</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model.trim="courseAbnormalOrder.id" placeholder="pk"/>
+			    </div>
+		</div>
+											    			<div class="form-group">
+			   	<!--<div class="col-sm-2 control-label">异常类型(0-正常 1-休学 2-失联)</div>-->
+			   	<!--<div class="col-sm-10">-->
+			      <!--<input type="text" class="form-control" v-model.trim="courseAbnormalOrder.abnormalType" placeholder="异常类型(0-正常 1-休学 2-失联)"/>-->
+			    <!--</div>-->
+
+                <div class="col-sm-2 control-label">异常类型</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="courseAbnormalOrder.abnormalType" @keyup.enter="query">
+                        <option v-for="option in selectData.abnormalTypeList" v-bind:value="option.value">{{ option.name }}</option>
+                    </select>
+                </div>
+			</div>
+															<!--<div class="form-group">-->
+				<!--<div class="col-sm-2 control-label">学员</div>-->
+				<!--<div class="col-sm-10">-->
+					<!--&lt;!&ndash;<input type="text" class="form-control" v-model.trim="courseAbnormalOrder.studentId" placeholder="学员pk"/>&ndash;&gt;-->
+					<!--<input type="text" class="form-control" v-model.trim="courseAbnormalOrder.nickName" readonly="readonly" placeholder="点击选择用户姓名" id="add-studentName" @click="userInfoLayerShow">-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="form-group">-->
+				<!--<div class="col-sm-2 control-label">学员号码</div>-->
+				<!--<div class="col-sm-10">-->
+					<!--&lt;!&ndash;<input type="text" class="form-control" v-model.trim="courseAbnormalOrder.studentId" placeholder="学员pk"/>&ndash;&gt;-->
+					<!--<input type="text" class="form-control" v-model.trim="courseAbnormalOrder.mobile" readonly="readonly" placeholder="点击选择手机号码" id="add-mobile" @click="userInfoLayerShow">-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">订单pk</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseAbnormalOrder.mallOrderNo" placeholder="订单pk" readonly="readonly"  placeholder="点击选择订单"  id="add-orderName"  @click="orderInfoLayerShow"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">预计开始时间</div>
+			   	<div class="col-sm-10">
+			      <!--<input type="text" class="form-control" v-model.trim="courseAbnormalOrder.startTime" placeholder="预计开始时间"/>-->
+                    <input type="text" class="form-control insertTime" v-model="courseAbnormalOrder.startTimeStr" id="add-startTime" readonly="readonly" placeholder="预计开始时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">预计结束时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control insertTime" v-model="courseAbnormalOrder.expectEndTimeStr" id="add-expectEndTime"  readonly="readonly" placeholder="预计结束时间"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">异常原因</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseAbnormalOrder.abnormalReason" placeholder="异常原因"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseAbnormalOrder.remark"  placeholder="备注"/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+    <div v-show="showResumeClasses" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">复课时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control insertTime"   v-model="courseAbnormalOrder.endTimeStr" id="endTime" readonly="readonly" placeholder="复课时间"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveResumeClasses" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="fileUploadLayer" style="display: none;">
+    <div class="panel-heading">批量上传</div>
+    <input type="file" id="file_data" name="file_data" accept=".xls"/>
+</div>
+<script src="${rc.contextPath}/js/course/courseabnormalorder.js?_${date.systemTime}"></script>
+#parse("layer/classLay.html")
+#parse("layer/professionLay.html")
+#parse("layer/userInfoLay.html")
+ #parse("layer/mallorderLay.html")
+#parse("layer/areaLay.html")
+#parse("layer/levelLay.html")
+#parse("layer/teacherLay.html")
+#parse("layer/classTypeLay.html")
+</body>
+</html>

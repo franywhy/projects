@@ -1,0 +1,68 @@
+<!--通用应用头-->
+<h2 class="appTitle">
+    <input type="button" value="导出表格" class="d-button J_export" />
+    <input type="button" value="返回" class="d-button J_back" />
+    <span class="text"><%=pty.name%></span> </h2>
+
+<div class="searchForm">
+    <form name="searchForm">
+        编号
+        <input id="code" type="text" name="code" value="" size="20"  />
+        名称
+        <input id="name" type="text" name="name" value="" size="20"  />
+        NC名称
+        <input id="nc_name" type="text" name="nc_name" value="" size="20"  />
+        商品简称
+        <input id="short_name" type="text" name="short_name" value="" size="20"  />
+        讲师ID
+        <input id="teacher_id" type="text" name="teacher_id" value="" size="20"  />
+        <br>
+        适用对象
+        <input id="reader" type="text" name="reader" value="" size="20"  />
+        上课方式
+        <input id="classmode" type="text" name="classmode" value="" size="20"  />
+        标签
+        <input id="labels" type="text" name="labels" value="" size="20"  />
+        <br/>
+        类型
+        <!--0.未分类 1.会计上岗 2.会计考证 3.会计学历 4.经营会计-->
+        <select id="ctype" name="ctype">
+            <option value ="-1" selected>已分类</option>
+            <option value ="1">会计上岗</option>
+            <option value ="2">会计考证</option>
+            <option value ="4">经营会计</option>
+            <option value ="0">未分类</option>
+        </select>
+        是否上架
+        <select id="is_shelves" name="is_shelves">
+            <option value ="" selected>所有</option>
+            <option value ="0">否</option>
+            <option value ="1">是</option>
+        </select>
+        是否需要排课
+        <select id="is_sort_course" name="is_sort_course">
+            <option value ="" selected></option>
+            <option value ="0">否</option>
+            <option value ="1">是</option>
+        </select>
+        <br/>
+        上架日期
+        <input id="sup_shelves_time" type="text" name="sup_shelves_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'sup_shelves_time\')}'})"  />
+        到
+        <input id="eup_shelves_time" type="text" name="eup_shelves_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'eup_shelves_time\')}'})" />
+        <br/>
+        下架时间
+        <input id="sdown_shelves_time" type="text" name="sdown_shelves_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'sdown_shelves_time\')}'})"  />
+        到
+        <input id="edown_shelves_time" type="text" name="edown_shelves_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'edown_shelves_time\')}'})" />
+        <br/>
+        同步日期
+        <input id="ssyn_time" type="text" name="ssyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'ssyn_time\')}'})" />
+        到
+        <input id="esyn_time" type="text" name="esyn_time" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'esyn_time\')}'})" />
+        <br>
+        <br/>
+        <input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+    </form>
+</div>
+<!--/通用应用头--> 

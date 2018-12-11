@@ -1,0 +1,51 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">排序</th>
+        <th class="auto">文章标题</th>
+        <th class="auto">文章作者</th>
+        <th class="auto">简介</th>
+        <th class="auto">是否推荐</th>
+        <th class="auto">是否停用</th>
+        <th class="auto">所属校区</th>
+        <th class="auto">操作</th>
+    </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i %></td>
+            <td class="auto"><%=data[i].activity_title %></td>
+            <td class="auto"><%=data[i].activity_author %></td>
+            <td class="auto"><%=data[i].summary %></td>
+            <% if(data[i].is_recommand == 0) {%>
+            <td class="auto">不推荐</td>
+            <%} else{%>
+            <td class="auto">推荐</td>
+            <% }%>
+            <% if(data[i].dr == 0) {%>
+            <td class="auto">启用</td>
+            <%} else{%>
+            <td class="auto">停用</td>
+            <% }%>
+
+            <td class="auto"><%=data[i].school_name %></td>
+            <td>
+            <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详情</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">修改</button>
+                <% if(data[i].dr == 0) {%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.disable('<%=data[i]._id%>')">停用</button>
+                <%} else{%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.enable('<%=data[i]._id%>')">启用</button>
+                <% }%>
+
+                <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

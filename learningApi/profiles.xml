@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profilesXml xmlns="http://maven.apache.org/PROFILES/1.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/PROFILES/1.0.0 http://maven.apache.org/xsd/profiles-1.0.0.xsd">
+    <profiles>
+        <profile>
+
+            <id>hq</id>
+
+            <activation>
+
+                <activeByDefault>false</activeByDefault>
+
+            </activation>
+
+            <repositories>
+
+                <!-- 私有库地址-->
+
+                <repository>
+
+                    <id>hq-public</id>
+
+                    <url>http://10.0.98.16:8181/repository/maven-public/</url>
+
+                    <releases>
+
+                        <enabled>true</enabled>
+
+                    </releases>
+
+                    <snapshots>
+
+                        <enabled>true</enabled>
+
+                    </snapshots>
+
+                </repository>
+
+                <repository>
+
+                    <id>hq-snapshots</id>
+
+                    <url>http://10.0.98.16:8181/repository/maven-snapshots/</url>
+
+                    <releases>
+
+                        <enabled>true</enabled>
+
+                    </releases>
+
+                    <snapshots>
+
+                        <enabled>true</enabled>
+
+                    </snapshots>
+
+                </repository>
+
+                <repository>
+
+                    <id>hq-releases</id>
+
+                    <url>http://10.0.98.16:8181/repository/maven-releases/</url>
+
+                    <releases>
+
+                        <enabled>true</enabled>
+
+                    </releases>
+
+                    <snapshots>
+
+                        <enabled>true</enabled>
+
+                    </snapshots>
+
+                </repository>
+
+                <repository>
+
+                    <id>hq-central</id>
+
+                    <url>http://10.0.98.16:8181/repository/maven-central/</url>
+
+                    <releases>
+
+                        <enabled>true</enabled>
+
+                    </releases>
+
+                    <snapshots>
+
+                        <enabled>true</enabled>
+
+                    </snapshots>
+
+                </repository>
+
+
+
+            </repositories>
+
+            <pluginRepositories>
+
+
+
+
+
+                <!--插件库地址-->
+
+                <pluginRepository>
+
+                    <id>hq-public</id>
+
+                    <url>http://10.0.98.16:8181/repository/maven-public/</url>
+
+                    <releases>
+
+                        <enabled>true</enabled>
+
+                    </releases>
+
+                    <snapshots>
+
+                        <enabled>true</enabled>
+
+                    </snapshots>
+
+                </pluginRepository>
+
+            </pluginRepositories>
+
+        </profile>
+
+
+    </profiles>
+</profilesXml>

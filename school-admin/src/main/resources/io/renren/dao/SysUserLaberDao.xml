@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysUserLaberDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.SysUserLaberEntity" id="sysUserLaberMap">
+        <result property="id" column="id"/>
+        <result property="sysUserId" column="sys_user_id"/>
+        <result property="laberIds" column="laber_ids"/>
+        <result property="laberNames" column="laber_names"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="creator" column="creator"/>
+        <result property="modifier" column="modifier"/>
+        <result property="status" column="status"/>
+        <result property="dr" column="dr"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.SysUserLaberEntity">
+		select * from sys_user_laber where id = #{value}
+	</select>
+	
+	<select id="queryPOJO" resultType="io.renren.pojo.SysUserLaberPOJO">
+		select 
+			userLaber.id AS id,
+			userLaber.create_time AS createTime,
+			userLaber.sys_user_id AS sysUserId,
+			sysUser.nick_name AS nickName,
+			sysUser.mobile AS mobile,
+			userLaber.laber_ids AS laberIds,
+			userLaber.laber_names AS laberNames,
+			userLaber.status AS status,
+			(select cu.nick_name from sys_user cu where cu.user_id = userLaber.creator) AS creationName,
+			userLaber.modify_time AS modifyTime,
+			userLaber.remark AS remark
+		from 
+			sys_user_laber AS userLaber
+			LEFT JOIN sys_user AS sysUser ON   sysUser.user_id=userLaber.sys_user_id
+		WHERE
+			userLaber.dr = 0
+		AND userLaber.id = #{value}
+	</select>
+	
+	<select id="queryLaberByUserId" resultType="String">
+		select laber_ids from sys_user_laber where dr = 0 and sys_user_id = #{userId}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.SysUserLaberEntity">
+		select * from sys_user_laber
+			WHERE
+		dr = 0
+		<if test="sysUserId != null">
+				AND sys_user_id =#{sysUserId}
+		</if>
+		<if test="status != null">
+				AND status =#{status}
+		</if>
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryUserLaberList" resultType="io.renren.pojo.SysUserLaberPOJO">
+		select 
+			userLaber.id AS id,
+			userLaber.create_time AS createTime,
+			userLaber.sys_user_id AS sysUserId,
+			sysUser.nick_name AS nickName,
+			sysUser.mobile AS mobile,
+			userLaber.laber_ids AS laberIds,
+			userLaber.laber_names AS laberNames,
+			userLaber.status AS status,
+			(select cu.nick_name from sys_user cu where cu.user_id = userLaber.creator) AS creationName,
+			userLaber.modify_time AS modifyTime,
+			userLaber.remark AS remark
+		from 
+			sys_user_laber AS userLaber
+			LEFT JOIN sys_user AS sysUser ON   sysUser.user_id=userLaber.sys_user_id
+		WHERE
+			userLaber.dr = 0
+		<if test="sysUserIds != null and sysUserIds.size()>0">
+				AND userLaber.sys_user_id in 
+				<foreach item="ids" collection="sysUserIds" open="(" separator="," close=")">
+           			 #{ids}
+        		</foreach>
+		</if>
+		<if test="sysUserMoIds != null and sysUserMoIds.size()>0">
+				AND userLaber.sys_user_id in 
+				<foreach item="moIds" collection="sysUserMoIds" open="(" separator="," close=")">
+           			 #{moIds}
+        		</foreach>
+		</if>
+		<if test="status != null and status !=-1">
+				AND userLaber.status =#{status}
+		</if>
+		
+		ORDER BY modify_time DESC
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select 
+			count(*)
+		from 
+			sys_user_laber AS userLaber
+			LEFT JOIN sys_user AS sysUser ON   sysUser.user_id=userLaber.sys_user_id
+		WHERE
+			userLaber.dr = 0
+		<if test="sysUserIds != null and sysUserIds.size()>0">
+				AND userLaber.sys_user_id in 
+				<foreach item="ids" collection="sysUserIds" open="(" separator="," close=")">
+           			 #{ids}
+        		</foreach>
+		</if>
+		<if test="sysUserMoIds != null and sysUserMoIds.size()>0">
+				AND userLaber.sys_user_id in 
+				<foreach item="moIds" collection="sysUserMoIds" open="(" separator="," close=")">
+           			 #{moIds}
+        		</foreach>
+		</if>
+		<if test="status != null and status !=-1">
+				AND userLaber.status =#{status}
+		</if>
+		
+		
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.SysUserLaberEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user_laber
+		(
+			`sys_user_id`, 
+			`laber_ids`, 
+			`laber_names`, 
+			`creator`, 
+			`modifier`, 
+			`status`, 
+			`dr`, 
+			`remark`
+		)
+		values
+		(
+			#{sysUserId}, 
+			#{laberIds}, 
+			#{laberNames}, 
+			#{creator}, 
+			#{modifier}, 
+			#{status}, 
+			0, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.SysUserLaberEntity">
+		update sys_user_laber 
+		<set>
+			<if test="sysUserId != null">`sys_user_id` = #{sysUserId}, </if>
+			<if test="laberIds != null">`laber_ids` = #{laberIds}, </if>
+			<if test="laberNames != null">`laber_names` = #{laberNames}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="dr != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateBatch">
+        update sys_user_laber set status = #{status} , modifier = #{modifier} where id in
+        <foreach item="ids" collection="list" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+    
+	<update id="del">
+        update sys_user_laber set dr = #{dr} , modifier = #{modifier} where id in
+        <foreach item="ids" collection="list" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+	
+
+</mapper>

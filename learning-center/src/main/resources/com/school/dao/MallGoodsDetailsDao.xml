@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.dao.MallGoodsDetailsDao">
+	<select id="queryCourseByCommodityId" resultType="com.school.entity.MallGoodsDetailsEntity">
+		SELECT SQL_CACHE * 
+		FROM mall_goods_details
+		WHERE mall_goods_id = #{commodityId}
+		AND mall_area_id = #{areaId}
+		AND dr = #{dr}
+		<if test="ccCommodity !=null">
+        AND mall_goods_id NOT IN (#{ccCommodity})
+        </if>
+		ORDER BY order_num
+	</select>
+	
+</mapper>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课程考试时段档案</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("courseexamschedule:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.courseName" @keyup.enter="query" placeholder="课程">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("courseexamschedule:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("courseexamschedule:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("courseexamschedule:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			<!-- <a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;启用</a>
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;禁用</a> -->
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" style="display:none">
+			   	<div class="col-sm-2 control-label">主键id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseExamSchedule.courseExamId" placeholder="主键id"/>
+			    </div>
+		    </div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">课程名称</div>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="courseExamSchedule.courseName" readonly="readonly" placeholder="课程名称"/>
+			      <input type="hidden" class="form-control" v-model="courseExamSchedule.courseId" readonly="readonly" placeholder="课程名称"/>
+			    </div>
+			    <!-- <a class="btn btn-default" @click="selCourse">选择课程</a> -->
+			    <a class="btn btn-default" @click="seleteCourse">选择课程</a>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">省份</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" v-model="courseExamSchedule.areaId" style="width:150px">
+				       <option v-for="option in selData.areaList" v-bind:value="option.value">{{ option.name }}</option>
+			      </select>
+			    </div>
+			</div>
+			
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">考试时间段</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" v-model="courseExamSchedule.examScheduleId" style="width:150px">
+				       <option v-for="option in selData.examTimeList" v-bind:value="option.id">{{ option.scheduleName }}</option>
+			      </select>
+			    </div>
+			</div> -->
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">考试时间段</div>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="courseExamSchedule.examScheduleName" readonly="readonly" placeholder="考试时间段"/>
+			      <input type="hidden" class="form-control" v-model="courseExamSchedule.examScheduleId" readonly="readonly" placeholder="考试时间段"/>
+			    </div>
+			    <!-- <a class="btn btn-default" @click="selExamSchedule">请选择</a> -->
+			    <a class="btn btn-default" @click="seleteExamSchedule">请选择</a>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">考试日期</div>
+			   	<div class="col-sm-10">
+                  <input type="text" class="form-control exam-Date" id="date" readonly="readonly" placeholder="考试日期" style="width:150px"/>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">考试时段</div>
+			   	<div class="col-sm-10">
+			      <select class="form-control" v-model="courseExamSchedule.examBucket" style="width:150px">
+				       <option v-for="option in options" v-bind:value="option.value">  
+    						{{ option.text }}  
+  						</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">状态</div> 
+				<label class="radio-inline">
+				  <input type="radio" name="status" value="0" v-model="courseExamSchedule.status"/> 禁用
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="status" value="1" v-model="courseExamSchedule.status"/> 正常
+				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">备注</div>
+				<div class="col-sm-10">
+					<textarea class="form-control" v-model="courseExamSchedule.remark" style="width:371px;height:100px;" placeholder="备注信息不得超过50个字">
+               		</textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+	
+	<!-- 课程列表 浮层 -->
+	<div id="courselayer" style="display: none;">
+			<!-- 课程查询条件 -->
+			<table  border="0">
+				<tr class="row" >
+					<td class=""><label for="name">课程名称</label></td>
+					<td >
+						<input type="text" class="form-control" v-model="q.courseName" @keyup.enter="reload" placeholder="课程名称">
+					</td>
+				</tr>
+			</table>
+			<!-- 按钮 -->
+			<div class="grid-btn">
+				<!-- <a class="btn btn-primary" @click="clearQueryOrderParams">清空</a>  -->
+				<a class="btn btn-default" @click="reload">查询</a> 
+			</div>
+			<!-- 订单grid -->
+			<table id="jqGridCourse"></table>
+		    <div id="jqGridPagerCourse"></div>
+    </div>
+	
+	<!-- 考试时间段列表 -->
+	<div id="examSchedulelayer" style="display: none;">
+			<!-- 订单查询条件 -->
+			<!-- <table  border="0">
+				<tr class="row" >
+					<td class=""><label for="name">订单号</label></td>
+					<td >
+						<input type="text" class="form-control" v-model="qorder.orderNo" @keyup.enter="reloadJqGridOrder" placeholder="订单号">
+					</td>
+					
+					<td><label for="name">手机号码</label></td>
+					<td>
+						<input type="text" class="form-control" v-model="qorder.userMobile" @keyup.enter="reloadJqGridOrder" placeholder="手机号码">
+					</td>
+					
+					<td><label for="name">来源</label></td>
+					<td>
+						<select class="form-control" placeholder="来源" v-model="qorder.sourceType">
+							<option value="">全部</option>
+							<option value="0">线上</option>
+							<option value="1">NC</option>
+						</select>
+					</td>
+				</tr>
+			</table> -->
+			<!-- 按钮 -->
+			<!-- <div class="grid-btn">
+				<a class="btn btn-primary" @click="clearQueryOrderParams">清空</a> 
+				<a class="btn btn-default" @click="reloadJqGridOrder">查询</a> 
+			</div> -->
+			<!-- 订单grid -->
+			<table id="jqGridExamSchedule"></table>
+		    <div id="jqGridPagerExamSchedule"></div>
+    </div>	
+</div>
+
+<script src="${rc.contextPath}/js/mall/courseexamschedule.js?_${date.systemTime}"></script>
+#parse("layer/courseLay.html")
+#parse("layer/examScheduleLay.html")
+</body>
+</html>

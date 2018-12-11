@@ -1,0 +1,31 @@
+<!--海报列表--> 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="title" style="width:60px">星期</th>
+        <th >主播ID</th>
+    </tr>
+	</thead>
+    <tbody>
+        <% for(var key in data){if(key.indexOf("week_")==0){var weekindex=key.replace("week_","");%>
+
+
+        <tr>
+            <td><%=["","星期日","星期一","星期二","星期三","星期四","星期五","星期六"][weekindex]%></td>
+            <td>
+                <ul class="blackWordList">
+<% for(var i=0; i< data[key].length; i++){ %>
+<li>
+<%=data[key][i]%> 
+<a class="del" href="javascript:Izb.controller.<%=pty.key%>.delitem('<%=data[key][i]%>',<%=weekindex%>);">×</a>
+</li>
+<%}%>
+</ul>
+			</td>
+        </tr>
+        <%}
+        }%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/海报列表--> 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elise.singlesignoncenter.dao.LogFirstActivateDao">
+
+    <insert id="insertOnRegister" parameterType="com.elise.singlesignoncenter.entity.LogFirstActivateEntity" useGeneratedKeys="true" keyProperty="id">
+
+        insert into `log_first_activate`
+        (
+          user_id,
+          create_user,
+          create_time,
+          business_id,
+          is_activate
+        )
+        values
+        (
+          #{userId},
+          #{createUser},
+          #{createTime},
+          #{businessId},
+          #{isActivate}
+        )
+
+    </insert>
+
+
+    <insert id="insertOnLogin" parameterType="com.elise.singlesignoncenter.entity.LogFirstActivateEntity" useGeneratedKeys="true" keyProperty="id">
+
+        insert into `log_first_activate`
+        (
+          user_id,
+          create_user,
+          create_time,
+          business_id,
+          is_activate
+        )
+        values
+        (
+          #{userId},
+          #{createUser},
+          #{createTime},
+          #{businessId},
+          #{isActivate}
+        )
+        on DUPLICATE key update
+        is_activate = 1
+
+    </insert>
+
+</mapper>

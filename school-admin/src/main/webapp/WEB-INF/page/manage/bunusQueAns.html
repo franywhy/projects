@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>应付红包金额汇总</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("bunusQueAns:list"))
+			<table class="table table-condensed" border="0">
+				<tr border="0">
+					<td><label for="name">评价时间:</label></td>
+					<td nowrap="nowrap" colspan=2>
+						<input type="text" class="datetimepicker_start" id="StartTime" readonly="readonly" @keyup.enter="query" placeholder="开始时间">
+						-
+						<input type="text" class="datetimepicker_end" id="EndTime" readonly="readonly" @keyup.enter="query" placeholder="结束时间">
+					</td>
+					<td><label for="name">标签:</label></td>
+					<td>
+						<input type="text" class="form-control" style="cursor:pointer;" id="tipInput" readonly="readonly" placeholder="标签"  @click="topicsLaberLayerShowQuery"/>
+					</td>
+				</tr>
+			</table>
+			<a class="btn btn-default" @click="clearQuery"><i class="fa fa-search"></i>&nbsp;重置</a>
+			<a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+			#end
+			<a class="btn btn-danger" onclick="hq.ui.exportData(null);" style="float: right;">导出</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+</div>
+
+<div id="topicsLaberLayer" style="display: none;padding:10px;">
+	<div><ul id="topicsLaberTree1" class="ztree"></ul></div>
+</div>
+<script src="${rc.contextPath}/js/manage/bunusQueAns.js?_${date.systemTime}"></script>
+<script src="${rc.contextPath}/js/layer/topicsLaberLay.js?_${date.systemTime}"></script>
+</body>
+</html>

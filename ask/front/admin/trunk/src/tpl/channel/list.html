@@ -1,0 +1,46 @@
+<!--渠道列表-->
+<table width="100%" class="listTable tablesorter">
+ <thead>
+    <tr>
+            <th class="short">渠道ID</th>
+			<th class="short">渠道名称</th>
+			<th class="short">父渠道</th>
+			<th class="short">类别</th>
+			<th class="short">合作类型</th>
+			<th class="title">备注</th>
+            <th class="action">操作</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="short"><%=data[i]._id%></td>
+			<td class="short">
+			<a href="#a=qdzcsy&_id=<%=data[i]._id%>&client=<%=data[i].client%>&tab=zcsy&menu=<%=Izb.config.channelMenu[data[i].client-1]%>&channel=<%=data[i].name%>&parent_qd=<%=data[i].parent_qd%>">
+			<%=data[i].name%>
+			</a>
+			</td>
+            <td class="short"><%=data[i].parent_qd?data[i].parent_qd:"--"%></td>
+
+            <td class="short"><%=Izb.config.channelType[data[i].client-1]%></td>
+			<td class="short"><%=['CPA','CPS'][data[i].type-1]%></td>				
+            <!--<td class="title"><%=data[i].reg_discount%></td>
+            <td class="title"><%=data[i].active_discount%></td>-->
+			<td class="title"><%=data[i].comment%></td>
+			
+            <td  class="action">
+            	<button class="d-button" onclick="Izb.controller.<%=pty.key%>.showUnionLink('<%=data[i].parent_qd%>','<%=data[i]._id%>')">查看推广方式</button>
+            	<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit('<%=data[i]._id%>')">改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删</button>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.addUser('<%=data[i]._id%>')">添加联运用户</button>
+				<!--<button class="d-button" onclick="Izb.controller.<%=pty.key%>.addUser('<%=data[i]._id%>')">管理员列表</button>			-->
+				<a class="d-button" href="#a=through&qd=<%=data[i]._id%>">联运用户列表</a>
+				<%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/频道列表-->

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.AppCourseBannerDao">
+
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		app_course_banner.id AS id , 
+		app_course_banner.title AS title , 
+		app_course_banner.pic AS pic , 
+		app_course_banner.url AS url ,
+		app_course_banner.create_person AS createPerson ,
+		app_course_banner.create_time AS createTime ,
+		app_course_banner.modify_person AS modifyPerson ,
+		app_course_banner.modify_time AS modifyTime ,
+		app_course_banner.order_num AS orderNum , 
+		app_course_banner.dr AS dr,
+		app_course_banner.product_id AS productId,
+		uc.nick_name AS createName,
+		um.nick_name AS modifyName,
+		sp.product_name AS productName
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE app_course_banner.dr=0 
+    	<if test="titleName != null and titleName.trim() != ''">
+	  	  and app_course_banner.title like concat('%',#{titleName},'%')
+	   </if>	
+    	<if test="productName != null and productName.trim() != ''">
+	  	  and sp.product_name like concat('%',#{productName},'%')
+	   </if>	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM app_course_banner AS app_course_banner
+    	 LEFT JOIN sys_user AS uc ON uc.user_id = app_course_banner.create_person
+    	 LEFT JOIN sys_user AS um ON um.user_id = app_course_banner.modify_person
+    	 LEFT JOIN sys_product AS sp ON sp.product_id = app_course_banner.product_id
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.AppCourseBannerEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	<!--根据ID查询-->
+	<select id="queryObjectPOJO" resultType="io.renren.pojo.AppCourseBannerPOJO">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.AppCourseBannerEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页列表-->
+	<select id="queryListPOJO" resultType="io.renren.pojo.AppCourseBannerPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.AppCourseBannerEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into app_course_banner
+	(
+		`title`, 
+		`pic`, 
+		`url`, 
+		`create_person`,
+		`create_time`, 
+		`modify_person`,
+		`modify_time`, 
+		`order_num`, 
+		`dr`,
+		`product_id` 
+	)
+	values
+	(
+		#{title}, 
+		#{pic}, 
+		#{url}, 
+		#{createPerson}, 
+		#{createTime},
+		#{modifyPerson},
+		#{modifyTime}, 
+		#{orderNum}, 
+		0,
+		#{productId}
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.AppCourseBannerEntity">
+		update app_course_banner 
+		<set>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="productId != null">`product_id` = #{productId}</if>
+		</set>
+		WHERE dr = 0
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.AppCourseBannerEntity">
+		UPDATE app_course_banner 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.AppCourseBannerEntity">
+		UPDATE app_course_banner 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

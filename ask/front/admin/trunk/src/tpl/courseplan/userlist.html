@@ -1,0 +1,19 @@
+<!--学员查询选择-->
+<table id ="usertable" data-toggle="table"
+       data-url="/courseplan/user_list.json"
+       data-pagination="true"
+       data-side-pagination="server"
+       data-page-list="[5, 10, 20, 50, 100, 200]"
+       data-search="true"
+       data-sort-order="desc"
+       data-click-to-select="true">
+    <thead>
+    <tr>
+        <th data-field="state" data-checkbox="true"></th>
+        <th data-field="_id" data-align="center" data-sortable="true">用户ID</th>
+        <th data-field="nick_name" data-align="center" data-sortable="true">用户姓名</th>
+        <th data-field="priv" data-align="center" data-sortable="true">类型</th>
+    </tr>
+    </thead>
+</table>
+<!--/学员查询选择-->

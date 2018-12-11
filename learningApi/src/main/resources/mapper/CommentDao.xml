@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.learningapi.dao.CommentDao" >
+
+  <sql id="base_column" >
+     comment.comment_id,
+     comment.comment_object,
+     comment.comment_type,
+     comment.content,
+     comment.name,
+     comment.avatar,
+     comment.like_number,
+     comment.creation_time
+  </sql>
+  <!-- 通用查询条件 -->
+  <sql id="base_where">
+    where 1=1
+  </sql>
+  <!-- 通用from -->
+  <sql id="base_from">
+    from comment as comment
+  </sql>
+
+  <!--分页列表-->
+  <select id="queryPojoList" resultType="com.hq.learningapi.pojo.CommentPOJO">
+    select
+    <include refid="base_column"/>
+    ,(SELECT COUNT(0) FROM like_user AS like_user
+    WHERE like_user.like_type = 0 AND like_user.like_object = comment.comment_id AND like_user.user_id = #{userId}) AS isLike
+    <include refid="base_from"/>
+    <include refid="base_where"/>
+    and comment.comment_object = #{commentObject}
+    and comment.comment_type = #{commentType}
+    and comment.app_status = 1
+    and comment.dr = 0
+    order by comment.creation_time desc
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.hq.learningapi.entity.Comment" >
+    insert into comment (comment_id, comment_object,
+      comment_type, content, user_id, name, avatar,
+      like_number, app_status, creation_time, modified_time, dr)
+    values (#{commentId,jdbcType=BIGINT}, #{commentObject,jdbcType=BIGINT},
+      #{commentType,jdbcType=TINYINT}, #{content,jdbcType=VARCHAR},
+      #{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
+      #{likeNumber,jdbcType=INTEGER}, #{appStatus,jdbcType=TINYINT},
+      #{creationTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP},
+      #{dr,jdbcType=TINYINT})
+  </insert>
+
+  <update id="addLikeNumber" parameterType="java.lang.Long">
+    update comment   
+    set like_number = like_number + 1    
+    where comment_id = #{commentId}
+  </update>
+
+  <update id="delLikeNumber" parameterType="java.lang.Long">
+    update comment   
+    set like_number = like_number - 1    
+    where comment_id = #{commentId}
+  </update>
+  
+</mapper>

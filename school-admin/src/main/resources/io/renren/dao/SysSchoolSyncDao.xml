@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SysSchoolSyncDao">
+
+		
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.SysSchoolSyncEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into sys_school_sync
+	(
+		`code`, 
+		`nc_id`, 
+		`err_type`, 
+		`nc_json`, 
+		`name` 
+	)
+	values
+	(
+		#{code},
+		#{ncId}, 
+		#{errType}, 
+		#{ncJson}, 
+		#{name} 
+	)
+</insert>
+	
+</mapper>

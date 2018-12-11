@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>统考成绩</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+ 		
+			<table class="table table-condensed" border="0">
+				<tr border="0"> 
+				 
+					<td><label for="name">姓名:</label></td>
+					<td><input type="text" class="form-control"  v-model.trim="q.name" id="name"></td>
+ 					
+                    <td><label for="mobile">手机号:</label></td>
+					<td><input type="text" class="form-control" v-model.trim="q.mobile" id="mobile"></td>
+					 
+					  <td><label for="teacherName">班主任</label></td>
+                    <td>
+                        <input type="text" class="form-control" id="query-classTeacherName" v-model.trim="q.teacherName" readonly="readonly" placeholder="选择班主任" @click="classTeacherLayerShow">
+                    </td>  
+					
+					<td><a class="btn btn-primary" @click="query">查询</a></td>
+					<td><a class="btn btn-primary" @click="queryClear">清空条件</a></td>
+				 
+					 #if($shiro.hasPermission("record:recordInfo:update"))
+					<td>	<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a></td>
+					#end
+					<td><a class="btn btn-danger" @click="exportTemplate" style="float: right"><i class="fa fa-plus"></i>&nbsp;下载导入模板</a></td>
+					 #if($shiro.hasPermission("record:recordInfo:importData"))
+					<td><a class="btn btn-danger" @click="importData" style="float: right"><i class="fa fa-plus"></i>&nbsp;导入</a></td>
+					#end
+					  #if($shiro.hasPermission("record:recordInfo:exportData"))
+					<td><a class="btn btn-danger" @click="exportData" style="float: right"><i class="fa fa-plus"></i>&nbsp;导出</a></td>
+					 #end
+						
+						
+						</tr>
+			</table>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+      <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+						<div class="form-group" >
+			   	<div class="col-sm-2 control-label">姓名</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="info.name" disabled="true"/>
+			    </div>
+		</div>
+								    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">性别</div>
+			   	<div class="col-sm-10">
+			   <!--    <input type="text" class="form-control" v-model="info.sex"  disabled="false"/> -->
+			      
+			       <label class="radio-inline">
+				  <input type="radio" name="sex" value="0" v-model.trim="info.sex"/> 女
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="sex" value="1" v-model.trim="info.sex"/> 男
+				</label>
+			      <label class="radio-inline">
+				  <input type="radio" name="sex" value="2" v-model.trim="info.sex"/> 保密
+				</label>
+			      
+			      
+			    </div>
+		 </div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">身份证</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="info.idCard"  />
+			    </div>
+			</div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">年龄</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="info.age"  />
+			    </div> </div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">QQ</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="info.qq"  />
+			    </div>
+			</div>
+			
+						
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">每天可学习时间(min)</div>
+			   <div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="info.studyTimeOfDay"  />
+			    </div>
+			 </div>
+			
+			
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">是否结婚</div>
+			   	<div class="col-sm-10">
+			   	 <label class="radio-inline">
+			       <input type="radio" name="marriageStatus" value="0" v-model.trim="info.marriageStatus"/> 否
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="marriageStatus" value="1" v-model.trim="info.marriageStatus"/> 是
+				</label> 
+			    </div>
+			 </div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">是否生育</div>
+			   	<div class="col-sm-10"> 
+			       <label class="radio-inline">
+			           <input type="radio" name="fertilityStatus" value="0" v-model.trim="info.fertilityStatus"/> 否
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="fertilityStatus" value="1" v-model.trim="info.fertilityStatus"/> 是
+				</label>
+			    </div>
+			</div>
+			
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">现工作岗位</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="info.postName"  />
+			    </div>
+			 </div>
+											    			<div class="form-group">
+			   	<div class="col-sm-2 control-label">会计类证书</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="info.accountingCertificates"  />
+			    </div>
+			</div>
+			
+			 
+										<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+    
+    
+    
+    
+    
+    
+    
+     		<!-- 上传文件弹窗 -->
+		<div id="uploadExcel" style="display: none;">
+			<form name="form_uploadImg" action="" enctype="multipart/form-data">
+				<input id="file_data"  type="file"  name="file_data" style="height: 35px; width: 200px;" /> 
+			</form>
+		</div>
+</div>
+
+<script src="${rc.contextPath}/js/student/recordinfo.js?_${date.systemTime}"></script> 
+
+#parse("layer/teacherLay.html")
+</body>
+</html>

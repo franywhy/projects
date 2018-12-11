@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.izhubo</groupId>
+	<artifactId>iuserSystem-web</artifactId>
+	<version>1.0</version>
+	<packaging>war</packaging>
+	<name>izhubo User System Web</name>
+	<!-- <url>http://maven.apache.org</url> -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.3.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.5.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty.orbit</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<version>3.0.0.v201112011016</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.izhubo</groupId>
+			<artifactId>iuserSystem-lib</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.commons</groupId> -->
+<!-- 			<artifactId>commons-pool2</artifactId> -->
+<!-- 			<version>2.0</version> -->
+<!-- 		</dependency> -->
+	</dependencies>
+
+	<properties>
+		<contextPath />
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<targetJdk>1.7</targetJdk>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+
+		<jettyVersion>9.2.1.v20140609</jettyVersion>
+		<log.target>stdout</log.target>
+		<log.web.level>DEBUG</log.web.level>
+		<pic.domain>http://ttimgshowd.app1101168695.twsapp.com/</pic.domain>
+		<api.domain>http://ttapi.app1101168695.twsapp.com/</api.domain>
+		<site.domain>http://ttwww.app1101168695.twsapp.com/</site.domain>
+
+		<redis.port>6379</redis.port>
+		<redis.timeout>15000</redis.timeout>
+		<redis.mem.db>0</redis.mem.db>
+		<redis.host>10.207.153.22</redis.host>
+		<redis.mem.host>${redis.host}</redis.mem.host>
+		<redis.mem.port>${redis.port}</redis.mem.port>
+		<redis.chat.host>${redis.host}</redis.chat.host>
+		<redis.chat.port>6381</redis.chat.port>
+		<mongo.uri>10.207.136.82,10.207.140.24,10.207.151.71</mongo.uri>
+		<pic.folder>/data/nginx-web/img</pic.folder>
+
+		<msg.thread.minSize>100</msg.thread.minSize>
+		<msg.thread.maxSize>200</msg.thread.maxSize>
+
+		<buss.thread.minSize>300</buss.thread.minSize>
+		<buss.thread.maxSize>400</buss.thread.maxSize>
+
+		<redis.pool.maxTotal>1000</redis.pool.maxTotal>
+		<redis.pool.maxIdle>500</redis.pool.maxIdle>
+		<redis.pool.maxWait>-1</redis.pool.maxWait>
+		<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+		<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+		<chat.pool.maxTotal>600</chat.pool.maxTotal>
+		<chat.pool.maxIdle>300</chat.pool.maxIdle>
+		<chat.pool.maxWait>1500</chat.pool.maxWait>
+
+		<aspectj-scope>compile</aspectj-scope>
+		<mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+	</properties>
+	<profiles>
+		<profile>
+			<id>testRemote</id>
+			<properties>
+				<redis.host>nb1.izhubo.com</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>nb2.izhubo.com</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/empty/upload/</pic.folder>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+
+				<pic.domain>http://ttimgshowd.app1101168695.twsapp.com/</pic.domain>
+				<api.domain>http://ttapi.app1101168695.twsapp.com/</api.domain>
+				<site.domain>http://ttwww.app1101168695.twsapp.com/</site.domain>
+			</properties>
+
+		</profile>
+
+		<profile>
+			<id>betaTest</id>
+			<properties>
+				<redis.host>177.77.86.222</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>177.77.86.222</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/data/nginx-web/img/</pic.folder>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+
+				<pic.domain>http://ttimgshowd.app1101815070.twsapp.com/</pic.domain>
+				<api.domain>http://ttestapi.app1101815070.twsapp.com/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+			</properties>
+
+		</profile>
+
+		<profile>
+			<id>product</id>
+			<properties>
+
+				<redis.host>10.169.130.149</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+
+				<redis.chat.host>10.169.130.149</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<redis.pool.maxTotal>1000</redis.pool.maxTotal>
+				<redis.pool.maxIdle>500</redis.pool.maxIdle>
+				<redis.pool.maxWait>-1</redis.pool.maxWait>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+				<chat.pool.maxTotal>600</chat.pool.maxTotal>
+				<chat.pool.maxIdle>300</chat.pool.maxIdle>
+				<chat.pool.maxWait>1500</chat.pool.maxWait>
+
+				<msg.thread.minSize>100</msg.thread.minSize>
+				<msg.thread.maxSize>200</msg.thread.maxSize>
+
+				<buss.thread.minSize>300</buss.thread.minSize>
+				<buss.thread.maxSize>400</buss.thread.maxSize>
+
+				<log.target>logfile</log.target>
+				<log.web.level>INFO</log.web.level>
+				<pic.folder>/data/nginx-web/img</pic.folder>
+
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+
+				<!-- replset -->
+				<mongo.uri>10.169.114.11,10.170.19.223,10.169.137.203</mongo.uri>
+				<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
+
+
+			</properties>
+		</profile>
+	</profiles>
+	<build>
+		<finalName>userSystem</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>*.properties</include>
+					<include>logback.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>apple/*</include>
+					<include>unionpay/*</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jettyVersion}</version>
+				<configuration>
+					<httpConnector>
+						<port>18080</port>
+						<host>ttus.app1101168695.twsapp.com</host>
+					</httpConnector>
+					<scanIntervalSeconds>3</scanIntervalSeconds>
+					<stopPort>18081</stopPort>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

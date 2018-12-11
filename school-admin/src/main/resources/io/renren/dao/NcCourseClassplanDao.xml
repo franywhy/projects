@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.NcCourseClassplanDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	nc_course_classplan.id AS id , 	nc_course_classplan.mobile AS mobile , 	nc_course_classplan.user_name AS userName , 	nc_course_classplan.nc_user_id AS ncUserId ,
+	nc_course_classplan.nc_id AS ncId , 	nc_course_classplan.nc_commodity_id AS ncCommodityId , 	nc_course_classplan.nc_code AS ncCode , 	nc_course_classplan.classplan_id AS classplanId ,
+	nc_course_classplan.course_code AS courseCode ,
+	nc_course_classplan.open_flag AS openFlag , 	nc_course_classplan.create_time AS createTime , 	nc_course_classplan.ts AS ts ,nc_course_classplan.is_success as isSuccess,
+	nc_course_classplan.nc_modified_time as ncModifiedTime
+</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM nc_course_classplan AS nc_course_classplan
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.NcCourseClassplanEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.NcCourseClassplanEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.NcCourseClassplanEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into nc_course_classplan
+		(
+				`mobile`,
+				`user_name`,
+				`nc_user_id`,
+				`nc_id`,
+				`nc_commodity_id`,
+			    `nc_code`,
+			    `classplan_id`,
+			    `course_code`,
+			    `open_flag`,
+			    `create_time`,
+			    `is_success`,
+			     `nc_modified_time`
+			    )
+		values
+		(
+			#{mobile},
+			#{userName},
+			#{ncUserId},
+			#{ncId},
+			#{ncCommodityId},
+			#{ncCode},
+			#{classplanId},
+			#{courseCode},
+			#{openFlag},
+			#{createTime},
+			#{isSuccess},
+			#{ncModifiedTime}
+			)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.NcCourseClassplanEntity">
+		update nc_course_classplan 
+		<set>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="ncUserId != null">`nc_user_id` = #{ncUserId}, </if>
+			<if test="ncId != null">`nc_id` = #{ncId}, </if>
+			<if test="ncCommodityId != null">`nc_commodity_id` = #{ncCommodityId}, </if>
+			<if test="ncCode != null">`nc_code` = #{ncCode}, </if>
+			<if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+			<if test="courseCode != null">`course_code` = #{courseCode}, </if>
+			<if test="openFlag != null">`open_flag` = #{openFlag}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="ts != null">`ts` = #{ts},</if>
+			<if test="isSuccess != null">`is_success` = #{isSuccess},</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM nc_course_classplan 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM nc_course_classplan 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+
+    <select id="queryDataByTs" resultType="io.renren.entity.NcCourseClassplanEntity">
+        select
+        <include refid="base_column"/>
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND nc_course_classplan.is_success = 0
+        ORDER BY nc_course_classplan.nc_modified_time
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryTotalNotSuccess" resultType="int">
+        select COUNT(1)
+        <include refid="base_from"/>
+        <include refid="base_where"/>
+        AND nc_course_classplan.is_success = 0
+    </select>
+    <update id="updateIsSuccess" parameterType="map">
+      UPDATE `nc_course_classplan` SET is_success = #{isSuccess} WHERE id = #{id};
+    </update>
+
+    <update id="updateIsSuccessByTime" parameterType="map">
+        UPDATE `nc_course_classplan` SET is_success = #{isSuccess}
+        WHERE mobile = #{mobile} AND classplan_id = #{classplanId} AND nc_modified_time &lt;= #{ncModifiedTime}
+    </update>
+</mapper>

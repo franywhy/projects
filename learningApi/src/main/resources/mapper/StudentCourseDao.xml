@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.learningapi.dao.StudentCourseDao" >
+
+  <select id="queryCourseNoList" resultType="java.lang.String">
+    select s.course_no from student_course s
+    where s.business_id = #{businessId}
+    AND (s.nc_user_id = (select u.nc_id from users u where u.user_id = #{userId}) or s.user_id = #{userId})
+  </select>
+
+  <select id="queryNcCommodityIdList" resultType="java.lang.String">
+    SELECT s.nc_commodity_id FROM student_course s
+    WHERE s.user_id = #{userId}
+  </select>
+
+</mapper>

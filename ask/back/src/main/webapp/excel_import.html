@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>APP问题标签导入</title>
+</head>
+<body>
+    <form action="/excel/importFile.json" method="post" enctype="multipart/form-data">
+        选择文件：<input type="file" name="file"/><br>
+        数据行号：<input type="number" name="headerNum" value="0"><br>
+        工作表编号：<input type="number" name="sheetIndex" value="1"><br>
+        产品线（0：会计，1：自考）<input type="number" name="product" value="1"><br>
+        开通方式（0：按科目，1：按专业）<input type="number" name="openType" value="0"><br>
+        <input type="submit" value="提交"/>
+    </form>
+</body>
+</html>

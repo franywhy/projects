@@ -1,0 +1,34 @@
+<!--答疑类型列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+			<th class="short">类型编号</th>
+            <th class="short">类型名称</th>
+            <th class="short">关联信息</th>
+            <th class="short">操作</th>
+        </tr>
+	</thead>
+	<tbody>
+        <% for(var i=0; i< data.length; i++){ %>
+        <tr>
+            <td  class="short"><%=data[i].answer_type_code||""%></td>
+            <td  class="short"><%=data[i].answer_type_name||""%></td>
+            <td  class="short"><%if(data[i].map_info=='0'){%>
+                 课程相关
+                <%}else{%>
+                 课程无关
+                <%}%>
+            </td>
+            <td class="short">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">查看</button>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.edit( '<%=data[i]._id %>' )">改</button>
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.del('<%=data[i]._id%>')">删</button>
+                <%}%>
+            </td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/答疑类型列表-->

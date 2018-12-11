@@ -1,0 +1,25 @@
+<!--礼物统计列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="longtime">消费时间</th>
+            <th class="auto">礼物Id</th>
+			<th class="auto">礼物名称</th>            
+            <th class="auto">消费数量</th>
+			<th class="auto">消费金额（元）</th>
+        </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="longtime"><%=new Date(data[i].timestamp).format("yyyy-MM-dd")%></td>
+            <td class="auto"><%=data[i].gift_id%></td>
+            <td class="auto"><%=data[i].name%></td>
+            <td class="auto"><%=data[i].count%></td>
+            <td class="auto"><%=Izb.common.getMoney(data[i].cost)%></td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/礼物统计列表-->

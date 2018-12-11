@@ -1,0 +1,70 @@
+<!--星币输入-->
+<form name="inputForm" enctype="multipart/form-data" method="post">
+    <input name="_id" hidden="hidden"/>
+    <table>
+        <tr>
+            <td>
+                <%=pty.itemName%>名称<span class="red">*</span>:
+            </td>
+            <td>
+                <input name="courseware_name"  class="input"  value="" size="36" required/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                时长<span class="red">*</span>:
+            </td>
+            <td>
+                <input type="number" class="input j_video_time" id="video_time1" name="video_time1" size="10" style="width:80px;" required  value="0">分钟<input type="number" class="input j_video_time" id="video_time2" name="video_time2" size="10" style="width:80px;" required  value="0">秒
+            </td>
+        </tr>
+        <tr>
+            <td>
+                所属讲师<span class="red">*</span>:
+            </td>
+            <td>
+                <select id="teacher_id" name="teacher_id" class="input J_teacher_id" style="width:240px" data-options="required:true">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                提交审核<span class="red">*</span>:
+            </td>
+            <td>
+                <select id="upload_flag" name="upload_flag" class="input" style="width:240px" data-options="required:true">
+                    <option value="true">提交</option>
+                    <option value="false" selected>不提交</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                视频<span class="red">*</span>:
+            </td>
+            <td>
+                <input class="input" name="courseware_url" id="courseware_url" type="text" value="" size="20" readonly required /><input type="button" class="d-button" value="选择视频" onClick="Izb.ui.upload('courseware_url', 'tasks','/upload_video.json');" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                大小:
+            </td>
+            <td>
+                <input class="input" name="file_sizeMB" id="file_sizeMB" readonly />MB
+                <input type="hidden" name="file_size" id="file_size" readonly />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                格式:
+            </td>
+            <td>
+                <input class="input" name="ext" id="ext" readonly />
+            </td>
+        </tr>
+
+
+    </table>
+</form>
+<br/>

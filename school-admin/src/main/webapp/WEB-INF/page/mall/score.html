@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>成绩档案表</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("score:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("score:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("score:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<a class="btn btn-primary" @click="downTemplate"><i class="fa fa-pencil-square-o"></i>&nbsp;下载模板</a>
+			<a class="btn btn-primary" @click="batchImport"><i class="fa fa-plus"></i>&nbsp;批量导入</a>
+			<a class="btn btn-primary" onclick="hq.ui.exportData(null);"><i class="fa fa-plus"></i>&nbsp;导出报表</a> 
+			#end
+			
+			#if($shiro.hasPermission("score:list"))
+			<table class="table-condensed" border="0">
+				<tr border="0">
+					<td><input type="text" class="form-control" v-model="q.teacherName" readonly="readonly" placeholder="点击选择班主任" @click="teacherLayerShow"></td>
+					<td><input type="text" class="form-control" v-model="q.course" readonly="readonly" placeholder="点击选择课程" @click="courseLayerShowDetail"></td>
+					<td><input type="text" class="form-control" v-model="q.studentMobile" @keyup.enter="query" placeholder="学员手机号"></td>
+					<td><input type="text" class="form-control" v-model="q.className" @keyup.enter="query" placeholder="班级名称"></td>
+					<td><label for="name">状态:</label></td>
+					<td>
+						<select class="form-control" v-model="q.status">
+							<option value="">全部</option>
+							<option value="0">通过</option>
+							<option value="1">未通过</option>
+						</select>
+					</td>
+					<td style="width: 100px; padding-left: 20px;">
+						<a class="btn btn-default" @click="clearQuery">&nbsp;重置</a>
+					</td>
+					<td><a class="btn btn-primary" @click="reload"><i class="fa fa-search"></i>&nbsp;查询</a></td>
+				</tr>
+			</table>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+     <!-- 上传文件弹窗 -->
+	<div id="uploadExcel" style="display: none;">
+		<form name="form_uploadImg" action="" enctype="multipart/form-data">
+			<input id="file_data"  type="file"  name="file_data" style="height: 35px; width: 200px;" />
+		</form>
+	</div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group" style="display: none">
+					<div class="col-sm-2 control-label">主键</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="score.id"
+							placeholder="主键" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">学员名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="score.studentName" readonly="readonly" placeholder="选择学员姓名" @click="userInfoLayerShow1"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">手机号</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="score.studentMobile" readonly="readonly" placeholder="选择手机号" @click="userInfoLayerShow2"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">班级名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="score.className" readonly="readonly" placeholder="选择班级名称" @click="classLayShow" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">班主任</div>
+					<div class="col-sm-10">
+						<!-- <input type="text" class="form-control" v-model="score.teacherName" placeholder="班主任" /> -->
+						<input type="text" class="form-control" v-model="score.teacherName" id="teacherName" readonly="readonly" placeholder="点击选择老师" @click="selectTeacher"/>						
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">课程</div>
+					<div class="col-sm-10">
+						<!-- <input type="text" class="form-control" v-model="score.course" placeholder="课程" /> -->
+						<input type="text" class="form-control" id="course" v-model="score.course" readonly="readonly" placeholder="点击选择课程" @click="selectCourse"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">考试时间</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control exam-Date" id="examinationtime" readonly="readonly"  placeholder="考试时间" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">录入时间</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control exam-Date" id="registrationtime" readonly="readonly"  placeholder="录入时间" />						
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">成绩</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="score.score"
+							placeholder="成绩" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">备注</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="score.remark"
+							placeholder="备注信息不得超过100个字" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate"
+						value="确定" /> &nbsp;&nbsp;<input type="button"
+						class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>
+		</div>
+</div>
+
+<script src="${rc.contextPath}/js/mall/score.js?_${date.systemTime}"></script>
+#parse("layer/courseLay.html")
+#parse("layer/teacherLay.html")
+#parse("layer/userInfoLay.html")
+#parse("layer/classLay.html")
+</body>
+</html>

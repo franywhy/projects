@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseTextbookDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	c.`course_no`,c.`course_name`,book.`textbook_id`,book.`textbook_name`,book.`status`,book.`modify_person`,book.`create_person`,book.`creation_time`,book.`modified_time`,book.`remark`	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where c.`course_id`=book.`course_id`</sql>
+    
+	<sql id="delete_where">
+    	where 1=1 </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from course_textbook as book,courses as c
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseTextbookDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND textbook_id = #{textbookId}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseTextbookDetailEntity">
+		select
+		<include refid="base_column"/>
+		,
+		(select cu.username from sys_user cu where cu.user_id = book.create_person) as createPerson,
+		(select mu.username from sys_user mu where mu.user_id = book.modify_person) as modifyPerson
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="textbookName != null and textbookName.trim() != ''">
+			AND book.`textbook_name` like concat('%', #{textbookName}, '%')
+		</if>
+		<if test="courseName != null and courseName.trim() != ''">
+			AND c.`course_name`=#{courseName}
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseTextbookEntity" useGeneratedKeys="true" keyProperty="textbookId">
+		insert into course_textbook
+		(
+				`textbook_name`, 				`course_id`, 				`status`, 				`remark`, 				`create_person`, 				`creation_time`, 				`modify_person`, 				`modified_time`, 				`school_id`		)
+		values
+		(
+															#{textbookName}, 																			#{courseId}, 																			#{status}, 																			#{remark}, 																			#{createPerson}, 																			#{creationTime}, 																			#{modifyPerson}, 																			#{modifiedTime}, 																			#{schoolId}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseTextbookEntity">
+		update course_textbook 
+		<set>
+			<if test="textbookName != null">`textbook_name` = #{textbookName}, </if>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}</if>
+		</set>
+		wheretextbook_id = #{textbookId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM course_textbook 
+		<include refid="delete_where"/>
+		AND textbook_id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM course_textbook
+		<include refid="delete_where"/> 
+		AND textbook_id IN 
+		<foreach item="textbookId" collection="ids" open="(" separator="," close=")">
+			#{textbookId}
+		</foreach>
+	</delete>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+	   update course_textbook set status = #{status} where textbook_id in
+	   <foreach item="textbookId" collection="list" open="(" separator="," close=")">
+	   	#{textbookId}
+		</foreach>
+	</update>
+</mapper>

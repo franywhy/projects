@@ -1,0 +1,53 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+        <!--<th class="auto">ID</th>-->
+        <th class="auto">学员</th>
+        <th class="auto">性别</th>
+        <th class="auto">报名号</th>
+        <th class="auto">上课校区</th>
+        <th class="auto">报读班型</th>
+        <th class="auto">预计开班时间</th>
+        <th class="auto">上课时间说明</th>
+        <th class="auto">订单编号</th>
+        <th class="auto">支付金额</th>
+        <th class="auto">支付方式</th>
+        <th class="auto">联系方式</th>
+        <th class="auto">使用积分说明</th>
+        <th class="longtime">创建时间</th>
+        <th class="auto">状态</th>
+        <th class="action action150">操作</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+            <!--<td class="auto"><%=data[i]._id %></td>-->
+            <td class="auto"><%=data[i].user_name %></td>
+            <td class="auto"><%=data[i].sex %></td>
+            <td class="auto"><%=data[i].code %></td>
+            <td class="auto"><%=data[i].school_name %></td>
+            <td class="auto"><%=data[i].class_type %></td>
+            <td class="auto"><%=data[i].predict_open_time %></td>
+            <td class="auto"><%=data[i].class_time %></td>
+            <td class="auto"><%=data[i].order_num %></td>
+            <td class="auto"><%=data[i].price %></td>
+            <td class="auto"><%=data[i].pay_type %></td>
+            <td class="auto"><%=data[i].phone %></td>
+            <td class="auto"><%=data[i].point %></td>
+            <td class="auto"><%=data[i].create_time %></td>
+            <td class="auto"><%=data[i].status %></td>
+            <td  class="action action150">
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">详细</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

@@ -1,0 +1,42 @@
+<!--banner管理-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+        <th class="num">序号</th>
+
+        <th class="auto">学员ID</th>
+        <th class="auto">手机号码</th>
+        <th class="auto">用户昵称</th>
+
+        <!--<th class="auto">课程</th>
+        <th class="auto">课时</th>-->
+        <th class="auto">来源</th>
+        <th class="auto">出勤时间</th>
+		  <th class="auto">回放观看时间</th>
+        <th class="auto">直播观看时长</th>
+   </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){var d = data[i];%>
+        <tr>
+            <td class="auto"><%=i+1 %></td>
+
+            <td class="short"><%=d.user_id  %></td>
+            <td class="short"><%=d.phone  %></td>
+            <td class="short"><%=d.nick_name  %></td>
+
+            <!--<td class="short">Izb.controller.middlelivedetail.selCourseName</td>
+            <td class="short">Izb.controller.middlelivedetail.selCourseTimeName</td>-->
+            <td class="short"><%=d.socure  %></td>
+
+            <td><%=data[i].timestamp ? new Date(data[i].timestamp).toLocaleString() : '-' %></td>
+			 <td><%=data[i].replytimestamp ? new Date(data[i].replytimestamp).toLocaleString() : '-' %></td>
+            <td><%=data[i].timestamp ? data[i].watch_time : '-' %></td>
+			
+			
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/banner管理-->

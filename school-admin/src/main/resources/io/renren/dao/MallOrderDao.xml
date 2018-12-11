@@ -1,0 +1,1067 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallOrderDao">
+    <select id="queryListByCommodityId" resultType="io.renren.entity.MallOrderEntity">
+        SELECT
+        mall_order.*
+        FROM mall_order AS mall_order
+        LEFT JOIN course_userplan AS course_userplan ON (
+        course_userplan.order_id = mall_order.order_id
+        AND course_userplan.dr = 0
+        AND course_userplan. STATUS = 1
+        )
+        WHERE mall_order.dr = 0
+        AND mall_order.dept_id > 0
+        AND mall_order.class_id > 0
+        AND course_userplan.user_plan_id is null
+        AND mall_order.commodity_id = #{commodityId}
+        <if test="classId > 0">
+            AND mall_order.class_id = #{classId}
+        </if>
+    </select>
+
+
+    <select id="queryListByCommodityIdAndUserId" resultType="io.renren.entity.MallOrderEntity">
+        SELECT
+			mall_order.*
+		FROM mall_order AS mall_order
+		WHERE mall_order.dr = 0
+		AND mall_order.commodity_id = #{commodityId}
+		AND mall_order.user_id = #{userId}
+	</select>
+
+    <!-- 未生成学员规划的条件 -->
+    <sql id="un_create_userplan_join">
+		LEFT JOIN course_userplan course_userplan ON (
+			course_userplan.order_id = m.order_id
+			AND course_userplan.dr = 0
+			AND course_userplan. STATUS = 1
+		)
+	</sql>
+    <sql id="un_create_userplan_where">
+		AND course_userplan.user_plan_id IS NULL
+	</sql>
+
+    <select id="queryObject" resultType="io.renren.entity.MallOrderEntity">
+        select * from mall_order
+        where dr = 0
+        <if test="orderId != null">
+            <if test="orderId != null">
+                and order_id = #{orderId}
+            </if>
+            <if test="orderNo != null">
+                and order_no = #{orderNo}
+            </if>
+        </if>
+        <if test="orderNo != null">
+            and order_no = #{orderNo}
+        </if>
+    </select>
+
+    <!-- 校验订单是否存在 根据nc_id -->
+    <select id="queryOrderExistByNcId" resultType="Integer">
+	     SELECT COUNT(1)
+	     FROM `mall_order` 
+	     WHERE nc_id=#{ncId}  and dr=0
+	</select>
+    <!-- 校验订单是否存在 根据nc_code -->
+    <select id="queryOrderExistByNcCode" resultType="Integer">
+	     SELECT COUNT(1)
+	     FROM `mall_order` 
+	     WHERE nc_code=#{ncCode} and dr=0
+	</select>
+    <!-- 校验订单是否存在 根据order_no -->
+    <select id="queryOrderExistByOrderNo" resultType="Integer">
+	     SELECT COUNT(1)
+	     FROM `mall_order` 
+	     WHERE order_no=#{orderNo} and dr=0
+	</select>
+
+    <select id="queryOrderId" parameterType="string" resultType="string">
+         SELECT  order_id FROM `mall_order` WHERE user_id=#{userId}
+	 </select>
+
+    <select id="queryUserOneOrder" parameterType="string" resultType="int">
+	     SELECT  COUNT(order_id) FROM `mall_order` WHERE user_id=#{userId}
+	 </select>
+    <!-- 统计订单下存在某个用户的数量 -->
+    <select id="countUsersMobile" resultType="int">
+	    SELECT
+	    count(users.mobile)
+        FROM
+	    mall_order mall_order
+        JOIN users users ON mall_order.user_id = users.user_id
+        WHERE
+	    users.mobile = #{mobilePhoneNo}
+	    AND mall_order.DR=0
+	 </select>
+
+    <!-- =====================================================查询学员全部未生成学员规划的订单-根据订单id和学员id===================================================== -->
+    <select id="queryOrderForChangeUserplan" resultType="map">
+        select
+        m.order_id as orderId,
+        m.order_no as orderNo,
+        m.user_id as userId,
+        m.commodity_id as commodityId,
+        m.commodity_name as commodityName,
+        m.area_id as areaId,
+        m.class_id as classId,
+        m.source_type as sourceType,
+
+        u.mobile as userMobile,
+        u.nick_name as userName,
+        (select ma.area_name from mall_area ma where ma.area_id = m.area_id) as areaName,
+        (select mc.class_name from mall_class mc where mc.class_id = m.class_id) as className,
+        (select mct.classtype_name from mall_class_type mct where mct.classtype_id = m.class_type_id) as classTypeName,
+        (select ln.level_name from mall_level ln where ln.level_id = m.level_id) as levelName,
+        (select sys_product.product_name from sys_product AS sys_product where sys_product.product_id = m.product_id) as
+        productName
+        from mall_order m JOIN users u ON(m.user_id = u.user_id)
+        <include refid="un_create_userplan_join"/>
+        where m.dr = 0
+        <include refid="un_create_userplan_where"/>
+        and m.ustatus=0
+        and m.status=1
+        and m.pay_status = 2
+        and m.class_id is not null
+        AND m.user_id = #{userId}
+
+    </select>
+    <!-- =====================================================查询学员全部未生成学员规划的订单===================================================== -->
+
+    <!-- 查询可生成学员规划的订单详情 -->
+    <select id="queryOrderForUserplan" resultType="io.renren.entity.MallOrderEntity">
+        SELECT
+        m.*
+        FROM
+        mall_order m
+        <include refid="un_create_userplan_join"/>
+        WHERE
+        m.dr = 0
+        <include refid="un_create_userplan_where"/>
+        AND m.ustatus = 0
+        AND m.STATUS = 1
+        AND m.pay_status = 2
+        AND m.order_id = #{orderId}
+
+    </select>
+
+
+    <!-- 支付成功订单列表 -->
+    <select id="queryListGrid" resultType="map">
+        select
+        m.order_id as orderId,
+        m.order_no as orderNo,
+        m.user_id as userId,
+        m.commodity_id as commodityId,
+        m.area_id as areaId,
+        m.class_id as classId,
+        m.source_type as sourceType,
+        m.pay_status as payStatus,
+        m.remark as remark,
+
+        u.mobile as userMobile,
+        u.nick_name as userName,
+        <!-- (select u.mobile from users u where u.user_id = m.user_id) as userMobile,
+        (select u1.nick_name from users u1 where u1.user_id = m.user_id) as userName, -->
+        (select ma.area_name from mall_area ma where ma.area_id = m.area_id) as areaName,
+        (select mc.class_name from mall_class mc where mc.class_id = m.class_id) as className,
+        (select mct.classtype_name from mall_class_type mct where mct.classtype_id = m.class_type_id) as classTypeName,
+        (select ln.level_name from mall_level ln where ln.level_id = m.level_id) as levelName,
+        (select count(1) from course_userplan userplan where userplan.order_id = m.order_id and userplan.dr = 0) as
+        userplanCount,
+        (select sys_product.product_name from sys_product AS sys_product where sys_product.product_id = m.product_id) as
+        productName
+        from mall_order m JOIN users u ON(m.user_id = u.user_id)
+        <include refid="un_create_userplan_join"/>
+        where m.dr = 0
+        and m.ustatus=0
+        and m.status=1
+        <include refid="un_create_userplan_where"/>
+        and m.pay_status = 2
+        and m.class_id > 0
+        <if test="orderNo != null and orderNo.trim() != ''">
+            and m.order_no = #{orderNo}
+        </if>
+        <if test="userMobile != null and userMobile.trim() != ''">
+            and u.mobile = #{userMobile}
+        </if>
+        <if test="sourceType != null and sourceType > 0">
+            and m.source_type = #{sourceType}
+        </if>
+        <if test="classId != null and classId > 0">
+            and m.class_id = #{classId}
+        </if>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryListGridTotal" resultType="int">
+        select
+        count(1)
+        from
+        mall_order m JOIN users u ON(m.user_id = u.user_id)
+        <include refid="un_create_userplan_join"/>
+        where
+        m.dr = 0
+        <include refid="un_create_userplan_where"/>
+        and m.ustatus=0
+        and m.status=1
+        and m.pay_status = 2
+        and m.class_id is not null
+
+        <if test="orderNo != null and orderNo.trim() != ''">
+            and m.order_no like concat('%',#{orderNo},'%')
+        </if>
+        <if test="userMobile != null and userMobile.trim() != ''">
+            and u.mobile = #{userMobile}
+        </if>
+        <if test="sourceType != null and sourceType > 0">
+            and m.source_type = #{sourceType}
+        </if>
+        <if test="classId != null and classId > 0">
+            and m.class_id = #{classId}
+        </if>
+
+    </select>
+
+    <!-- 通用查询条件 -->
+    <sql id="list_where">
+        <!-- 学员规划是否生成 -->
+        <if test="userplanType != null">
+            <if test="userplanType == 0">
+                LEFT JOIN course_userplan course_userplan ON (
+                course_userplan.order_id = mall_order.order_id
+                AND course_userplan.dr = 0
+                AND course_userplan. STATUS = 1
+                )
+            </if>
+            <if test="userplanType == 1">
+                LEFT JOIN course_userplan course_userplan ON (
+                course_userplan.order_id = mall_order.order_id
+                AND course_userplan.dr = 0
+                AND course_userplan. STATUS = 1
+                )
+            </if>
+        </if>
+        where mall_order.dr = 0
+        <if test="userplanType != null">
+            <if test="userplanType == 0">
+                AND course_userplan.user_plan_id IS NULL
+            </if>
+            <if test="userplanType == 1">
+                AND course_userplan.user_plan_id > 0
+            </if>
+        </if>
+        <!-- 订单号 -->
+        <if test="orderNo != null and orderNo.trim() != ''">
+            and mall_order.order_no = #{orderNo}
+        </if>
+        <!-- 产品线 -->
+        <if test="productId != null and productId > 0">
+            and mall_order.product_id = #{productId}
+        </if>
+        <!-- 部门 -->
+        <if test="deptId != null and deptId > 0">
+            and mall_order.dept_id = #{deptId}
+        </if>
+        <!-- 部门 -->
+        <if test="deptIdList != null and deptIdList.size() > 0">
+            and mall_order.dept_id in
+            <foreach item="deptId" collection="deptIdList" open="(" separator="," close=")">
+                #{deptId}
+            </foreach>
+        </if>
+        <!-- 手机号码 -->
+        <if test="mobile != null and mobile.trim() != ''">
+            and users.mobile =#{mobile}
+        </if>
+        <!-- 用户昵称-->
+        <if test="nickName != null and nickName.trim() != ''">
+            and users.nick_name like concat('%',#{nickName},'%')
+        </if>
+        <!-- 班级 -->
+        <if test="classId != null and classId > 0 ">
+            and mall_order.class_id = #{classId}
+        </if>
+        <!-- 班型 -->
+        <if test="classTypeId != null and classTypeId > 0 ">
+            and mall_order.class_type_id = #{classTypeId}
+        </if>
+        <!-- 层次 -->
+        <if test="levelId != null and levelId > 0 ">
+            and mall_order.level_id = #{levelId}
+        </if>
+        <!-- 省份 -->
+        <if test="areaId != null and areaId > 0 ">
+            and mall_order.area_id = #{areaId}
+        </if>
+        <!-- 产品线 -->
+        <if test="productId != null and productId > 0 ">
+            and mall_order.product_id = #{productId}
+        </if>
+        <!-- nc_id -->
+        <if test="ncId != null">
+            and mall_order.nc_id = #{ncId}
+        </if>
+        <!-- nc_code -->
+        <if test="ncCode != null">
+            and mall_order.nc_code = #{ncCode}
+        </if>
+        <!-- 专业 -->
+        <if test="professionId != null and professionId > 0 ">
+            and mall_order.profession_id = #{professionId}
+        </if>
+        <!-- 用户操作状态 0.正常 1.取消 2.删除 -->
+        <if test="ustatus != null ">
+            and mall_order.ustatus = #{ustatus}
+        </if>
+        <!-- 支付状态 0.未支付 1.发起支付 ,2.支付成功 -->
+        <if test="payStatus != null ">
+            and mall_order.pay_status = #{payStatus}
+        </if>
+        <!-- 学员规划是否生成 -->
+        <!-- <if test="userplanType != null">
+            <if test="userplanType == 0">
+            and 0 = (select count(1) from course_userplan userplan where userplan.order_id = mall_order.order_id and userplan.dr = 0)
+            </if>
+            <if test="userplanType == 1">
+            and 0 &lt; (select count(1) from course_userplan userplan where userplan.order_id = mall_order.order_id and userplan.dr = 0)
+            </if>
+        </if> -->
+    </sql>
+
+    <sql id="list_from">
+		from mall_order mall_order 
+		LEFT JOIN users users ON mall_order.user_id = users.user_id
+	</sql>
+    <select id="getUserplanDetailId" resultType="long">
+	    select course_userplan_detail.userplan_detail_id 
+	    from  course_userplan course_userplan 
+        left join course_userplan_detail  course_userplan_detail  on course_userplan.user_plan_id =course_userplan_detail.userplan_id
+        where course_userplan.order_no=#{orderNo} 
+        and course_userplan_detail.course_id=#{course_id} 
+        and course_userplan_detail.area_id=#{area_id}
+        and course_userplan.product_id = #{productId}
+        and course_userplan.dr=0 and course_userplan_detail.dr=0;	
+	</select>
+    <select id="countUserplanDetailId" resultType="int">
+	    select count(course_userplan_detail.userplan_detail_id) from  course_userplan course_userplan 
+        left join course_userplan_detail 
+        course_userplan_detail 
+        on course_userplan.user_plan_id =course_userplan_detail.userplan_id
+        where course_userplan.order_no=#{orderNo} 
+        and course_userplan_detail.course_id=#{course_id} 
+        and course_userplan_detail.area_id=#{area_id}
+        and course_userplan.product_id = #{productId}
+        and course_userplan.dr=0 and course_userplan_detail.dr=0;	
+	</select>
+    <select id="queryList" resultType="io.renren.pojo.order.OrderPOJO">
+        select
+        mall_order.*,mall_order.is_Teacher as isTeacher,
+        (select area.area_name from mall_area area where area.area_id = mall_order.area_id) as areaName,
+        (select mall_class.class_name from mall_class mall_class where mall_class.class_id = mall_order.class_id) as
+        className,
+        (select mall_class_type.classtype_name from mall_class_type mall_class_type where mall_class_type.classtype_id =
+        mall_order.class_type_id) as classtypeName,
+        (select mall_level.level_name from mall_level mall_level where mall_level.level_id = mall_order.level_id) as
+        levelName,
+        users.nick_name as nickName,
+        users.mobile as mobile,
+        (select count(1) from course_userplan userplan where userplan.order_id = mall_order.order_id and userplan.dr =
+        0) as userplanCount,
+        (select mall_profession.profession_name from mall_profession mall_profession where mall_profession.profession_id
+        = mall_order.profession_id) as professionName,
+        (select sys_product.product_name from sys_product AS sys_product where sys_product.product_id =
+        mall_order.product_id) as productName
+        <include refid="list_from"/>
+        <include refid="list_where"/>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryPOJO" resultType="io.renren.pojo.order.OrderPOJO">
+        select
+        mall_order.order_id,mall_order.order_no,mall_order.commodity_id, mall_order.commodity_name,
+        mall_order.pay_money, mall_order.pay_money,mall_order.pay_status,
+        mall_order.pay_time,mall_order.dr,mall_order.ustatus,mall_order.date_validity,mall_order.is_teacher,mall_order.nc_code,
+        (select aa.area_name from mall_area aa where aa.area_id = mall_order.area_id) as areaName,
+        (select bb.class_name from mall_class bb where bb.class_id = mall_order.class_id) as className,
+        (select cc.classtype_name from mall_class_type cc where cc.classtype_id = mall_order.class_type_id) as
+        classtypeName,
+        (select dd.level_name from mall_level dd where dd.level_id = mall_order.level_id) as levelName,
+        users.nick_name as nickName,users.mobile AS mobile,
+        (select count(1) from course_userplan userplan where userplan.order_id = mall_order.order_id and userplan.dr =
+        0) as userplanCount,
+        (select p.profession_name from mall_profession p where p.profession_id = mall_order.profession_id) as
+        professionName,
+        (select sys_product.product_name from sys_product AS sys_product where sys_product.product_id =
+        mall_order.product_id) as productName,
+        (select sys_dept.name from sys_dept AS sys_dept where sys_dept.dept_id = mall_order.dept_id ) as deptName,
+        contract_record.contract_id as contractId,
+        contract_record.company_id as companyId,
+        contract_record.status signStatus,
+        contract_record.ts contractTs
+        <include refid="list_from"/>
+        LEFT JOIN contract_record on contract_record.order_id = mall_order.order_id
+        <include refid="list_where"/>
+        <if test="signStatus != null">
+            and contract_record.status = #{signStatus}
+        </if>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryPOJOByOrderId" resultType="io.renren.pojo.order.OrderPOJO">
+        select
+        mall_order.*,
+        (select aa.area_name from mall_area aa where aa.area_id = mall_order.area_id) as areaName,
+        (select bb.class_name from mall_class bb where bb.class_id = mall_order.class_id) as className,
+        (select cc.classtype_name from mall_class_type cc where cc.classtype_id = mall_order.class_type_id) as
+        classtypeName,
+        (select dd.level_name from mall_level dd where dd.level_id = mall_order.level_id) as levelName,
+        users.nick_name as nickName,
+        (select ff.mobile from users ff where ff.user_id = mall_order.user_id) as mobile,
+        (select count(1) from course_userplan userplan where userplan.order_id = mall_order.order_id and userplan.dr =
+        0) as userplanCount,
+        (select p.profession_name from mall_profession p where p.profession_id = mall_order.profession_id) as
+        professionName,
+        (select sys_product.product_name from sys_product AS sys_product where sys_product.product_id =
+        mall_order.product_id) as productName,
+        (select sys_dept.name from sys_dept AS sys_dept where sys_dept.dept_id = mall_order.dept_id ) as deptName
+        <include refid="list_from"/>
+        where mall_order.order_id = #{orderId} and mall_order.dr = 0
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(1)
+        from mall_order mall_order
+        <if test="useUsers == true">
+            LEFT JOIN users users ON mall_order.user_id = users.user_id
+        </if>
+        <if test="signStatus != null">
+            LEFT JOIN contract_record on contract_record.order_id = mall_order.order_id
+        </if>
+        <!--<include refid="list_from" />-->
+        <include refid="list_where"/>
+
+        <if test="signStatus != null">
+            and contract_record.status = #{signStatus}
+        </if>
+    </select>
+    <select id="checkClassType" resultType="int">
+		select count(1) 
+		from mall_order mall_order
+		where  mall_order.class_type_id=#{classtypeId}
+	</select>
+    <select id="checkProfession" resultType="int">
+		select count(1) from mall_order mall_order where mall_order.profession_id=#{professionId}
+	</select>
+    <insert id="save" parameterType="io.renren.pojo.order.OrderPOJO" useGeneratedKeys="true" keyProperty="orderId">
+		insert into mall_order
+		(
+		    `order_id`, 
+			`order_no`, 
+			`user_id`, 
+			`commodity_id`, 
+			`profession_id`,
+			`commodity_name`, 
+			`order_name`, 
+			`order_describe`, 
+			`total_money`, 
+			`pay_money`, 
+			`pay_status`, 
+			`remark`, 
+			`pay_time`, 
+			`favorable_money`, 
+			`discount_id`, 
+			`pay_callblack_time`, 
+			`pay_callblack_msg`, 
+			`alipay_trade_no`, 
+			`payIP`, 
+			`pay_url`, 
+			`pic`, 
+			`spic`, 
+			`dr`, 
+			`ustatus`, 
+			`wx_open_id`, 
+			`pay_type`, 
+			`bank_code`, 
+			`bank_name`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`, 
+			`school_id`, 
+			`source_type`, 
+			`area_id`, 
+			`level_id`, 
+			`class_id`, 
+			`nc_id`, 
+			`status`, 
+			`class_type_id`,
+			
+			`nc_code`,
+			`syn_time`,
+			`product_id`,
+			`date_validity`,
+			`dept_id`,
+			`only_one`
+		)
+		values
+		(
+		    #{orderId},
+			#{orderNo},
+			#{userId},
+			#{commodityId},
+			#{professionId},
+			#{commodityName},
+			#{orderName},
+			#{orderDescribe},
+			#{totalMoney},
+			#{payMoney},
+			#{payStatus},
+			#{remark},
+			#{payTime},
+			#{favorableMoney},
+			#{discountId},
+			#{payCallblackTime},
+			#{payCallblackMsg},
+			#{alipayTradeNo},
+			#{payip},
+			#{payUrl},
+			#{pic},
+			#{spic},
+			#{dr},
+			#{ustatus},
+			#{wxOpenId},
+			#{payType},
+			#{bankCode},
+			#{bankName},
+			#{creator},
+			#{creationTime},
+			#{modifier},
+			#{modifiedTime},
+			#{schoolId},
+			#{sourceType},
+			#{areaId},
+			#{levelId},
+			#{classId},
+			#{ncId},
+			1,
+			#{classTypeId},
+
+			#{ncCode},
+			#{synTime},
+			#{productId},
+			#{dateValidity},
+			#{deptId},
+			#{onlyOne}
+
+		)
+	</insert>
+
+    <insert id="saveLogOrder" parameterType="io.renren.entity.MallOrderEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into log_order_updatetime
+        (
+        `order_id`,
+        `create_person`,
+        `old_time`,
+        `new_time`
+        )
+        values
+        (
+        #{orderId},
+        #{userId},
+        #{oldDateValidity},
+        #{dateValidity}
+        )
+    </insert>
+    <update id="updateDr" parameterType="io.renren.entity.MallOrderEntity">
+        update mall_order
+        <set>
+            <if test="dr != null">
+                `dr` = #{dr}
+            </if>
+        </set>
+        where nc_code=#{ncCode}
+    </update>
+    <!-- 更新订单的ncid  ncCode为空 -->
+    <update id="setNcId" parameterType="io.renren.entity.MallOrderEntity">
+        update mall_order
+        <set>
+            <if test="ncId == null">
+                `nc_id` = null,`nc_code`= null
+            </if>
+            <if test="ncId != null">
+                `nc_id` = #{ncId}
+            </if>
+        </set>
+        where order_id=#{orderId}
+    </update>
+
+    <update id="updateBatchClass" parameterType="io.renren.entity.MallOrderEntity">
+        update mall_order
+        <set>
+            <if test="orderNo != null">`order_no` = #{orderNo},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="commodityId != null">`commodity_id` = #{commodityId},</if>
+            <if test="professionId != null">`profession_id` = #{professionId},</if>
+            <if test="commodityName != null">`commodity_name` = #{commodityName},</if>
+            <if test="orderName != null">`order_name` = #{orderName},</if>
+            <if test="orderDescribe != null">`order_describe` = #{orderDescribe},</if>
+            <if test="totalMoney != null">`total_money` = #{totalMoney},</if>
+            <if test="payMoney != null">`pay_money` = #{payMoney},</if>
+            <if test="payStatus != null">`pay_status` = #{payStatus},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="payTime != null">`pay_time` = #{payTime},</if>
+            <if test="favorableMoney != null">`favorable_money` = #{favorableMoney},</if>
+            <if test="discountId != null">`discount_id` = #{discountId},</if>
+            <if test="payCallblackMsg != null">`pay_callblack_msg` = #{payCallblackMsg},</if>
+            <if test="alipayTradeNo != null">`alipay_trade_no` = #{alipayTradeNo},</if>
+            <if test="payUrl != null">`pay_url` = #{payUrl},</if>
+            <if test="pic != null">`pic` = #{pic},</if>
+            <if test="spic != null">`spic` = #{spic},</if>
+            <if test="dr != null">`dr` = #{dr},</if>
+            <if test="ustatus != null">`ustatus` = #{ustatus},</if>
+            <if test="wxOpenId != null">`wx_open_id` = #{wxOpenId},</if>
+            <if test="payType != null">`pay_type` = #{payType},</if>
+            <if test="bankCode != null">`bank_code` = #{bankCode},</if>
+            <if test="bankName != null">`bank_name` = #{bankName},</if>
+            <if test="creator != null">`creator` = #{creator},</if>
+            <if test="creationTime != null">`creation_time` = #{creationTime},</if>
+            <if test="modifier != null">`modifier` = #{modifier},</if>
+            <if test="modifiedTime != null">`modified_time` = #{modifiedTime},</if>
+            <if test="sourceType != null">`source_type` = #{sourceType},</if>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="levelId != null">`level_id` = #{levelId},</if>
+            <if test="classId != null">`class_id` = #{classId},</if>
+            <if test="ncId != null">`nc_id` = #{ncId},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="classTypeId != null">`class_type_id` = #{classTypeId},</if>
+            <if test="ncCode != null">`nc_code` = #{ncCode},</if>
+            <if test="synTime != null">`syn_time` = #{synTime},</if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="dateValidity != null">`date_validity` = #{dateValidity},</if>
+            <if test="payip != null">`payIP` = #{payip},</if>
+            <if test="payCallblackTime != null">`pay_callblack_time` = #{payCallblackTime},</if>
+            <if test="schoolId != null">`school_id` = #{schoolId},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="ncTs != null">`nc_ts` = #{ncTs},</if>
+            <if test="businessId != null">`business_id` = #{businessId}</if>
+        </set>
+        where order_id in
+        <foreach item="orderId" collection="list" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </update>
+
+    <!--修改-->
+    <update id="update" parameterType="io.renren.entity.MallOrderEntity">
+        update mall_order
+        <set>
+            <if test="orderNo != null">`order_no` = #{orderNo},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="commodityId != null">`commodity_id` = #{commodityId},</if>
+            <if test="professionId != null">`profession_id` = #{professionId},</if>
+            <if test="commodityName != null">`commodity_name` = #{commodityName},</if>
+            <if test="orderName != null">`order_name` = #{orderName},</if>
+            <if test="orderDescribe != null">`order_describe` = #{orderDescribe},</if>
+            <if test="totalMoney != null">`total_money` = #{totalMoney},</if>
+            <if test="payMoney != null">`pay_money` = #{payMoney},</if>
+            <if test="payStatus != null">`pay_status` = #{payStatus},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="payTime != null">`pay_time` = #{payTime},</if>
+            <if test="favorableMoney != null">`favorable_money` = #{favorableMoney},</if>
+            <if test="discountId != null">`discount_id` = #{discountId},</if>
+            <if test="payCallblackMsg != null">`pay_callblack_msg` = #{payCallblackMsg},</if>
+            <if test="alipayTradeNo != null">`alipay_trade_no` = #{alipayTradeNo},</if>
+            <if test="payUrl != null">`pay_url` = #{payUrl},</if>
+            <if test="pic != null">`pic` = #{pic},</if>
+            <if test="spic != null">`spic` = #{spic},</if>
+            <if test="dr != null">`dr` = #{dr},</if>
+            <if test="ustatus != null">`ustatus` = #{ustatus},</if>
+            <if test="wxOpenId != null">`wx_open_id` = #{wxOpenId},</if>
+            <if test="payType != null">`pay_type` = #{payType},</if>
+            <if test="bankCode != null">`bank_code` = #{bankCode},</if>
+            <if test="bankName != null">`bank_name` = #{bankName},</if>
+            <if test="creator != null">`creator` = #{creator},</if>
+            <if test="creationTime != null">`creation_time` = #{creationTime},</if>
+            <if test="modifier != null">`modifier` = #{modifier},</if>
+            <if test="modifiedTime != null">`modified_time` = #{modifiedTime},</if>
+            <if test="sourceType != null">`source_type` = #{sourceType},</if>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="levelId != null">`level_id` = #{levelId},</if>
+            <if test="classId != null">`class_id` = #{classId},</if>
+            <if test="ncId != null">`nc_id` = #{ncId},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="classTypeId != null">`class_type_id` = #{classTypeId},</if>
+            <if test="ncCode != null">`nc_code` = #{ncCode},</if>
+            <if test="synTime != null">`syn_time` = #{synTime},</if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="dateValidity != null">`date_validity` = #{dateValidity},</if>
+            <if test="payip != null">`payIP` = #{payip},</if>
+            <if test="payCallblackTime != null">`pay_callblack_time` = #{payCallblackTime},</if>
+            <if test="schoolId != null">`school_id` = #{schoolId},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="ncTs != null">`nc_ts` = #{ncTs}</if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+    <update id="updateBatch">
+        update mall_order set status = #{status} where order_id in
+        <foreach item="orderId" collection="list" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </update>
+    <delete id="delete">
+        delete from mall_order where order_id = #{value}
+    </delete>
+
+
+    <delete id="deleteBatch">
+        update mall_order set dr = 1,modified_time = now() where order_id in
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+
+    <insert id="saveOrder" parameterType="io.renren.entity.MallOrderEntity" useGeneratedKeys="true"
+            keyProperty="orderId">
+        insert into mall_order
+        (
+        `order_no`, `user_id`, `commodity_id`,
+        `profession_id`, `commodity_name`,
+        `order_name`, `order_describe`,
+        `total_money`, `pay_money`,
+        `pay_status`, `remark`, `pay_time`,
+        `favorable_money`, `discount_id`,
+        `pay_callblack_msg`,
+        `alipay_trade_no`, `pay_url`, `pic`, `spic`, `dr`,
+        `ustatus`,
+        `wx_open_id`, `pay_type`, `bank_code`, `bank_name`,
+        `creator`,
+        `creation_time`, `modifier`, `modified_time`, `source_type`,
+        `area_id`,
+        `level_id`, `class_id`, `nc_id`, `status`, `class_type_id`,
+        `nc_code`,
+        `syn_time`, `product_id`, `date_validity`, `payIP`,
+        `pay_callblack_time`, `school_id`, `dept_id`, `nc_ts` ,`business_id`,`only_one`
+        )
+        values
+        (
+        #{orderNo}, #{userId}, #{commodityId}, #{professionId},
+        #{commodityName},
+        #{orderName}, #{orderDescribe}, #{totalMoney},
+        #{payMoney},
+        #{payStatus}, #{remark}, #{payTime}, #{favorableMoney},
+        #{discountId},
+        #{payCallblackMsg}, #{alipayTradeNo}, #{payUrl}, #{pic},
+        #{spic}, 0,
+        #{ustatus}, #{wxOpenId}, #{payType}, #{bankCode},
+        #{bankName},
+        #{creator}, #{creationTime}, #{modifier}, #{modifiedTime},
+        #{sourceType}, #{areaId}, #{levelId}, #{classId}, #{ncId}, #{status},
+        #{classTypeId}, #{ncCode}, #{synTime}, #{productId}, #{dateValidity},
+        #{payip}, #{payCallblackTime}, #{schoolId}, #{deptId}, #{ncTs} , #{businessId},#{onlyOne}
+        )
+    </insert>
+    <update id="updateDrByOrderIds">
+        update mall_order set dr = 1 where order_id in
+        <foreach item="orderId" collection="array" open="(" separator=","
+                 close=")">
+            #{orderId}
+        </foreach>
+    </update>
+
+    <select id="queryVideoCourse" resultType="map">
+        SELECT
+        mall_order.order_no as orderNo,
+        mall_goods_info.id as goodId,
+        users.user_id as userId,
+        users.nick_name as nickName,
+        users.mobile,
+        mall_class.class_id as classId,
+        mall_class.class_name as className,
+        mall_class_type.classtype_id as classTypeId,
+        mall_class_type.classtype_name as classTypeName,
+        sys_user.user_id as classTeacherId,
+        sys_user.username as classTeacerNickName,
+        sys_user.mobile as classTeacherAccount,
+        ifnull(mall_order.only_one,1) as onlyOne,
+        mall_order.creation_time as ts
+        FROM mall_order
+        JOIN mall_goods_info ON mall_order.commodity_id = mall_goods_info.id
+        JOIN users ON mall_order.user_id = users.user_id
+        JOIN mall_class ON mall_order.class_id = mall_class.class_id
+        JOIN mall_class_type ON mall_order.class_type_id = mall_class_type.classtype_id
+        JOIN sys_user ON mall_class.user_id = sys_user.user_id
+        WHERE
+        mall_goods_info.watch_type = 2
+        <if test="commodityIdList !=null and commodityIdList.size > 0">
+            AND mall_order.commodity_id IN
+            <foreach item="commodityId" collection="commodityIdList" open="(" separator="," close=")">
+                #{commodityId}
+            </foreach>
+        </if>
+        AND mall_order.dr = 0
+        AND mall_order.pay_status = 2
+        AND mall_goods_info.dr = 0
+        AND users.dr = 0
+        AND mall_class.dr = 0
+        AND mall_class_type.dr = 0
+        <if test="startDate !=null and endDate != null">
+            AND mall_order.creation_time &gt; #{startDate}
+            AND mall_order.creation_time &lt; #{endDate}
+        </if>
+        <if test="orderNo !=null">
+            AND mall_order.order_no = #{orderNo}
+        </if>
+    </select>
+    <select id="queryDivideClassesMessage" resultType="map">
+        SELECT
+        mall_order.order_no as orderNo,
+        mall_goods_info.id as goodId,
+        users.user_id as userId,
+        users.nick_name as nickName,
+        users.mobile,
+        mall_class.class_id as classId,
+        mall_class.class_name as className,
+        mall_class_type.classtype_id as classTypeId,
+        mall_class_type.classtype_name as classTypeName,
+        sys_user.user_id as classTeacherId,
+        sys_user.username as classTeacerNickName,
+        sys_user.mobile as classTeacherAccount,
+        ifnull(mall_order.only_one,1) as onlyOne,
+        mall_order.creation_time as ts
+        FROM mall_order
+        JOIN mall_goods_info ON mall_order.commodity_id = mall_goods_info.id
+        JOIN users ON mall_order.user_id = users.user_id
+        JOIN mall_class ON mall_order.class_id = mall_class.class_id
+        JOIN mall_class_type ON mall_order.class_type_id = mall_class_type.classtype_id
+        JOIN sys_user ON mall_class.user_id = sys_user.user_id
+        WHERE
+        mall_order.class_id > 0
+        <if test="watchType != null">
+            AND mall_goods_info.watch_type = #{watchType}
+        </if>
+        <if test="commodityIdList !=null and commodityIdList.size > 0">
+            AND mall_order.commodity_id IN
+            <foreach item="commodityId" collection="commodityIdList" open="(" separator="," close=")">
+                #{commodityId}
+            </foreach>
+        </if>
+        <if test="productIdList !=null and productIdList.size > 0">
+            AND mall_order.product_id IN
+            <foreach item="productId" collection="productIdList" open="(" separator="," close=")">
+                #{productId}
+            </foreach>
+        </if>
+        AND mall_order.dr = 0
+        AND mall_order.pay_status = 2
+        AND mall_goods_info.dr = 0
+        AND users.dr = 0
+        AND mall_class.dr = 0
+        AND mall_class_type.dr = 0
+        <if test="startDate !=null and endDate != null">
+            AND mall_order.creation_time &gt; #{startDate}
+            AND mall_order.creation_time &lt; #{endDate}
+        </if>
+    </select>
+
+    <select id="queryKJClasstoTK" resultType="map">
+        SELECT
+        mall_order.order_no as orderNo,
+        mall_goods_info.id as goodId,
+        users.user_id as userId,
+        users.nick_name as nickName,
+        users.mobile,
+        mall_class.class_id as classId,
+        mall_class.class_name as className,
+        mall_class_type.classtype_id as classTypeId,
+        mall_class_type.classtype_name as classTypeName,
+        sys_user.user_id as classTeacherId,
+        sys_user.username as classTeacerNickName,
+        sys_user.mobile as classTeacherAccount,
+        ifnull(mall_order.only_one,1) as onlyOne,
+        mall_order.creation_time as ts
+        FROM mall_order
+        JOIN mall_goods_info ON mall_order.commodity_id = mall_goods_info.id
+        JOIN users ON mall_order.user_id = users.user_id
+        JOIN mall_class ON mall_order.class_id = mall_class.class_id
+        JOIN mall_class_type ON mall_order.class_type_id = mall_class_type.classtype_id
+        JOIN sys_user ON mall_class.user_id = sys_user.user_id
+        WHERE
+        mall_order.order_id = #{orderId}
+
+    </select>
+
+    <!--根据nc内容查询退费订单-->
+    <select id="queryObjectByNC" resultType="io.renren.entity.MallOrderEntity">
+        SELECT  mall_order.* from mall_order mall_order
+          LEFT JOIN users users ON users.user_id = mall_order.user_id
+          LEFT JOIN mall_goods_info mall_goods_info on mall_goods_info.id = mall_order.commodity_id
+        WHERE
+          users.mobile =#{mobile}
+          and mall_goods_info.nc_id = #{ncId}
+    </select>
+    <update id="updateChangeByOrderNo">
+        update mall_order set dr = 1,modified_time= now() where order_id = #{orderId}
+    </update>
+    <select id="queryOrderExistByTkCode" resultType="int">
+        SELECT COUNT(1)
+        FROM mall_order
+        where
+        dr = 0
+        and user_id = #{userId}  and commodity_id = #{commodityId}
+    </select>
+
+    <select id="isExistByUserId" resultType="io.renren.entity.MallOrderEntity">
+        SELECT mall_order.* 
+        FROM mall_order mall_order
+        JOIN users users ON users.user_id = mall_order.user_id
+        JOIN mall_goods_info mall_goods_info on mall_goods_info.id = mall_order.commodity_id
+        WHERE 
+        mall_order.dr = 0 
+        and mall_order.nc_id = #{ncId}
+        and users.mobile =#{userPhone}
+        and mall_goods_info.nc_id = #{commodityNCPK}
+    </select>
+    <select id="queryMapList" resultType="io.renren.pojo.SyncCustomerPOJO">
+        SELECT
+        course_userplan.order_id as orderId,
+        mall_goods_info.name as commodityName,
+        course_userplan.creation_time as payTime,
+        users.nick_name as nickName,
+        users.mobile as mobile,
+        sys_user.nick_name as teacherName,
+        sys_user.owner_id as ownerId,
+        mall_class.class_name as className,
+        course_userplan.class_id as classId,
+        mall_area.area_name as areaName,
+        mall_profession.profession_name as professionName,
+        mall_level.level_name as levelName,
+        sys_dept.name as deptName
+        FROM
+        course_userplan as course_userplan
+        LEFT JOIN mall_goods_info as mall_goods_info ON mall_goods_info.id = course_userplan.commodity_id
+        LEFT JOIN users as users ON users.user_id = course_userplan.user_id
+        LEFT JOIN mall_area as mall_area ON mall_area.area_id = course_userplan.area_id
+        LEFT JOIN mall_level as mall_level ON mall_level.level_id = course_userplan.level_id
+        LEFT JOIN mall_profession as mall_profession ON mall_profession.profession_id = course_userplan.profession_id
+        LEFT JOIN sys_dept as sys_dept ON sys_dept.dept_id = course_userplan.dept_id
+        LEFT JOIN mall_class as mall_class ON mall_class.class_id = course_userplan.class_id
+        LEFT JOIN sys_user as sys_user ON sys_user.user_id = mall_class.user_id
+        WHERE
+        course_userplan.dr = 0
+        AND course_userplan.commodity_id != 1548
+        AND course_userplan.commodity_id != 1534
+        AND course_userplan.commodity_id != 1546
+        AND course_userplan.commodity_id != 1550
+        AND course_userplan.class_id > 0
+        AND mall_class.class_id > 0
+        <if test="startOrderId > 0 and startOrderId != null">
+            AND course_userplan.order_id &gt; #{startOrderId}
+        </if>
+        <if test="endOrderId > 0 and endOrderId != null">
+            AND course_userplan.order_id &lt; #{endOrderId}
+        </if>
+        <if test="teacherMobileList !=null and teacherMobileList.size > 0">
+            AND sys_user.mobile IN
+            <foreach item="teacherMobile" collection="teacherMobileList" open="(" separator="," close=")">
+                #{teacherMobile}
+            </foreach>
+        </if>
+        <if test="orderNoList !=null and orderNoList.size > 0">
+            AND course_userplan.order_no IN
+            <foreach item="orderNo" collection="orderNoList" open="(" separator="," close=")">
+                #{orderNo}
+            </foreach>
+        </if>
+        ORDER BY course_userplan.order_id
+        LIMIT #{offset},100
+    </select>
+    <select id="queryTotalCustomers" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM
+        course_userplan as course_userplan
+        LEFT JOIN mall_goods_info as mall_goods_info ON mall_goods_info.id = course_userplan.commodity_id
+        LEFT JOIN users as users ON users.user_id = course_userplan.user_id
+        LEFT JOIN mall_area as mall_area ON mall_area.area_id = course_userplan.area_id
+        LEFT JOIN mall_level as mall_level ON mall_level.level_id = course_userplan.level_id
+        LEFT JOIN mall_profession as mall_profession ON mall_profession.profession_id = course_userplan.profession_id
+        LEFT JOIN sys_dept as sys_dept ON sys_dept.dept_id = course_userplan.dept_id
+        LEFT JOIN mall_class as mall_class ON mall_class.class_id = course_userplan.class_id
+        LEFT JOIN sys_user as sys_user ON sys_user.user_id = mall_class.user_id
+        WHERE
+        course_userplan.dr = 0
+        AND course_userplan.commodity_id != 1548
+        AND course_userplan.commodity_id != 1534
+        AND course_userplan.commodity_id != 1546
+        AND course_userplan.commodity_id != 1550
+        AND course_userplan.class_id > 0
+        AND mall_class.class_id > 0
+        <if test="startOrderId > 0 and startOrderId != null">
+            AND course_userplan.order_id &gt; #{startOrderId}
+        </if>
+        <if test="endOrderId > 0 and endOrderId != null">
+            AND course_userplan.order_id &lt; #{endOrderId}
+        </if>
+        <if test="teacherMobileList !=null and teacherMobileList.size > 0">
+            AND sys_user.mobile IN
+            <foreach item="teacherMobile" collection="teacherMobileList" open="(" separator="," close=")">
+                #{teacherMobile}
+            </foreach>
+        </if>
+        <if test="orderNoList !=null and orderNoList.size > 0">
+            AND course_userplan.order_no IN
+            <foreach item="orderNo" collection="orderNoList" open="(" separator="," close=")">
+                #{orderNo}
+            </foreach>
+        </if>
+    </select>
+    <update id="updateIsTeacher">
+        update mall_order
+        <set>
+            is_teacher = #{isTeacher},`modifier` = #{modifier}, `modified_time` = #{modifiedTime}
+        </set>
+        where order_id=#{orderId}
+    </update>
+    <select id="queryPhoneByOrderId" resultType="string">
+    	select
+    		users.mobile as mobile
+    	from
+    		mall_order as mall_order
+    		left join users as users on users.user_id = mall_order.user_id
+    	where
+    		mall_order.dr = 0 and
+    		users.dr = 0 and
+    		mall_order.order_id = #{orderId}
+    </select>
+
+    <select id="queryObjectByNcIdAndCommodityId" resultType="io.renren.entity.MallOrderEntity">
+        SELECT
+            mall_order.*
+        FROM
+            mall_order mall_order
+        LEFT JOIN mall_goods_info goods ON goods.id = mall_order.commodity_id
+        WHERE
+            mall_order.dr = 0
+        AND mall_order.nc_id = #{ncId}
+        AND goods.nc_id = #{ncCommodityId}
+    </select>
+    <select id="queryObjectByMobileAndComodityId" resultType="io.renren.entity.MallOrderEntity">
+        SELECT mall_order.*
+        FROM mall_order mall_order
+        JOIN users users ON users.user_id = mall_order.user_id
+        JOIN mall_goods_info mall_goods_info on mall_goods_info.id = mall_order.commodity_id
+        WHERE
+        mall_order.dr = 0
+        and users.mobile =#{mobile}
+        and mall_goods_info.nc_id = #{ncCommodityId}
+        ORDER BY creation_time desc limit 1
+    </select>
+</mapper>

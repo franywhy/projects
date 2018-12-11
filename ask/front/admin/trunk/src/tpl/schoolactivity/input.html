@@ -1,0 +1,71 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:120px;">关联校区</td>
+            <td>
+                <select class="select-sf" id="province_select"/>
+                <select class="select-sf" id="school_code" name="school_code"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章标题</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="activity_title" id="activity_title" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章作者</td>
+            <td>
+                <input class="input" type="text" name="activity_author" id="activity_author" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">活动图片小图</td>
+            <td>
+                <input class="input" type="text" name="activity_picurl" id="activity_picurl"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('activity_picurl', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">活动图片大图</td>
+            <td>
+                <input class="input" type="text" name="activity_big_picurl" id="activity_big_picurl"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('activity_big_picurl', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">是否推荐到校区首页</td>
+            <td>
+                <select name="is_recommand" class="input" id="is_recommand" style="width: 182px"><option value=0>不推荐</option><option value=1>推荐</option></select>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:120px;">app默认地址</td>
+            <td>
+                <input class="input" type="text" name="activity_infourl" id="activity_infourl" value=""/>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td style="width:120px;">公告简介</td>
+            <td>
+                <textarea name="summary"  id="summary" style="width:400px;height:200px" value=""></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章详情</td>
+            <td>
+                <textarea name="activity_info"  id="activity_info" style="width:1000px;height:400px" value=""></textarea>
+            </td>
+        </tr>
+
+
+
+
+
+
+    </table>
+</form>

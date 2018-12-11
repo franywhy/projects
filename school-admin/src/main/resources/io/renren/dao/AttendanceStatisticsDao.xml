@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.AttendanceStatisticsDao">
+
+	<!-- 查询学员在startTime和endTime有排课的数据 考勤统计报表用-->
+	<!-- 注-如果筛选条件没有学员信息,不关联学员表sys_user;如果筛选条件没有班主任ID,不关联班主任表sys_user -->
+	<select id="logStudentAttenUserClassplanList" resultType="io.renren.pojo.log.LogAttendanceClassTeacherPOJO">
+		SELECT DISTINCT
+			course_userplan.user_plan_id AS userplanId,
+			course_userplan_class_detail.userplan_detail_id AS userplanDetailId,
+			course_userplan_class_detail.classplan_id AS classplanId
+		FROM
+			course_userplan AS course_userplan,
+			course_userplan_detail AS course_userplan_detail,
+			<!-- 需要根据学员ID 学员手机号码 学员昵称 部门ID查询是关联学员表 -->
+			<choose>
+				<when test="mobile != null and mobile.trim() !=''">
+					users AS users,
+				</when>
+				<when test="userName != null and userName.trim() !=''">
+					users AS users,
+				</when>
+				<when test="userId != null and userId > 0">
+					users AS users,
+				</when>
+				<when test="deptId != null and deptId > 0">
+					users AS users,
+				</when>
+                <when test="deptIdList != null and deptIdList.size() > 0">
+                    users AS users,
+                </when>
+			</choose>
+			
+			<!-- 根据班主任查询 -->
+			<if test="classTeacherId != null and classTeacherId > 0">
+			mall_class AS mall_class,
+			</if>
+			course_userplan_class_detail AS course_userplan_class_detail
+		<where>
+			course_userplan_class_detail.classplan_id IN (
+				SELECT DISTINCT(course_classplan_lives.classplan_id)
+				FROM
+					course_classplan_lives AS course_classplan_lives
+				WHERE
+					course_classplan_lives.dr = 0
+				AND course_classplan_lives.start_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+				ORDER BY
+					course_classplan_lives.classplan_id
+			)
+			AND course_userplan_class_detail.dr = 0
+			AND course_userplan.dr = 0
+			<!-- 学员规划-关联学员规划子表 -->
+			AND course_userplan.user_plan_id = course_userplan_detail.userplan_id
+			AND course_userplan_detail.dr = 0
+			<!-- 学员规划子表-关联学习计划子表 -->
+			AND course_userplan_detail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id
+			<!-- 学员规划-班级 -->
+			<if test="classTeacherId != null and classTeacherId > 0">
+				AND mall_class.class_id = course_userplan.class_id
+			</if>
+			<choose>
+				<when test="mobile != null and mobile.trim() !=''">
+					AND users.user_id = course_userplan.user_id
+				</when>
+				<when test="userName != null and userName.trim() !=''">
+					AND users.user_id = course_userplan.user_id
+				</when>
+				<when test="userId != null and userId > 0">
+					AND users.user_id = course_userplan.user_id
+				</when>
+				<when test="deptId != null and deptId > 0">
+					AND users.user_id = course_userplan.user_id
+				</when>
+				<when test="deptIdList != null and deptIdList.size() > 0">
+					AND users.user_id = course_userplan.user_id
+				</when>
+			</choose>
+			<!-- 不定条件 查询条件:班主任、排课、省份、班级、入课时间、学员手机号码、学员姓名、部门（校区） -->
+			<!-- 班主任 -->
+			<if test="classTeacherId != null and classTeacherId > 0">
+				AND mall_class.user_id = #{classTeacherId}
+			</if>
+			<!-- 排课 -->
+			<if test="classplanId != null and classplanId.trim() !='' ">
+				AND course_userplan_class_detail.classplan_id = #{classplanId}
+			</if>
+			<!-- 省份 -->
+			<if test="areaId != null and areaId > 0">
+				AND course_userplan.area_id = #{areaId}
+			</if>
+			<!-- 班级 -->
+			<if test="classId != null and classId > 0">
+				AND course_userplan.class_id = #{classId}
+			</if>
+			<!-- 用户信息 手机号码 -->
+			<if test="mobile != null and mobile.trim() !='' ">
+				AND users.mobile = #{mobile}
+			</if>
+			<!-- 用户昵称 -->
+			<if test="userName != null and userName.trim() !='' ">
+				AND users.nick_name LIKE concat('%', #{userName}, '%')
+			</if>
+			<!-- 用户ID -->
+			<if test="userId != null and userId > 0">
+				AND users.user_id = #{userId}	
+			</if>
+			<!-- 部门ID -->
+			<if test="deptId != null and deptId > 0">
+				AND users.dept_id = #{deptId}	
+			</if>
+			<if test="deptIdList != null and deptIdList.size() > 0">
+				AND users.dept_id IN
+                <foreach collection="deptIdList" item="deptId" open="(" separator="," close=")">
+                    #{deptId}
+                </foreach>
+			</if>
+		</where>
+		ORDER BY
+			course_userplan.user_plan_id,
+			course_userplan_class_detail.userplan_detail_id
+	</select>
+	
+	<!-- 查询学员规划详情 -->
+	<select id="logStudentAttenUserPlanInfo" resultType="io.renren.pojo.log.LogAttendaceClassTeacherVPOJO">
+		select 
+			up.user_plan_id as userPlanId ,
+			up.user_id as userId ,
+			up.is_rep as isRep ,
+			up.is_match as isMatch ,
+			up.status as status ,
+			up.userplan_status as userplanStatus ,
+			up.order_id as orderId ,
+			up.class_id as classId ,
+			up.order_no as orderNo,
+			up.class_type_id as classTypeId,
+			up.commodity_id as commodityId,
+			<!-- 学员手机号码 -->
+			u.mobile as userMobile,
+			<!-- 学员名称 -->
+			u.nick_name as userName,
+			<!-- 部门名称 -->
+			(select sys_dept.name from sys_dept sys_dept where sys_dept.dept_id = u.dept_id) as deptName,
+			<!-- 商品名称 -->
+			(select mgood.name from mall_goods_info mgood where mgood.id = up.commodity_id) as commodityName,
+			<!-- 省份名称 -->
+			(select ma.area_name from mall_area ma where ma.area_id = up.area_id) as areaName,
+			<!-- 班型名称 -->
+			(select ct.classtype_name from mall_class_type ct where ct.classtype_id = up.class_type_id) as classTypeName,
+			<!-- 班级名称 -->
+			mclass.class_name as className,
+			<!-- 层次名称 -->
+			(select mlevel.level_name from mall_level mlevel where mlevel.level_id = up.level_id) as levelName,
+			<!-- 班主任名称 -->
+			(select steacher.nick_name from sys_user steacher where steacher.user_id = mclass.user_id) as teacherName,
+			<!-- 专业 -->
+			mp.profession_name as professionName
+		from course_userplan up 
+			JOIN users u ON(u.user_id = up.user_id)
+			JOIN mall_class mclass ON(mclass.class_id = up.class_id)
+			JOIN mall_profession mp ON(mp.profession_id = up.profession_id)
+			where user_plan_id = #{userplanId}
+	</select>
+	
+	<!-- 实际考勤次数 -->
+	<select id="logStudentAttenClassplanLiveNum" resultType="int">
+		SELECT
+			count(DISTINCT(course_classplan_lives.classplan_live_id))
+		FROM
+			course_classplan_lives AS course_classplan_lives
+		WHERE
+			course_classplan_lives.classplan_id IN 
+			<foreach item="classplanId" collection="classplanIds" open="(" separator="," close=")">
+				#{classplanId}
+			</foreach>
+		AND course_classplan_lives.live_class_type_ids LIKE CONCAT('%',#{classTypeId},'%')
+		AND course_classplan_lives.start_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+		AND course_classplan_lives.dr = 0
+	</select>
+	
+	<!-- 考勤平均值 -->
+	<select id="logStudentAttenAvg" resultType="double">
+		SELECT
+			IFNULL(sum(attend_per),0)
+		FROM
+			log_gensee_watch
+		WHERE
+			business_id IN (
+				SELECT
+					course_classplan_lives.classplan_live_id
+				FROM
+					course_classplan_lives AS course_classplan_lives
+				WHERE
+					course_classplan_lives.classplan_id IN 
+					<foreach item="classplanId" collection="classplanIds" open="(" separator="," close=")">
+						#{classplanId}
+					</foreach>
+				AND course_classplan_lives.start_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+				AND course_classplan_lives.live_class_type_ids LIKE CONCAT('%',#{classTypeId},'%')
+			)
+			AND user_id = #{userId}
+	</select>
+	<!-- 学员第一次开课时间-->
+	<!-- 注:此处没有考虑学员报名时间-->
+	<!--如果需要学员报名时间,例如 某排课已经开课,学员后续开课,则获取订单的创建时间,在该SQL中加入条件-->
+	<select id="logStudentAttenFisrtTime" resultType="Date">
+		SELECT
+			course_classplan_lives.day_time
+		FROM
+			course_classplan_lives AS course_classplan_lives
+		WHERE
+			course_classplan_lives.live_class_type_ids LIKE CONCAT('%', #{classTypeId}, '%')
+		AND course_classplan_lives.classplan_id IN (
+			SELECT DISTINCT
+				course_userplan_class_detail.classplan_id
+			FROM
+				course_userplan_class_detail AS course_userplan_class_detail
+			WHERE
+				course_userplan_class_detail.userplan_detail_id IN (
+					SELECT
+						course_userplan_detail.userplan_detail_id
+					FROM
+						course_userplan_detail AS course_userplan_detail
+					WHERE
+						course_userplan_detail.userplan_id = #{userplanId}
+				)
+			GROUP BY
+				course_userplan_class_detail.classplan_id
+		)
+		ORDER BY
+			start_time ASC
+		LIMIT 1
+	</select>
+	
+	<!-- 考勤报表-按学员统计-出勤详情 classplan_live_id 课程章节 直播时间 出勤时长 出勤率 -->
+	<select id="logStudentAttenDetailClassplanInfo" resultType="io.renren.pojo.log.LogStudentAttenDetailInfo">
+		SELECT
+			course_classplan_lives.classplan_live_id AS classplanLiveId,
+			course_classplan_lives.classplan_live_name AS classplanLiveName,
+			course_classplan_lives.start_time AS startTime,
+			course_classplan_lives.end_time AS endTime,
+			course_classplan_lives.back_id AS backId,
+			mall_live_room.gensee_live_id AS liveId,
+			log_gensee_watch.watch_dur AS watchDur,
+			log_gensee_watch.attend_per AS attendPer
+		FROM
+			course_classplan_lives AS course_classplan_lives
+		LEFT JOIN log_gensee_watch AS log_gensee_watch ON log_gensee_watch.business_id = course_classplan_lives.classplan_live_id
+		LEFT JOIN mall_live_room AS mall_live_room on mall_live_room.live_room_id = course_classplan_lives.liveroom_id
+		AND log_gensee_watch.user_id = #{userId}
+		WHERE
+			<choose>
+				<!-- 筛选条件输入了排课-非必填条件-->
+				<when test="classplanId != null and classplanId.trim() != ''">
+					course_classplan_lives.classplan_id = #{classplanId}
+				</when>
+				<!-- 帅选条件没有排课 -->
+				<otherwise>
+					course_classplan_lives.classplan_id IN (
+						SELECT DISTINCT
+							course_userplan_class_detail.classplan_id
+						FROM
+							course_userplan_class_detail AS course_userplan_class_detail
+						WHERE
+							course_userplan_class_detail.userplan_detail_id IN (
+								SELECT
+									course_userplan_detail.userplan_detail_id
+								FROM
+									course_userplan_detail AS course_userplan_detail
+								WHERE
+									course_userplan_detail.userplan_id = #{userplanId}
+							)
+						AND course_userplan_class_detail.dr = 0
+					)
+				</otherwise>
+			</choose>
+			
+		<!-- 时间范围-必填条件 -->
+		<if test="startTime != null">
+			AND course_classplan_lives.start_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+		</if>
+		<!-- 班型-必填条件 -->
+		<if test="classTypeId != null and classTypeId.trim() != ''">
+			AND course_classplan_lives.live_class_type_ids LIKE CONCAT('%', #{classTypeId}, '%')
+		</if>
+		AND course_classplan_lives.dr = 0
+		ORDER BY
+			course_classplan_lives.start_time ASC
+	</select>
+	
+	<!-- 考勤报表-按学员统计-出勤详情-第一次出勤时间 -->
+	<!-- live_log_detail.join_time AS joinTime -->
+	<select id="logStudentAttenDetailTime" resultType="Long">
+		(
+			SELECT
+				live_log_detail.leave_time AS joinTime
+			FROM
+				live_log_detail AS live_log_detail
+			WHERE
+				live_log_detail.user_id = #{userId}
+			AND live_log_detail.live_id = #{liveId}
+			ORDER BY
+				live_log_detail.join_time ASC
+			LIMIT 1
+		)
+		UNION ALL
+			(
+				SELECT
+					video_log_detail.start_time AS joinTime
+				FROM
+					video_log_detail AS video_log_detail
+				WHERE
+					video_log_detail.user_id = #{userId}
+				AND video_log_detail.video_id = #{videoId}
+				ORDER BY
+					video_log_detail.start_time ASC
+				LIMIT 1
+			)
+		ORDER BY
+			joinTime
+		LIMIT 1
+	</select>
+	
+	<!-- 考勤报表-按学员统计-出勤详情-学员昵称 -->
+	<select id="logStudentAttenDetailUserInfo" resultType="io.renren.pojo.log.LogStudentAttenDetailUserInfoPOJO">
+		SELECT
+			users.nick_name AS userName,
+			users.user_id AS userId,
+			course_userplan.class_type_id AS classtypeId
+		FROM
+			users AS users,
+			course_userplan AS course_userplan
+		WHERE
+			users.user_id = course_userplan.user_id
+		AND course_userplan.user_plan_id = #{userplanId}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 被统计考勤的学员列表和总数查询条件 -->
+	<sql id="base_where">
+   		WHERE
+			userplan_class_detail.classplan_id = #{classplanId} 
+			AND userplan_class_detail.dr = 0
+			AND userplan.dr = 0
+		<if test="areaId != null and areaId > 0">
+			AND userplan.area_id = #{areaId}
+		</if>
+		<if test="professionId != null and professionId > 0">
+			AND userplan.profession_id = #{professionId}
+		</if>
+		<if test="classTypeId != null and classTypeId > 0">
+			AND userplan.class_type_id = #{classTypeId}
+		</if>
+		<if test="classId != null and classId > 0">
+			AND userplan.class_id = #{classId}
+		</if>
+		<if test="classTeacherId != null and classTeacherId > 0">
+			AND mall_class.user_id = #{classTeacherId}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			AND users.mobile = #{mobile}
+		</if>		
+    </sql>
+	<!-- 被统计考勤的学员总数 -->
+	<select id="queryAttendanceTotal" resultType="int">
+		SELECT 
+			count(1)
+		FROM
+			course_userplan_class_detail AS userplan_class_detail <!-- 学习计划子表 -->
+			JOIN course_userplan_detail AS userplan_detail ON userplan_detail.userplan_detail_id = userplan_class_detail.userplan_detail_id <!-- 学员规划表子表 -->
+			JOIN course_userplan AS userplan ON userplan.user_plan_id = userplan_detail.userplan_id <!-- 学员规划表 -->
+			JOIN users AS users ON users.user_id = userplan.user_id  <!-- 学员表 -->
+			JOIN mall_class AS mall_class ON mall_class.class_id = userplan.class_id <!-- 班级表 -->
+			<include refid="base_where"/>
+	</select>
+	<!-- 被统计考勤的学员列表 -->
+	<select id="queryUserList" resultType="map">
+		SELECT
+			(select mall_order.pay_time from mall_order AS mall_order where mall_order.order_id = userplan.order_id) AS registrationTime ,<!-- 报名时间 -->
+			(select mall_area.area_name from mall_area AS mall_area where mall_area.area_id = userplan.area_id) AS areaName ,<!-- 省份 -->
+		  	userplan.user_id AS userId ,<!-- 学员id -->
+			users.nick_name AS userName,<!-- 学员名称 -->
+			users.mobile AS mobile,<!-- 学员账号 -->
+			(select mall_level.level_name from mall_level AS mall_level where mall_level.level_id = userplan.level_id) AS levelName ,<!-- 学员层次 -->
+			userplan_class_detail.timestamp AS TIMESTAMP ,<!-- 上课时间 -->
+			mall_class.class_name AS className ,<!-- 班级名称 -->
+			(select sys_user.nick_name from sys_user AS sys_user where sys_user.user_id = mall_class.user_id) AS teacherName ,<!-- 班主任 -->
+			userplan.class_type_id AS classTypeId,<!-- 班型 -->
+			userplan.user_plan_id AS userPlanId ,<!-- 学员规划id -->
+			(select mall_class_type.classtype_name from mall_class_type AS mall_class_type where mall_class_type.classtype_id = userplan.class_type_id) AS classTypeName ,<!-- 班型名称 -->
+			(select mall_profession.profession_name from mall_profession as mall_profession where mall_profession.profession_id = userplan.profession_id) as professionName ,<!-- 报读专业 -->
+			(select mall_goods_info.name from mall_goods_info as mall_goods_info where mall_goods_info.id = userplan.commodity_id) as commodityName ,<!-- 购买商品 -->
+			userplan_class_detail.classplan_id AS classplanId ,<!-- 排课计划id -->
+			(select course_classplan.classplan_name from course_classplan as course_classplan where course_classplan.classplan_id = userplan_class_detail.classplan_id) as classplanName <!-- 排课计划 -->
+		FROM
+			course_userplan_class_detail AS userplan_class_detail <!-- 学习计划子表 -->
+			JOIN course_userplan_detail AS userplan_detail ON userplan_detail.userplan_detail_id = userplan_class_detail.userplan_detail_id <!-- 学员规划表子表 -->
+			JOIN course_userplan AS userplan ON userplan.user_plan_id = userplan_detail.userplan_id <!-- 学员规划表 -->
+			JOIN users AS users ON users.user_id = userplan.user_id  <!-- 学员表 -->
+			JOIN mall_class AS mall_class ON mall_class.class_id = userplan.class_id <!-- 班级表 -->
+			<include refid="base_where"/>
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+	</select>
+	<!-- 单个学员在某个排课下的直播课次ids和录播ids -->
+	<select id="queryLivesAndVideosList" resultType="map">
+		SELECT 
+			course_classplan_lives.classplan_live_id AS classplanLiveId,
+			course_classplan_lives.video_id AS videoId
+			
+		FROM
+			course_classplan_lives AS course_classplan_lives
+		WHERE
+			course_classplan_lives.classplan_id = #{classplanId}
+			AND course_classplan_lives.live_class_type_ids LIKE concat('%',#{classTypeId},'%')
+			AND course_classplan_lives.start_time &lt; #{dateTime} <!--  小于 当前时间 -->
+			AND course_classplan_lives.dr = 0
+	</select>
+	<!-- 该排课下的直播课次的录播ids -->
+	<select id="queryVideoIdsList" resultType="String"  parameterType="Map">
+		SELECT 
+			course_classplan_lives.video_id
+		FROM
+			course_classplan_lives AS course_classplan_lives
+		WHERE
+			course_classplan_lives.classplan_id = #{classplanId}
+			AND course_classplan_lives.live_class_type_ids LIKE concat('%',#{classTypeId},'%')
+			AND course_classplan_lives.start_time &lt; #{dateTime} <!--  小于 当前时间 -->
+			AND course_classplan_lives.dr = 0
+	</select>
+	<!-- 直播出勤 -->
+	<select id="queryLiveLog" resultType="int">
+		<!-- SELECT
+			COUNT(1)
+		FROM
+			live_log AS live_log
+		WHERE
+			live_log.user_id = #{userId}
+		AND live_log.business_id IN (
+			SELECT
+				course_classplan_lives.classplan_live_id
+			FROM
+				course_classplan_lives AS course_classplan_lives
+			WHERE
+				course_classplan_lives.classplan_live_id = #{classplanLiveId}
+			AND course_classplan_lives.live_class_type_ids LIKE concat('%',#{classTypeId},'%')
+		)
+		AND live_log.attend_30 = 1 -->
+		<!-- ==================================== -->
+		SELECT 
+			COUNT(1) 
+		FROM 
+			log_watch as log_watch 
+		WHERE 
+			log_watch.user_id = #{userId} 
+			AND log_watch.business_id = #{classplanLiveId}
+			AND log_watch.attend_30 = 1
+			AND log_watch.log_type = 0
+	</select>
+	<!-- 录播出勤 -->
+	<select id="queryVideoLog" resultType="int">
+		<!-- SELECT
+			COUNT(1)
+		FROM
+			video_log AS video_log
+		WHERE
+			video_log.user_id = #{userId}
+		AND video_log.video_id IN (
+			SELECT
+				course_classplan_lives.video_id
+			FROM
+				course_classplan_lives AS course_classplan_lives
+			WHERE
+				course_classplan_lives.video_id = #{videoId}
+			AND course_classplan_lives.classplan_live_id = #{classplanLiveId}	
+			AND course_classplan_lives.live_class_type_ids LIKE concat('%',#{classTypeId},'%')
+		)
+		AND video_log.attend_30 = 1 -->
+		<!-- ======================== -->
+		SELECT 
+			COUNT(1) 
+		FROM 
+			log_watch as log_watch 
+		WHERE 
+			log_watch.user_id = #{userId} 
+			AND log_watch.business_id = #{classplanLiveId}
+			AND log_watch.attend_30 = 1
+			AND log_watch.log_type = 1
+	</select>
+	<!-- 单个学员对应的班型 -->
+	<select id="queryClassTypeId" resultType="long"  parameterType="Map">
+		SELECT
+			userplan.class_type_id
+		FROM 
+			course_userplan AS userplan
+		WHERE
+			userplan.user_id = #{userId}
+			AND userplan.user_plan_id = #{userPlanId}
+			AND userplan.dr = 0
+	</select>
+	<!-- 考勤详情 -->
+	<select id="queryDetailsList" resultType="map">
+		SELECT 
+			(select courses.course_name from courses AS courses where courses.course_id = classplan_lives.course_id) AS courseName ,
+			classplan_lives.classplan_live_name AS classplanLiveName ,
+			classplan_lives.start_time AS startTime ,
+			classplan_lives.classplan_live_id AS classplanLiveId ,
+			classplan_lives.video_id AS videoId ,
+			(select sys_user.nick_name from sys_user AS sys_user where sys_user.user_id = classplan_lives.teacher_id) AS teacher
+		FROM 
+			course_classplan_lives AS classplan_lives
+		WHERE
+			classplan_lives.classplan_id = #{classplanId}
+			AND classplan_lives.live_class_type_ids LIKE concat('%',#{classTypeId},'%')
+			AND classplan_lives.start_time &lt; #{dateTime} <!--  小于 当前时间 -->
+			AND classplan_lives.dr = 0
+			ORDER BY classplan_lives.start_time desc
+	</select>
+	<!-- 考勤详情统计 -->
+	<select id="queryDetailsTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM 
+			course_classplan_lives as classplan_lives
+		WHERE
+			classplan_lives.classplan_id = #{classplanId}
+			AND classplan_lives.live_class_type_ids LIKE concat('%',#{classTypeId},'%')
+			AND classplan_lives.start_time &lt; #{dateTime} <!--  小于 当前时间 -->
+			AND classplan_lives.dr = 0
+	</select>
+	
+	<!-- 学员信息 -->
+	<select id="queryUserInfoList" resultType="map">
+		SELECT
+			(select mall_order.pay_time from mall_order AS mall_order where mall_order.order_id = userplan.order_id) AS registrationTime ,<!-- 报名时间 -->
+			(select mall_area.area_name from mall_area AS mall_area where mall_area.area_id = userplan.area_id) AS areaName ,<!-- 省份 -->
+		  	users.nick_name AS userName ,<!-- 学员名称 -->
+			users.mobile AS mobile,<!-- 学员账号 -->
+			(select mall_level.level_name from mall_level AS mall_level where mall_level.level_id = userplan.level_id) AS levelName ,<!-- 学员层次 -->
+			(select sys_user.nick_name from sys_user AS sys_user where sys_user.user_id = mall_class.user_id) AS teacherName ,<!-- 班主任 -->
+			(select mall_class_type.classtype_name from mall_class_type AS mall_class_type where mall_class_type.classtype_id = userplan.class_type_id) AS classTypeName ,<!-- 班型名称 -->
+			(select mall_profession.profession_name from mall_profession AS mall_profession where mall_profession.profession_id = userplan.profession_id) AS professionName <!-- 报读专业 -->
+		FROM 
+			course_userplan AS userplan
+			JOIN users AS users ON users.user_id = userplan.user_id
+			JOIN mall_class AS mall_class ON mall_class.class_id = userplan.class_id
+		WHERE 
+			userplan.user_plan_id = #{userPlanId}
+			AND userplan.dr = 0
+	</select>
+	<!-- 某个课次直播是否出勤 -->
+	<select id="isLiveAttendance" resultType="int">
+		SELECT 
+			COUNT(1) 
+		FROM 
+			log_watch as log_watch 
+		WHERE 
+			log_watch.user_id = #{userId} 
+			AND log_watch.business_id = #{classplanLiveId}
+			AND log_watch.attend_30 = 1
+			AND log_watch.log_type = 0
+	</select>
+	<!-- 某个课次录播是否出勤 -->
+	<select id="isBackAttendance" resultType="int">
+		SELECT 
+			COUNT(1) 
+		FROM 
+			log_watch as log_watch 
+		WHERE 
+			log_watch.user_id = #{userId} 
+			AND log_watch.business_id = #{classplanLiveId}
+			AND log_watch.attend_30 = 1
+			AND log_watch.log_type = 1
+	</select>
+
+    <!--查看学员观看直播课程日志-->
+    <select id="queryLogStudentAttenLiveLogDetails" resultType="io.renren.pojo.log.LogStudentAttentLiveLogDetails">
+        SELECT
+        users.nick_name as userName,
+        users.mobile as mobile,
+        cll.classplan_live_name as courseName,
+        sysuser.nick_name as teacherName,
+        cll.start_time as startTime,
+        cll.end_time as endTime,
+        log.business_id as devices,
+        log.type as type,
+        log.create_time as inTime
+        FROM `users` as users
+        LEFT JOIN course_userplan as cu on cu.user_id = users.user_id
+        LEFT JOIN lc_log as log ON users.user_id = log.user_id
+        LEFT JOIN course_classplan_lives as cll on log.`data` = cll.classplan_live_id
+        LEFT JOIN sys_user as sysuser ON cll.teacher_id = sysuser.user_id
+        where cu.user_plan_id = #{userplanId}
+        and cll.start_time &gt;= #{startDate} and start_time &lt;= #{endDate}
+        ORDER BY cll.day_time
+    </select>
+</mapper>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallClassDao">
+	
+	<!-- 关联产品表字段 -->
+	<sql id="column_sys_product">
+		(select sys_product.product_name from sys_product AS sys_product where sys_product.product_id = mall_class.product_id) as productName
+	</sql>
+	<!-- 关联产品表字段 -->
+	<sql id="column_sys_dept">
+		(select sys_dept.name from sys_dept AS sys_dept where sys_dept.dept_id = mall_class.dept_id) as deptName
+	</sql>
+	<!-- 关联省份 -->
+	<sql id="column_area_name">
+		(select mall_area.area_name from mall_area AS mall_area where mall_area.area_id = mall_class.area_id) as areaName
+	</sql>
+	<!-- 关联专业 -->
+	<sql id="column_profession_name">
+		(select mall_profession.profession_name from mall_profession AS mall_profession where mall_profession.profession_id = mall_class.profession_id) as professionName
+	</sql>
+	<!-- 关联班主任 -->
+	<sql id="column_teacher_name">
+		sys_user.nick_name as classTeacherName
+	</sql>
+	<!-- 关联班主任 -->
+	<sql id="column_level_name">
+		(select mall_level.level_name from mall_level AS mall_level where mall_level.level_id = mall_class.level_id) as levelName
+	</sql>
+			
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		mall_class.class_id AS classId , 
+		mall_class.school_id AS schoolId ,
+		mall_class.dr AS dr , 
+		mall_class.area_id AS areaId ,
+		mall_class.profession_id AS professionId , 
+		mall_class.level_id AS levelId , 
+		mall_class.user_id AS userId , 
+		mall_class.class_name AS className ,
+		mall_class.status AS status ,
+		mall_class.default_class AS defaultClass , 
+		mall_class.remake AS remake , 
+		mall_class.creator AS creator ,
+		mall_class.creation_time AS creationTime ,
+		mall_class.modifier AS modifier , 
+		mall_class.modified_time AS modifiedTime,
+		mall_class.product_id AS productId,
+		mall_class.dept_id AS deptId
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from mall_class as mall_class
+    	 left join sys_user as sys_user on sys_user.user_id = mall_class.user_id
+	</sql>
+	
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		where mall_class.dr = 0
+		<!-- 班级名称 -->
+	    <if test="className != null and className.trim() != ''">
+			and mall_class.`class_name` like concat('%',#{className},'%') 
+		</if>
+		<!-- 层次 -->
+	    <if test="levelId != null and levelId > 0">
+			and mall_class.level_id = #{levelId} 
+		</if>
+		<!-- 省份 -->
+	    <if test="areaId != null and areaId > 0">
+			and mall_class.area_id = #{areaId} 
+		</if>
+		<!-- 专业 -->
+	    <if test="professionId != null and professionId > 0">
+			and mall_class.profession_id = #{professionId} 
+		</if>
+		<!-- 班主任 -->
+	    <if test="userId != null and userId > 0">
+			and mall_class.user_id = #{userId} 
+		</if>
+		<!-- 班主任名称 -->
+	    <if test="teacherName != null and teacherName.trim() != ''">
+			and sys_user.nick_name like concat('%', #{teacherName},'%')
+		</if>
+		<!--产品线-->
+	    <if test="productId != null and productId > 0">
+			and mall_class.product_id = #{productId} 
+		</if>
+		<!--产品线-->
+	    <if test="deptId != null">
+			and mall_class.dept_id = #{deptId} 
+		</if>
+	</sql>
+	<sql id="base_order">
+		order by mall_class.default_class desc,mall_class.class_id desc
+	</sql>
+	
+	
+	
+	<select id="findClassList" resultType="io.renren.entity.MallClassEntity">
+		select * from mall_class 
+		order by default_class desc,level_id asc
+	</select>
+	
+	<select id="queryObject" resultType="io.renren.entity.MallClassEntity">
+		select * from mall_class where class_id = #{classId} and dr = 0
+	</select>
+	
+	<select id="queryClassId" resultType="io.renren.entity.MallClassEntity">
+		SELECT
+			class_id  
+		FROM  
+			mall_class
+		WHERE 
+			area_id=#{areaId} AND profession_id=#{professionId} AND level_id=#{levelId} AND default_class=1
+			ORDER BY creation_time DESC
+			LIMIT 1
+	</select>
+	
+	<select id="queryPojoObject" resultType="io.renren.pojo.Class.ClassPOJO">
+		select 
+			<include refid="base_column"/>
+			,
+			<include refid="column_sys_product"/>
+			,
+			<include refid="column_sys_dept"/>
+			,
+			<include refid="column_area_name"/>
+			,
+			<include refid="column_profession_name"/>
+			,
+			<include refid="column_teacher_name"/>
+			,
+			<include refid="column_level_name"/>
+			<include refid="base_from"/>
+		where mall_class.class_id = #{classId} 
+		and mall_class.dr = 0
+		LIMIT 1
+	</select>
+	
+	<select id="queryList" resultType="io.renren.entity.MallClassEntity">
+		select 
+		<include refid="base_column"/>
+		,
+		<include refid="column_sys_product"/>
+		,
+		<include refid="column_sys_dept"/>
+		,
+		<include refid="column_area_name"/>
+		,
+		<include refid="column_profession_name"/>
+		,
+		<include refid="column_teacher_name"/>
+		,
+		<include refid="column_level_name"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryPojoList" resultType="io.renren.pojo.Class.ClassPOJO">
+		select 
+		<include refid="base_column"/>
+		,
+		<include refid="column_sys_product"/>
+		,
+		<include refid="column_area_name"/>
+		,
+		<include refid="column_sys_dept"/>
+			,
+		<include refid="column_profession_name"/>
+		,
+		<include refid="column_teacher_name"/>
+		,
+		<include refid="column_level_name"/>
+		<include refid="base_from"/>
+
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	 <select id="checkExist" resultType="int">
+		select count(1) 
+		from mall_class mall_class
+		where mall_class.class_id=#{classId}
+	</select>
+	<insert id="save" parameterType="io.renren.entity.MallClassEntity" useGeneratedKeys="true" keyProperty="classId">
+		insert into mall_class
+		(
+			`school_id`,
+			`dr`, 
+			`area_id`, 
+			`profession_id`, 
+			`level_id`, 
+			`user_id`, 
+			`class_name`, 
+			`status`, 
+			`default_class`, 
+			`remake`, 
+			`creator`, 
+			`creation_time`, 
+			`modifier`, 
+			`modified_time`,
+			`product_id`,
+			`dept_id`
+			
+		)
+		values
+		(
+			#{schoolId},
+			#{dr}, 
+			#{areaId}, 
+			#{professionId}, 
+			#{levelId}, 
+			#{userId}, 
+			#{className}, 
+			#{status}, 
+			#{defaultClass}, 
+			#{remake}, 
+			#{creator}, 
+			#{creationTime}, 
+			#{modifier}, 
+			#{modifiedTime},
+			#{productId},
+			#{deptId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.MallClassEntity">
+		update mall_class 
+		<set>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="areaId != null">`area_id` = #{areaId}, </if>
+			<if test="professionId != null">`profession_id` = #{professionId}, </if>
+			<if test="levelId != null">`level_id` = #{levelId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="className != null">`class_name` = #{className}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="defaultClass != null">`default_class` = #{defaultClass}, </if>
+			<if test="remake != null">`remake` = #{remake}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime},</if>
+			<if test="productId != null">`product_id` = #{productId},</if>
+			<if test="deptId != null">`dept_id` = #{deptId}</if>
+		</set>
+		where class_id = #{classId}
+	</update>
+	<!-- 取消原来的默认班级 -->
+	<update id="removeOtherDefaultClass" parameterType="map">
+		update mall_class 
+		<set>
+			default_class = 0
+		</set>
+		WHERE profession_id = #{professionId}
+		AND area_id = #{areaId}
+		AND level_id = #{levelId}
+		<if test="classId != null">
+			AND class_id &lt;&gt;  #{classId}
+			
+		</if>
+	</update>
+	<!-- 取消原来的默认班级  非自考-->
+	<update id="removeOtherDefaultClassNotZK" parameterType="map">
+		update mall_class 
+		<set>
+			default_class = 0
+		</set>
+		WHERE user_id = #{userId}
+		AND product_id in(2,3,6,7)
+		<if test="classId != null">
+			AND class_id &lt;&gt;  #{classId}
+			
+		</if>
+	</update>
+	<!-- 设置的默认班级 -->
+	<update id="updateDefaultClass" parameterType="map">
+		update mall_class 
+		<set>
+			default_class = 1
+		</set>
+		WHERE class_id = #{classId}
+	</update>
+	<!-- 设置的默认班级  非自考-->
+	<update id="updateDefaultClassNotZK" parameterType="map">
+		update mall_class 
+		<set>
+			default_class = 1
+		</set>
+		WHERE class_id = #{classId}
+	</update>
+	
+	<update id="updateBatch">
+	   update mall_class set status = #{status} where class_id in
+	   <foreach item="classId" collection="list" open="(" separator="," close=")">
+	   	#{classId}
+		</foreach>
+	</update>
+	<delete id="delete">
+		delete from mall_class where class_id = #{value}
+	</delete>
+	
+	<update id="deleteBatch">
+		update mall_class set dr = 1 where class_id in 
+		<foreach item="classId" collection="array" open="(" separator="," close=")">
+			#{classId}
+		</foreach>
+	</update>
+	
+	<select id="queryClassList" resultType="io.renren.entity.MallClassEntity">
+		SELECT
+			class_id  
+		FROM  
+			mall_class
+		WHERE 
+			default_class=1
+			<if test="areaId != null">
+				AND area_id=#{areaId}
+			</if>
+			<if test="professionId != null">
+				AND profession_id=#{professionId}
+			</if>
+			<if test="levelId != null">
+				AND level_id=#{levelId}
+			</if>
+			<!-- <if test="deptId != null">
+				AND dept_id=#{deptId}
+			</if> -->
+			order by creation_time desc 
+	</select>
+</mapper>

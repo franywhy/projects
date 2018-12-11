@@ -1,0 +1,53 @@
+<form name="inputForm">
+    <table class="inputForm" cellpadding="10">
+        <tr>
+            <td style="width:120px;">文章标题</td>
+            <td>
+                <input name="_id" type="hidden" value=""/>
+                <input class="input" type="text" name="article_title" value="" data-options="required:true" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">类型</td>
+            <td>
+                <select name="article_type" class="input" style="width:200px" data-options="required:true" required>
+                    <option value="0" selected>企业动态</option>
+                    <option value="1" >企业文化</option>
+                    <option value="2" >总裁语录</option>
+                    <option value="3" >2017年会</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章作者</td>
+            <td>
+                <input class="input" type="text" name="article_author" value="" data-options="required:true"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章标题图片</td>
+            <td>
+                <input class="input" type="text" name="article_pic" id="article_pic"/>
+                <input type="button" class="d-button" value="选择图片" onClick="Izb.ui.upload('article_pic', 'Posters');" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章内容URL</td>
+            <td>
+                <input class="input" type="text" name="article_url" readonly value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">简介</td>
+            <td>
+                <input class="input" type="textarea" name="article_info" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:120px;">文章详情</td>
+            <td>
+                <textarea name="article_html"  id="article_html" style="width:1000px;height:400px" value=""></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

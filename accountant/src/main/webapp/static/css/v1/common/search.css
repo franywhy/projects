@@ -1,0 +1,132 @@
+/*共用部分  min格式                  2015-8-15*/
+/*
+
+  @author : huangxuejie ;
+  @date : 2015-8-15
+  @搜索滑动框样式
+ */
+
+/*@utf-8;*/
+.header{
+	z-index:10;
+}
+.header .form-search{
+  width:350px;
+  right:-19px;
+  top:35px;
+  height:45px;
+  line-height:45px;
+  background-color:#ffffff;
+  z-index:9999;
+  display:none;
+}
+.header .form-search .search-con{
+  width:350px;
+  height:auto;
+}
+.header .form-search .search-con .search-input{
+  width:100%;
+  height:45px;
+  line-height:45px;
+  position:relative;
+  border-bottom:1px solid #cdeaf5;
+}
+.header .form-search .search-con .search-input input{
+  width:315px;
+  padding-left: 35px;
+  height:45px;
+  border:0;
+  color:#555555;
+  font-size:14px;
+   background:none;
+}
+
+.header .form-search .search-con .search-input a.search-btn-a{
+  display:block;
+  width:35px;
+  height:45px;
+  background: url(../../images/icon/search.png) no-repeat center center;
+  position:absolute;
+  left:0;
+  top:0;
+}
+
+.header .form-search .search-con .search-input a.search-btn-a:hover{
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
+
+.header .form-search .search-con .search-input input::-webkit-input-placeholder {
+  color: #cccccc;
+  opacity: 1;
+}
+
+.header .form-search .search-con .search-input input::-moz-placeholder {
+  color: #cccccc;
+  opacity: 1;
+}
+
+.header .form-search .search-con .search-input input:-ms-input-placeholder {
+  color: #cccccc;
+  opacity: 1;
+}
+.header .form-search .search-con .search-input input::placeholder {
+  color: #cccccc;
+  opacity: 1;
+}
+.header .form-search .search-con .slideDown-list{
+  width:100%;
+  background-color:#ffffff;
+  border:1px solid #25b6ed;
+  border-top:0;
+  margin-left: -1px;
+  overflow:hidden;
+}
+.header .form-search .search-con .slideDown-list dl{
+  padding: 20px 15px;
+}
+.header .form-search .search-con .slideDown-list dl dd{
+  height:30px;
+  font-size:14px;
+  color:#666666;
+}
+.header .form-search .search-con .slideDown-list dl dd a{
+  display:block;
+  height:30px;
+  line-height:30px;
+  overflow:hidden;
+  color:#7f7f7f;
+  padding-left:25px;
+}
+
+.header .form-search .search-con .slideDown-list dl dd a span{
+  float: right;
+  font-size:12px;
+  padding-right:10px;
+  color:#cccccc;
+}
+.header .form-search .search-con .slideDown-list dl dd a:hover{
+  background-color:#f5f5f5;
+}
+.header .form-search .search-con .slideDown-list dl dt{
+  height:22px;
+  line-height:22px;
+  padding-bottom:5px;
+  padding-left:15px;
+  font-size:14px;
+  color:#777777;
+}
+.header .form-search .search-con span.absolute{
+  right:0;
+  font-size:18px;
+  font-family:Arial;
+  color:#ffffff;
+  top:5px;
+  display:block;
+  width:35px;
+  height:35px;
+  line-height:35px;
+  text-align:center;
+  cursor:pointer;
+  background: url(../../images/icon/off_clcse.png) no-repeat center center;
+}

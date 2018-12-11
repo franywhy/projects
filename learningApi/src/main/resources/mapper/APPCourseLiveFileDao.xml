@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.learningapi.dao.APPCourseLiveFileDao">
+    <select id="getReviewFileList" parameterType="String" resultType="map">
+        select c.review_url as reviewUrl,c.review_name as reviewName
+        from course_classplan_lives as c
+        <if test="classplanLiveId != null and classplanLiveId != '' ">WHERE `classplan_live_id`=#{classplanLiveId}</if>
+    </select>
+
+    <select id="getPrepareFileList" parameterType="String" resultType="map">
+        select c.prepare_url as prepareUrl,c.prepare_name as prepareName
+        from course_classplan_lives as c
+        <if test="classplanLiveId != null and classplanLiveId != '' ">WHERE `classplan_live_id`=#{classplanLiveId}</if>
+    </select>
+
+    <select id="getCoursewareFileList" parameterType="String" resultType="map">
+        select c.courseware_url as coursewareUrl,c.courseware_name as coursewareName
+        from course_classplan_lives as c
+        <if test="classplanLiveId != null and classplanLiveId != '' ">WHERE `classplan_live_id`=#{classplanLiveId}</if>
+    </select>
+
+    <select id="getFileList" parameterType="String" resultType="map">
+        select c.file_url as fileUrl,c.file_name as fileName
+        from course_classplan_lives as c
+        <if test="classplanLiveId != null and classplanLiveId != '' ">WHERE `classplan_live_id`=#{classplanLiveId}</if>
+    </select>
+</mapper>

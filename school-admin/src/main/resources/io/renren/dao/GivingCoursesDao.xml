@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.GivingCoursesDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		giving_courses.id AS id,
+		giving_courses.create_person AS createPerson, 
+		giving_courses.create_time AS createTime,
+		giving_courses.modify_person AS modifyPerson ,
+		giving_courses.modify_time AS modifyTime ,
+		giving_courses.mall_goods_id AS mallGoodsId ,
+		giving_courses.mall_goods_name AS mallGoodsName ,
+		giving_courses.nc_commodity_id AS ncCommodityId ,
+		giving_courses.nc_commodity_name AS ncCommodityName ,
+		giving_courses.product_id AS productId ,
+		giving_courses.dr AS dr ,
+		giving_courses.remark AS remark,
+		giving_courses.giving_type givingType
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE giving_courses.dr=0</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM giving_courses AS giving_courses
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.GivingCoursesEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.GivingCoursesEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<!-- <include refid="base_where"/> -->
+		
+			WHERE 1=1
+			<if test="hasDr == null">
+			and  giving_courses.dr=0
+			</if>
+			 
+		<if test="ncCommodityId != null">
+			and nc_commodity_id = #{ncCommodityId} 
+		</if>
+		 
+		 
+		<if test="mallGoodsId != null">
+			and mall_goods_id = #{mallGoodsId} 
+		</if>
+		<if test="productId != null">
+			and product_Id = #{productId} 
+		</if>
+		<if test="givingType != null"><!-- 增加过滤类型来取得指定类型的赠送 -->
+			and giving_type = #{givingType} 
+		</if>
+
+	    <if test="givingTypeList != null"><!-- 增加过滤类型来取得指定类型的赠送 -->
+
+
+		    AND giving_type IN
+		   <foreach item="givingType" collection="givingTypeList" open="("
+			separator="," close=")">
+			#{givingType}
+		   </foreach>
+	   </if>
+		
+		
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		<include refid="base_order"/>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="ncCommodityId != null">
+			and nc_commodity_id = #{ncCommodityId} 
+		</if>
+		<if test="mallGoodsId != null">
+			and mall_goods_id = #{mallGoodsId} 
+		</if>
+		<if test="productId != null">
+			and product_Id = #{productId} 
+		</if>
+		<if test="givingType != null"><!-- 增加过滤类型来取得指定类型的赠送 -->
+			and giving_type = #{givingType} 
+		</if>
+
+	    <if test="givingTypeList != null"><!-- 增加过滤类型来取得指定类型的赠送 -->
+
+
+		    AND giving_type IN
+		   <foreach item="givingType" collection="givingTypeList" open="("
+			separator="," close=")">
+			#{givingType}
+		   </foreach>
+	   </if>
+		
+	</select>
+	
+	<!-- 自定义查询 -->
+	<select id="queryPojoList" resultType="io.renren.pojo.GivingCoursesPOJO">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<!-- <include refid="base_where"/> -->
+		
+		
+			WHERE 1=1
+			<if test="hasDr == null">
+			and  giving_courses.dr=0
+			</if>
+		<if test="id != null">
+			and id = #{id} 
+		</if>
+		<if test="ncCommodityId != null">
+			and nc_commodity_id = #{ncCommodityId} 
+		</if>
+		<if test="mallGoodsId != null">
+			and mall_goods_id = #{mallGoodsId} 
+		</if>
+		<if test="productId != null">
+			and product_Id = #{productId} 
+		</if>
+		<if test="givingType != null"><!-- 增加过滤类型来取得指定类型的赠送 -->
+			and giving_type = #{givingType} 
+		</if>
+
+	    <if test="givingTypeList != null"><!-- 增加过滤类型来取得指定类型的赠送 -->
+
+
+		    AND giving_type IN
+		   <foreach item="givingType" collection="givingTypeList" open="("
+			separator="," close=")">
+			#{givingType}
+		   </foreach>
+	   </if>
+		
+		
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.GivingCoursesEntity">
+	insert into giving_courses
+	(`id`, `create_person`, `create_time`, `modify_person`, `modify_time`,
+	`mall_goods_id`, `mall_goods_name`, `nc_commodity_id`,
+	`nc_commodity_name`, `product_id`,`dr`,`remark`,`giving_type`)
+	values
+	(#{id}, #{createPerson}, #{createTime}, #{modifyPerson}, #{modifyTime},
+	#{mallGoodsId}, #{mallGoodsName}, #{ncCommodityId}, #{ncCommodityName},
+	#{productId},0, #{remark},#{givingType})
+</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.GivingCoursesEntity">
+		update giving_courses 
+		<set>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="mallGoodsId != null">`mall_goods_id` = #{mallGoodsId}, </if>
+			<if test="mallGoodsName != null">`mall_goods_name` = #{mallGoodsName}, </if>
+			<if test="ncCommodityId != null">`nc_commodity_id` = #{ncCommodityId}, </if>
+			<if test="ncCommodityName != null">`nc_commodity_name` = #{ncCommodityName}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="remark != null">`remark` = #{remark},</if>
+			<if test="givingType != null">`giving_type` = #{givingType}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.GivingCoursesEntity">
+		UPDATE giving_courses 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.GivingCoursesEntity">
+		UPDATE giving_courses 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="Chrome=1,IE=edge" />
+    <link rel="dns-prefetch" href="@adminDomain@" />
+    <link rel="dns-prefetch" href="@baseDomain@" />
+    <link rel="dns-prefetch" href="@appDomain@" />
+    <title>爱主播秀场 - 管理后台</title>
+    <link rel="stylesheet" href="@baseDomain@/base/styles/base.css" />
+    <link rel="stylesheet" href="@baseDomain@/base/scripts/ui/artDialog/skins/green.css" />
+    <link rel="stylesheet" href="/styles/manage.css" />
+    <script src="/scripts/seed.js" data-page="main" data-version="2.0.0"></script>
+</head>
+
+<body>
+    <div id="header">
+        <div class="logo"></div>
+        <div id="hi">Hi, izhubo</div>
+        <div id="sysMsg"></div>
+    </div>
+    <div id="content">
+        <div id="aside"></div>
+        <div id="main">
+            <div id="appHeader"></div>
+            <div id="appContent"></div>
+        </div>
+    </div>
+    <div id="tips"></div>
+    <div class="scripts">
+        <script src="@baseDomain@/base/scripts/jquery.js"></script>
+        
+        <script src="@baseDomain@/base/scripts/util/standard.js"></script>
+        <script src="@baseDomain@/base/scripts/util/oo.js"></script>
+        <script src="@baseDomain@/base/scripts/util/util.js"></script>
+        <script src="@baseDomain@/base/scripts/util/baiduTemplate.js"></script>
+        <script src="@baseDomain@/base/scripts/util/query.js"></script>
+        <script src="@baseDomain@/base/scripts/util/history.js"></script>
+        <script src="@baseDomain@/base/scripts/util/json2.js"></script>
+        <script src="@baseDomain@/base/scripts/util/cookie.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/pager.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/tablesorter.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/tablesorter.js"></script>
+        <script src="@baseDomain@/base/scripts/util/validate.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/artDialog/jquery.artDialog.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/My97DatePicker/WdatePicker.js"></script>
+        <script src="@baseDomain@/base/scripts/ui/uploadify/uploadify.js"></script>
+        
+        <script src="@baseDomain@/pro-core/1.1.0/core.js"></script>
+        <script src="/scripts/ui.js"></script>
+        <script src="/scripts/common.js"></script>
+        <script src="/scripts/user.js"></script>
+        <script src="/scripts/controller.js"></script>
+        <script src="/scripts/module.js"></script>
+        <script src="/scripts/main.js"></script>
+        <script>
+        $(function() {
+            Izb.user.ready(function() {
+                Izb.main.init();
+            });
+            Izb.user.init();
+        });
+        </script>
+    </div>
+</body>
+
+</html>

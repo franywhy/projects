@@ -1,0 +1,23 @@
+<form name="inputForm">
+    <table width="100%">
+        <tr>
+            <td align="right" style="width:100px;">版本号</td>
+            <td>
+                <input type="text" class="input" id="j-download-version"  name="version" value="" data-options="required:true" style="width:200px;" />
+            </td>
+        </tr>
+         <tr>
+            <td align="right">下载地址</td>
+            <td>
+                <input type="text" class="input" name="down_url" id="j-download-url" value="" data-options="required:true" style="width:200px;" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right"></td>
+            <td>
+    <input type="button" class="d-button d-state-highlight" value="保存" onclick="Izb.controller.pc.save();"/>
+
+            </td>
+        </tr>
+    </table>
+</form>

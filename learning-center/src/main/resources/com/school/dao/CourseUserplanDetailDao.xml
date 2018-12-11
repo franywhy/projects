@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.dao.CourseUserplanDetailDao">
+
+    <select id="queryList" resultType="com.school.entity.CourseUserplanDetailEntity">
+        select SQL_CACHE userplan_detail_id,course_id
+        from course_userplan_detail
+        where userplan_id = #{userPlanId}
+        and   dr = #{dr}
+        and   `status` = #{status}
+        <if test="isSubstitute != null">and `is_substitute` = #{isSubstitute} </if>
+        <if test="isSubstituted != null"> and `is_substituted` = #{isSubstituted} </if>
+        <if test="isSuitable != null"> and `is_suitable` = #{isSuitable} </if>
+    </select>
+
+</mapper>

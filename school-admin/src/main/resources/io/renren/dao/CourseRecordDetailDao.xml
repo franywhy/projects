@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseRecordDetailDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		course_record_detail.record_id AS recordId , 	
+		course_record_detail.course_id AS courseId , 	
+		course_record_detail.parent_id AS parentId , 	
+		course_record_detail.name AS name , 	
+		course_record_detail.user_id AS userId , 	
+		course_record_detail.type AS type ,
+		course_record_detail.vid AS vid ,
+		course_record_detail.polyv_name AS polyvName ,
+		course_record_detail.duration AS duration , 	
+		course_record_detail.duration_s AS durationS , 	
+		course_record_detail.ptime AS ptime , 	
+		course_record_detail.first_image AS firstImage , 	
+		course_record_detail.order_num AS orderNum , 	
+		course_record_detail.create_person AS createPerson , 	
+		course_record_detail.creation_time AS creationTime , 	
+		course_record_detail.modify_person AS modifyPerson , 	
+		course_record_detail.modified_time AS modifiedTime ,
+		course_record_detail.file_url AS fileUrl ,
+		course_record_detail.file_name AS fileName
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1
+   	</sql>
+	<!-- 课程查询条件 -->
+	<sql id="course_where">
+    	AND course_record_detail.course_id = #{courseId}
+   	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM course_record_detail AS course_record_detail
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY order_num ASC ,record_id ASC
+	</sql>
+	
+	<!-- LEFT JOIN sys_user 教师名称 -->
+	<sql id="left_join_sysuser_column">
+    	 sys_user.nick_name as userName
+	</sql>
+	<!-- LEFT JOIN sys_user -->
+	<sql id="left_join_sysuser_from">
+    	 LEFT JOIN sys_user AS sys_user on sys_user.user_id =  course_record_detail.user_id
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.CourseRecordDetailEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND course_record_detail.record_id = #{recordId}
+	</select>
+	<select id="queryPOJO" resultType="io.renren.pojo.CourseRecordDetailPOJO">
+		select 
+      	<include refid="base_column"/>
+      	,
+      	<include refid="left_join_sysuser_column"/>
+		<include refid="base_from"/>
+		<include refid="left_join_sysuser_from"/>
+		<include refid="base_where"/>
+		AND course_record_detail.record_id = #{recordId}
+	</select>
+	
+	<!--查询节数量-->
+	<select id="queryJCount" resultType="int">
+		select count(1)
+		<include refid="base_from"/>
+		<where>
+			<if test="recordId != null">
+				course_record_detail.parent_id = #{recordId}
+			</if>
+		</where> 
+	</select>
+	
+	<!--列表-->
+	<select id="queryList" resultType="io.renren.entity.CourseRecordDetailEntity">
+		select
+		<include refid="base_column" />
+		<include refid="base_from" />
+		<include refid="base_where" />
+		<include refid="course_where" />
+		<include refid="base_order" />
+	</select>
+	<select id="queryPOJOList" resultType="io.renren.pojo.CourseRecordDetailPOJO">
+		select
+		<include refid="base_column" />
+		,
+		<include refid="left_join_sysuser_column" />
+		<include refid="base_from" />
+		<include refid="left_join_sysuser_from" />
+		<include refid="base_where" />
+		<include refid="course_where" />
+		<include refid="base_order" />
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.CourseRecordDetailEntity" useGeneratedKeys="true" keyProperty="recordId">
+	insert into course_record_detail
+	(
+		`course_id`, 
+		`parent_id`, 
+		`name`,
+		`user_id`, 
+		`type`,
+		`vid`,
+		`polyv_name`,
+		`duration`, 
+		`duration_s`, 
+		`ptime`,
+		`first_image`, 
+		`order_num`, 
+		`create_person`, 
+		`creation_time`,
+		`modify_person`, 
+		`modified_time`,
+		`file_url`,
+		`file_name`
+	)
+		values
+		(
+		#{courseId}, 
+		#{parentId},
+		#{name}, 
+		#{userId}, 
+		#{type},
+		#{vid},
+		#{polyvName},
+		#{duration},
+		#{durationS},
+		#{ptime}, 
+		#{firstImage}, 
+		#{orderNum}, 
+		#{createPerson}, 
+		#{creationTime},
+		#{modifyPerson}, 
+		#{modifiedTime},
+		#{fileUrl},
+		#{fileName}
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.CourseRecordDetailEntity">
+		update course_record_detail 
+		<set>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="vid != null">`vid` = #{vid}, </if>
+			<if test="polyvName != null">`polyv_name` = #{polyvName}, </if>
+			<if test="duration != null">`duration` = #{duration}, </if>
+			<if test="durationS != null">`duration_s` = #{durationS}, </if>
+			<if test="ptime != null">`ptime` = #{ptime}, </if>
+			<if test="firstImage != null">`first_image` = #{firstImage}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifiedTime != null">`modified_time` = #{modifiedTime},</if>
+			<if test="fileUrl != null and fileUrl != ''">`file_url` = #{fileUrl}, </if>
+			<if test="fileName != null and fileName != ''">`file_name` = #{fileName}</if>
+		</set>
+		<include refid="base_where"/>
+		AND record_id = #{recordId}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM course_record_detail 
+		<include refid="base_where"/>
+		AND record_id = #{recordId}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM course_record_detail 
+		<include refid="base_where"/> 
+		AND record_id IN 
+		<foreach item="recordId" collection="ids" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,94 @@
+@import './theme.less';
+/*通用类*/
+.left(){
+    float: left;
+}
+.right(){
+    float: right;
+}
+.clearfix(){
+    &:after{
+        content: " ";
+        display: table;
+        clear: both;
+    }
+}
+/*透明ie8*/
+.opacity(@op){
+    opacity: @op/100;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=@op);
+}
+// 扩大点击区域
+.addClickZone(@top, @left){
+    position:relative;
+    &:before{
+        content: "";
+        position: absolute;
+        top: @top;
+        left: @left;
+        bottom: @top;
+        right: @left;
+    }
+}
+// 扩大点击区域-修复版
+.addClickZoneFixed(@pos, @left, @top){
+    position:@pos;
+    &::before{
+        content: "";
+        position: absolute;
+        top: @top;
+        left: @left;
+        bottom: @top;
+        right: @left;
+    }
+}
+// float-box
+.float-box(@width, @marginRight, @marginBot){
+    .clearfix();
+    margin-right: -@marginRight;
+    .item{
+        .left();
+        box-sizing: border-box;
+        width: @width;
+        margin-right: @marginRight;
+        margin-bottom: @marginBot;
+    }
+}
+// 省略号
+.sl(){
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+// 过度时间
+.transition(){
+    transition: all 0.3s;
+}
+// 文字高亮
+.titleHover(){
+    .transition();
+    &:hover{
+        color: @mainColor;
+    }
+}
+// 上下边距
+.padVal(){
+    padding-top: 40px;
+    padding-bottom: 80px;
+}
+// 下边距
+.padVal-bot(){
+    padding-bottom: 80px;
+}
+// 移入上浮效果
+.moveTop(){
+    transition: all 0.3s;
+    &:hover{
+        transform: translateY(-3px);
+    }
+}
+// 移入浮起
+.scale(@op){
+    transform: scale(@op);
+    // box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+}

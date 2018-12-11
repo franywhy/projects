@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SchoolDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	school.schoolId AS schoolid , 	school.domain1 AS domain1 , 	school.domain2 AS domain2 , 	school.name AS name , 	school.logo AS logo , 	school.icon AS icon , 	school.isEnabled AS isenabled , 	school.polyvUserId AS polyvuserid , 	school.polyvSecretKey AS polyvsecretkey , 	school.polyvWriteToken AS polyvwritetoken , 	school.polyvReadToken AS polyvreadtoken , 	school.liveUserId AS liveuserid , 	school.liveAppId AS liveappid , 	school.liveSecretKey AS livesecretkey , 	school.billingPlan AS billingplan , 	school.webmasterName AS webmastername , 	school.webmasterEmail AS webmasteremail , 	school.webmasterMobile AS webmastermobile , 	school.webmasterQq AS webmasterqq , 	school.icpNumber AS icpnumber , 	school.isSmtpEnabled AS issmtpenabled , 	school.smtpServer AS smtpserver , 	school.smtpPort AS smtpport , 	school.smtpUsername AS smtpusername , 	school.smtpPassword AS smtppassword , 	school.smtpSslEnabled AS smtpsslenabled , 	school.smtpFromEmail AS smtpfromemail , 	school.smtpFromName AS smtpfromname , 	school.isVipEnabled AS isvipenabled , 	school.isAuditCourse AS isauditcourse , 	school.isRoyaltyEnabled AS isroyaltyenabled , 	school.defRoyaltyRate AS defroyaltyrate , 	school.isRegEnabled AS isregenabled , 	school.isRegMobile AS isregmobile , 	school.isRegEmail AS isregemail , 	school.isRegUsername AS isregusername , 	school.isRegSharable AS isregsharable , 	school.regSharableUrl AS regsharableurl , 	school.isSingleLogin AS issinglelogin , 	school.isOauthLogin AS isoauthlogin , 	school.isSyncLogin AS issynclogin , 	school.syncSecretKey AS syncsecretkey , 	school.syncLoginUrl AS syncloginurl , 	school.syncLogoutUrl AS synclogouturl , 	school.alipayEnabled AS alipayenabled , 	school.alipayPid AS alipaypid , 	school.alipayKey AS alipaykey , 	school.weixinEnabled AS weixinenabled , 	school.weixinAppId AS weixinappid , 	school.weixinAppSecret AS weixinappsecret , 	school.weixinToken AS weixintoken , 	school.weixinAesKey AS weixinaeskey , 	school.wxpayEnabled AS wxpayenabled , 	school.wxpayAppId AS wxpayappid , 	school.wxpayMchId AS wxpaymchid , 	school.wxpaySubMchId AS wxpaysubmchid , 	school.wxpayKey AS wxpaykey , 	school.isApiEnabled AS isapienabled , 	school.apiSecretKey AS apisecretkey , 	school.apiBackupKey AS apibackupkey , 	school.isVodCourseLogin AS isvodcourselogin , 	school.isLiveCourseLogin AS islivecourselogin , 	school.depositUrl AS depositurl , 	school.jsonSetting AS jsonsetting , 	school.createdTime AS createdtime , 	school.lastModified AS lastmodified 	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where schoolId = #{schoolId} 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from school as school
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.SchoolEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.SchoolEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.SchoolEntity">
+		insert into school
+		(
+				`schoolId`, 				`domain1`, 				`domain2`, 				`name`, 				`logo`, 				`icon`, 				`isEnabled`, 				`polyvUserId`, 				`polyvSecretKey`, 				`polyvWriteToken`, 				`polyvReadToken`, 				`liveUserId`, 				`liveAppId`, 				`liveSecretKey`, 				`billingPlan`, 				`webmasterName`, 				`webmasterEmail`, 				`webmasterMobile`, 				`webmasterQq`, 				`icpNumber`, 				`isSmtpEnabled`, 				`smtpServer`, 				`smtpPort`, 				`smtpUsername`, 				`smtpPassword`, 				`smtpSslEnabled`, 				`smtpFromEmail`, 				`smtpFromName`, 				`isVipEnabled`, 				`isAuditCourse`, 				`isRoyaltyEnabled`, 				`defRoyaltyRate`, 				`isRegEnabled`, 				`isRegMobile`, 				`isRegEmail`, 				`isRegUsername`, 				`isRegSharable`, 				`regSharableUrl`, 				`isSingleLogin`, 				`isOauthLogin`, 				`isSyncLogin`, 				`syncSecretKey`, 				`syncLoginUrl`, 				`syncLogoutUrl`, 				`alipayEnabled`, 				`alipayPid`, 				`alipayKey`, 				`weixinEnabled`, 				`weixinAppId`, 				`weixinAppSecret`, 				`weixinToken`, 				`weixinAesKey`, 				`wxpayEnabled`, 				`wxpayAppId`, 				`wxpayMchId`, 				`wxpaySubMchId`, 				`wxpayKey`, 				`isApiEnabled`, 				`apiSecretKey`, 				`apiBackupKey`, 				`isVodCourseLogin`, 				`isLiveCourseLogin`, 				`depositUrl`, 				`jsonSetting`, 				`createdTime`, 				`lastModified`		)
+		values
+		(
+												#{schoolid}, 																			#{domain1}, 																			#{domain2}, 																			#{name}, 																			#{logo}, 																			#{icon}, 																			#{isenabled}, 																			#{polyvuserid}, 																			#{polyvsecretkey}, 																			#{polyvwritetoken}, 																			#{polyvreadtoken}, 																			#{liveuserid}, 																			#{liveappid}, 																			#{livesecretkey}, 																			#{billingplan}, 																			#{webmastername}, 																			#{webmasteremail}, 																			#{webmastermobile}, 																			#{webmasterqq}, 																			#{icpnumber}, 																			#{issmtpenabled}, 																			#{smtpserver}, 																			#{smtpport}, 																			#{smtpusername}, 																			#{smtppassword}, 																			#{smtpsslenabled}, 																			#{smtpfromemail}, 																			#{smtpfromname}, 																			#{isvipenabled}, 																			#{isauditcourse}, 																			#{isroyaltyenabled}, 																			#{defroyaltyrate}, 																			#{isregenabled}, 																			#{isregmobile}, 																			#{isregemail}, 																			#{isregusername}, 																			#{isregsharable}, 																			#{regsharableurl}, 																			#{issinglelogin}, 																			#{isoauthlogin}, 																			#{issynclogin}, 																			#{syncsecretkey}, 																			#{syncloginurl}, 																			#{synclogouturl}, 																			#{alipayenabled}, 																			#{alipaypid}, 																			#{alipaykey}, 																			#{weixinenabled}, 																			#{weixinappid}, 																			#{weixinappsecret}, 																			#{weixintoken}, 																			#{weixinaeskey}, 																			#{wxpayenabled}, 																			#{wxpayappid}, 																			#{wxpaymchid}, 																			#{wxpaysubmchid}, 																			#{wxpaykey}, 																			#{isapienabled}, 																			#{apisecretkey}, 																			#{apibackupkey}, 																			#{isvodcourselogin}, 																			#{islivecourselogin}, 																			#{depositurl}, 																			#{jsonsetting}, 																			#{createdtime}, 																			#{lastmodified}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.SchoolEntity">
+		update school 
+		<set>
+			<if test="domain1 != null">`domain1` = #{domain1}, </if>
+			<if test="domain2 != null">`domain2` = #{domain2}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="logo != null">`logo` = #{logo}, </if>
+			<if test="icon != null">`icon` = #{icon}, </if>
+			<if test="isenabled != null">`isEnabled` = #{isenabled}, </if>
+			<if test="polyvuserid != null">`polyvUserId` = #{polyvuserid}, </if>
+			<if test="polyvsecretkey != null">`polyvSecretKey` = #{polyvsecretkey}, </if>
+			<if test="polyvwritetoken != null">`polyvWriteToken` = #{polyvwritetoken}, </if>
+			<if test="polyvreadtoken != null">`polyvReadToken` = #{polyvreadtoken}, </if>
+			<if test="liveuserid != null">`liveUserId` = #{liveuserid}, </if>
+			<if test="liveappid != null">`liveAppId` = #{liveappid}, </if>
+			<if test="livesecretkey != null">`liveSecretKey` = #{livesecretkey}, </if>
+			<if test="billingplan != null">`billingPlan` = #{billingplan}, </if>
+			<if test="webmastername != null">`webmasterName` = #{webmastername}, </if>
+			<if test="webmasteremail != null">`webmasterEmail` = #{webmasteremail}, </if>
+			<if test="webmastermobile != null">`webmasterMobile` = #{webmastermobile}, </if>
+			<if test="webmasterqq != null">`webmasterQq` = #{webmasterqq}, </if>
+			<if test="icpnumber != null">`icpNumber` = #{icpnumber}, </if>
+			<if test="issmtpenabled != null">`isSmtpEnabled` = #{issmtpenabled}, </if>
+			<if test="smtpserver != null">`smtpServer` = #{smtpserver}, </if>
+			<if test="smtpport != null">`smtpPort` = #{smtpport}, </if>
+			<if test="smtpusername != null">`smtpUsername` = #{smtpusername}, </if>
+			<if test="smtppassword != null">`smtpPassword` = #{smtppassword}, </if>
+			<if test="smtpsslenabled != null">`smtpSslEnabled` = #{smtpsslenabled}, </if>
+			<if test="smtpfromemail != null">`smtpFromEmail` = #{smtpfromemail}, </if>
+			<if test="smtpfromname != null">`smtpFromName` = #{smtpfromname}, </if>
+			<if test="isvipenabled != null">`isVipEnabled` = #{isvipenabled}, </if>
+			<if test="isauditcourse != null">`isAuditCourse` = #{isauditcourse}, </if>
+			<if test="isroyaltyenabled != null">`isRoyaltyEnabled` = #{isroyaltyenabled}, </if>
+			<if test="defroyaltyrate != null">`defRoyaltyRate` = #{defroyaltyrate}, </if>
+			<if test="isregenabled != null">`isRegEnabled` = #{isregenabled}, </if>
+			<if test="isregmobile != null">`isRegMobile` = #{isregmobile}, </if>
+			<if test="isregemail != null">`isRegEmail` = #{isregemail}, </if>
+			<if test="isregusername != null">`isRegUsername` = #{isregusername}, </if>
+			<if test="isregsharable != null">`isRegSharable` = #{isregsharable}, </if>
+			<if test="regsharableurl != null">`regSharableUrl` = #{regsharableurl}, </if>
+			<if test="issinglelogin != null">`isSingleLogin` = #{issinglelogin}, </if>
+			<if test="isoauthlogin != null">`isOauthLogin` = #{isoauthlogin}, </if>
+			<if test="issynclogin != null">`isSyncLogin` = #{issynclogin}, </if>
+			<if test="syncsecretkey != null">`syncSecretKey` = #{syncsecretkey}, </if>
+			<if test="syncloginurl != null">`syncLoginUrl` = #{syncloginurl}, </if>
+			<if test="synclogouturl != null">`syncLogoutUrl` = #{synclogouturl}, </if>
+			<if test="alipayenabled != null">`alipayEnabled` = #{alipayenabled}, </if>
+			<if test="alipaypid != null">`alipayPid` = #{alipaypid}, </if>
+			<if test="alipaykey != null">`alipayKey` = #{alipaykey}, </if>
+			<if test="weixinenabled != null">`weixinEnabled` = #{weixinenabled}, </if>
+			<if test="weixinappid != null">`weixinAppId` = #{weixinappid}, </if>
+			<if test="weixinappsecret != null">`weixinAppSecret` = #{weixinappsecret}, </if>
+			<if test="weixintoken != null">`weixinToken` = #{weixintoken}, </if>
+			<if test="weixinaeskey != null">`weixinAesKey` = #{weixinaeskey}, </if>
+			<if test="wxpayenabled != null">`wxpayEnabled` = #{wxpayenabled}, </if>
+			<if test="wxpayappid != null">`wxpayAppId` = #{wxpayappid}, </if>
+			<if test="wxpaymchid != null">`wxpayMchId` = #{wxpaymchid}, </if>
+			<if test="wxpaysubmchid != null">`wxpaySubMchId` = #{wxpaysubmchid}, </if>
+			<if test="wxpaykey != null">`wxpayKey` = #{wxpaykey}, </if>
+			<if test="isapienabled != null">`isApiEnabled` = #{isapienabled}, </if>
+			<if test="apisecretkey != null">`apiSecretKey` = #{apisecretkey}, </if>
+			<if test="apibackupkey != null">`apiBackupKey` = #{apibackupkey}, </if>
+			<if test="isvodcourselogin != null">`isVodCourseLogin` = #{isvodcourselogin}, </if>
+			<if test="islivecourselogin != null">`isLiveCourseLogin` = #{islivecourselogin}, </if>
+			<if test="depositurl != null">`depositUrl` = #{depositurl}, </if>
+			<if test="jsonsetting != null">`jsonSetting` = #{jsonsetting}, </if>
+			<if test="createdtime != null">`createdTime` = #{createdtime}, </if>
+			<if test="lastmodified != null">`lastModified` = #{lastmodified}</if>
+		</set>
+		<include refid="base_where"/>
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM school 
+		<include refid="base_where"/>
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM school 
+		<!-- <include refid="base_where"/> --> 
+		where schoolId IN 
+		<foreach item="schoolid" collection="ids" open="(" separator="," close=")">
+			#{schoolid}
+		</foreach>
+	</delete>
+</mapper>

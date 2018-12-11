@@ -1,0 +1,103 @@
+<!--联运数据头-->
+<div class="tagArea">
+	<ul class="tagList">
+		<li class="<%=params.tab=="zcsy"? "cur":""%>"><a href="#a=zcsy&client=<%=params.client%>&menu=<%=params.menu%>"><i></i><span>注册&收益</span></a></li>
+		<li class="<%=params.tab=="ffzh"? "cur":""%>"><a href="#a=ffzh&client=<%=params.client%>&menu=<%=params.menu%>"><i></i><span>付费转化</span></a></li>
+        <li class="<%=params.tab=="ffzq"? "cur":""%>"><a href="#a=ffzq&client=<%=params.client%>&menu=<%=params.menu%>"><i></i><span>付费周期</span></a></li>
+		<li class="<%=params.tab=="lcsj"? "cur":""%>"><a href="#a=lcsj&client=<%=params.client%>&menu=<%=params.menu%>"><i></i><span>留存数据</span></a></li>
+		<!--<li class="<%=params.tab=="srdl"? "cur":""%>"><a href="#a=srdl&client=<%=params.client%>&menu=<%=params.menu%>"><i></i><span>首日登录</span></a></li>-->
+		<li class="<%=params.tab=="hytj"? "cur":""%>"><a href="#a=hytj&client=<%=params.client%>&menu=<%=params.menu%>"><i></i><span>活跃统计</span></a></li>
+	</ul>
+	<div class="tag_r"><input type="button" value="导出表格" class="d-button J_export" />
+<input type="button" value="返回" class="d-button J_back" /></div>
+</div>
+<%if(pty.filterType==1){%>
+<div class="searchForm">
+	<form name="searchForm">
+	<%if(params.channel){%>
+	<%:=params.channel ? "渠道：<strong class='red'>"+params.channel+"</strong>&nbsp;&nbsp;":"" %>
+	<%:=params.client ? "渠道类别："+Izb.config.channelType[params.client-1]+"&nbsp;&nbsp;<br /><br />":"" %>
+         <%if(!params.parent_qd){%>
+        子渠道：<input type="text" name="child_qd" size="10" />
+        <%}%>
+	<%}%>
+
+       
+
+
+	选择日期
+	<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00'})" />
+	<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+	</form>
+</div>
+<%}else if(pty.filterType==2){%>
+<div class="searchForm">
+	<form name="searchForm">
+	<%if(params.channel){%>
+	<%:=params.channel ? "渠道：<strong class='red'>"+params.channel+"</strong>&nbsp;&nbsp;":"" %>
+	<%:=params.client ? "渠道类别："+Izb.config.channelType[params.client-1]+"&nbsp;&nbsp;<br /><br />":"" %>
+         <%if(!params.parent_qd){%>
+    子渠道：<input type="text" name="child_qd" size="10" />
+    <%}%>
+	<%}%>
+   
+    渠道ID：<input type="text" name="_id" size="10" />
+    <!--<select id="union_id" name="_id">    
+    <option value="">全部</option>
+    </select>-->
+        
+    <br /><br />
+	注册时间：
+	<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+		到
+	<input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+    <br /><br />
+    付费时间：
+	<input id="stime1" type="text" name="stime1" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime1\')}'})" />
+		到
+	<input id="etime1" type="text" name="etime1" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime1\')}'})"/>
+    
+	<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+	</form>
+</div>
+<%}else if(pty.filterType==3){%>
+<div class="searchForm">
+	<form name="searchForm">
+	<%if(params.channel){%>
+	<%:=params.channel ? "渠道：<strong class='red'>"+params.channel+"</strong>&nbsp;&nbsp;":"" %>
+	<%:=params.client ? "渠道类别："+Izb.config.channelType[params.client-1]+"&nbsp;&nbsp;<br /><br />":"" %>
+           <%if(!params.parent_qd){%>
+    子渠道：<input type="text" name="child_qd" size="10" />
+    <%}%>
+	<%}%>
+    <!--渠道：
+    <select id="union_id" name="_id">    
+    <option value="">全部</option>
+    </select>-->
+         渠道ID：<input type="text" name="_id" size="10" />
+	&nbsp;&nbsp;
+	选择日期：
+	<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00'})" />
+        
+	<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+	</form>
+</div>
+<%}else{%>
+<div class="searchForm">
+	<form name="searchForm">
+	<%if(params.channel){%>
+	<%:=params.channel ? "渠道：<strong class='red'>"+params.channel+"</strong>&nbsp;&nbsp;":"" %>
+	<%:=params.client ? "渠道类别："+Izb.config.channelType[params.client-1]+"&nbsp;&nbsp;<br /><br />":"" %>
+           <%if(!params.parent_qd){%>
+    子渠道：<input type="text" name="child_qd" size="10" />
+    <%}%>
+	<%}%>
+	选择日期
+	<input id="stime" type="text" name="stime" value="" size="20"  readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'etime\')}'})" />
+		到
+	<input id="etime" type="text" name="etime" value="" size="20" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'stime\')}'})"/>
+	<input class="d-button J_search" type="button" value="查询"/><input class="d-button J_reset" type="reset" name="" value="重置">
+	</form>
+</div>
+<%}%>
+<!--/联运数据头-->

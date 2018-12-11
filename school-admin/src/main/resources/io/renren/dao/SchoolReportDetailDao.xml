@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.SchoolReportDetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.SchoolReportDetailEntity" id="schoolReportDetailMap">
+        <result property="id" column="id"/>
+        <result property="classTeacherId" column="class_teacher_id"/>
+        <result property="classTeacherName" column="class_teacher_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="learningStatus" column="learning_status"/>
+        <result property="watchDuration" column="watch_duration"/>
+        <result property="fullDuration" column="full_duration"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="dr" column="dr"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.SchoolReportDetailEntity">
+		select * from school_report_detail where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.SchoolReportDetailEntity">
+		select * from school_report_detail
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from school_report_detail 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.SchoolReportDetailEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into school_report_detail
+		(
+			`class_teacher_id`, 
+			`class_teacher_name`, 
+			`user_id`, 
+			`order_id`, 
+			`learning_status`, 
+			`watch_duration`, 
+			`full_duration`, 
+			`start_date`, 
+			`end_date`, 
+			`create_time`, 
+			`dr`,
+			`type`
+		)
+		values
+		(
+			#{classTeacherId}, 
+			#{classTeacherName}, 
+			#{userId}, 
+			#{orderId}, 
+			#{learningStatus}, 
+			#{watchDuration}, 
+			#{fullDuration}, 
+			#{startDate}, 
+			#{endDate}, 
+			#{createTime}, 
+			#{dr},
+			#{type}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.SchoolReportDetailEntity">
+		update school_report_detail 
+		<set>
+			<if test="classTeacherId != null">`class_teacher_id` = #{classTeacherId}, </if>
+			<if test="classTeacherName != null">`class_teacher_name` = #{classTeacherName}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="orderId != null">`order_id` = #{orderId}, </if>
+			<if test="learningStatus != null">`learning_status` = #{learningStatus}, </if>
+			<if test="watchDuration != null">`watch_duration` = #{watchDuration}, </if>
+			<if test="fullDuration != null">`full_duration` = #{fullDuration}, </if>
+			<if test="startDate != null">`start_date` = #{startDate}, </if>
+			<if test="endDate != null">`end_date` = #{endDate}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from school_report_detail where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from school_report_detail where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+
+    <select id="queryUserMessage" resultType="io.renren.pojo.SchoolReportUserMessagePOJO">
+          SELECT
+            mall_order.order_id AS orderId,
+            mall_order.user_id AS userId,
+            mall_order.class_type_id as classTypeId,
+            sys_user.user_id AS classTeacherId,
+            sys_user.nick_name AS classTeacherName
+        FROM
+            mall_order mall_order
+        JOIN mall_goods_info g ON g.id = mall_order.commodity_id
+        JOIN mall_class mc ON mc.class_id = mall_order.class_id
+        JOIN sys_user sys_user ON sys_user.user_id = mc.user_id
+        WHERE
+            mall_order.dr = 0
+        AND g.pattern LIKE '%直播%'
+    </select>
+
+    <select id="classPlanIdByOrder" resultType="String">
+        SELECT
+            course_classplan.classplan_id
+        FROM
+            course_classplan course_classplan
+        JOIN courses courses ON courses.course_id = course_classplan.course_id
+        JOIN mall_goods_details mgd ON mgd.course_id = courses.course_id
+        JOIN mall_goods_info mgi ON mgi.id = mgd.mall_goods_id
+        JOIN mall_order mall_order ON mall_order.commodity_id = mgi.id
+        WHERE
+          course_classplan.dr = 0
+          AND
+            mall_order.order_id = #{orderId}
+    </select>
+
+
+    <select id="getClassPlanLivesDetail" resultType="io.renren.pojo.ClassPlanLivesDetailPOJO">
+       /* -- 查询排课计划子表列表*/
+        SELECT
+        course_classplan_lives.live_class_type_ids AS liveClassTypeIds,
+        course_classplan_lives.classplan_live_name AS classPlanLiveName,
+        course_classplan_lives.day_time AS dayTime,
+        course_classplan_lives.classplan_live_id AS classPlanLiveId,
+        course_classplan_lives.classplan_id AS classPlanId,
+        course_userplan_detail.userplan_id AS userPlanId ,
+        course_userplan.class_type_id AS classTypeId,
+        course_userplan.user_id AS userId,
+        (	SELECT
+        /*-- 1.其他*/
+        CASE WHEN 1 = ( SELECT count( 1 )  FROM mall_order AS mall_order  WHERE mall_order.order_id = #{orderId} AND mall_order.is_teacher = 1  AND mall_order.dr = 0 )
+        THEN 1
+        /*-- 2.1.休学\失联单 结束*/
+        ELSE (
+        SELECT
+        CASE WHEN 1=(
+        SELECT count( 1 )
+        FROM course_abnormal_order AS course_abnormal_order
+        WHERE course_abnormal_order.audit_status = 2
+        AND course_abnormal_order.order_id = course_userplan.order_id
+        AND course_abnormal_order.start_time &lt; #{endDate}
+        AND course_abnormal_order.end_time > #{startDate}
+        ORDER BY course_abnormal_order.start_time DESC
+        LIMIT 1
+        )
+        THEN 1
+       /* -- 						 2.2 休学\失联单 未结束*/
+        ELSE(
+        SELECT
+        CASE WHEN 1=(
+        SELECT count( 1 )
+        FROM
+        course_abnormal_order AS course_abnormal_order
+        WHERE
+        course_abnormal_order.audit_status = 2
+        AND course_abnormal_order.order_id = course_userplan.order_id
+        AND course_abnormal_order.start_time &lt; #{endDate}
+        AND ISNULL( course_abnormal_order.end_time )
+        ORDER BY
+        course_abnormal_order.start_time DESC
+        LIMIT 1
+        )
+        THEN 1
+        /*-- 	 3.免考核*/
+        ELSE(
+        SELECT
+        CASE WHEN 1=(
+        SELECT count(1)
+        FROM course_abnormal_free_assessment AS course_abnormal_free_assessment
+        WHERE
+        course_abnormal_free_assessment.course_id = course_userplan_detail.course_id
+        AND course_abnormal_free_assessment.order_id = course_userplan.order_id
+        AND course_abnormal_free_assessment.audit_status = 2
+        AND course_abnormal_free_assessment.start_time &lt; #{endDate} AND course_abnormal_free_assessment.end_time >  #{startDate}
+        ORDER BY
+        course_abnormal_free_assessment.start_time DESC
+        LIMIT 1
+        )
+        THEN 1
+       /* --  TODO 弃考*/
+        ELSE(
+        SELECT
+        CASE WHEN 1=(
+        SELECT count(1)
+        FROM course_abnormal_abandon_exam AS course_abnormal_abandon_exam
+        LEFT JOIN course_abnormal_registration AS course_abnormal_registration ON course_abnormal_registration.id = course_abnormal_abandon_exam.registration_id
+        WHERE
+        course_abnormal_registration.user_plan_id = course_userplan.user_plan_id -- 学员规划PK
+        AND course_abnormal_registration.course_id = course_userplan_detail.course_id
+        AND course_abnormal_registration.dr = 0
+        AND course_abnormal_abandon_exam.`status` = 2
+        AND course_abnormal_registration.`status` = 2
+        AND course_abnormal_registration.exam_schedule_id = course_userplan.exam_schedule_id
+        ORDER BY
+        course_abnormal_abandon_exam.id ASC
+        LIMIT 1
+        )
+        THEN 1
+        ELSE
+        0
+        END
+        )
+        END
+        )
+        END
+        )
+        END
+        )
+        END) as classPlanLiveIsError
+        FROM
+        course_userplan_class_detail AS course_userplan_class_detail
+       /* -- 学习计划子表*/
+        LEFT JOIN course_userplan_detail AS course_userplan_detail ON course_userplan_detail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id -- 学员规划子表
+        JOIN course_userplan AS course_userplan ON course_userplan.user_plan_id = course_userplan_detail.userplan_id,
+       /* -- Cross join [笛卡尔]*/
+        course_classplan_lives AS course_classplan_lives
+        /*-- 排课计划子表*/
+        LEFT JOIN course_classplan AS course_classplan ON course_classplan.classplan_id = course_classplan_lives.classplan_id
+       /* -- 	关联排课计划主表*/
+        WHERE
+        1 = 1
+        AND course_userplan_class_detail.classplan_id = course_classplan_lives.classplan_id
+        AND course_classplan_lives.day_time > course_userplan_class_detail.`timestamp`
+        AND course_classplan_lives.day_time >  #{startDate}
+        AND course_classplan_lives.day_time &lt; #{endDate}
+        AND course_userplan_class_detail.dr = 0
+        AND course_userplan_detail.dr = 0
+        AND course_classplan_lives.dr = 0
+        AND course_classplan.dr = 0
+        /*AND course_classplan.product_id = 1*/
+        /*-- 	产品线*/
+        AND course_userplan.user_id = #{userId}
+        AND  FIND_IN_SET(course_userplan.class_type_id,course_classplan_lives.live_class_type_ids)
+       /* -- 班型*/
+        ORDER BY
+        course_userplan_detail.userplan_id,
+        course_classplan_lives.classplan_id
+    </select>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.PushTimeTemplateDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		push_time_template.id AS id , 	
+		push_time_template.name AS name , 	
+		push_time_template.push_day AS pushDay , 	
+		push_time_template.push_time AS pushTime , 	
+		push_time_template.push_content_template AS pushContentTemplate , 	
+		push_time_template.dr AS dr , 	
+		push_time_template.ts AS ts ,
+		push_time_template.remark AS remark	,
+		push_time_template.type AS type
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE push_time_template.dr=0 	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM push_time_template AS push_time_template
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY  id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.PushTimeTemplateEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.PushTimeTemplateEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="pushTemplateName != null">
+			and push_time_template.name like concat('%',#{pushTemplateName},'%')
+		</if>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="pushTemplateName != null">
+			and push_time_template.name like concat('%',#{pushTemplateName},'%')
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.PushTimeTemplateEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into push_time_template
+	(
+		`name`, `push_day`, `push_time`, `push_content_template`, `dr`, `ts`, `remark` 
+	)
+	values
+	(
+		#{name}, #{pushDay}, #{pushTime}, #{pushContentTemplate}, 0, #{ts}, #{remark} 
+	)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.PushTimeTemplateEntity">
+		update push_time_template 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="pushDay != null">`push_day` = #{pushDay}, </if>
+			<if test="pushTime != null">`push_time` = #{pushTime}, </if>
+			<if test="pushContentTemplate != null">`push_content_template` = #{pushContentTemplate}, </if>
+			<if test="dr != null">`dr` = #{dr}, </if>
+			<if test="ts != null">`ts` = #{ts}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<update id="delete" parameterType="io.renren.entity.PushTimeTemplateEntity">
+		UPDATE push_time_template 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<update id="deleteBatch" parameterType="io.renren.entity.PushTimeTemplateEntity">
+		UPDATE push_time_template 
+		<set> dr = 1 </set>
+		<include refid="base_where"/>
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

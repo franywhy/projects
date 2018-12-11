@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ColdStartingDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.entity.ColdStartingEntity" id="coldStartingMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="pic" column="pic"/>
+        <result property="url" column="url"/>
+        <result property="countdown" column="countdown"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="version" column="version"/>
+        <result property="isShow" column="is_show"/>
+        <result property="dr" column="dr"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.entity.ColdStartingEntity">
+		select * from cold_starting where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.ColdStartingEntity">
+		select * from cold_starting
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cold_starting 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.ColdStartingEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cold_starting
+		(
+			`title`, 
+			`pic`, 
+			`url`, 
+			`countdown`, 
+			`create_time`, 
+			`update_time`, 
+			`version`, 
+			`is_show`, 
+			`dr`
+		)
+		values
+		(
+			#{title}, 
+			#{pic}, 
+			#{url}, 
+			#{countdown}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{version}, 
+			#{isShow}, 
+			#{dr}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.ColdStartingEntity">
+		update cold_starting 
+		<set>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="countdown != null">`countdown` = #{countdown}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="isShow != null">`is_show` = #{isShow}, </if>
+			<if test="dr != null">`dr` = #{dr}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cold_starting where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cold_starting where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+
+    <update id="resume">
+        update cold_starting SET `is_show` = 1,`update_time` = now()
+        WHERE id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="pause">
+        update cold_starting SET `is_show` = 0,`update_time` = now()
+        WHERE id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

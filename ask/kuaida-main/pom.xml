@@ -1,0 +1,1246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.izhubo</groupId>
+		<artifactId>izhubo</artifactId>
+		<version>1.0</version>
+	</parent>
+
+	<artifactId>main</artifactId>
+	<version>2.0</version>
+
+	<packaging>war</packaging>
+
+	<properties>
+		<contextPath />
+		<log.target>stdout</log.target>
+		<log.web.level>DEBUG</log.web.level>
+		<pic.domain>http://img.xuelxuew.com/</pic.domain>
+		<api.domain>http://api.xuelxuew.com/</api.domain>
+		<site.domain>http://www.xuelxuew.com/</site.domain>
+
+		<redis.port>6379</redis.port>
+		<redis.timeout>15000</redis.timeout>
+		<redis.mem.db>0</redis.mem.db>
+		<redis.host>177.77.77.219</redis.host>
+		<!-- <redis.host>10.169.130.149</redis.host> -->
+		<redis.mem.host>${redis.host}</redis.mem.host>
+		<redis.mem.port>${redis.port}</redis.mem.port>
+		<redis.chat.host>${redis.host}</redis.chat.host>
+		<redis.chat.port>6381</redis.chat.port>
+		<mongo.uri>177.77.77.188</mongo.uri>
+		<!-- <mongo.uri>10.169.114.11,10.170.19.223,10.169.137.203</mongo.uri> -->
+		<pic.folder>/www/nginx-web/img</pic.folder>
+
+		<msg.thread.minSize>100</msg.thread.minSize>
+		<msg.thread.maxSize>200</msg.thread.maxSize>
+
+		<buss.thread.minSize>300</buss.thread.minSize>
+		<buss.thread.maxSize>400</buss.thread.maxSize>
+
+		<redis.pool.maxActive>500</redis.pool.maxActive>
+		<redis.pool.maxIdle>500</redis.pool.maxIdle>
+		<redis.pool.maxWait>-1</redis.pool.maxWait>
+		<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+		<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+		<chat.pool.maxActive>300</chat.pool.maxActive>
+		<chat.pool.maxIdle>300</chat.pool.maxIdle>
+		<chat.pool.maxWait>1500</chat.pool.maxWait>
+
+		<aspectj-scope>compile</aspectj-scope>
+		<mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+
+		<openapi.test>1</openapi.test>
+
+		<openapi.domain>openapi.tencentyun.com</openapi.domain>
+		<openapi.test.domain>119.147.19.43</openapi.test.domain>
+
+		<appid.test>1101168695</appid.test>
+		<appkey.test>NCBvqcAACGdULmGh</appkey.test>
+
+		<appid.product></appid.product>
+		<appkey.product></appkey.product>
+
+		<appid>1101168695</appid>
+		<appkey>NCBvqcAACGdULmGh</appkey>
+
+		<serverType>product</serverType>
+	</properties>
+
+	<profiles>
+<profile>
+				<id>testRemote</id>
+	<properties>
+		<serverType>testRemote</serverType>
+		<redis.host>177.77.77.86</redis.host>
+		<redis.mem.host>${redis.host}</redis.mem.host>
+		<redis.mem.port>6379</redis.mem.port>
+		<mongo.uri>177.77.77.188:27018</mongo.uri>
+		<!--,${redis.host}:20000</mongo.uri> -->
+		<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+		<redis.chat.host>${redis.host}</redis.chat.host>
+		<redis.chat.port>6381</redis.chat.port>
+
+		<msg.thread.minSize>20</msg.thread.minSize>
+		<msg.thread.maxSize>30</msg.thread.maxSize>
+
+		<buss.thread.minSize>40</buss.thread.minSize>
+		<buss.thread.maxSize>50</buss.thread.maxSize>
+
+		<pic.folder>E:/SVN/DEV/front/file/img</pic.folder>
+		<!-- 用户提问图片存放路径 -->
+		<topic.file.folder>E:/SVN/DEV/front/file/img</topic.file.folder>
+		<temp.folder>E:/SVN/DEV/front/file/img/hqonline</temp.folder>
+		<!-- 红包地址 -->
+		<red.url>res/chat/red.png</red.url>
+		<log.target>logfile</log.target>
+		<log.web.level>DEBUG</log.web.level>
+		<groovy-scope>provided</groovy-scope>
+		<aspectj-scope>provided</aspectj-scope>
+
+		<!-- 每日推送更多接口 -->
+		<day.push.more.url><![CDATA[http://www.baidu.com?i=0]]></day.push.more.url>
+		<!-- 课程列表接口  -->
+		<course.list.url><![CDATA[http://www.baidu.com?i=0]]></course.list.url>
+		<!-- 课程详情  -->
+		<course.info.url><![CDATA[http://my.kjcity.com:88/course-details.html?i=0]]></course.info.url>
+
+		<!-- 付款异步通知站点 -->
+		<notify.domain>http://183.63.120.222:8010/</notify.domain>
+		<!-- 				<notify.domain>http://113.108.202.180:1708/</notify.domain> -->
+		<!-- 支付宝PC付款异步通知接口 -->
+		<notify.alipay.url>alipaynotify/nodity.json</notify.alipay.url>
+		<!-- 付款同步通知站点 -->
+		<return.domain>http://113.108.202.180:8016/</return.domain>
+		<!-- 支付宝PC付款同步跳转地址 -->
+		<return.alipay.url>myCommoditysList.html#tab=tab1#type=type2</return.alipay.url>
+		<!-- 微信付款异步通知接口 -->
+		<notify.wx.url>wxappnotify/nodity</notify.wx.url>
+
+
+		<!-- 支付宝H5付款异步通知接口 -->
+		<notify.wapdirect.url>alipaywapdirectnotify/nodity.json</notify.wapdirect.url>
+		<!-- 块钱异步通知接口 -->
+		<notify.bill99.url>bill99receive/nodity.json</notify.bill99.url>
+		<!-- H5站点地址-->
+		<pay.h5.domain>http://my.kjcity.com:88/</pay.h5.domain>
+		<!-- H5支付成功后同步跳转页面-->
+		<notify.return_h5.url><![CDATA[course-all.html?1=1&v=_a&token=]]></notify.return_h5.url>
+		<!-- 单号补齐位 -->
+		<orders.head>100000</orders.head>
+
+		<!-- 第三方交易成功跳转页面 -->
+		<pay.success.url><![CDATA[order_success.html?i1=1]]></pay.success.url>
+
+		<!--pc考前冲刺站点 -->
+		<pc.liveclass.domain>http://113.108.202.180:1708/</pc.liveclass.domain>
+		<!--app考前冲刺站点 -->
+		<app.liveclass.domain>http://113.108.202.180:1708/</app.liveclass.domain>
+
+		<openapi.domain>openapi.tencentyun.com</openapi.domain>
+		<openapi.test.domain>119.147.19.43</openapi.test.domain>
+
+		<appid.test>1101815070</appid.test>
+		<appkey.test>WSq1TQNZU9CKebY5</appkey.test>
+
+		<appid.product>1101815070</appid.product>
+		<appkey.product>WSq1TQNZU9CKebY5</appkey.product>
+
+		<appid>1101815070</appid>
+		<appkey>WSq1TQNZU9CKebY5</appkey>
+
+		<msm.id>0SDK-EAA-6688-JEZTT</msm.id>
+		<msm.pwd>584277</msm.pwd>
+
+		<!-- <pic.domain>http://ttimg.app1101815070.twsapp.com/</pic.domain> -->
+		<!-- <pic.domain>http://kdimg.app1101168695.twsapp.com/</pic.domain> -->
+		<pic.domain>http://177.77.77.81:8084/</pic.domain>
+		<api.domain>http://177.77.77.81:8081/</api.domain>
+		<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+		<admin.domain>http://177.77.77.81:8085/</admin.domain>
+		<us.domain>http://177.77.77.81:8082/</us.domain>
+		<temp.domain>http://183.63.120.222:8016/</temp.domain>
+
+		<!-- 是否使用代理，正式线才会使用 -->
+		<isproxy>false</isproxy>
+		<proxy.url></proxy.url>
+		<proxy.port></proxy.port>
+		<file.folder>D:\work_file</file.folder>
+
+		<queue.receivenc>receive_from_nc_test</queue.receivenc>
+		<nc.queue.user>test.nc.sync.users</nc.queue.user>
+		<queue.sendnc>send_to_nc_test</queue.sendnc>
+		<queue.daka>rabbit_queue_hqonline_attendances</queue.daka>
+
+		<currencysync.domain>http://my.kjcity.com/</currencysync.domain>
+		<hqjy.domain>http://test.hqjy.com/</hqjy.domain>
+		<hqjyh5.domain>http://177.77.77.81:9000</hqjyh5.domain>
+		<hqonlineh5.domain>http://177.77.77.158:8027/</hqonlineh5.domain>
+		<kjcityapi.domain>http://177.77.77.118:12005/</kjcityapi.domain>
+
+		<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+		<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+		<validationQuery>SELECT 1</validationQuery>
+		<url><![CDATA[jdbc:mysql://177.77.77.158:3307/ask?autoReconnect=true;characterEncoding=UTF-8]]></url>
+		<username>root</username>
+		<password>root</password>
+		<hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+		<hibernate.show_sql>true</hibernate.show_sql>
+		<hibernate.format_sql>true</hibernate.format_sql>
+		<!-- 开发环境是2，生产环境是1 -->
+		<push.env>2</push.env>
+	</properties>
+			
+		</profile>
+
+
+
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<serverType>test</serverType>
+				<redis.host>177.77.77.158</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6380</redis.mem.port>
+				<mongo.uri>${redis.host}:10000</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/empty/upload/</pic.folder>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+
+				<pic.domain>http://test.img.izhubo.com/</pic.domain>
+				<api.domain>http://ttestapi.app1101168695.twsapp.com/</api.domain>
+				<site.domain>http://ttest.app1101168695.twsapp.com/</site.domain>
+
+			</properties>
+
+		</profile>
+
+          <profile>
+			<id>local</id>
+			<properties>
+				<serverType>local</serverType>
+				<redis.host>177.77.77.86</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>177.77.77.70</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<topic.file.folder>/www/nginx-web/img</topic.file.folder>
+				<!-- 红包地址 -->
+				<red.url>res/chat/red.png</red.url>
+				<log.target>logfile</log.target>
+				<log.web.level>INFO</log.web.level>
+				<pic.folder>/www/nginx-web/img</pic.folder>
+                <temp.folder>/data/nginx-web/www.hqonline.com</temp.folder>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+
+				<!-- 每日推送更多接口 -->
+				<day.push.more.url><![CDATA[http://www.baidu.com?i=0]]></day.push.more.url>
+				<!-- 课程列表接口  -->
+				<course.list.url><![CDATA[http://www.baidu.com?i=0]]></course.list.url>
+				<!-- 课程详情  -->
+				<course.info.url><![CDATA[http://my.kjcity.com:88/course-details.html?i=0]]></course.info.url>
+
+				<!-- 付款异步通知站点 -->
+				<notify.domain>http://183.63.120.222:8010/</notify.domain>
+<!-- 				<notify.domain>http://113.108.202.180:1708/</notify.domain> -->
+				<!-- 支付宝PC付款异步通知接口 -->
+				<notify.alipay.url>alipaynotify/nodity.json</notify.alipay.url>
+				<!-- 付款同步通知站点 -->
+				<return.domain>http://113.108.202.180:8016/</return.domain>
+				<!-- 支付宝PC付款同步跳转地址 -->
+				<return.alipay.url>myCommoditysList.html#tab=tab1#type=type2</return.alipay.url>
+				<!-- 微信付款异步通知接口 -->
+				<notify.wx.url>wxappnotify/nodity</notify.wx.url>
+
+
+				<!-- 支付宝H5付款异步通知接口 -->
+				<notify.wapdirect.url>alipaywapdirectnotify/nodity.json</notify.wapdirect.url>
+				<!-- 块钱异步通知接口 -->
+				<notify.bill99.url>bill99receive/nodity.json</notify.bill99.url>
+				<!-- H5站点地址-->
+				<pay.h5.domain>http://my.kjcity.com:88/</pay.h5.domain>
+				<!-- H5支付成功后同步跳转页面-->
+				<notify.return_h5.url><![CDATA[course-all.html?1=1&v=_a&token=]]></notify.return_h5.url>
+				<!-- 单号补齐位 -->
+				<orders.head>100000</orders.head>
+
+				<!-- 第三方交易成功跳转页面 -->
+				<pay.success.url><![CDATA[order_success.html?i1=1]]></pay.success.url>
+
+				<!--pc考前冲刺站点 -->
+				<pc.liveclass.domain>http://113.108.202.180:1708/</pc.liveclass.domain>
+				<!--app考前冲刺站点 -->
+				<app.liveclass.domain>http://113.108.202.180:1708/</app.liveclass.domain>
+
+				<openapi.domain>openapi.tencentyun.com</openapi.domain>
+				<openapi.test.domain>119.147.19.43</openapi.test.domain>
+
+				<appid.test>1101815070</appid.test>
+				<appkey.test>WSq1TQNZU9CKebY5</appkey.test>
+
+				<appid.product>1101815070</appid.product>
+				<appkey.product>WSq1TQNZU9CKebY5</appkey.product>
+
+				<appid>1101815070</appid>
+				<appkey>WSq1TQNZU9CKebY5</appkey>
+
+				<msm.id>0SDK-EAA-6688-JEZTT</msm.id>
+				<msm.pwd>584277</msm.pwd>
+
+				<!-- <pic.domain>http://ttimg.app1101815070.twsapp.com/</pic.domain> -->
+				<!-- <pic.domain>http://kdimg.app1101168695.twsapp.com/</pic.domain> -->
+				<pic.domain>http://113.108.202.180:8014/</pic.domain>
+				<api.domain>http://ttestapi.app1101815070.twsapp.com/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+				<admin.domain>http://183.63.120.222:8015/</admin.domain>
+				<us.domain>http://177.77.77.158:8081/</us.domain>
+				<temp.domain>http://183.63.120.222:8016/</temp.domain>
+				<!-- 是否使用代理，正式线才会使用 -->
+				<isproxy>false</isproxy>
+				<proxy.url></proxy.url>
+				<proxy.port></proxy.port>
+				<file.folder>D:\work_file</file.folder>
+
+				<sorceorders.head>duibatest</sorceorders.head>
+
+
+
+				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<url><![CDATA[jdbc:mysql://177.77.77.158:3307/ask?autoReconnect=true;characterEncoding=UTF-8]]></url>
+				<username>root</username>
+				<password>root</password>
+				<hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+                <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>2</push.env>
+			</properties>
+
+		</profile>
+		
+		<profile>
+				<id>dockerTest</id>
+	<properties>
+		<serverType>dev</serverType>
+		<redis.host>10.0.98.9</redis.host>
+		<redis.mem.host>${redis.host}</redis.mem.host>
+		<redis.mem.port>6379</redis.mem.port>
+		<mongo.uri>10.0.98.10:27017</mongo.uri>
+		<!--,${redis.host}:20000</mongo.uri> -->
+		<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+		<redis.chat.host>${redis.host}</redis.chat.host>
+		<redis.chat.port>6381</redis.chat.port>
+
+		<msg.thread.minSize>20</msg.thread.minSize>
+		<msg.thread.maxSize>30</msg.thread.maxSize>
+
+		<buss.thread.minSize>40</buss.thread.minSize>
+		<buss.thread.maxSize>50</buss.thread.maxSize>
+
+		<pic.folder>/www/img</pic.folder>
+		<!-- 用户提问图片存放路径 -->
+		<topic.file.folder>/www/img</topic.file.folder>
+		<temp.folder>/www/img</temp.folder>
+		<!-- 红包地址 -->
+		<red.url>res/chat/red.png</red.url>
+		<log.target>logfile</log.target>
+		<log.web.level>INFO</log.web.level>
+		<groovy-scope>provided</groovy-scope>
+		<aspectj-scope>provided</aspectj-scope>
+
+		<!-- 每日推送更多接口 -->
+		<day.push.more.url><![CDATA[http://www.baidu.com?i=0]]></day.push.more.url>
+		<!-- 课程列表接口  -->
+		<course.list.url><![CDATA[http://www.baidu.com?i=0]]></course.list.url>
+		<!-- 课程详情  -->
+		<course.info.url><![CDATA[http://my.kjcity.com:88/course-details.html?i=0]]></course.info.url>
+
+		<!-- 付款异步通知站点 -->
+		<notify.domain>http://183.63.120.222:8010/</notify.domain>
+		<!-- 				<notify.domain>http://113.108.202.180:1708/</notify.domain> -->
+		<!-- 支付宝PC付款异步通知接口 -->
+		<notify.alipay.url>alipaynotify/nodity.json</notify.alipay.url>
+		<!-- 付款同步通知站点 -->
+		<return.domain>http://113.108.202.180:8016/</return.domain>
+		<!-- 支付宝PC付款同步跳转地址 -->
+		<return.alipay.url>myCommoditysList.html#tab=tab1#type=type2</return.alipay.url>
+		<!-- 微信付款异步通知接口 -->
+		<notify.wx.url>wxappnotify/nodity</notify.wx.url>
+
+
+		<!-- 支付宝H5付款异步通知接口 -->
+		<notify.wapdirect.url>alipaywapdirectnotify/nodity.json</notify.wapdirect.url>
+		<!-- 块钱异步通知接口 -->
+		<notify.bill99.url>bill99receive/nodity.json</notify.bill99.url>
+		<!-- H5站点地址-->
+		<pay.h5.domain>http://my.kjcity.com:88/</pay.h5.domain>
+		<!-- H5支付成功后同步跳转页面 弃用-->
+		<notify.return_h5.url><![CDATA[course-all.html?1=1&v=_a&token=]]></notify.return_h5.url>
+		<!-- 单号补齐位 -->
+		<orders.head>100000</orders.head>
+
+		<!-- 第三方交易成功跳转页面 -->
+		<pay.success.url><![CDATA[order_success.html?i1=1]]></pay.success.url>
+
+		<!--pc考前冲刺站点  弃用-->
+		<pc.liveclass.domain>http://113.108.202.180:1708/</pc.liveclass.domain>
+		<!--app考前冲刺站点 弃用-->
+		<app.liveclass.domain>http://113.108.202.180:1708/</app.liveclass.domain>
+		<!-- 根据学员获取课程 -->
+		<learning.api.domain>http://10.0.98.87:8091/</learning.api.domain>
+
+		<openapi.domain>openapi.tencentyun.com</openapi.domain>
+		<openapi.test.domain>119.147.19.43</openapi.test.domain>
+
+		<appid.test>1101815070</appid.test>
+		<appkey.test>WSq1TQNZU9CKebY5</appkey.test>
+
+		<appid.product>1101815070</appid.product>
+		<appkey.product>WSq1TQNZU9CKebY5</appkey.product>
+
+		<appid>1101815070</appid>
+		<appkey>WSq1TQNZU9CKebY5</appkey>
+
+		<msm.id>0SDK-EAA-6688-JEZTT</msm.id>
+		<msm.pwd>584277</msm.pwd>
+
+		<!-- <pic.domain>http://ttimg.app1101815070.twsapp.com/</pic.domain> -->
+		<!-- <pic.domain>http://kdimg.app1101168695.twsapp.com/</pic.domain> -->
+		<pic.domain>http://10.0.98.20:8094/</pic.domain>
+		<api.domain>http://10.0.98.20:8090/</api.domain>
+		<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+		<admin.domain>http://10.0.98.20:8095/</admin.domain>
+		<us.domain>http://10.0.98.20:8091/</us.domain>
+		<temp.domain>http://183.63.120.222:8016/</temp.domain>
+
+		<!-- 是否使用代理，正式线才会使用 -->
+		<isproxy>false</isproxy>
+		<proxy.url></proxy.url>
+		<proxy.port></proxy.port>
+		<file.folder>/www/img</file.folder>
+
+		<queue.receivenc>receive_from_nc_test</queue.receivenc>
+		<nc.queue.user>test.nc.sync.users</nc.queue.user>
+		<queue.sendnc>send_to_nc_test</queue.sendnc>
+		<queue.daka>rabbit_queue_hqonline_attendances</queue.daka>
+		<!-- 教师排课消息队列 -->
+		<pom.teacher.plan.sync.kd><![CDATA[test.teacher.plan.sync.kd]]></pom.teacher.plan.sync.kd>
+
+		<currencysync.domain>http://my.kjcity.com/</currencysync.domain>
+		<hqjy.domain>http://test.hqjy.com/</hqjy.domain>
+		<hqjyh5.domain>http://10.0.98.20:9000/</hqjyh5.domain>
+		<hqonlineh5.domain>http://177.77.77.158:8027/</hqonlineh5.domain>
+		<kjcityapi.domain>http://177.77.77.118:12001/</kjcityapi.domain>
+
+		<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+		<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+		<validationQuery>SELECT 1</validationQuery>
+		<url><![CDATA[jdbc:mysql://10.0.98.5:3306/ask?autoReconnect=true;characterEncoding=UTF-8]]></url>
+		<username>root</username>
+		<password>root</password>
+		<hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+		<hibernate.show_sql>true</hibernate.show_sql>
+		<hibernate.format_sql>true</hibernate.format_sql>
+		<!-- 开发环境是2，生产环境是1 -->
+		<push.env>2</push.env>
+
+		<!-- SSO接口 -->
+		<sso.domain><![CDATA[http://10.0.98.21:28087]]></sso.domain>
+		<sso_login_post>${sso.domain}<![CDATA[/inner/login]]></sso_login_post>
+		<sso_userInfo_get>${sso.domain}<![CDATA[/inner/userInfo]]></sso_userInfo_get>
+		<sso_userMobileNo_get>${sso.domain}<![CDATA[/inner/userMobileNo]]></sso_userMobileNo_get>
+		<sso_logout_post>${sso.domain}<![CDATA[/inner/logout]]></sso_logout_post>
+		<sso_sendSMS_get>${sso.domain}<![CDATA[/inner/otpSMS]]></sso_sendSMS_get>
+		<sso_register_post>${sso.domain}<![CDATA[/inner/register]]></sso_register_post>
+		<sso_userTokenDetail_get>${sso.domain}<![CDATA[/inner/userTokenDetail]]></sso_userTokenDetail_get>
+		<sso_passWord_post>${sso.domain}<![CDATA[/inner/passWord]]></sso_passWord_post>
+		<sso_checkMobileNo_get>${sso.domain}<![CDATA[/inner/checkMobileNo]]></sso_checkMobileNo_get>
+		<sso_checkPassWord_post>${sso.domain}<![CDATA[/inner/checkPassWord]]></sso_checkPassWord_post>
+		<sso_tokenExpired_get>${sso.domain}<![CDATA[/inner/tokenExpired]]></sso_tokenExpired_get>
+
+		<!-- 活动url -->
+		<promotion.domain>http://10.0.98.27:8080</promotion.domain>
+		<!-- 展视互动HLS固定拉流地址 -->
+		<gensee.hls.url><![CDATA[http://hqyzx.gensee.com/integration/site/webcast/stream/pull/info?webcastId={live_id}&mode=redirect]]></gensee.hls.url>
+	</properties>
+			
+		</profile>
+		
+		<profile>
+			<id>dockerDev</id>
+			<properties>
+				<serverType>dev</serverType>
+				<redis.host>10.0.98.9</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>10.0.98.10:27017</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<!-- <redis.chat.port>6381</redis.chat.port> -->
+				<redis.chat.port>6381</redis.chat.port>
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>/www/img</pic.folder>
+				<!-- 用户提问图片存放路径 -->
+				<topic.file.folder>/www/img</topic.file.folder>
+                <temp.folder>/www/img</temp.folder>
+				<!-- 红包地址 -->
+				<red.url>res/chat/red.png</red.url>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+				
+				<!-- 每日推送更多接口 -->
+				<day.push.more.url><![CDATA[http://www.baidu.com?i=0]]></day.push.more.url>
+				<!-- 课程列表接口  -->
+				<course.list.url><![CDATA[http://www.baidu.com?i=0]]></course.list.url>
+				<!-- 课程详情  -->
+				<course.info.url><![CDATA[http://my.kjcity.com:88/course-details.html?i=0]]></course.info.url>
+				
+				<!-- 付款异步通知站点 -->
+				<notify.domain>http://183.63.120.222:8010/</notify.domain>
+<!-- 				<notify.domain>http://113.108.202.180:1708/</notify.domain> -->
+				<!-- 支付宝PC付款异步通知接口 -->
+				<notify.alipay.url>alipaynotify/nodity.json</notify.alipay.url>
+				<!-- 付款同步通知站点 -->
+				<return.domain>http://113.108.202.180:8016/</return.domain>
+				<!-- 支付宝PC付款同步跳转地址 -->
+				<return.alipay.url>myCommoditysList.html#tab=tab1#type=type2</return.alipay.url>
+				<!-- 微信付款异步通知接口 -->
+				<notify.wx.url>wxappnotify/nodity</notify.wx.url>
+				
+				
+				<!-- 支付宝H5付款异步通知接口 -->
+				<notify.wapdirect.url>alipaywapdirectnotify/nodity.json</notify.wapdirect.url>
+				<!-- 块钱异步通知接口 -->
+				<notify.bill99.url>bill99receive/nodity.json</notify.bill99.url>
+				<!-- H5站点地址-->
+				<pay.h5.domain>http://my.kjcity.com:88/</pay.h5.domain>
+				<!-- H5支付成功后同步跳转页面-->
+				<notify.return_h5.url><![CDATA[course-all.html?1=1&v=_a&token=]]></notify.return_h5.url>
+				<!-- 单号补齐位 -->
+				<orders.head>100000</orders.head>
+				
+				<!-- 第三方交易成功跳转页面 -->
+				<pay.success.url><![CDATA[order_success.html?i1=1]]></pay.success.url>
+				
+				<!--pc考前冲刺站点 -->
+				<pc.liveclass.domain>http://113.108.202.180:1708/</pc.liveclass.domain>
+				<!--app考前冲刺站点 -->
+				<app.liveclass.domain>http://113.108.202.180:1708/</app.liveclass.domain>
+				<!-- 根据学员获取课程 -->
+				<learning.api.domain>http://10.0.98.15:8098/</learning.api.domain>
+
+				<openapi.domain>openapi.tencentyun.com</openapi.domain>
+				<openapi.test.domain>119.147.19.43</openapi.test.domain>
+
+				<appid.test>1101815070</appid.test>
+				<appkey.test>WSq1TQNZU9CKebY5</appkey.test>
+
+				<appid.product>1101815070</appid.product>
+				<appkey.product>WSq1TQNZU9CKebY5</appkey.product>
+
+				<appid>1101815070</appid>
+				<appkey>WSq1TQNZU9CKebY5</appkey>
+
+				<msm.id>0SDK-EAA-6688-JEZTT</msm.id>
+				<msm.pwd>584277</msm.pwd>
+
+				<!-- <pic.domain>http://ttimg.app1101815070.twsapp.com/</pic.domain> -->
+				<!-- <pic.domain>http://kdimg.app1101168695.twsapp.com/</pic.domain> -->
+				<pic.domain>http://183.63.120.222:8014/</pic.domain>
+				<api.domain>http://10.0.98.20:8090/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+				<admin.domain>http://10.0.98.20:8095/</admin.domain>
+				<us.domain>http://10.0.98.20:8091/</us.domain>
+				<temp.domain>http://183.63.120.222:8016/</temp.domain>
+				
+				<!-- 是否使用代理，正式线才会使用 -->
+				<isproxy>false</isproxy>
+				<proxy.url></proxy.url>
+				<proxy.port></proxy.port>
+				<file.folder>/www/img</file.folder>
+				
+				<queue.receivenc>receive_from_nc_test</queue.receivenc>
+				<nc.queue.user>test.nc.sync.users</nc.queue.user>
+				<queue.sendnc>send_to_nc_test</queue.sendnc>
+				<queue.daka>rabbit_queue_hqonline_attendances</queue.daka>
+				
+				<currencysync.domain>http://my.kjcity.com/</currencysync.domain>
+				<hqjy.domain>http://test.hqjy.com/</hqjy.domain>
+                <hqjyh5.domain>http://10.0.98.20:9000/</hqjyh5.domain>
+                <hqonlineh5.domain>http://10.0.98.20:9000/</hqonlineh5.domain>
+             	<kjcityapi.domain>http://10.0.98.20:12001/</kjcityapi.domain>
+             	
+				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<url><![CDATA[jdbc:mysql://10.0.98.5:3307/ask?autoReconnect=true;characterEncoding=UTF-8]]></url>
+				<username>root</username>
+				<password>root</password>
+				<hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+                <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>2</push.env>
+
+				<!-- SSO接口 -->
+				<sso.domain><![CDATA[http://10.0.98.21:28087]]></sso.domain>
+				<sso_login_post>${sso.domain}<![CDATA[/inner/login]]></sso_login_post>
+				<sso_userInfo_get>${sso.domain}<![CDATA[/inner/userInfo]]></sso_userInfo_get>
+				<sso_userMobileNo_get>${sso.domain}<![CDATA[/inner/userMobileNo]]></sso_userMobileNo_get>
+				<sso_logout_post>${sso.domain}<![CDATA[/inner/logout]]></sso_logout_post>
+				<sso_sendSMS_get>${sso.domain}<![CDATA[/inner/otpSMS]]></sso_sendSMS_get>
+				<sso_register_post>${sso.domain}<![CDATA[/inner/register]]></sso_register_post>
+				<sso_userTokenDetail_get>${sso.domain}<![CDATA[/inner/userTokenDetail]]></sso_userTokenDetail_get>
+				<sso_passWord_post>${sso.domain}<![CDATA[/inner/passWord]]></sso_passWord_post>
+				<sso_checkMobileNo_get>${sso.domain}<![CDATA[/inner/checkMobileNo]]></sso_checkMobileNo_get>
+				<sso_checkPassWord_post>${sso.domain}<![CDATA[/inner/checkPassWord]]></sso_checkPassWord_post>
+
+			</properties>
+
+		</profile>
+		
+
+		<profile>
+			<id>betaTest</id>
+			<properties>
+				<serverType>betaTest</serverType>
+				<redis.host>177.77.77.158</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>
+				<mongo.uri>${redis.host}</mongo.uri>
+				<!--,${redis.host}:20000</mongo.uri> -->
+				<!--<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write> -->
+				<redis.chat.host>${redis.host}</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>
+
+				<msg.thread.minSize>20</msg.thread.minSize>
+				<msg.thread.maxSize>30</msg.thread.maxSize>
+
+				<buss.thread.minSize>40</buss.thread.minSize>
+				<buss.thread.maxSize>50</buss.thread.maxSize>
+
+				<pic.folder>E:/SVN/DEV/front/file/img</pic.folder>
+				<!-- 用户提问图片存放路径 -->
+				<topic.file.folder>E:/SVN/DEV/front/file/img</topic.file.folder>
+                <temp.folder>E:/SVN/DEV/front/file/img/hqonline</temp.folder>
+				<!-- 红包地址 -->
+				<red.url>res/chat/red.png</red.url>
+				<log.target>logfile</log.target>
+				<log.web.level>DEBUG</log.web.level>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+				
+				<!-- 每日推送更多接口 -->
+				<day.push.more.url><![CDATA[http://www.baidu.com?i=0]]></day.push.more.url>
+				<!-- 课程列表接口  -->
+				<course.list.url><![CDATA[http://www.baidu.com?i=0]]></course.list.url>
+				<!-- 课程详情  -->
+				<course.info.url><![CDATA[http://my.kjcity.com:88/course-details.html?i=0]]></course.info.url>
+				
+				<!-- 付款异步通知站点 -->
+				<notify.domain>http://183.63.120.222:8010/</notify.domain>
+<!-- 				<notify.domain>http://113.108.202.180:1708/</notify.domain> -->
+				<!-- 支付宝PC付款异步通知接口 -->
+				<notify.alipay.url>alipaynotify/nodity.json</notify.alipay.url>
+				<!-- 付款同步通知站点 -->
+				<return.domain>http://113.108.202.180:8016/</return.domain>
+				<!-- 支付宝PC付款同步跳转地址 -->
+				<return.alipay.url>myCommoditysList.html#tab=tab1#type=type2</return.alipay.url>
+				<!-- 微信付款异步通知接口 -->
+				<notify.wx.url>wxappnotify/nodity</notify.wx.url>
+				
+				
+				<!-- 支付宝H5付款异步通知接口 -->
+				<notify.wapdirect.url>alipaywapdirectnotify/nodity.json</notify.wapdirect.url>
+				<!-- 块钱异步通知接口 -->
+				<notify.bill99.url>bill99receive/nodity.json</notify.bill99.url>
+				<!-- H5站点地址-->
+				<pay.h5.domain>http://my.kjcity.com:88/</pay.h5.domain>
+				<!-- H5支付成功后同步跳转页面-->
+				<notify.return_h5.url><![CDATA[course-all.html?1=1&v=_a&token=]]></notify.return_h5.url>
+				<!-- 单号补齐位 -->
+				<orders.head>100000</orders.head>
+				
+				<!-- 第三方交易成功跳转页面 -->
+				<pay.success.url><![CDATA[order_success.html?i1=1]]></pay.success.url>
+				
+				<!--pc考前冲刺站点 -->
+				<pc.liveclass.domain>http://113.108.202.180:1708/</pc.liveclass.domain>
+				<!--app考前冲刺站点 -->
+				<app.liveclass.domain>http://113.108.202.180:1708/</app.liveclass.domain>
+				
+				<openapi.domain>openapi.tencentyun.com</openapi.domain>
+				<openapi.test.domain>119.147.19.43</openapi.test.domain>
+
+				<appid.test>1101815070</appid.test>
+				<appkey.test>WSq1TQNZU9CKebY5</appkey.test>
+
+				<appid.product>1101815070</appid.product>
+				<appkey.product>WSq1TQNZU9CKebY5</appkey.product>
+
+				<appid>1101815070</appid>
+				<appkey>WSq1TQNZU9CKebY5</appkey>
+
+				<msm.id>0SDK-EAA-6688-JEZTT</msm.id>
+				<msm.pwd>584277</msm.pwd>
+
+				<!-- <pic.domain>http://ttimg.app1101815070.twsapp.com/</pic.domain> -->
+				<!-- <pic.domain>http://kdimg.app1101168695.twsapp.com/</pic.domain> -->
+				<pic.domain>http://183.63.120.222:8014/</pic.domain>
+				<api.domain>http://183.63.120.222:8010/</api.domain>
+				<site.domain>http://ttwww.app1101815070.twsapp.com/</site.domain>
+				<admin.domain>http://183.63.120.222:8015/</admin.domain>
+				<us.domain>http://passport1.kjcity.com/</us.domain>
+				<temp.domain>http://183.63.120.222:8016/</temp.domain>
+				
+				<!-- 是否使用代理，正式线才会使用 -->
+				<isproxy>false</isproxy>
+				<proxy.url></proxy.url>
+				<proxy.port></proxy.port>
+				<file.folder>D:\work_file</file.folder>
+				
+				<queue.receivenc>receive_from_nc_test</queue.receivenc>
+				<nc.queue.user>test.nc.sync.users</nc.queue.user>
+				<queue.sendnc>send_to_nc_test</queue.sendnc>
+				<queue.daka>rabbit_queue_hqonline_attendances</queue.daka>
+				
+				<currencysync.domain>http://my.kjcity.com/</currencysync.domain>
+				<hqjy.domain>http://test.hqjy.com/</hqjy.domain>
+                <hqjyh5.domain>http://183.63.120.222:8028/</hqjyh5.domain>
+                <hqonlineh5.domain>http://177.77.77.158:8027/</hqonlineh5.domain>
+             	<kjcityapi.domain>http://177.77.77.118:12001/</kjcityapi.domain>
+             	
+				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<url><![CDATA[jdbc:mysql://177.77.77.158:3307/ask?autoReconnect=true;characterEncoding=UTF-8]]></url>
+				<username>root</username>
+				<password>root</password>
+				<hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>true</hibernate.format_sql>
+                <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>2</push.env>
+			</properties>
+
+		</profile>
+
+		<profile>
+			<id>product</id>
+			<properties>
+				<serverType>product</serverType>
+				<redis.host>172.16.2.244</redis.host>
+				<redis.mem.host>${redis.host}</redis.mem.host>
+				<redis.mem.port>6379</redis.mem.port>	<!-- 原来 6380，改为 6379 -->
+
+				<redis.chat.host>172.16.2.244</redis.chat.host>
+				<redis.chat.port>6381</redis.chat.port>				<!-- 6381 -->
+
+				<redis.pool.maxActive>500</redis.pool.maxActive>
+				<redis.pool.maxIdle>500</redis.pool.maxIdle>
+				<redis.pool.maxWait>-1</redis.pool.maxWait>
+				<redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
+				<redis.pool.testOnReturn>true</redis.pool.testOnReturn>
+
+				<chat.pool.maxActive>300</chat.pool.maxActive>
+				<chat.pool.maxIdle>300</chat.pool.maxIdle>
+				<chat.pool.maxWait>1500</chat.pool.maxWait>
+
+				<msg.thread.minSize>100</msg.thread.minSize>
+				<msg.thread.maxSize>200</msg.thread.maxSize>
+
+				<buss.thread.minSize>300</buss.thread.minSize>
+				<buss.thread.maxSize>400</buss.thread.maxSize>
+				
+				
+					<!-- 付款异步通知站点 -->
+				<notify.domain>http://api.kjcity.com/</notify.domain>
+				<!-- 支付宝付款异步通知接口 -->
+				<notify.alipay.url>alipaynotify.json</notify.alipay.url>
+				<!-- 块钱异步通知接口 -->
+				<notify.bill99.url>receive.json</notify.bill99.url>
+				<!-- 单号补齐位 -->
+				<orders.head>200</orders.head>
+				
+				<!-- 每日推送更多接口 -->
+				<day.push.more.url><![CDATA[http://www.baidu.com?i=0]]></day.push.more.url>
+				<!-- 课程列表接口  -->
+				<course.list.url><![CDATA[http://www.baidu.com?i=0]]></course.list.url>
+				<!-- 课程详情  -->
+				<course.info.url><![CDATA[http://h5.hqjy.com/course-details.html?i=0]]></course.info.url>
+				
+				<!--pc考前冲刺站点 -->
+				<pc.liveclass.domain>http://api.kjcity.com/</pc.liveclass.domain>
+				<!--app考前冲刺站点 -->
+				<app.liveclass.domain>http://api.kjcity.com/</app.liveclass.domain>
+				<!-- 根据学员获取课程 -->
+				<learning.api.domain>http://api.hqjy.com/service-learning-api-prod/</learning.api.domain>
+				
+				<!-- 微信付款异步通知接口 -->
+				<notify.wx.url>wxappnotify/nodity</notify.wx.url>
+				<!-- 用户提问图片存放路径 -->
+				<topic.file.folder>/www/nginx-web/img</topic.file.folder>
+				<!-- 红包地址 -->
+				<red.url>res/chat/red.png</red.url>
+				<log.target>logfile</log.target>
+				<log.web.level>INFO</log.web.level>
+				<pic.folder>/www/nginx-web/img</pic.folder>
+                <temp.folder>/data/nginx-web/www.hqonline.com</temp.folder>
+				<groovy-scope>provided</groovy-scope>
+				<aspectj-scope>provided</aspectj-scope>
+
+				<!-- replset -->
+				<mongo.uri>172.16.2.246:27018</mongo.uri>
+				<mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
+				
+				<pic.domain>http://answerimg.kjcity.com/</pic.domain>
+				<admin.domain>http://adminapi.kjcity.com/</admin.domain>
+				<us.domain>http://passport.hqjy.com/</us.domain>
+				<api.domain>http://api.kjcity.com/</api.domain>
+				<temp.domain>http://api1.kjcity.com/</temp.domain>
+				<openapi.test>0</openapi.test>
+			 	<sorceorders.head>duiba</sorceorders.head>
+			     
+				<queue.receivenc>receive_from_nc</queue.receivenc>
+				<queue.sendnc>send_to_nc</queue.sendnc>
+				<queue.daka>rabbit_queue_hqonline_attendances_pro</queue.daka>
+				<nc.queue.user>nc.sync.users</nc.queue.user>
+				<!-- 教师排课消息队列 -->
+				<pom.teacher.plan.sync.kd><![CDATA[teacher.plan.sync.kd]]></pom.teacher.plan.sync.kd>
+
+				<currencysync.domain>http://my.kjcity.com/</currencysync.domain>
+				<hqjy.domain>http://www.hqjy.com/</hqjy.domain>
+			  	<hqjyh5.domain>https://appapi.hqjy.com/</hqjyh5.domain>
+			   	<hqonlineh5.domain>http://wap.hqjy.com/</hqonlineh5.domain>
+			   	<kjcityapi.domain>http://webapi.hqjy.com/</kjcityapi.domain>
+					   
+				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<validationQuery>SELECT 1</validationQuery>
+				<url><![CDATA[jdbc:mysql://rm-wz98may44ctowhmr8.mysql.rds.aliyuncs.com:3306/ask?useUnicode=true&characterEncoding=UTF-8]]></url>
+				<username>hqsa</username>
+				<password>rds!hengqijy@2018</password>
+				<hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>false</hibernate.format_sql>
+				 <!-- 开发环境是2，生产环境是1 -->
+               	<push.env>1</push.env>
+
+				<!-- SSO接口 -->
+				<sso.domain><![CDATA[http://172.16.2.222:8101]]></sso.domain>
+				<sso_login_post>${sso.domain}<![CDATA[/inner/login]]></sso_login_post>
+				<sso_userInfo_get>${sso.domain}<![CDATA[/inner/userInfo]]></sso_userInfo_get>
+				<sso_userMobileNo_get>${sso.domain}<![CDATA[/inner/userMobileNo]]></sso_userMobileNo_get>
+				<sso_logout_post>${sso.domain}<![CDATA[/inner/logout]]></sso_logout_post>
+				<sso_sendSMS_get>${sso.domain}<![CDATA[/inner/otpSMS]]></sso_sendSMS_get>
+				<sso_register_post>${sso.domain}<![CDATA[/inner/register]]></sso_register_post>
+				<sso_userTokenDetail_get>${sso.domain}<![CDATA[/inner/userTokenDetail]]></sso_userTokenDetail_get>
+				<sso_passWord_post>${sso.domain}<![CDATA[/inner/passWord]]></sso_passWord_post>
+				<sso_checkMobileNo_get>${sso.domain}<![CDATA[/inner/checkMobileNo]]></sso_checkMobileNo_get>
+				<sso_checkPassWord_post>${sso.domain}<![CDATA[/inner/checkPassWord]]></sso_checkPassWord_post>
+				<sso_tokenExpired_get>${sso.domain}<![CDATA[/inner/tokenExpired]]></sso_tokenExpired_get>
+
+				<!-- 活动url -->
+				<promotion.domain>http://www.hengqijiaoyu.cn</promotion.domain>
+				<!-- 展视互动HLS固定拉流地址 -->
+				<gensee.hls.url><![CDATA[http://hqyzx.gensee.com/integration/site/webcast/stream/pull/info?webcastId={live_id}&mode=redirect]]></gensee.hls.url>
+			</properties>
+		</profile>
+
+
+	</profiles>
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.izhubo</groupId>
+			<artifactId>rest</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-tx</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.5.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.2.0.RELEASE</version>
+		</dependency>
+
+		<!--<dependency> -->
+		<!--<groupId>javax.json</groupId> -->
+		<!--<artifactId>javax.json-api</artifactId> -->
+		<!--<version>1.0-b02</version> -->
+		<!--</dependency> -->
+
+
+		<!--<dependency> -->
+		<!--<groupId>com.paypal.sdk</groupId> -->
+		<!--<artifactId>rest-api-sdk</artifactId> -->
+		<!--<version>0.7.0</version> -->
+		<!--</dependency> -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>com.notnoop.apns</groupId>
+			<artifactId>apns</artifactId>
+			<version>0.2.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.5</version>
+			<!-- <version>4.2.5</version> -->
+		</dependency>
+
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.izhubo</groupId>
+			<artifactId>iuserSystem-lib</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>jaxrpc</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.commons.logging</groupId> -->
+		<!-- <artifactId>logging</artifactId> -->
+		<!-- <version>1.0</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.apache.servicemix.specs</groupId>
+			<artifactId>org.apache.servicemix.specs.saaj-api-1.3</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.3.10.Final</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>4.1.7.RELEASE</version>
+		</dependency>
+
+
+		<!-- MySQL驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.24</version>
+		</dependency>
+
+		<!-- mchange C3P0 数据源 -->
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5-pre2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		
+		
+	<!-- swagger-springmvc -->
+    <dependency>
+        <groupId>com.mangofactory</groupId>
+        <artifactId>swagger-springmvc</artifactId>
+        <version>1.0.2</version>
+    </dependency>
+    <dependency>
+        <groupId>com.mangofactory</groupId>
+        <artifactId>swagger-models</artifactId>
+        <version>1.0.2</version>
+    </dependency>
+    <dependency>
+        <groupId>com.wordnik</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>1.3.11</version>
+    </dependency>
+    <!-- swagger-springmvc dependencies -->
+    <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>15.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>2.4.4</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.4.4</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>2.4.4</version>
+    </dependency>
+    <!-- 微信 start -->
+    
+	<!-- <dependency>
+		<groupId>commons-logging</groupId>
+		<artifactId>commons-logging</artifactId>
+		<version>1.1.3</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>fluent-hc</artifactId>
+		<version>4.3.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient-cache</artifactId>
+		<version>4.3.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore</artifactId>
+		<version>4.3.2</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpmime</artifactId>
+		<version>4.3.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>xmlpull</groupId>
+		<artifactId>xmlpull</artifactId>
+		<version>1.1.3.1</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>xpp3</groupId>
+		<artifactId>xpp3</artifactId>
+		<version>1.1.4c</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>com.thoughtworks.xstream</groupId>
+		<artifactId>xstream</artifactId>
+		<version>1.4.7</version>
+		<scope>provided</scope>
+	</dependency>
+ -->
+
+	<dependency>
+		<groupId>com.thoughtworks.xstream</groupId>
+		<artifactId>xstream</artifactId>
+		<version>1.4.7</version>
+		<scope>provided</scope>
+	</dependency>
+		
+     <!-- 微信 end -->
+    <dependency>
+        <groupId>com.fasterxml</groupId>
+        <artifactId>classmate</artifactId>
+        <version>1.1.0</version>
+    </dependency>
+   	<dependency>
+		<groupId>com.rabbitmq</groupId>
+		<artifactId>amqp-client</artifactId>
+		<version>3.5.4</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.amqp</groupId>
+		<artifactId>spring-rabbit</artifactId>
+		<version>1.3.5.RELEASE</version>
+	</dependency>
+		<dependency>
+		<groupId>org.quartz-scheduler</groupId>
+		<artifactId>quartz</artifactId>
+		<version>2.2.1</version>
+	</dependency>
+	
+	
+	   <!-- 支付宝  start -->
+		<dependency>
+			<groupId>org.jarimport</groupId>
+			<artifactId>alipaysdk</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+			<dependency>
+			<groupId>org.jarimport</groupId>
+			<artifactId>alipaysdk-commons-logging</artifactId>
+			<version>1.0</version>
+		</dependency>
+	
+        
+             <!-- 支付宝end -->
+
+		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.40</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+		</dependency>
+	</dependencies>
+
+
+</project>

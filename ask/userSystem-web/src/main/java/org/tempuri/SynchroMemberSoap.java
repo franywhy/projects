@@ -1,0 +1,12 @@
+/**
+ * SynchroMemberSoap.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
+package org.tempuri;
+
+public interface SynchroMemberSoap extends java.rmi.Remote {
+    public boolean addUser(java.lang.String website, java.lang.String loginName, java.lang.String loginPwd, java.lang.String nc_id, int registertype, java.lang.String key, javax.xml.rpc.holders.StringHolder retCode) throws java.rmi.RemoteException;
+}

@@ -1,0 +1,55 @@
+<!--充值记录-->
+<table width="100%" class="listTable tablesorter">
+<thead>
+    <tr>
+    		<th>时间</th> 
+            <th>奇迹礼物</th>
+
+            <%if(!params._id){%>
+            <th>获得者Id</th>            
+            <th>获得者昵称</th>
+            <%}%> 
+            <th>获得个数</th>
+            <th>奖励</th>
+        <th>领取时间</th> 
+            <th>创造者Id</th>            
+            <th>创造者昵称</th>
+            <th>贡献</th>
+    		
+			<!--<th class="auto">购买天数（天）</th>-->
+        </tr>
+	</thead>
+	<tbody>
+        <%for(var i=0; i<data.length; i++){var tempData = data[i]; %>
+				<tr>
+                    <td><%=tempData._id.slice(0,4)+"-"+tempData._id.slice(4,6)+"-"+tempData._id.slice(6)%>&nbsp;
+						<% var stime={};
+                        stime.h=Math.floor(tempData.stime/1000 / 3600);
+                        stime.m=Math.floor((tempData.stime/1000% 3600) / 60);
+                        stime.s=Math.floor(tempData.stime/1000 %60);
+                        var etime ={};
+                         etime.h=Math.floor(tempData.etime/1000 / 3600);
+                        etime.m=Math.floor((tempData.etime/1000% 3600) / 60);
+                        etime.s=Math.floor(tempData.etime/1000 %60);%>
+						<%=stime.h+":"+stime.m+"~"+etime.h+":"+etime.m%></td>
+                    <td><%=tempData.gift.name%></td>
+                    <% var starData=tempData.star1 || {};%>
+            <%if(!params._id){%>
+                    <td><%=starData._id%></td>
+                    <td><%=starData.nick_name%></td>
+            <%}%> 
+                    <td><%=starData.count%>个</td>
+                    <td><%=starData.bonus%>星豆</td>
+                    <td><%=new Date(starData.bonus_time).toLocaleString()%></td>
+
+
+                    <%var fanData=tempData.fan1 || {};%>
+                    <td><%=fanData._id%></td>
+                    <td><%=fanData.nick_name%></td>
+                    <td><%=fanData.count%>个</td>
+                    </tr>
+			<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<!-- <setting name="logImpl" value="LOG4J" />  -->
+		<!--解决，查询返回结果含null没有对应字段值问题-->
+		<setting name="callSettersOnNulls" value="true"/>
+	</settings>
+	<plugins>
+		<!-- 数据权限-->
+		<plugin interceptor="io.renren.mybatis.interceptor.DataInterceptor" >
+			<property name="dept" value="sys_user,sys_role,mall_dept,course_userplan,course_userplan_class,"/>
+			<property name="product" 
+				value="mall_profession,mall_class_type,mall_live_room,mall_studio,mall_class,course_classplan,courses,mall_order,sys_product,mall_goods_info,"/>
+		</plugin>
+	</plugins>
+</configuration>

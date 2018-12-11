@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.CourseClassplanLivesDao">
+    <select id="getCourseLives" resultType="String" parameterType="Map">
+		SELECT
+			classplan_live.classplan_live_id
+		FROM
+			course_classplan_lives AS classplan_live,
+			courses AS courses
+		WHERE
+			classplan_live.course_id = courses.course_id
+			AND courses.course_id = #{courseId}	
+	</select>
+    <sql id="check_comm_head">
+        SELECT
+        cl.classplan_live_name AS classplanLiveName,
+        cl.classplan_live_id AS classplanLiveId,
+        cl.classplan_id AS classplanId,
+        cl.day_time AS dayTime,
+        cl.time_bucket AS timeBucket,
+        c.classplan_name AS classplanName
+        FROM course_classplan_lives cl
+        JOIN course_classplan c ON cl.classplan_id = c.classplan_id
+        WHERE c.dr = 0
+        AND cl.day_time = #{dayTime}
+        AND cl.time_bucket = #{timeBucket}
+        <if test="classplanId != null and classplanId.trim() != '' ">
+            AND cl.classplan_id != #{classplanId}
+        </if>
+    </sql>
+    <sql id="check_comm_fool">
+		ORDER BY cl.classplan_id
+		LIMIT 0, 1
+	</sql>
+    <sql id="check_teacher_where">
+		AND cl.teacher_id = #{teacherId}
+	</sql>
+    <sql id="check_studio_where">
+		AND cl.studio_id = #{studioId}
+	</sql>
+    <sql id="check_liveroom_where">
+		AND cl.liveroom_id = #{liveroomId}
+	</sql>
+    <sql id="check_courseLive_where">
+		AND cl.course_id = #{courseId}
+	</sql>
+    <sql id="check_oneCommodityCourseLive_where">
+		AND cl.course_id = #{courseId}
+	</sql>
+
+    <select id="findMid" parameterType="string" resultType="int">
+	     SELECT COUNT(classplan_live_id) from `course_classplan_lives` WHERE m_id=#{mId}
+	</select>
+
+    <select id="findClassplanliveId" parameterType="string" resultType="string">
+	     SELECT classplan_live_id from `course_classplan_lives` WHERE m_id=#{mId}
+	</select>
+
+    <update id="updateBackUrl" parameterType="map">
+	  UPDATE `course_classplan_lives` SET back_url=#{backUrl} WHERE m_id=#{mId}
+	</update>
+
+    <update id="updateBackUrlByClassplanliveId" parameterType="map">
+	  UPDATE `course_classplan_lives` SET back_url=#{backUrl},back_id=#{backId} WHERE classplan_live_id=#{classplanLiveId}
+	</update>
+
+    <!-- 授课教师 -->
+    <select id="checkTeacher" parameterType="io.renren.entity.CourseClassplanLivesEntity" resultType="map">
+        <include refid="check_comm_head"/>
+        <include refid="check_teacher_where"/>
+        <include refid="check_comm_fool"/>
+    </select>
+    <!-- 直播室校验 -->
+    <select id="checkStudio" parameterType="io.renren.entity.CourseClassplanLivesEntity" resultType="map">
+        <include refid="check_comm_head"/>
+        <include refid="check_studio_where"/>
+        <include refid="check_comm_fool"/>
+    </select>
+    <!-- 直播间校验 -->
+    <select id="checkLiveRoom" parameterType="io.renren.entity.CourseClassplanLivesEntity" resultType="map">
+        <include refid="check_comm_head"/>
+        <include refid="check_liveroom_where"/>
+        <include refid="check_comm_fool"/>
+    </select>
+    <!-- 同一课程多次排课课次校验 -->
+    <select id="checkCourseLive" parameterType="io.renren.entity.CourseClassplanLivesEntity" resultType="map">
+        <include refid="check_comm_head"/>
+        <include refid="check_courseLive_where"/>
+        <include refid="check_comm_fool"/>
+    </select>
+    <!-- 同一商品下的不同课程排课课次校验 -->
+    <select id="checkOneCommodityCourseLive" parameterType="io.renren.entity.CourseClassplanLivesEntity" resultType="map">
+        SELECT
+        cl.classplan_live_name AS classplanLiveName,
+        cl.classplan_live_id AS classplanLiveId,
+        cl.classplan_id AS classplanId,
+        cl.day_time AS dayTime,
+        cl.time_bucket AS timeBucket,
+        c.classplan_name AS classplanName
+        FROM course_classplan_lives cl
+        JOIN course_classplan c ON cl.classplan_id = c.classplan_id
+        WHERE c.dr = 0
+        AND cl.day_time = #{dayTime}
+        AND cl.time_bucket = #{timeBucket}
+        AND cl.course_id = #{courseId}
+        <if test="classplanId != null and classplanId.trim() != '' ">
+            AND cl.classplan_id != #{classplanId}
+        </if>
+        ORDER BY cl.classplan_id
+        LIMIT 0, 1
+    </select>
+
+    <!-- 根据排课计划id查询排课子表List集合 -->
+    <select id="queryPojoList" parameterType="map" resultType="io.renren.pojo.classplan.ClassplanLivePOJO">
+        select
+        c.classplan_live_id as classplanLiveId,
+        c.classplan_id as classplanId,
+        c.classplan_live_name as classplanLiveName,
+        c.classplan_live_time_detail as classplanLiveTimeDetail,
+        c.day_time as dayTime,
+        c.start_time as startTime,
+        c.end_time as endTime,
+        c.time_bucket as timeBucket,
+        c.liveroom_id as liveroomId,
+        c.studio_id as studioId,
+        c.back_url as backUrl,
+        c.back_id as backId,
+        c.back_type as backType,
+        c.teacher_id as teacherId,
+        c.live_class_type_ids as liveClassTypeIds,
+        c.order_num as orderNum,
+        c.course_live_detail_id as courseLiveDetailId,
+        c.create_person as createPerson,
+        c.creation_time as creationTime,
+        c.modify_person as modifyPerson,
+        c.modified_time as modifiedTime,
+        c.school_id as schoolId,
+        c.course_id as courseId,
+        c.dr as dr,
+        c.file_url as fileUrl,
+        c.ready_time as readyTime,
+        c.close_time as closeTime,
+        c.review_url as review,
+        c.prepare_url as prepare,
+        c.courseware_url as courseware,
+        c.practice_stage_id as practiceStageId,
+        c.exam_stage_id as examStageId,
+        c.phase_name as phaseName,
+        c.ban_speaking as banSpeaking,
+        c.ban_asking as banAsking,
+        c.hide_discussion as hideDiscussion,
+        c.hide_asking as hideAsking,
+        c.attendance as attendance,
+        (select cl.live_name from course_live_details cl where cl.live_id = c.course_live_detail_id) as
+        classplanLiveName,
+        (select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+        live_room.live_room_name as liveRoomName,
+        live_room.live_room_channel_id as liveRoomChannelId,
+        live_room.live_room_channel_password as liveRoomChannelPassword,
+        live_room.gensee_live_id as genseeLiveId,
+        live_room.gensee_live_num as genseeLiveNum,
+        (select su.nick_name from sys_user su where su.user_id = c.teacher_id) as teacherName
+        from course_classplan_lives as c
+        JOIN mall_live_room as live_room ON live_room.live_room_id = c.liveroom_id
+        where
+        c.classplan_id = #{classplanId}
+        and c.dr = 0
+        order by c.start_time asc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryObject2" resultType="io.renren.mongo.sync.entity.ClassplanLiveEntity">
+        select * from course_classplan_lives where classplan_live_id=#{classplanLiveId}
+    </select>
+
+    <select id="queryObject" resultType="io.renren.entity.CourseClassplanLivesEntity">
+        select c.classplan_live_id as classplanLiveId,
+        c.classplan_id as classplanId,
+        c.classplan_live_name as classplanLiveName,
+        c.classplan_live_time_detail as classplanLiveTimeDetail,
+        c.day_time as dayTime,
+        c.start_time as startTime,
+        c.end_time as endTime,
+        c.time_bucket as timeBucket,
+        c.liveroom_id as liveroomId,
+        c.studio_id as studioId,
+        c.back_url as backUrl,
+        c.back_id as backId,
+        c.back_type as backType,
+        c.teacher_id as teacherId,
+        c.live_class_type_ids as liveClassTypeIds,
+        c.order_num as orderNum,
+        c.course_live_detail_id as courseLiveDetailId,
+        c.create_person as createPerson,
+        c.creation_time as creationTime,
+        c.modify_person as modifyPerson,
+        c.modified_time as modifiedTime,
+        c.school_id as schoolId,
+        c.course_id as courseId,
+        c.dr as dr,
+        c.file_url as fileUrl,
+        c.ready_time as readyTime,
+        c.close_time as closeTime,
+        c.file_name as fileName,
+        c.review_name as reviewName,
+        c.prepare_name as prepareName,
+        c.courseware_name as coursewareName,
+        c.review_url as review,
+        c.prepare_url as prepare,
+        c.courseware_url as courseware,
+        c.practice_stage_id as practiceStageId,
+        c.exam_stage_id as examStageId,
+        c.ban_speaking as banSpeaking,
+        c.ban_asking as banAsking,
+        c.hide_discussion as hideDiscussion,
+        c.hide_asking as hideAsking,
+        c.attendance as attendance
+        from course_classplan_lives c where c.classplan_live_id=#{classplanLiveId}
+    </select>
+    <!-- 直播明细详情 -->
+    <select id="queryObject1" resultType="io.renren.pojo.classplan.ClassplanLivePOJO">
+        select
+        c.classplan_live_id as classplanLiveId,
+        c.classplan_id as classplanId,
+        c.classplan_live_name as classplanLiveName,
+        c.classplan_live_time_detail as classplanLiveTimeDetail,
+        c.day_time as dayTime,
+        c.start_time as startTime,
+        c.end_time as endTime,
+        c.time_bucket as timeBucket,
+        c.liveroom_id as liveroomId,
+        c.studio_id as studioId,
+        c.back_url as backUrl,
+        c.back_id as backId,
+        c.back_type as backType,
+        c.teacher_id as teacherId,
+        c.live_class_type_ids as liveClassTypeIds,
+        c.order_num as orderNum,
+        c.course_live_detail_id as courseLiveDetailId,
+        c.create_person as createPerson,
+        c.creation_time as creationTime,
+        c.modify_person as modifyPerson,
+        c.modified_time as modifiedTime,
+        c.school_id as schoolId,
+        c.course_id as courseId,
+        c.dr as dr,
+        c.file_name as fileName,
+        c.review_name as reviewName,
+        c.prepare_name as prepareName,
+        c.courseware_name as coursewareName,
+        c.file_url as fileUrl,
+        c.ready_time as readyTime,
+        c.close_time as closeTime,
+        c.review_url as review,
+        c.prepare_url as prepare,
+        c.courseware_url as courseware,
+        c.practice_stage_id as practiceStageId,
+        c.exam_stage_id as examStageId,
+        (select cl.live_name from course_live_details cl where cl.live_id = c.course_live_detail_id) as classplanLiveName,
+        (select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+        live_room.live_room_name as liveRoomName,
+        live_room.live_room_channel_id as liveRoomChannelId,
+        live_room.live_room_channel_password as liveRoomChannelPassword,
+        live_room.gensee_live_id as genseeLiveId,
+        live_room.gensee_live_num as genseeLiveNum,
+        (select su.nick_name from sys_user su where su.user_id = c.teacher_id) as teacherName
+        from course_classplan_lives as c
+        JOIN mall_live_room as live_room ON live_room.live_room_id = c.liveroom_id
+        where
+        c.classplan_live_id = #{classplanLiveId}
+    </select>
+    <!-- 直播明细列表 -->
+    <select id="queryPojoList1" parameterType="map" resultType="io.renren.pojo.classplan.ClassplanLivePOJO">
+        select
+        c.classplan_live_id as classplanLiveId,
+        c.classplan_id as classplanId,
+        classplan.classplan_name as classplanName,
+        c.classplan_live_name as classplanLiveName,
+        c.classplan_live_time_detail as classplanLiveTimeDetail,
+        c.day_time as dayTime,
+        c.start_time as startTime,
+        c.end_time as endTime,
+        c.time_bucket as timeBucket,
+        c.liveroom_id as liveroomId,
+        c.studio_id as studioId,
+        c.back_url as backUrl,
+        c.back_id as backId,
+        c.back_type as backType,
+        c.teacher_id as teacherId,
+        c.live_class_type_ids as liveClassTypeIds,
+        c.order_num as orderNum,
+        c.course_live_detail_id as courseLiveDetailId,
+        c.create_person as createPerson,
+        c.creation_time as creationTime,
+        c.modify_person as modifyPerson,
+        c.modified_time as modifiedTime,
+        c.school_id as schoolId,
+        c.course_id as courseId,
+        (select courses.course_name from courses courses where courses.course_id = c.course_id) as courseName,
+        c.dr as dr,
+        c.file_url as fileUrl,
+        c.ready_time as readyTime,
+        c.close_time as closeTime,
+        c.file_name as fileName,
+        c.review_name as reviewName,
+        c.prepare_name as prepareName,
+        c.courseware_name as coursewareName,
+        c.review_url as review,
+        c.prepare_url as prepare,
+        c.courseware_url as courseware,
+        c.practice_stage_id as practiceStageId,
+        c.exam_stage_id as examStageId,
+        (select cl.live_name from course_live_details cl where cl.live_id = c.course_live_detail_id) as classplanLiveName,
+        (select ms.studio_name from mall_studio ms where ms.studio_id = c.studio_id) as studioName,
+        live_room.live_room_name as liveRoomName,
+        live_room.gensee_live_id as genseeLiveId,
+        live_room.live_room_channel_id as liveRoomChannelId,
+        live_room.live_room_channel_password as liveRoomChannelPassword,
+        live_room.gensee_live_id as genseeLiveId,
+        live_room.gensee_live_num as genseeLiveNum,
+        (select su.nick_name from sys_user su where su.user_id = c.teacher_id) as teacherName
+        from
+        course_classplan_lives AS c
+        JOIN mall_live_room AS live_room ON (live_room.live_room_id = c.liveroom_id)
+        JOIN course_classplan AS classplan ON (classplan.classplan_id = c.classplan_id)
+        where
+        c.dr = 0
+        <!-- 开始时间 -->
+        <if test="startTime != null">
+            and c.start_time  &gt; #{startTime}
+        </if>
+        <!-- 结束时间 -->
+        <if test="endTime != null">
+            and c.start_time &lt; #{endTime}
+        </if>
+        <!-- 直播课次名称 -->
+        <if test="classplanLiveName != null and classplanLiveName.trim() != ''">
+            and c.classplan_live_name like concat('%',#{classplanLiveName},'%')
+        </if>
+        <!-- 排课计划名称 -->
+        <if test="classplanName != null and classplanName.trim() != ''">
+            and classplan.classplan_name like concat('%',#{classplanName},'%')
+        </if>
+        <!-- 上课时段 -->
+        <if test="timeBucket != null">
+            and c.time_bucket = #{timeBucket}
+        </if>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(1) from
+        course_classplan_lives AS c
+        JOIN mall_live_room AS live_room ON (live_room.live_room_id = c.liveroom_id)
+        JOIN course_classplan AS classplan ON (classplan.classplan_id = c.classplan_id)
+        where c.dr = 0
+        <!-- 开始时间 -->
+        <if test="startTime != null">
+            and c.start_time  &gt; #{startTime}
+        </if>
+        <!-- 结束时间 -->
+        <if test="endTime != null">
+            and c.start_time &lt; #{endTime}
+        </if>
+        <!-- 直播课次名称 -->
+        <if test="classplanLiveName != null and classplanLiveName.trim() != ''">
+            and c.classplan_live_name like concat('%',#{classplanLiveName},'%')
+        </if>
+        <!-- 排课计划名称 -->
+        <if test="classplanName != null and classplanName.trim() != ''">
+            and classplan.classplan_name like concat('%',#{classplanName},'%')
+        </if>
+        <!-- 上课时段 -->
+        <if test="timeBucket != null">
+            and c.time_bucket = #{timeBucket}
+        </if>
+    </select>
+    <select id="checkClassType" resultType="int">
+        select count(1) from course_classplan_lives course_classplan_lives where course_classplan_lives.live_class_type_ids like concat('%',#{classtypeId},'%')
+    </select>
+    <insert id="save" parameterType="io.renren.entity.CourseClassplanLivesEntity" useGeneratedKeys="true"
+            keyProperty="classplanLiveId">
+        insert into course_classplan_lives
+        (
+        `classplan_live_id`,
+        `classplan_id`,
+        `classplan_live_name`,
+        `classplan_live_time_detail`,
+        `day_time`,
+        `start_time`,
+        `end_time`,
+        `time_bucket`,
+        `liveroom_id`,
+        `studio_id`,
+        `back_url`,
+        `back_id`,
+        `back_type`,
+        `teacher_id`,
+        `live_class_type_ids`,
+        `order_num`,
+        `course_live_detail_id`,
+        `create_person`,
+        `creation_time`,
+        `modify_person`,
+        `modified_time`,
+        `school_id`,
+        `course_id`,
+        `dr`,
+        `file_url`,
+        `ready_time`,
+        `close_time`,
+        `review_url`,
+        `prepare_url`,
+        `courseware_url`,
+        `practice_stage_id`,
+        `exam_stage_id`,
+        `phase_name`,
+        `ban_speaking`,
+        `ban_asking`,
+        `hide_discussion`,
+        `hide_asking`,
+        `attendance`,
+        `file_name`,
+        `review_name`,
+        `prepare_name`,
+        `courseware_name`
+        )
+        values
+        (
+        #{classplanLiveId},
+        #{classplanId},
+        #{classplanLiveName},
+        #{classplanLiveTimeDetail},
+        #{dayTime},
+        #{startTime},
+        #{endTime},
+        #{timeBucket},
+        #{liveroomId},
+        #{studioId},
+        #{backUrl},
+        #{backId},
+        #{backType},
+        #{teacherId},
+        #{liveClassTypeIds},
+        #{orderNum},
+        #{courseLiveDetailId},
+        #{createPerson},
+        #{creationTime},
+        #{modifyPerson},
+        #{modifiedTime},
+        #{schoolId},
+        #{courseId},
+        #{dr},
+        #{fileUrl},
+        #{readyTime},
+        #{closeTime},
+        #{review},
+        #{prepare},
+        #{courseware},
+        #{practiceStageId},
+        #{examStageId},
+        #{phaseName},
+        #{banSpeaking},
+        #{banAsking},
+        #{hideDiscussion},
+        #{hideAsking},
+        #{attendance},
+        #{fileName},
+        #{reviewName},
+        #{prepareName},
+        #{coursewareName}
+        )
+    </insert>
+
+    <update id="update" parameterType="io.renren.entity.CourseClassplanLivesEntity">
+        update course_classplan_lives
+        <set>
+            <if test="classplanId != null">`classplan_id` = #{classplanId}, </if>
+            <if test="classplanLiveName != null">`classplan_live_name` = #{classplanLiveName}, </if>
+            <if test="classplanLiveTimeDetail != null">`classplan_live_time_detail` = #{classplanLiveTimeDetail}, </if>
+            <if test="dayTime != null">`day_time` = #{dayTime}, </if>
+            <if test="startTime != null">`start_time` = #{startTime}, </if>
+            <if test="endTime != null">`end_time` = #{endTime}, </if>
+            <if test="timeBucket != null">`time_bucket` = #{timeBucket}, </if>
+            <if test="liveroomId != null">`liveroom_id` = #{liveroomId}, </if>
+            <if test="studioId != null">`studio_id` = #{studioId}, </if>
+            <if test="backUrl != null">`back_url` = #{backUrl}, </if>
+            <if test="backId != null">`back_id` = #{backId}, </if>
+            <if test="backType != null">`back_type` = #{backType}, </if>
+            <if test="teacherId != null">`teacher_id` = #{teacherId}, </if>
+            <if test="liveClassTypeIds != null">`live_class_type_ids` = #{liveClassTypeIds}, </if>
+            <if test="orderNum != null">`order_num` = #{orderNum}, </if>
+            <if test="courseId != null">`course_id` = #{courseId}, </if>
+            <if test="courseLiveDetailId != null">`course_live_detail_id` = #{courseLiveDetailId}, </if>
+            <if test="createPerson != null">`create_person` = #{createPerson}, </if>
+            <if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+            <if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+            <if test="modifiedTime != null">`modified_time` = #{modifiedTime}, </if>
+            <if test="schoolId != null">`school_id` = #{schoolId}, </if>
+            <if test="dr != null">`dr` = #{dr}, </if>
+            <if test="fileUrl != null">`file_url` = #{fileUrl}, </if>
+            <if test="readyTime != null">`ready_time` = #{readyTime}, </if>
+            <if test="closeTime != null">`close_time` = #{closeTime},</if>
+            <if test="review != null">`review_url` = #{review},</if>
+            <if test="prepare != null">`prepare_url` = #{prepare},</if>
+            <if test="courseware != null">`courseware_url` = #{courseware},</if>
+            <if test="practiceStageId != null">`practice_stage_id` = #{practiceStageId},</if>
+            <if test="examStageId != null">`exam_stage_id` = #{examStageId},</if>
+            <if test="phaseName != null">`phase_name` = #{phaseName},</if>
+            <if test="banSpeaking != null">`ban_speaking` = #{banSpeaking},</if>
+            <if test="banAsking != null">`ban_asking` = #{banAsking},</if>
+            <if test="hideDiscussion != null">`hide_discussion` = #{hideDiscussion},</if>
+            <if test="hideAsking != null">`hide_asking` = #{hideAsking},</if>
+            <if test="attendance != null">`attendance` = #{attendance},</if>
+            <if test="fileName != null">`file_name` = #{fileName},</if>
+            <if test="reviewName != null">`review_name` = #{reviewName},</if>
+            <if test="prepareName != null">`prepare_Name` = #{prepareName},</if>
+            <if test="coursewareName != null">`courseware_name` = #{coursewareName}</if>
+        </set>
+        where classplan_live_id = #{classplanLiveId}
+    </update>
+    <update id="updateBatch">
+        update course_classplan_lives set status = #{status} where classplan_live_id in
+        <foreach item="classplanLiveId" collection="list" open="(" separator="," close=")">
+            #{classplanLiveId}
+        </foreach>
+    </update>
+    <delete id="delete">
+		delete from course_classplan_lives where classplan_live_id = #{value}
+	</delete>
+
+    <!--批量删除-->
+    <update id="deleteBatch" parameterType="io.renren.entity.CourseUserplanClassEntity">
+        update course_classplan_lives
+        <set>
+            dr = 1,`modified_time` = now()
+        </set>
+        where classplan_id in
+        <foreach item="classplanId" collection="ids" open="(" separator="," close=")">
+            #{classplanId}
+        </foreach>
+    </update>
+
+    <delete id="deleteBatchNotIn">
+
+        update course_classplan_lives
+        set dr = 1,`modified_time` = now()
+        where classplan_id = #{classplanId}
+        <if test="classplanLiveIds != null and classplanLiveIds.size() > 0 ">
+            and classplan_live_id not in
+            <foreach item="item" collection="classplanLiveIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <!-- 根据直播开始结束时,查询排课 -->
+    <select id="queryByDate" parameterType="map" resultType="map">
+		select 
+		c.classplan_live_id as classplanLiveId, 
+		l.gensee_live_id as liveId,
+		l.gensee_live_num as liveNum,
+		c.start_time as startTime, 
+		c.end_time as endTime
+		from course_classplan_lives as c ,
+		 course_classplan as cp,
+		 mall_live_room as l
+		where c.liveroom_id = l.live_room_id
+		and cp.classplan_id = c.classplan_id
+		and cp.dr = 0
+		<![CDATA[and #{startTime} < c.start_time]]>
+		<![CDATA[and #{endTime} > c.end_time
+
+
+
+
+        ]]>
+    </select>
+
+    <!-- 根据回放id和回放类型,查询排课 -->
+    <select id="queryByBackId" parameterType="map" resultType="map">
+		SELECT classplan_live_id as classplanLiveId, start_time as startTime,  end_time as endTime, back_id as backId, back_type as backType
+		FROM course_classplan_lives
+		WHERE back_id = #{backId}
+		AND back_type = #{backType}
+		LIMIT 1
+	</select>
+
+    <select id="queryByClassPlanLiveId" parameterType="map" resultType="io.renren.entity.CourseClassplanLivesEntity">
+	SELECT 
+			classplan_live_id as classplanLiveId,
+			classplan_id as classplanId,
+			classplan_live_name as classplanLiveName,
+			classplan_live_time_detail as classplanLiveTimeDetail,
+			day_time as dayTime,
+			start_time as startTime,
+			end_time as endTime,
+			time_bucket as timeBucket,
+			liveroom_id as liveroomId,
+			studio_id as studioId,
+			back_url as backUrl,
+			back_id as backId,
+			back_type as backType,
+			video_id as videoId,
+			teacher_id as teacherId,
+			live_class_type_ids as liveClassTypeIds,
+			order_num as orderNum,
+			course_live_detail_id as courseLiveDetailId,
+			create_person as createPerson,
+			creation_time as creationTime,
+			modify_person as modifyPerson,
+			modified_time as modifiedTime,
+			school_id as schoolId,
+			course_id as courseId,
+			dr as dr,
+			file_url as fileUrl,
+			m_id as mId
+	FROM course_classplan_lives
+	WHERE classplan_live_id = #{classplanLiveId}
+	AND dr = #{dr}
+	</select>
+
+    <select id="queryCourseClassplanLivesByDate" parameterType="string"
+            resultType="io.renren.entity.CourseClassplanLivesEntity">
+		SELECT
+			*
+		FROM
+			course_classplan_lives 
+		WHERE
+			dr = 0
+			<![CDATA[AND #{startTime}<start_time ]]>
+			<![CDATA[AND #{endTime}>end_time
+
+
+
+
+        ]]>
+    </select>
+    <!-- 根据排课计划id查询排课子表List集合 -->
+    <select id="queryEntityListByClassplanId" parameterType="string"
+            resultType="io.renren.entity.CourseClassplanLivesChangeRecordEntity">
+		select c.*
+		from course_classplan_lives as c
+		where
+		c.classplan_id = #{classplanId}
+		and c.dr = 0
+		order by c.start_time asc
+	</select>
+
+    <!-- 通过排课计划id查询明细 -->
+    <select id="queryListByClassplanId" parameterType="String" resultType="io.renren.entity.CourseClassplanLivesEntity">
+		select
+			*
+		from course_classplan_lives
+		where
+			classplan_id = #{courseClassplanId} and
+			dr = 0
+		order by start_time asc
+	</select>
+</mapper>

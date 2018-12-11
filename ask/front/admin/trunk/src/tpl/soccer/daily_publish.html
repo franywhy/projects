@@ -1,0 +1,26 @@
+<form name="inputForm">
+    <table width="100%">
+        <tr>
+            <td align="right">设置获胜队: </td>
+            <td style="width:150px;">
+
+                <input type="hidden" name="rid" value="" />
+
+                <label style="width:150px;">
+                    <input type="radio" name="result" value="A" />
+                    A队：<%=Izb.controller.soccer.getAllTeams()[teamA]%>
+                </label><br />
+                <label style="width:150px;">
+                    <input type="radio" name="result" value="B" />
+                    B队：<%=Izb.controller.soccer.getAllTeams()[teamB]%>
+                </label><br />
+                <%if(cat==1){%>
+                <label style="width:150px;">
+                    <input type="radio" name="result" value="C" />
+                    平队
+                </label><br />
+                <%}%>
+            </td>
+        </tr>
+    </table>
+</form>

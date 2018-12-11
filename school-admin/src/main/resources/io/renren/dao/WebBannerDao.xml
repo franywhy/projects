@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.WebBannerDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+	web_banner.id AS id , 	web_banner.name AS name , 	web_banner.pic AS pic , 	web_banner.status AS status , 	web_banner.order_num AS orderNum , 	web_banner.school_id AS schoolId , 	web_banner.create_time AS createTime , 	web_banner.modify_person AS modifyPerson , 	web_banner.modify_time AS modifyTime , 	web_banner.create_person AS createPerson , 	web_banner.url AS url,web_banner.colour_text AS colourText</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	where 1=1 	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 from web_banner as web_banner
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.WebBannerEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.WebBannerEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="name != null and name.trim() != ''">
+			and web_banner.name like concat('%',#{name},'%')
+		</if>
+		order by web_banner.order_num desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="name != null and name.trim() != ''">
+			and web_banner.name like concat('%',#{name},'%')
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.WebBannerEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into web_banner
+		(
+				`name`, 				`pic`, 				`status`, 				`order_num`, 				`school_id`, 				`create_time`, 				`modify_person`, 				`modify_time`, 				`create_person`, 				`url`,     `colour_text`		)
+		values
+		(
+															#{name}, 																			#{pic}, 																			#{status}, 																			#{orderNum}, 																			#{schoolId}, 																			#{createTime}, 																			#{modifyPerson}, 																			#{modifyTime}, 																			#{createPerson}, 																			#{url}		,#{colourText}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.WebBannerEntity">
+		update web_banner 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyPerson != null">`modify_person` = #{modifyPerson}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="createPerson != null">`create_person` = #{createPerson}, </if>
+			<if test="url != null">`url` = #{url},</if>
+			<if test="colourText != null">`colour_text` = #{colourText}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM web_banner 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM web_banner 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+	   update web_banner set status = #{status} where id in
+	   <foreach item="id" collection="list" open="(" separator="," close=")">
+	   	#{id}
+		</foreach>
+	</update>
+</mapper>

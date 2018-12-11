@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MallBussinessOppDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		mall_bussiness_opp.id AS id , 
+		mall_bussiness_opp.user_id AS userId ,
+		mall_bussiness_opp.nick_name AS nickName ,
+		mall_bussiness_opp.user_mobile AS userMobile ,
+		mall_bussiness_opp.create_time AS createTime ,
+		mall_bussiness_opp.school_id AS schoolId 	
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+    	WHERE 1=1	
+    </sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+    	 FROM mall_bussiness_opp AS mall_bussiness_opp
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+    	 ORDER BY id DESC
+	</sql>
+	
+	<!--根据ID查询-->
+	<select id="queryObject" resultType="io.renren.entity.MallBussinessOppEntity">
+		select 
+      	<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</select>
+	
+	<!--分页列表-->
+	<select id="queryList" resultType="io.renren.entity.MallBussinessOppEntity">
+		select
+		<include refid="base_column"/>
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="nickName != null and nickName.trim() != ''">
+			AND mall_bussiness_opp.nick_name like concat('%',#{nickName},'%')
+		</if>
+		<if test="userMobile != null and userMobile.trim() != ''">
+			AND mall_bussiness_opp.user_mobile = #{userMobile}
+		</if>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!--分页总数-->
+ 	<select id="queryTotal" resultType="int">
+		select count(1) 
+		<include refid="base_from"/> 
+		<include refid="base_where"/>
+		<if test="nickName != null and nickName.trim() != ''">
+			AND mall_bussiness_opp.nick_name like concat('%',#{nickName},'%')
+		</if>
+		<if test="userMobile != null and userMobile.trim() != ''">
+			AND mall_bussiness_opp.user_mobile = #{userMobile}
+		</if>
+	</select>
+	<!--新增-->
+	<insert id="save" parameterType="io.renren.entity.MallBussinessOppEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_bussiness_opp
+		(
+				`user_id`, 				`nick_name`, 				`user_mobile`, 				`create_time`, 				`school_id`		)
+		values
+		(
+															#{userId}, 																			#{nickName}, 																			#{userMobile}, 																			#{createTime}, 																			#{schoolId}									)
+	</insert>
+	
+	<!--修改-->
+	<update id="update" parameterType="io.renren.entity.MallBussinessOppEntity">
+		update mall_bussiness_opp 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="nickName != null">`nick_name` = #{nickName}, </if>
+			<if test="userMobile != null">`user_mobile` = #{userMobile}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="schoolId != null">`school_id` = #{schoolId}</if>
+		</set>
+		<include refid="base_where"/>
+		AND id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		DELETE FROM mall_bussiness_opp 
+		<include refid="base_where"/>
+		AND id = #{id}
+	</delete>
+	
+	<!--批量删除-->
+	<delete id="deleteBatch">
+		DELETE FROM mall_bussiness_opp 
+		<include refid="base_where"/> 
+		AND id IN 
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

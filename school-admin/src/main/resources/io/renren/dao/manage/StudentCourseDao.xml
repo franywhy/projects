@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.dao.manage.StudentCourseDao" >
+
+  <delete id="deleteByNcId">
+    delete from student_course
+    where nc_id = #{ncId}
+  </delete>
+
+  <!-- 批量插入 -->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into student_course (id, user_id, nc_id, nc_user_id,
+    nc_commodity_id, course_no, course_name, business_id)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.id,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT}, #{item.ncId,jdbcType=VARCHAR}, #{item.ncUserId,jdbcType=VARCHAR},
+      #{item.ncCommodityId,jdbcType=VARCHAR}, #{item.courseNo,jdbcType=VARCHAR}, #{item.courseName,jdbcType=VARCHAR},
+      #{item.businessId,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <select id="queryCourseNoListByNcId" resultType="java.lang.String">
+    select course_no from student_course
+    where nc_id = #{ncId}
+  </select>
+
+  <delete id="deleteByNcIdCourseNo">
+    delete from student_course
+    where nc_id = #{ncId}
+    AND course_no IN
+    <foreach item="courseNo" collection="courseNoSet" open="(" separator="," close=")">
+      #{courseNo}
+    </foreach>
+  </delete>
+
+</mapper>

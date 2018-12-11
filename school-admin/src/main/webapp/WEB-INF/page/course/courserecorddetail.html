@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课程录播</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("courserecorddetail:list"))
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.recordName" @keyup.enter="query" placeholder="录播课名称">
+			</div>
+			<a class="btn btn-primary" @click="query"><i class='fa fa-search'></i>&nbsp;查询</a>
+			#end
+			#if($shiro.hasPermission("courserecorddetail:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("courserecorddetail:update"))
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("courserecorddetail:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("courserecorddetail:resume"))
+			<a class="btn btn-primary" @click="resume"><i class="fa fa-play"></i>&nbsp;恢复</a>
+			#end
+			#if($shiro.hasPermission("courserecorddetail:pause"))
+			<a class="btn btn-primary" @click="pause"><i class="fa fa-pause"></i>&nbsp;暂停</a>
+			#end
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">课程</div>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="courseRecordDetail.courseName" readonly="readonly" placeholder="课程名称"/>
+			    </div>
+			    <a class="btn btn-default" @click="courseShow">选择课程</a>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">录播课名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseRecordDetail.recordName" placeholder="录播课名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">录播课标题</div>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="courseRecordDetail.recordTitle" readonly="readonly" placeholder="录播课标题"/>
+			    </div>
+			    <a class="btn btn-default" @click="videoShow">选录播课</a>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">排序</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseRecordDetail.orderNum" placeholder="排序"/>
+			    </div>
+			</div>
+			<!-- <div class="form-group">
+			   	<div class="col-sm-2 control-label">其他平台URL</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="courseRecordDetail.otherUrl" placeholder="请输入URL"/>
+			    </div>
+			</div> -->
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+	
+	<!-- 录播课弹窗 -->
+	<div id="videolayer" style="display: none;">
+		<table id="videoGrid"></table>
+		<!-- <div id="userplanGridPager"></div> -->
+	</div>
+</div>
+
+<script src="${rc.contextPath}/js/course/courserecorddetail.js?_${date.systemTime}"></script>
+#parse("layer/courseLay.html")
+#parse("layer/polyvVideoLay.html")
+</body>
+</html>

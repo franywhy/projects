@@ -1,0 +1,81 @@
+.honor{
+	position: relative;
+}
+.honor .honor-hq,
+.honor .honor-wy,
+.honor .honor-ts,
+.honor .honor-zm,
+.honor .honor-jy{
+	width: 100%;
+	height: 100%;
+}
+.honor .honor-hq .mobile-img,
+.honor .honor-wy .mobile-img,
+.honor .honor-ts .mobile-img,
+.honor .honor-zm .mobile-img,
+.honor .honor-jy .mobile-img{
+	display: none;
+}	
+.pc-item-img{
+	width: 100%;
+
+}
+.pc-bg-img{
+	margin:0 auto;
+	display: block;
+}
+.honor .honor-wy{
+	background: url(../images/bg/bg_honor_02.jpg) no-repeat center center;
+}
+.honor .honor-ts{
+	background: url(../images/bg/bg_honor_03.jpg) no-repeat center center;
+}
+.honor .honor-zm{
+	background: url(../images/bg/bg_honor_04.jpg) no-repeat center center;
+}
+.honor .honor-jy{
+	background: url(../images/bg/bg_honor_05.jpg) no-repeat center center;
+}
+.mobile-img-item{
+	display: none;
+}
+@media screen and (max-width:641px){
+	.honor .honor-hq .pc-img,
+	.honor .honor-wy .pc-img,
+	.honor .honor-ts .pc-img,
+	.honor .honor-zm .pc-img,
+	.honor .honor-jy .pc-img{
+		display: none;
+	}	
+	.honor .honor-hq .mobile-img,
+	.honor .honor-wy .mobile-img,
+	.honor .honor-ts .mobile-img,
+	.honor .honor-zm .mobile-img,
+	.honor .honor-jy .mobile-img{
+		display: block;
+	}
+	.honor .mobile-img{
+		width: 80%;
+		display: block;
+		margin:0 auto;
+	}
+	.honor .mobile-img-item{
+		width: 100%;
+		display: block;
+		margin:0 auto;
+	}
+	.honor {
+		background: 
+	}
+	.honor .honor-jy{
+		background: url(../images/bg/new_mobile_bg.jpg) no-repeat center center;
+		background-size: 100%;
+	}
+
+	.mobile-img-item{
+		display: block;
+	}
+	.header-v2,.footer{
+		display:none
+	}
+}

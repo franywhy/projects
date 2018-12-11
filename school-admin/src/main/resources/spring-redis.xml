@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+        default-lazy-init="true">
+
+	<bean id="redisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:hostName="${redis.host}"
+		p:port="${redis.port}"
+		p:database="${redis.dbindex}"
+		p:timeout="${redis.timeout}"
+		/>
+
+	<bean id="mainRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+		p:connectionFactory-ref="redisConnectionFactory" />
+
+	<bean id="jedisPoolConfig"
+		  class="redis.clients.jedis.JedisPoolConfig"
+		  p:maxTotal="${redis.pool.maxActive}"
+		  p:maxIdle="${redis.pool.maxIdle}"
+		  p:maxWaitMillis="${redis.pool.maxWait}"
+		  p:testOnBorrow="${redis.pool.testOnBorrow}"
+		  p:testOnReturn="${redis.pool.testOnReturn}" />
+
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+		<constructor-arg name="host" value="${redis.host}" />
+		<constructor-arg name="port" value="${redis.port}" type="int" />
+		<constructor-arg name="timeout" value="${redis.timeout}" type="int" />
+	</bean>
+
+	<bean id="LearningRedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:hostName="${redis.host}"
+		p:port="${redis.port}"
+		p:database="0"
+		p:timeout="${redis.timeout}"
+		/>
+
+	<bean id="schoolLearningRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+		p:connectionFactory-ref="LearningRedisConnectionFactory" />
+
+
+    <bean id="kgsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:database="${redis.dbindex}"/>
+
+    <bean id="kgsUniqueRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="kgsConnectionFactory" />
+
+    <bean id="userKGS" class="io.renren.rest.persistent.HighLowKGS"
+          p:nameSpace="users"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="11010000"/>
+    <bean id="orderNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+          p:nameSpace="orderNo"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="110000"/>
+          
+    <bean id="examRecordKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="examRecordNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="10100"/>
+	<!-- 资料库明细 -->       
+	 <bean id="courseMaterialDetailKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseMaterialDetailNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="12000"/>
+    <!-- 流程指南 -->       
+	 <bean id="courseGuideKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseGuideNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="12000"/>
+    <!-- 学习计划单号 -->
+    <bean id="studyplanKGS" class="io.renren.rest.persistent.HighLowKGS"
+          p:nameSpace="studyplan"
+          p:kgsRedis-ref="kgsUniqueRedis"
+          p:step="10"
+          p:offset="50000"/>
+    
+    <bean id="scoreRecordKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="scoreRecordNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="10000"/>
+	<!-- 消息ID -->
+    <bean id="msgContentIdKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="msgContentId"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="15000"/>
+
+	<bean id="courseAbnormalOrderNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseAbnormalOrderNo"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="100000"/>
+
+	<bean id="courseAbnormalClassplanNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseAbnormalClassplanNoKGS"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="100000"/>
+	<bean id="courseAbnormalFreeAssessmentNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		  p:nameSpace="courseAbnormalFreeAssessmentNoKGS"
+		  p:kgsRedis-ref="kgsUniqueRedis"
+		  p:step="10"
+		  p:offset="100000"/>
+		
+	<!-- 报考编号 -->
+	<bean id="baoKaoNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="baoKaoNo" 
+		p:kgsRedis-ref="kgsUniqueRedis" 
+		p:step="10"
+		p:offset="100000"
+		/>	
+		<!-- 弃考单据号 -->	      
+    <bean id="invoicesNumberKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="invoicesNumber"
+		p:kgsRedis-ref="kgsUniqueRedis"
+		p:step="10"
+		p:offset="100000"/> 
+
+		  
+	<!-- 智慧学习系统 KGS adaptive add by shihongjie 2017-11-23 -->
+	<!-- 章编号 -->
+	<bean id="adlChapterNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="adlChapterNo" 
+		p:kgsRedis-ref="kgsUniqueRedis" 
+		p:step="10"
+		p:offset="100000"
+		/>
+	<!-- 节编号 -->
+	<bean id="adlSectionNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="adlSectionNo" 
+		p:kgsRedis-ref="kgsUniqueRedis" 
+		p:step="10"
+		p:offset="100000"
+		/>
+	<!-- 节知识点编号 -->
+	<bean id="adlKnowledgeNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="adlKnowledgeNo" 
+		p:kgsRedis-ref="kgsUniqueRedis" 
+		p:step="10"
+		p:offset="100000"
+		/>
+	<!-- 课程服务 KGS course_sevice add by shihongjie 2017-12-19 -->
+	<!-- 章编号 -->
+	<bean id="csChapterNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="csChapterNo" 
+		p:kgsRedis-ref="kgsUniqueRedis" 
+		p:step="10"
+		p:offset="10000"
+		/>
+	<!-- 节编号 -->
+	<bean id="csSectionNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="csSectionNo" 
+		p:kgsRedis-ref="kgsUniqueRedis" 
+		p:step="10"
+		p:offset="10000"
+		/>
+	<!-- 节知识点编号 -->
+	<bean id="csKnowledgeNoKGS" class="io.renren.rest.persistent.HighLowKGS"
+		p:nameSpace="csKnowledgeNo" 
+		p:kgsRedis-ref="kgsUniqueRedis" 
+		p:step="10"
+		p:offset="100000"
+		/>
+</beans>

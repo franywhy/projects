@@ -1,0 +1,33 @@
+<!--账号管理列表-->
+<table width="100%" class="listTable tablesorter">
+    <thead>
+    <tr>
+            <th class="num">ID</th>
+            <th class="auto">登录名</th>
+			<th class="auto">昵称</th>
+			<th class="auto">所属公司</th>
+            <th class="longtime">时间</th>
+            <th class="action action150">操作</th>
+       </tr>
+	</thead>
+	<tbody>
+		<%for(var i=0;i<data.length;i++){%>
+        <tr>
+            <td class="num"><%=data[i]._id%></td>
+            <td class="auto"><%=data[i].name%></td>
+			<td class="auto"><%=data[i].nick_name%></td>
+			<td class="auto"><%=data[i].company_name%></td>
+            <td class="longtime"><%=data[i].timestamp ? new Date(data[i].timestamp).toLocaleString() : data[i].createTime %></td>
+            <td  class="action action150">
+                <button class="d-button" onClick="Izb.controller.<%=pty.key%>.showDetail('<%=data[i]._id%>')">查看</button>
+                <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+				<button class="d-button" onclick="Izb.controller.<%=pty.key%>.edit(<%=data[i]._id%>)">改</button>
+                <button class="d-button" onclick="Izb.controller.<%=pty.key%>.del(<%=data[i]._id%>)">删</button>
+                <%}%>
+			</td>
+        </tr>
+		<%}%>
+    </tbody>
+</table>
+<div class="appPager"></div>
+<!--/账号管理列表-->

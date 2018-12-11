@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.adaptive.dao.AdlPhaseSectionDao">
+
+		
+	<!-- 通用查询表头 -->
+	<sql id="base_column">
+		adl_phase_section.id AS id,
+		adl_phase_section.course_id AS courseId,
+		adl_phase_section.phase_id AS phaseId,
+		adl_phase_section.section_id AS sectionId,
+		adl_phase_section.update_time AS updateTime,
+		adl_phase_section.create_time AS createTime
+	</sql>
+	<!-- 通用查询条件 -->
+	<sql id="base_where">
+		<where>
+			<if test="phaseId != null">
+				adl_phase_section.phase_id = #{phaseId}
+			</if>
+			<if test="courseId != null">
+				AND adl_phase_section.course_id = #{courseId}
+			</if>
+		</where>
+	</sql>
+	<!-- 通用from -->
+	<sql id="base_from">
+        FROM adl_phase_section AS adl_phase_section
+	</sql>
+	<!-- 通用排序 -->
+	<sql id="base_order">
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryObject" resultType="com.hq.adaptive.entity.AdlPhaseSectionEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		WHERE id = #{id}
+	</select>
+
+	<select id="queryList" parameterType="com.hq.adaptive.pojo.query.AdlPhaseSectionQuery" resultType="com.hq.adaptive.entity.AdlPhaseSectionEntity">
+		SELECT
+		<include refid="base_column"/>
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+		<include refid="base_order"/>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" parameterType="com.hq.adaptive.pojo.query.AdlPhaseSectionQuery"  resultType="int">
+		SELECT COUNT(1)
+		<include refid="base_from"/>
+		<include refid="base_where"/>
+	</select>
+	 
+	<insert id="save" parameterType="com.hq.adaptive.entity.AdlPhaseSectionEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO adl_phase_section
+		(
+			`course_id`, 
+			`phase_id`, 
+			`section_id`
+		)
+		values
+		(
+			#{courseId}, 
+			#{phaseId}, 
+			#{sectionId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.hq.adaptive.entity.AdlPhaseSectionEntity">
+		UPDATE adl_phase_section 
+		<set>
+			<if test="courseId != null">`course_id` = #{courseId}, </if>
+			<if test="phaseId != null">`phase_id` = #{phaseId}, </if>
+			<if test="sectionId != null">`section_id` = #{sectionId} </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM adl_phase_section where id = #{id}
+	</delete>
+	<delete id="deleteBatch">
+		DELETE FROM adl_phase_section
+		      where phase_id = #{phaseId}
+			<if test="notDelIds != null and notDelIds.size > 0">
+				AND id NOT IN
+				<foreach item="id" collection="notDelIds" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+	</delete>
+
+</mapper>

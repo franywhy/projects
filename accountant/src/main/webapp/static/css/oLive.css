@@ -1,0 +1,564 @@
+/*--------------------------------------------------------------------
+----------------------------------------------------------------------
+ @Author's xiaotianjia
+ @---Date 2016-10-10
+ @---When you need to customize the new public style, 
+     please write the name of the author, 
+     and the use of the annotation style
+----------------------------------------------------------------------
+--------------------------------------------------------------------*/
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.mainCon-live{
+	background: #313131;
+	height: 100%;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		padding-top: 60px;
+}	
+.live-head{
+	padding: 0 0 0 30px;
+	height: 60px;
+	line-height: 60px;
+	/* overflow: hidden; */
+	position: absolute;
+	z-index: 2;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background: #313131;
+}
+.live-head .left-logo,
+.live-head .center-p{
+	float: left;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+}
+.live-head .left-logo{
+	width: 12%;
+	text-align: left;
+}
+.live-head .left-logo img{
+	padding-top: 17.5px;
+}
+.live-head .center-p{
+	text-align: center;
+	color: #fff;
+	width: 50%;
+	width: 88%;
+	padding-right: 400px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.live-head .right-box{
+	float: right;
+	width: 460px;
+	box-sizing: border-box;
+		 -webkit-box-sizing: border-box;
+		 position: absolute;
+		 top: 0;
+		 right: 0
+}
+.live-head .right-box a.right-box-p{
+	float: left;
+	color: #aaa;
+	margin-right: 10px;
+	padding-left: 20px;
+	font-size: 16px;
+	cursor: pointer;
+	display: block;
+	height: 70px;
+	line-height: 70px;
+	position: relative
+}
+.live-head .right-box a.right-box-p:hover{
+	color:#fff
+}
+.live-head .right-box a.right-box-p b{
+	font-weight: normal;
+	margin-top: -10px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.live-head .right-box a.right-box-p i{
+	height: 17px;
+	width: 18px;
+	display: inline-block;
+	margin-right: 10px;
+	/* transition: All 0.4s ease;
+  	-webkit-transition: All 0.4s ease;
+  	-moz-transition: All 0.4s ease;
+  	-o-transition: All 0.4s ease; */
+}
+.live-head .right-box a.right-box-p1 i{
+	background: url(../images/icon/oLive/oLive.png) -284px -0px no-repeat;
+	_background: none;
+	_padding-left: 284px;
+	_margin-left: -284px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-head .right-box a.right-box-p1:hover i{
+	background: url(../images/icon/oLive/oLive.png) -158px -0px no-repeat;
+	_background: none;
+	_padding-left: 158px;
+	_margin-left: -158px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-head .right-box a.right-box-p2 i{
+	background: url(../images/icon/oLive/oLive.png) -176px -0px no-repeat;
+	_background: none;
+	_padding-left: 176px;
+	_margin-left: -176px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-head .right-box a.right-box-p2:hover i{
+	background: url(../images/icon/oLive/oLive.png) -194px -0px no-repeat;
+	_background: none;
+	_padding-left: 194px;
+	_margin-left: -194px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-head .right-box a.right-box-p3 i{
+	background: url(../images/icon/oLive/oLive.png) -212px -0px no-repeat;
+	_background: none;
+	_padding-left: 212px;
+	_margin-left: -212px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-head .right-box a.right-box-p3:hover i{
+	background: url(../images/icon/oLive/oLive.png) -230px -0px no-repeat;
+	_background: none;
+	_padding-left: 230px;
+	_margin-left: -230px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-head .right-box a.right-box-p2 .hide-img{
+	position: absolute;
+	z-index: 9999;
+	left: 25px;
+	top: 60px;
+	background: #313131;
+	/* width: 100px; */
+	display: none;
+}
+.live-head .right-box a.right-box-p2 .hide-img img{
+	width: 88px;
+	height: 88px;
+	/* opacity: 0; */
+	text-align: center;
+	/* display: none; */
+}
+.live-head .right-box a.right-box-p2:hover .hide-img img{
+	/* display: block; */
+	/* opacity: 1; */
+}
+
+.live-main{
+	box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding-right: 300px;
+}
+.live-main .left-video{
+	height: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: relative
+}
+
+.live-main .left-video .video-main{
+	background-color: #000;
+	height: 100%;
+	position: relative;
+	padding-bottom: 70px;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+}
+.live-main .left-video .video-main .video-box{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		padding-bottom: 70px;
+}
+.live-main .left-video .video-small{
+	background: url('../images/icon/oLive/right-s.png') center center no-repeat;
+	width: 18px;
+	height: 39px;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	margin-top: -55px;
+	cursor: pointer;
+	display: none
+}
+.live-main  .right-main{
+	float: right;
+  margin-left: 10px;
+  width: 300px;
+  height: 100%;
+  background-color: #222;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: relative;
+  margin-right: -300px;
+  color: #fff
+}
+.live-main  .right-main .teacher-logo{
+	text-align: center;
+	padding: 10px 0;
+	  box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		position: absolute;
+		width: 100%;
+		height: 160px;
+		background-color: #222;
+		z-index: 1;
+}
+.live-main  .right-main .teacher-logo img{
+	display: inline-block;
+	width: 280px;
+	height: 138px;
+	z-index: 5;
+}
+.live-main  .right-main .say-p{
+	font-size: 16px;
+	line-height: 55px;
+	height: 55px;
+	padding-left: 20px;
+	background: #282828;
+	box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		position: absolute;
+		width: 100%;
+		top: 160px;
+		z-index: 5;
+}
+.live-main  .right-main .cast-box{
+	  height: 100%;
+	  background-color: #222;
+	  box-sizing: border-box;
+	  -webkit-box-sizing: border-box;
+	  padding: 230px 10px 200px 16px;
+	  /* overflow: scroll; */
+	  width: 100%;
+}
+.live-main  .right-main .cast-box .cast-p{
+	font-size: 14px;
+	padding-bottom: 10px;
+	line-height: 24px;
+	width: 100%;
+}
+.live-main  .right-main .cast-box .cast-p .gift-msg{
+	font-size: 14px;
+	color: #e0e0e0
+}
+.live-main  .right-main .cast-box .cast-p .gift-msg  span{
+	padding-right:3px;
+	display: inline-block;
+}
+.live-main  .right-main .cast-box .cast-p .gift-msg .user-name{
+	color: #66bb6a;
+}
+.live-main  .right-main .cast-box .cast-p .gift-msg .gifi-img{
+	  background-image: url("../images/icon/oLive/flower-red.png");
+	  display: inline-block;
+	  width: 18px;
+	  height: 19px;
+	  margin: 0 5px;
+	  background-size: contain;
+}
+.live-main  .right-main .cast-box .cast-p .gift-msg .gift-count{
+}	
+.live-main  .right-main .cast-box .cast-p .this-name{
+	color: #bababa
+}
+.live-main  .right-main .cast-box .cast-p .this-p{
+	word-break:break-all;
+}
+.live-main  .right-main  .right-txt-box{
+	  width: 100%;
+	  box-sizing: border-box;
+	  -webkit-box-sizing: border-box;
+	  height: 180px;
+	  padding: 0 16px;
+	  background-color: #282828;
+	  position: absolute;
+	  bottom: 0;
+	  left: 0;
+	  width: 100%;
+	  z-index: 2;
+}
+.live-main  .right-main  .right-txt-box .txt-top{
+	height: 40px;
+	line-height: 40px;
+}
+.live-main  .right-main  .right-txt-box .txt-top .face-box,
+.live-main  .right-main  .right-txt-box .txt-top .flower-box{
+	height: 18px;
+	width: 18px;
+	overflow: hidden;
+	display: inline-block;
+	margin-right: 10px;
+	cursor: pointer;
+	vertical-align: middle
+}
+.live-main  .right-main  .right-txt-box .txt-top .face-box{
+	background: url(../images/icon/oLive/oLive.png) -14px -0px no-repeat;
+	_background: none;
+	_padding-left: 14px;
+	_margin-left: -14px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main  .right-main  .right-txt-box .txt-top .flower-box{
+	background: url(../images/icon/oLive/oLive.png) -50px -0px no-repeat;
+	_background: none;
+	_padding-left: 50px;
+	_margin-left: -50px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main  .right-main  .right-txt-box .txt-top .face-box:hover{
+	background: url(../images/icon/oLive/oLive.png) -32px -0px no-repeat;
+	_background: none;
+	_padding-left: 32px;
+	_margin-left: -32px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main  .right-main  .right-txt-box .txt-top .flower-box:hover{
+	background: url(../images/icon/oLive/oLive.png) -68px -0px no-repeat;
+	_background: none;
+	_padding-left: 68px;
+	_margin-left: -68px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main  .right-main  .right-txt-box textarea{
+	width: 90%;
+	height: 70px;
+	background: none;
+	background-color: #fff;
+	border-radius: 5px;
+	padding:9px 5%;
+	outline: none;
+	resize:none
+}
+.live-main  .right-main  .right-txt-box .up-box{
+	height: 40px;
+	line-height: 40px;
+}
+.live-main  .right-main  .right-txt-box .up-box .up-left-p{
+	font-size: 12px;
+	color: #888;
+	width: 180px;
+	display: inline-block;
+}
+.live-main  .right-main  .right-txt-box .up-box .up-btn{
+	border: none;
+	background: none;
+	height: 30px;
+	width: 80px;
+	float: right;
+	margin-top: 5px;
+	border-radius: 5px;
+	background: #66ba6a;
+	font-size: 14px;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+	transition: All 0.4s ease;
+  	-webkit-transition: All 0.4s ease;
+  	-moz-transition: All 0.4s ease;
+  	-o-transition: All 0.4s ease;
+  	outline: none
+}
+.live-main  .right-main  .right-txt-box .up-box .up-btn:hover{
+	background: #01ad59;
+}
+.live-main .left-video .foot-nav{
+	height: 70px;
+	line-height: 70px;
+	background: #313131;
+	color: #fff;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	box-sizing: border-box;
+		 -webkit-box-sizing: border-box;
+	width: 100%;
+}
+.live-main .left-video .foot-nav .this-left{
+	float: left;
+	width: 300px;
+	padding-left: 10px;
+}
+.live-main .left-video .foot-nav .this-left .left-teacher-name,
+.live-main .left-video .foot-nav .this-left .left-teacher-num{
+	display: inline-block;
+	padding-left: 30px;
+	color: #bababa
+}
+.live-main .left-video .foot-nav .this-left .left-teacher-name i{
+	display: inline-block;
+	height: 19px;
+	width: 14px;
+	overflow: hidden;
+	background: url(../images/icon/oLive/oLive.png) -0px -0px no-repeat;
+	_background: none;
+	_padding-left: 0px;
+	_margin-left: -0px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+	vertical-align: middle;
+	margin-right: 10px;
+}
+.live-main .left-video .foot-nav .this-right{
+	float: right;
+	padding-right: 20px;
+}
+.live-main .left-video .foot-nav .this-right .right-p{
+	height: 70px;
+	width: 18px;
+	overflow: hidden;
+	display: inline-block;
+	line-height: 70px;
+	margin-right: 20px;
+	cursor: pointer;
+	  
+}
+.live-main .left-video .foot-nav .this-right .right-p i{
+	display: block;
+	height: 70px;
+	width: 18px;
+	transition: All 0.4s ease;
+	  -webkit-transition: All 0.4s ease;
+	  -moz-transition: All 0.4s ease;
+	  -o-transition: All 0.4s ease;
+}
+.live-main .left-video .foot-nav .this-right .right-p.right-p1 i{
+	background: url(../images/icon/oLive/oLive.png) -86px center no-repeat;
+	_background: none;
+	_padding-left: 86px;
+	_margin-left: -86px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main .left-video .foot-nav .this-right .right-p.right-p1:hover i{
+	background: url(../images/icon/oLive/oLive.png) -104px center no-repeat;
+	_background: none;
+	_padding-left: 104px;
+	_margin-left: -104px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main .left-video .foot-nav .this-right .right-p.right-p2 i{
+	background: url(../images/icon/oLive/sound-del.png) center center no-repeat;
+} 
+.live-main .left-video .foot-nav .this-right .right-p.this-no-die.right-p2 i{
+	background: url(../images/icon/oLive/oLive.png) -248px center no-repeat;
+	_background: none;
+	_padding-left: 248px;
+	_margin-left: -248px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main .left-video .foot-nav .this-right .right-p.this-no-die.right-p2:hover i{
+	background: url(../images/icon/oLive/oLive.png) -266px center no-repeat;
+	_background: none;
+	_padding-left: 266px;
+	_margin-left: -266px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main .left-video .foot-nav .this-right .right-p.right-p3 i{
+	background: url(../images/icon/oLive/oLive.png) -122px center no-repeat;
+	_background: none;
+	_padding-left: 122px;
+	_margin-left: -122px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main .left-video .foot-nav .this-right .right-p.right-p3:hover i{
+	background: url(../images/icon/oLive/oLive.png) -140px center no-repeat;
+	_background: none;
+	_padding-left: 140px;
+	_margin-left: -140px;
+	_padding-top: 0px;
+	_margin-top: -0px;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../images/icon/oLive/oLive.png");
+}
+.live-main .left-video .foot-nav .this-right .right-p.right-p2 .show{
+	display: none
+}
+.live-main .left-video .foot-nav .this-right .right-p.right-p2:hover .show{
+	display: block
+}
+.live-main .left-video .foot-nav .this-right .right-p .show .sound{
+	position: absolute;
+	width: 28px;
+	height:90px;
+	background: #313131;
+	top: -90px;
+	margin-left: -5px;
+}
+
+.live-main .left-video .foot-nav .this-right .right-p .show .sound .sound-bg{
+	  background: url(../images/icon/oLive/dot.png) repeat-y center 0;
+	  width: 100%;
+	  height: 80px;
+	  margin: 10px 0;
+	  position: relative
+}
+.live-main .left-video .foot-nav .this-right .right-p .show .sound .space{
+	background: #fff;
+	border-radius: 50%;
+	width: 10px;
+	height: 10px;
+	margin-left: 9px;
+	position: absolute;
+	z-index:9999;
+}
+.live-main .left-video .foot-nav .this-right .right-p .show .sound .all{
+	background: #66bb6a;
+	width: 4px;
+	position: absolute;
+	left: 12px;
+	bottom: 0px;
+	z-index: 9998;
+}
+/**/
+#mCSB_1_dragger_vertical{
+	top: 405px
+}

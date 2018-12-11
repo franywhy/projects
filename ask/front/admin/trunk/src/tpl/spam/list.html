@@ -1,0 +1,34 @@
+<!--海报列表--> 
+<table width="100%" class="listTable tablesorter">
+	<thead>
+    <tr>
+        <th class="title">field_id</th>
+        <th >field_content</th>
+		<%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+        	<th style="width:50px">操作</th>
+		<%}%>
+    </tr>
+	</thead>
+	<tbody>
+    <% for(var i=0; i< data.length; i++){ %>
+    
+        
+            
+            <%for(var item in data[i]){if(item!="_id"&&item!="timestamp"){%>
+            <tr>
+            <td><%=item%></td><td><%=data[i][item]%></td>
+        <%if(Izb.user.checkLimits(pty.menu,Izb.enumList.menuType.all)){%>
+			<td class="action">
+				<button class="d-button" onClick="Izb.controller.<%=pty.key%>.delitem('<%=item%>','<%=data[i][item]%>')">删</button>
+			</td></tr>
+		<%}%>
+            <%}}%>
+
+        
+		
+    
+    <%}%>
+	</tbody>
+</table>
+<div class="appPager"></div>
+<!--/海报列表--> 
