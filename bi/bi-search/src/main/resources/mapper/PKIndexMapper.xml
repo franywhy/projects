@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.search.mapper.PKIndexMapper">
+
+    <!--学习笔记管理报表-->
+    <select id="getTeachNoteList" resultType="com.hq.bi.search.entity.TeachNoteEvaluationEntity">
+        SELECT
+            utn.user_id as userId,
+            utn.user_name as userName,
+            utn.mobile,
+            utn.mall_goods_id as mallGoodsId,
+            utn.mall_goods_name as mallGoodsName,
+            utn.profession_name as professionName,
+            utn.course_name as courseName,
+            count( utn.teach_note_id ) as teachNoteNum,
+            max( utn.note_create_time ) as noteCreateTime,
+            utn.course_id as courseId,
+            utn.course_fk as courseFk,
+            utn.topic_type as topicType
+        FROM
+            bi_user_teach_note utn
+       <where>
+        <if test="mallGoodsId != null and !&quot;&quot;.equals(mallGoodsId)">and utn.mall_goods_id = #{mallGoodsId}</if>
+        <if test="professionId != null and !&quot;&quot;.equals(professionId)">and utn.profession_id = #{professionId}</if>
+        <if test="courseId != null and !&quot;&quot;.equals(courseId)">and utn.course_id = #{courseId}</if>
+        <if test="userName != null and !&quot;&quot;.equals(userName)">and utn.user_name = #{userName}</if>
+        <if test="mobile != null and !&quot;&quot;.equals(mobile)">and utn.mobile = #{mobile}</if>
+       </where>
+        GROUP BY
+            utn.course_id,
+            utn.user_id,
+            utn.mall_goods_id,
+            utn.profession_id,
+            utn.topic_type
+        order by max(utn.note_create_time) desc
+    </select>
+
+    <select id="getErrorHistoryList" resultType="com.hq.bi.search.entity.ErrorHistoryReportEntity">
+        SELECT
+            subject_id as subjectId,
+            subject_name as subjectName,
+            chapter_name as chapterName,
+            section_name as sectionName,
+            course_name as courseName,
+            error_number as errorTimes,
+            error_number as errorNumber,
+            CONCAT( ROUND( error_number / done_number * 100, 2 ), '', '%' ) errorRate
+        FROM
+            bi_error_history_report
+        <where>
+            <if test="courseId != null and !&quot;&quot;.equals(courseId)">and course_code = #{courseId}</if>
+            <if test="chapterId != null and !&quot;&quot;.equals(chapterId)">and chapter_code = #{chapterId}</if>
+            <if test="sectionId != null and !&quot;&quot;.equals(sectionId)">and section_code = #{sectionId}</if>
+            <if test="subjectId != null and !&quot;&quot;.equals(subjectId)">and subject_id = #{subjectId}</if>
+            <if test="subjectName != null and !&quot;&quot;.equals(subjectName)">and subject_name like CONCAT('%',#{subjectName},'%')</if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and test_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <!--班级学籍评比报表-->
+    <select id="getSchoolRollList" resultType="com.hq.bi.search.entity.SchoolRollEvaluationEntity">
+        select
+        D.class_teacher_name as classTeacherName,
+        D.profession_name as professionName,
+        D.class_name as className,
+        D.total_num as totalNum,
+        D.learning_num as learningNum,
+        D.pause_num as pauseNum,
+        D.pause_rate as pauseRate,
+        D.drop_num as dropNum,
+        D.drop_rate as dropRate
+        from
+            (SELECT
+            c.nick_name as class_teacher_name,
+            c.profession_name ,
+            c.class_name ,
+            c.total_num ,
+            c.learning_num ,
+            c.pause_num ,
+            CONCAT( ROUND( c.pause_num / c.total_num * 100, 2 ), '', '%' ) pause_rate,
+            c.drop_num,
+            CONCAT( ROUND( c.drop_num / c.total_num * 100, 2 ), '', '%' ) drop_rate
+            FROM
+            (
+            SELECT
+            A.nick_name,
+            A.class_name,
+            A.profession_id,
+            A.profession_name,
+            A.class_id,
+            B.create_time,
+            count( A.order_id ) total_num,
+            sum( CASE B.learning_status WHEN 0 THEN 1 ELSE 0 END ) learning_num,
+            sum( CASE B.learning_status WHEN 1 THEN 1 ELSE 0 END ) pause_num,
+            ( SELECT count( 1 ) FROM bw_record_refunds rr WHERE rr.order_id = A.order_id ) drop_num
+            FROM
+            bi_mall_class_order A,
+            (
+            SELECT
+            sr.create_time,
+            sr.order_id,
+            sr.learning_status
+            FROM
+            ( SELECT max( create_time ) createTime, sr.order_id FROM bw_school_report_detail sr GROUP BY sr.order_id ) t,
+            bw_school_report_detail sr
+            WHERE
+            t.createTime = sr.create_time
+            AND sr.order_id = t.order_id
+            ) B
+            WHERE
+            A.order_id = B.order_id
+            GROUP BY
+            A.class_id
+            ) c
+            <where>
+                <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                    and c.create_time between #{startTime} and #{endTime}
+                </if>
+                <if test="professionId != null and !&quot;&quot;.equals(professionId)">and c.profession_id =
+                    #{professionId}</if>
+                <if test="classTeacherName != null and !&quot;&quot;.equals(classTeacherName)">and c.nick_name =
+                    #{classTeacherName}</if>
+                <if test="className != null and !&quot;&quot;.equals(className)">and c.class_name = #{className}</if>
+            </where> )D
+    </select>
+
+   <!-- 教学质量评比报表-->
+    <select id="getTeachingEvaluationList" resultType="com.hq.bi.search.entity.PKIndexEvaluationEntity">
+       select
+        D.teacher_name AS teacherName,
+        D.course_name AS courseName,
+        D.user_num as userNum,
+        D.classplan_name as classPlanName,
+        D.preview_correct_rate as previewCorrectRate,
+        D.classroom_correct_rate as classroomCorrectRate,
+        D.afterclass_correct_rate as afterclassCorrectRate,
+        D.attendance_rate as attendanceRate,
+        D.question_total_num as questionTotalNum,
+        D.question_answer_num as questionAnswerNum,
+        D.evaluate_good_rate as evaluateGoodRate
+        from
+            (SELECT
+                teacher_name ,
+                course_name ,
+                count( DISTINCT user_id ) AS user_num,
+                classplan_name ,
+                CONCAT(
+                ROUND(
+                sum( ued.preview_correct_num ) / ( sum( ued.preview_correct_num ) + sum( ued.preview_error_num ) ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) preview_correct_rate,
+                CONCAT(
+                ROUND(
+                sum( ued.classroom_correct_num ) / ( sum( ued.classroom_correct_num ) + sum( ued.classroom_error_num ) ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) classroom_correct_rate,
+                CONCAT(
+                ROUND(
+                sum( ued.afterclass_correct_num ) / ( sum( ued.afterclass_correct_num ) + sum( ued.afterclass_error_num ) ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) afterclass_correct_rate,
+                CONCAT(
+                ROUND(
+                (
+                CASE
+                WHEN sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur ) IS NULL THEN
+                0
+                WHEN sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur ) &gt; 1 THEN
+                1
+                WHEN sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur ) &lt; 0 THEN
+                0 ELSE sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur )
+                END
+                ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) attendance_rate,
+                ( SELECT SUM( lar.live_total_num ) FROM bi_live_answer_record lar WHERE lar.classplan_live_id = ued.classplan_live_id ) question_total_num,
+                ( SELECT SUM( lar.live_answer_num ) FROM bi_live_answer_record lar WHERE lar.classplan_live_id = ued.classplan_live_id ) question_answer_num,
+                CONCAT(
+                ROUND(
+                sum( CASE WHEN ued.evaluate_good_score = 1 THEN 1 END ) / sum( CASE WHEN ued.evaluate_good_score IS NOT NULL THEN 1 END ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) evaluate_good_rate
+            FROM
+              bi_user_exercise_detail ued
+            <where>
+                <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                    and ued.day_time between #{startTime} and #{endTime}
+                </if>
+                <if test="classPlanId != null and !&quot;&quot;.equals(classPlanId)">and ued.classplan_id = #{classPlanId}</if>
+                <if test="courseId != null and !&quot;&quot;.equals(courseId)">and ued.course_id = #{courseId}</if>
+                <if test="teacherName != null and !&quot;&quot;.equals(teacherName)">and ued.teacher_name = #{teacherName}</if>
+            </where>
+            GROUP BY
+                ued.classplan_id )D
+    </select>
+
+    <!-- 班级学习评比报表-->
+    <select id="getClassStudyList" resultType="com.hq.bi.search.entity.PKIndexEvaluationEntity">
+        select
+        D.class_teacher_name AS classTeacherName,
+        D.profession_name AS professionName,
+        D.class_name as className,
+        D.user_num as userNum,
+        D.preview_finish_rate as previewFinishRate,
+        D.preview_correct_rate as previewCorrectRate,
+        D.classroom_finish_rate as classroomFinishRate,
+        D.classroom_correct_rate as classroomCorrectRate,
+        D.afterclass_finish_rate as afterclassFinishRate,
+        D.afterclass_correct_rate as afterclassCorrectRate,
+        D.attendance_rate as attendanceRate
+        FROM
+            (SELECT
+                ued.class_teacher_name ,
+                ued.profession_name ,
+                ued.class_name ,
+                count( DISTINCT user_id ) as user_num,
+                CONCAT(
+                ROUND(
+                sum( case when ued.preview_submit_status = 1 then 1 ELSE 0 end ) / count(ued.classplan_live_id) * 100,
+                1
+                ),
+                '',
+                '%'
+                ) preview_finish_rate,
+                CONCAT(
+                ROUND(
+                sum( ued.preview_correct_num ) / ( sum( ued.preview_correct_num ) + sum( ued.preview_error_num ) ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) preview_correct_rate,
+                CONCAT(
+                ROUND(
+                sum( case when ued.classroom_submit_status = 1 then 1 ELSE 0 end ) / count(ued.classplan_live_id) * 100,
+                1
+                ),
+                '',
+                '%'
+                ) classroom_finish_rate,
+                CONCAT(
+                ROUND(
+                sum( ued.classroom_correct_num ) / ( sum( ued.classroom_correct_num ) + sum( ued.classroom_error_num ) ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) classroom_correct_rate,
+                CONCAT(
+                ROUND(
+                sum( case when ued.afterclass_submit_status = 1 then 1 ELSE 0 end ) / count(ued.classplan_live_id) * 100,
+                1
+                ),
+                '',
+                '%'
+                ) afterclass_finish_rate,
+                CONCAT(
+                ROUND(
+                sum( ued.afterclass_correct_num ) / ( sum( ued.afterclass_correct_num ) + sum( ued.afterclass_error_num ) ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) afterclass_correct_rate,
+                CONCAT(
+                ROUND(
+                (
+                CASE
+                WHEN sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur ) IS NULL THEN
+                0
+                WHEN sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur ) &gt; 1 THEN
+                1
+                WHEN sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur ) &lt; 0 THEN
+                0 ELSE sum( ued.watch_dur ) * 1.25 / sum( ued.full_dur )
+                END
+                ) * 100,
+                0
+                ),
+                '',
+                '%'
+                ) attendance_rate
+            FROM
+              bi_user_exercise_detail ued
+            <where>
+                <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                    and ued.day_time between #{startTime} and #{endTime}
+                </if>
+                <if test="professionId != null and !&quot;&quot;.equals(professionId)">and ued.profession_id = #{professionId}</if>
+                <if test="classTeacherName != null and !&quot;&quot;.equals(classTeacherName)">and ued.class_teacher_name = #{classTeacherName}</if>
+                <if test="className != null and !&quot;&quot;.equals(className)">and ued.class_name = #{className}</if>
+            </where>
+            GROUP BY
+              ued.class_id )D
+    </select>
+
+
+</mapper>

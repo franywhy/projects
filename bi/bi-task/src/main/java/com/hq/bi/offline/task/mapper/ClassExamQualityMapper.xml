@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.offline.task.mapper.ClassExamQualityMapper">
+    <!-- 实体映射 -->
+
+    <!--班级考试质量报表明细获取-->
+    <select id="getClassExamQualityList" resultType="java.util.Map">
+        SELECT
+            a.user_id AS user_id,
+            a.teacher_name AS teacher_name,
+            a.class_id AS class_id,
+            a.class_name AS class_name,
+            a.profession_id AS profession_id,
+            a.profession_name AS profession_name,
+            a.course_id AS course_id,
+            a.course_name AS course_name,
+            a.course_userplan_creation_time AS course_userplan_creation_time,
+            a.registration_id AS registration_id,
+            car.registration_create_time AS registration_create_time,
+            car.abandon_id AS abandon_id,
+            car.examination_result_id AS examination_result_id,
+            car.examinationScore AS examinationScore
+        FROM
+                ( SELECT
+                t.user_id AS user_id,
+                su.nick_name  AS teacher_name,
+                t.class_id AS class_id,
+                mc.class_name AS class_name,
+                mc.profession_id AS profession_id,
+                mp.profession_name AS profession_name,
+                t.course_id AS course_id,
+                c.course_name AS course_name,
+                t.creation_time AS course_userplan_creation_time,
+                (SELECT registration_id FROM bi_course_examination_record car WHERE car.course_id = t.course_id  AND car.user_plan_id = t.user_plan_id
+                ORDER BY car.registration_create_time DESC LIMIT 1 ) registration_id
+            FROM
+
+                (
+                 select
+					  cu.user_id,
+					  cu.class_id,
+					  cu.user_plan_id as user_plan_id,
+					  cc.course_id,
+					  cu.creation_time
+				from bw_course_userplan cu
+				INNER JOIN bw_course_userplan_class cuc on cuc.userplan_id=cu.user_plan_id
+				INNER JOIN bw_course_userplan_class_detail cucd  on cucd.userplan_class_id=cuc.userplan_class_id
+				INNER JOIN bw_course_classplan cc on cc.classplan_id=cucd.classplan_id
+				WHERE cu.userplan_status = 0 GROUP BY cu.user_plan_id,cc.course_id
+				)t
+            INNER JOIN bw_mall_class mc ON mc.class_id = t.class_id
+            INNER JOIN bw_sys_user su ON su.user_id = mc.user_id
+            INNER JOIN bw_mall_profession mp ON mp.profession_id = mc.profession_id
+            INNER JOIN bw_courses c ON c.course_id = t.course_id
+         ) a
+        LEFT JOIN bi_course_examination_record car on a.registration_id=car.registration_id
+    </select>
+    <!--插入明细表-->
+    <insert id="saveClassExamQuality"  keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO bi_class_exam_quality(user_id, teacher_name, class_id, class_name, profession_id, profession_name, course_id, course_name,course_userplan_creation_time,
+                    registration_id, registration_create_time, abandon_id, examination_result_id, examinationScore)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+            ( #{item.user_id},#{item.teacher_name},#{item.class_id},#{item.class_name},#{item.profession_id}, #{item.profession_name},#{item.course_id}, #{item.course_name},#{item.course_userplan_creation_time},
+            #{item.registration_id},#{item.registration_create_time},#{item.abandon_id},#{item.examination_result_id},#{item.examinationScore})
+        </foreach>
+    </insert>
+   <!--获取明细表的结果-->
+    <select id="getClassExamQualityEntity" resultType="java.util.Map">
+        select  bcq.user_id as user_id  from bi_class_exam_quality bcq limit 1
+    </select>
+    <!--删除明细-->
+    <delete id="deleteAllClassExamQualityEntity">
+        delete from bi_class_exam_quality
+    </delete>
+</mapper>

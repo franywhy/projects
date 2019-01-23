@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.search.mapper.HomeWorkMapper">
+
+    <!--预习作业统计报表-->
+    <select id="getPreHomeWorkStaticList" resultType="com.hq.bi.search.entity.HomeWorkStaticEntity">
+
+          SELECT
+            work_name as homeWorkName,
+            course_id as courseId,
+            course_name as courseName,
+            classplan_live_id as classplanLiveId,
+            classplan_live_name as classplanLiveName,
+            user_id as userId,
+            user_name as studentName,
+            mobile as mobile,
+            stage_code as stage,
+            right_num as answerRightCount,
+            error_num as answerWrongCount,
+            kp_num_right as kpNumRight,
+            kp_num as kpNum,
+            submit_time as homeWorkSubmitTime,
+            day_time as dayTime,
+            create_time as createTime,
+            CONCAT((ROUND((bhr.right_num/(bhr.right_num+bhr.error_num)*100),1)),'%') as rightRate,
+            CONCAT((ROUND((bhr.kp_num_right/(bhr.kp_num)*100),1)),'%') as knowledgeRightRate
+          FROM
+            bi_homework_report bhr
+          where bhr.stage_code=20
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and bhr.day_time between #{startTime} and #{endTime}
+            </if>
+            <if test="courseId != null and !&quot;&quot;.equals(courseId)">and bhr.course_id = #{courseId}</if>
+            <if test="courseClassplanLivesId != null and !&quot;&quot;.equals(courseClassplanLivesId)">
+                and bhr.classplan_live_id in
+                <foreach collection="courseClassplanLivesId" separator="," item="id" open="(" close=")">
+                  #{id}
+                </foreach>
+            </if>
+            <if test="studentName != null and !&quot;&quot;.equals(studentName)">and bhr.user_name like CONCAT ('%', #{studentName},'%')</if>
+            <if test="homeWorkName != null and !&quot;&quot;.equals(homeWorkName)">and bhr.work_name  like CONCAT ('%', #{homeWorkName},'%')</if>
+    </select>
+    <!--课后作业统计报表-->
+    <select id="getAfterClassStaticList" resultType="com.hq.bi.search.entity.HomeWorkStaticEntity">
+        SELECT
+            work_name as homeWorkName,
+            course_id as courseId,
+            course_name as courseName,
+            classplan_live_id as classplanLiveId,
+            classplan_live_name as classplanLiveName,
+            user_id as userId,
+            user_name as studentName,
+            mobile as mobile,
+            stage_code as stage,
+            right_num as answerRightCount,
+            error_num as answerWrongCount,
+            kp_num_right as kpNumRight,
+            kp_num as kpNum,
+            submit_time as homeWorkSubmitTime,
+            is_submit as is_submit,
+            (case when is_submit =0 then '未提交' when is_submit=1 then '已提交' else '未提交' end )as submitStatusName,
+            day_time as dayTime,
+            create_time as createTime,
+            (case when bhr.right_num >0 then CONCAT((ROUND((bhr.right_num/(bhr.right_num+bhr.error_num)*100),1)),'%') else '0%' end) as rightRate,
+            (case when bhr.kp_num_right >0 then CONCAT((ROUND((bhr.kp_num_right/(bhr.kp_num)*100),1)),'%') else '0%' end )   as knowledgeRightRate
+        FROM
+            bi_homework_report bhr
+        where bhr.stage_code=40
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and bhr.day_time between #{startTime} and #{endTime}
+        </if>
+        <if test="courseId != null and !&quot;&quot;.equals(courseId)">and bhr.course_id = #{courseId}</if>
+        <if test="courseClassplanLivesId != null and !&quot;&quot;.equals(courseClassplanLivesId)"> and bhr.classplan_live_id in
+            <foreach collection="courseClassplanLivesId" separator="," item="id" open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+        <if test="studentName != null and !&quot;&quot;.equals(studentName)">and bhr.user_name like CONCAT ('%', #{studentName},'%')</if>
+        <if test="homeWorkName != null and !&quot;&quot;.equals(homeWorkName)">and bhr.work_name  like CONCAT ('%', #{homeWorkName},'%')</if>
+        <if test="submitStatusId != null and !&quot;&quot;.equals(submitStatusId)">and bhr.is_submit =#{submitStatusId}</if>
+    </select>
+</mapper>

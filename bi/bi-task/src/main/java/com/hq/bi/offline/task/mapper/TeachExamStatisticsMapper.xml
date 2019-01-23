@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.offline.task.mapper.TeachExamStatisticsMapper">
+
+
+  <insert id="insert" parameterType="com.hq.bi.offline.task.entity.TeachExamStatisticsEntity">
+    INSERT INTO bi_teach_exam_statistics(topic, profession, course, examination_paper_type,
+    student_name, mobile, paper_score, is_correct, submit_time, exam_score, start_time,
+    submit_status) VALUES
+    <foreach collection='list' item='item' index='index' separator=','>
+      (#{item.topic}, #{item.profession},#{item.course}, #{item.examinationPaperType},
+      #{item.studentName}, #{item.mobile}, #{item.paperScore}, #{item.isCorrect},
+      #{item.submitTime}, #{item.examScore}, #{item.startTime}, #{item.isSubmit}
+      )
+    </foreach>
+  </insert>
+
+  <delete id="delete">
+    truncate table bi_teach_exam_statistics
+  </delete>
+
+  <select id="getExamStatistics"
+    resultType="com.hq.bi.offline.task.entity.TeachExamStatisticsEntity">
+    select p.paper_name       topic,
+           p.major_mname      profession,
+           p.course_mname     course,
+           p.used_type        examinationPaperType,
+           u.name             studentName,
+           u.telephone        mobile,
+           p.amount           paperScore,
+           p.is_force_pg      isCorrect,
+           er.issubmit        isSubmit,
+           er.submit_time     submitTime,
+           ei.exam_start_time startTime,
+           er.exam_score      examScore
+    from tk_exam_record er
+           left join tk_userinfo u on er.user_id = u.id
+           left join tk_exam_info ei on ei.id = er.exam_id
+           left join tk_paper p on er.paper_id = p.id and er.isdelete = 0 limit #{page}, #{pageSize}
+  </select>
+
+  <select id="getTotal"
+    resultType="java.lang.Integer">
+    select count(1)
+    from tk_exam_record
+   </select>
+
+
+</mapper>

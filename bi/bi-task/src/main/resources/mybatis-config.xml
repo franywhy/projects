@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://10.0.99.68:3306/hq_bi"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!-- // power by http://www.yiibai.com -->
+        <mapper class="com.hq.bi.offline.task.mapper.PKIndexMapper"/>
+        <mapper class="com.hq.bi.offline.task.mapper.TeachExamStatisticsMapper"/>
+        <mapper class="com.hq.bi.offline.task.mapper.ClassExamQualityMapper"/>
+        <mapper class="com.hq.bi.offline.task.mapper.TeachExamQualityMapper"/>
+        <mapper class="com.hq.bi.offline.task.mapper.HomeWorkMapper"/>
+		<mapper class="com.hq.bi.offline.task.mapper.LiveEvaluateMapper"/>
+        <mapper class="com.hq.bi.offline.task.mapper.RecordEvaluateMapper"/>
+		<mapper class="com.hq.bi.offline.task.mapper.LogStudentAttendMapper"/>
+        <mapper class="com.hq.bi.offline.task.mapper.TkMmUserJobMapper"/>
+	</mappers>
+
+</configuration>

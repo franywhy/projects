@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.offline.task.mapper.RecordEvaluateMapper">
+    <!-- 实体映射 -->
+
+    <!--录播评价list-->
+    <select id="getRecordEvaluateList" resultType="java.util.Map">
+        SELECT
+            count( 1 ) AS evaluate_num,
+            a.create_time,
+            a.topic_id,
+            ROUND(sum( a.score )/count( 1 ),2) AS total_scores,
+            ROUND(sum( a.material_score )/count( 1 ),2) AS material_scores,
+            ROUND(sum( a.content_score )/count( 1 ),2) AS content_scores,
+            ROUND(sum( a.teach_style_score )/count( 1 ),2) AS teachstyle_scores,
+            b.record_id,
+            b.NAME as record_name,
+            b.user_id AS teacher_id,
+            d.course_id,
+            d.course_name,
+            c.username AS teacher_name,
+            e.user_num
+        FROM
+            (SELECT * from bw_teach_evaluate WHERE topic_type = 20 ORDER BY create_time desc LIMIT 10000000000) a
+            LEFT JOIN bw_course_record_detail b ON a.topic_id = b.record_id
+            LEFT JOIN bw_sys_user c ON b.user_id = c.user_id
+            LEFT JOIN bw_courses d ON d.course_id = b.course_id
+            LEFT JOIN (
+               	SELECT
+                    count( 1 ) AS user_num,
+                    crd.record_id
+                FROM
+                    bw_course_record_detail crd,
+                    bw_mall_goods_details mgd,
+                    bw_mall_order mo
+                WHERE
+                    mgd.course_id = crd.course_id
+                    AND mo.commodity_id = mgd.mall_goods_id
+                    AND mgd.mall_area_id = mo.area_id
+                    AND mgd.dr = 0
+                    AND mo.dr = 0
+                GROUP BY
+                    crd.record_id
+            )e on e.record_id = b.record_id
+        GROUP BY
+            a.topic_id
+    </select>
+    <!--插入明细表-->
+    <insert id="saveRecordEvaluate"  keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO bi_bw_record_evaluate(course_id, course_name, record_id, record_name, create_time, teacher_id, teacher_name,
+        total_scores,material_scores,content_scores, teachstyle_scores, evaluate_num, user_num)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+            ( #{item.course_id},#{item.course_name},#{item.record_id},#{item.record_name},#{item.create_time}, #{item.teacher_id},
+            #{item.teacher_name}, #{item.total_scores},#{item.material_scores},
+            #{item.content_scores},#{item.teachstyle_scores},#{item.evaluate_num},#{item.user_num})
+        </foreach>
+    </insert>
+
+    <!--删除明细-->
+    <delete id="deleteRecordEvaluate">
+        delete from bi_bw_record_evaluate
+    </delete>
+</mapper>

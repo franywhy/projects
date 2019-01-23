@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 保存路径-->
+    <!--<property name="logDir" value="./logs"/>-->
+    <property name="logDir" value="./logs"/>
+    <!-- 保存日志天数-->
+    <property name="maxHistory" value="10"/>
+    <!--错误日志最大保存天数-->
+    <property name="errorMaxHistory" value="30"/>
+    <!-- 项目名-->
+    <property name="projectName" value="hq_bi_task"/>
+    <!-- 活动文件的大小 -->
+    <property name="maxFileSize" value="500MB"/>
+     <!-- 控制所有归档日志文件的总大小 -->
+     <property name="totalSizeCap" value="30GB"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <file>${logDir}/${projectName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/${projectName}-%d{yyyy-MM-dd}.zip</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}:%L] - %method\(\) - %msg %n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- ERROR日志 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/${projectName}-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxHistory}</maxHistory>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger:%L] - %method\(\) - %msg %n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}:%L] - %method\(\) - %msg %n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+
+    <!--通过配置报名及level  可以选择去掉第三方过多的日志 -->
+    <logger name="org.apache.zookeeper" level="WARN"/>
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

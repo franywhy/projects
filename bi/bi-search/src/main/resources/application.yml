@@ -1,0 +1,21 @@
+# Tomcat
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 3400
+  # 上下文路径
+  context-path: /search
+
+spring:
+  # 开发环境 dev|test|pro
+  profiles:
+    active: dev
+
+# Mybatis配置
+mybatis:
+  mapperLocations: classpath*:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hq.bi.offline.task.mapper.LogStudentAttendMapper">
+
+	<select id="queryUserplan" resultType="com.hq.bi.offline.task.entity.LogStudentAttendEntity">
+		SELECT course_userplan.user_plan_id as userplanId,course_userplan.user_id as userId,course_userplan.class_type_id as classTypeId,
+		course_userplan.area_id as areaId,course_userplan.dept_id as deptId,course_userplan.class_id as classId,
+		(SELECT users.nick_name FROM bw_users as users WHERE users.user_id = course_userplan.user_id) as userName,
+		(SELECT users.mobile FROM bw_users as users WHERE users.user_id = course_userplan.user_id) as mobile,
+		(SELECT mall_area.area_name FROM bw_mall_area as mall_area WHERE mall_area.area_id = course_userplan.area_id) as areaName,
+		(SELECT sys_dept.name FROM bw_sys_dept as sys_dept WHERE sys_dept.dept_id = course_userplan.dept_id) as deptName,
+		class.class_name as className,class.user_id as classTeacherId,
+		(SELECT sys_user.nick_name FROM bw_sys_user as sys_user WHERE class.user_id = sys_user.user_id) as teacherName
+		FROM bw_course_userplan as course_userplan
+		JOIN (SELECT mall_class.class_id,mall_class.class_name,mall_class.user_id FROM bw_mall_class as mall_class WHERE mall_class.dr=0 AND mall_class.`status`=1) as class ON course_userplan.class_id = class.class_id
+		WHERE course_userplan.dr = 0
+		AND course_userplan.class_id IN
+			(SELECT mall_class.class_id
+				FROM bw_mall_class as mall_class
+				WHERE mall_class.dr=0 AND mall_class.`status`=1
+			)
+		ORDER BY course_userplan.user_id
+	</select>
+
+	<select id="queryLivePerByMobile" resultType="map">
+		SELECT
+			course_classplan_lives.classplan_live_id AS classplanliveId,
+			course_classplan_lives.classplan_live_name AS classplanLiveName,
+			course_classplan_lives.day_time AS startClassTime,
+			course_classplan_lives.start_time AS startTime,
+			course_classplan_lives.end_time AS endTime,
+		  log_gensee_watch.watch_dur/60000 AS minWatchDur,
+		  TIME_TO_SEC(TIMEDIFF(course_classplan_lives.end_time,course_classplan_lives.start_time))/60 AS minFullDur,
+			(
+				CASE
+				WHEN log_gensee_watch.live_dur / log_gensee_watch.full_dur IS NULL THEN
+					0
+				WHEN log_gensee_watch.live_dur / log_gensee_watch.full_dur > 1 THEN
+					1
+				ELSE
+					log_gensee_watch.live_dur / log_gensee_watch.full_dur
+				END
+			) AS livePer,
+			(
+				CASE
+				WHEN log_gensee_watch.attend_per IS NULL THEN
+					0
+				ELSE
+					log_gensee_watch.attend_per
+				END
+			) AS attendPer
+		FROM
+			(
+				SELECT
+					DISTINCT course_userplan_class_detail.classplan_id
+				FROM
+					(
+						SELECT
+							course_userplan_detail.userplan_detail_id
+						FROM
+							bw_course_userplan_detail as course_userplan_detail
+						WHERE
+							course_userplan_detail.userplan_id = #{userplanId}
+						AND course_userplan_detail.dr = 0
+					) AS userplanDetail
+				JOIN bw_course_userplan_class_detail as course_userplan_class_detail ON userplanDetail.userplan_detail_id = course_userplan_class_detail.userplan_detail_id
+				WHERE
+					course_userplan_class_detail.dr = 0
+			) AS userplanClassDetail
+		JOIN bw_course_classplan_lives as course_classplan_lives ON userplanClassDetail.classplan_id = course_classplan_lives.classplan_id
+		LEFT JOIN bw_log_gensee_watch as log_gensee_watch ON course_classplan_lives.classplan_live_id = log_gensee_watch.business_id
+		AND log_gensee_watch.user_id = #{userId}
+		WHERE
+			course_classplan_lives.dr = 0
+		AND course_classplan_lives.attendance = 0
+		AND course_classplan_lives.live_class_type_ids LIKE CONCAT('%,',#{classTypeId},',%')
+		AND course_classplan_lives.start_time &gt;= #{startDate}
+		AND course_classplan_lives.end_time &lt;= #{endDate}
+		GROUP BY
+			course_classplan_lives.day_time ,course_classplan_lives.classplan_live_id ,log_gensee_watch.log_watch_id
+		ORDER BY
+			course_classplan_lives.day_time
+	</select>
+
+	<insert id="insertBatch" parameterType="java.util.List" >
+		INSERT INTO bi_log_student_attend (
+		id, user_plan_id, class_type_id,
+		classplan_live_id, user_id, area_id,
+		dept_id, class_id, class_teacher_id,
+		mobile, start_class_time, area_name,
+		dept_name, class_name, user_name,
+		teacher_name, live_per, attend_per,
+		min_watch_dur, min_full_dur, classplan_live_name,
+		compliance_per, creation_time, modified_time
+		)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator="," >
+		(
+			#{item.id,jdbcType=VARCHAR},
+			#{item.userPlanId,jdbcType=BIGINT},
+			#{item.classTypeId,jdbcType=BIGINT},
+			#{item.classplanLiveId,jdbcType=VARCHAR},
+			#{item.userId,jdbcType=BIGINT},
+			#{item.areaId,jdbcType=BIGINT},
+			#{item.deptId,jdbcType=BIGINT},
+			#{item.classId,jdbcType=BIGINT},
+			#{item.classTeacherId,jdbcType=BIGINT},
+			#{item.mobile,jdbcType=VARCHAR},
+			#{item.startClassTime,jdbcType=DATE},
+			#{item.areaName,jdbcType=VARCHAR},
+			#{item.deptName,jdbcType=VARCHAR},
+			#{item.className,jdbcType=VARCHAR},
+			#{item.userName,jdbcType=VARCHAR},
+			#{item.teacherName,jdbcType=VARCHAR},
+			#{item.livePer,jdbcType=DECIMAL},
+			#{item.attendPer,jdbcType=DECIMAL},
+			#{item.minWatchDur,jdbcType=DECIMAL},
+			#{item.minFullDur,jdbcType=DECIMAL},
+			#{item.classplanLiveName,jdbcType=VARCHAR},
+			#{item.compliancePer,jdbcType=DECIMAL},
+			#{item.creationTime,jdbcType=TIMESTAMP},
+			#{item.modifiedTime,jdbcType=TIMESTAMP}
+		)
+		</foreach>
+		ON DUPLICATE KEY UPDATE
+		compliance_per = VALUES(compliance_per),
+		modified_time = VALUES(modified_time)
+	</insert>
+
+</mapper>

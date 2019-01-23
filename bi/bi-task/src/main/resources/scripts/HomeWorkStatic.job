@@ -1,0 +1,2 @@
+type = command
+command=java -classpath "/data/azkaban/bi_task/bi-task/bi-task/lib/*" com.hq.bi.offline.task.service.HomeWorkStaticService

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.synchronize_la_statistics.dao.BiLiveAnswerRecordDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.synchronize_la_statistics.entity.BiLiveAnswerRecord">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="classplan_live_id" jdbcType="VARCHAR" property="classplanLiveId"/>
+        <result column="live_answer_num" jdbcType="BIGINT" property="liveAnswerNum"/>
+        <result column="live_total_num" jdbcType="BIGINT" property="liveTotalNum"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+    id, classplan_live_id, live_answer_num, live_total_num, create_time
+  </sql>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Where_SQL">
+        <where>
+            <if test="classplanLiveId != null and !&quot;&quot;.equals(classplanLiveId)">and classplan_live_id =
+                #{classplanLiveId}
+            </if>
+            <if test="liveAnswerNum != null and !&quot;&quot;.equals(liveAnswerNum)">and live_answer_num =
+                #{liveAnswerNum}
+            </if>
+            <if test="liveTotalNum != null and !&quot;&quot;.equals(liveTotalNum)">and live_total_num =
+                #{liveTotalNum}
+            </if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{createTime},'%Y-%m-%d')
+            </if>
+        </where>
+    </sql>
+
+    <!-- 插入一条记录 -->
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        insert into bi_live_answer_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != classplanLiveId">classplan_live_id,</if>
+            <if test="null != liveAnswerNum">live_answer_num,</if>
+            <if test="null != liveTotalNum">live_total_num,</if>
+            <if test="null != createTime">create_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != classplanLiveId">#{classplanLiveId},</if>
+            <if test="null != liveAnswerNum">#{liveAnswerNum},</if>
+            <if test="null != liveTotalNum">#{liveTotalNum},</if>
+            <if test="null != createTime">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新一条记录 -->
+    <update id="update">
+        update bi_live_answer_record
+        <set>
+            <if test="null != classplanLiveId">classplan_live_id = #{classplanLiveId},</if>
+            <if test="null != liveAnswerNum">live_answer_num = #{liveAnswerNum},</if>
+            <if test="null != liveTotalNum">live_total_num = #{liveTotalNum},</if>
+            <if test="null != createTime">create_time = #{createTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 删除给定主键的记录 -->
+    <delete id="delete">
+    delete
+		from bi_live_answer_record
+	where
+		id = #{id}
+  </delete>
+
+    <!-- 多个主键批量删除记录 -->
+    <delete id="deleteBatch">
+        delete
+        from bi_live_answer_record
+        where
+        id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 多个实体批量删除记录 -->
+    <delete id="deleteList">
+        delete
+        from bi_live_answer_record
+        where
+        id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bi_live_answer_record
+        where id = #{id}
+    </select>
+
+    <!-- 查询多条 -->
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bi_live_answer_record
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 查询记录数量 -->
+    <select id="count" resultType="int">
+        select
+        count(*)
+        from bi_live_answer_record
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 查询记录是否存在 -->
+    <select id="exist" resultType="boolean">
+        select
+        count(*)
+        from bi_live_answer_record
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <select id="totalCount" resultType="int">
+        select
+        count(id)
+        from bi_live_answer_record
+        where
+        classplan_live_id=#{arg0}
+    </select>
+
+</mapper>

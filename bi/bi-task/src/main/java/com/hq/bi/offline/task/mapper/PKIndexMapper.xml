@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.offline.task.mapper.PKIndexMapper">
+    <!-- 实体映射 -->
+    <resultMap id="BaseMap" type="com.hq.bi.offline.task.entity.PKIndexEvaluationEntity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="username" jdbcType="VARCHAR" property="userName"/>
+    </resultMap>
+
+
+    <select id="getChapterSectionList" resultMap="BaseMap">
+      select user_id, username from bw_sys_user limit 10
+    </select>
+
+    <!--学习笔记管理报表-->
+    <select id="getTeachNoteList" resultType="com.hq.bi.offline.task.entity.PKIndexEvaluationEntity">
+       SELECT
+            DISTINCT u.user_id AS userId,
+            u.nick_name AS userName,
+            u.mobile,
+            mo.commodity_id as mallGoodsId,
+            mgi.name as mallGoodsName,
+            mo.profession_id as professionId,
+            mp.profession_name as  professionName,
+            tn.course_id as courseId,
+            c.course_name as courseName,
+            c.course_fk as courseFk,
+            tn.id as teachNoteId,
+            tn.create_time as noteCreateTime,
+            tn.topic_type as topicType
+        FROM
+            bw_teach_note tn
+            INNER JOIN bw_users u ON tn.user_id = u.user_id
+            INNER JOIN bw_mall_order mo ON mo.user_id = u.user_id and mo.dr = 0
+            INNER JOIN bw_mall_goods_details mgd ON mgd.mall_goods_id = mo.commodity_id and mgd.dr = 0
+            INNER JOIN bw_courses c ON c.course_id = tn.course_id and c.course_id = mgd.course_id
+            INNER JOIN bw_mall_goods_info mgi ON mgi.id = mo.commodity_id and mgi.dr = 0
+            INNER JOIN bw_mall_profession mp ON mp.profession_id = mo.profession_id
+        WHERE
+             tn.`status` = 1
+    </select>
+    <!--删除学习笔记报表数据-->
+    <delete id="deleteTeachNoteList" >
+        DELETE  from bi_user_teach_note
+    </delete>
+    <!-- 插入一条记录 -->
+    <insert id="saveTeachNoteList" keyProperty="id" useGeneratedKeys="true" parameterType="com.hq.bi.offline.task.entity.PKIndexEvaluationEntity">
+        insert into bi_user_teach_note( teach_note_id, topic_type, user_id, user_name, mobile, profession_id, profession_name,
+        mall_goods_id, mall_goods_name, course_id, course_name, course_fk, note_create_time )
+        values
+        <foreach collection="list" index="index" item="item" separator="," >
+            (#{item.teachNoteId}, #{item.topicType}, #{item.userId}, #{item.userName}, #{item.mobile}, #{item.professionId}, #{item.professionName},
+            #{item.mallGoodsId}, #{item.mallGoodsName}, #{item.courseId}, #{item.courseName}, #{item.courseFk}, #{item.noteCreateTime})
+        </foreach>
+    </insert>
+
+    <!--班级学籍评比报表-->
+    <select id="getClassSchoolRollList" resultType="com.hq.bi.offline.task.entity.PKIndexEvaluationEntity">
+       SELECT
+			mo.order_id as orderId,
+			mc.user_id as userId,
+			su.nick_name as userName,
+			mc.profession_id as professionId,
+			mp.profession_name as professionName,
+			mc.class_id as classId,
+			mc.area_id as areaId,
+			mc.class_name as className
+		FROM
+			bw_mall_class mc
+			INNER JOIN bw_mall_order mo ON mo.class_id = mc.class_id
+			INNER JOIN bw_sys_user su on mc.user_id = su.user_id
+			INNER JOIN bw_mall_profession mp on mp.profession_id = mc.profession_id
+		WHERE
+			mc.area_id = mo.area_id
+			AND mo.dr = 0
+		ORDER BY
+			mc.class_id,
+			mo.order_id
+    </select>
+    <!--删除班级学籍评比报表数据-->
+    <delete id="deleteClassSchoolRollList" >
+        DELETE  from bi_mall_class_order
+    </delete>
+
+    <!-- 插入一条记录 -->
+    <insert id="saveClassSchoolRollList" keyProperty="id" useGeneratedKeys="true" parameterType="com.hq.bi.offline.task.entity.PKIndexEvaluationEntity">
+        insert into bi_mall_class_order ( order_id, user_id, nick_name, profession_id, profession_name, class_id, class_name, area_id )
+        values
+        <foreach collection="list" index="index" item="item" separator="," >
+           ( #{item.orderId}, #{item.userId}, #{item.userName}, #{item.professionId},
+            #{item.professionName}, #{item.classId}, #{item.className}, #{item.areaId} )
+        </foreach>
+    </insert>
+
+
+    <!--教学评比明细报表-->
+    <select id="getTeachingQualityList" resultType="com.hq.bi.offline.task.entity.PKIndexEvaluationEntity">
+        SELECT
+            cu.user_id as userId,
+            u.mobile,
+            cu.class_id as classId,
+            mc.class_name as className,
+            mc.user_id as classTeacherId,
+            su.nick_name as classTeacherName,
+            mc.profession_id as professionId,
+            mp.profession_name as professionName,
+            cc.course_id as courseId,
+            c.course_name as courseName,
+            cc.classplan_id as classPlanId,
+            cc.classplan_name as classPlanName,
+            ccl.classplan_live_id as classPlanLiveId,
+            ccl.classplan_live_name as classPlanLiveName,
+            cu.creation_time as dayTime,
+            cc.teacher_id as teacherId,
+            syu.nick_name as teacherName,
+            ( CASE WHEN te.score &gt;= 4 THEN 1 WHEN te.score &lt; 4 THEN 0 END ) AS evaluateGoodScore,
+            blsa.min_full_dur as fullDur,
+            blsa.min_watch_dur as watchDur,
+             mujp.right_num as previewCorrectNum,
+             mujp.error_num as previewErrorNum,
+             mujp.is_submit as previewSubmitStatus,
+             mujc.right_num as classroomCorrectNum,
+             mujc.error_num as classroomErrorNum,
+             mujc.is_submit as classroomSubmitStatus,
+             muja.right_num as afterClassCorrectNum,
+             muja.error_num as afterClassErrorNum,
+             muja.is_submit as afterClassSubmitStatus
+         FROM
+                bw_course_userplan cu
+            INNER JOIN bw_mall_class mc ON mc.class_id = cu.class_id
+            INNER JOIN bw_course_userplan_class cuc ON cu.user_plan_id = cuc.userplan_id
+            INNER JOIN bw_course_userplan_class_detail cucd ON cucd.userplan_class_id = cuc.userplan_class_id
+            INNER JOIN bw_course_classplan cc ON cucd.classplan_id = cc.classplan_id
+            INNER JOIN bw_course_classplan_lives ccl ON ccl.classplan_id = cc.classplan_id
+            INNER JOIN bw_users u ON u.user_id = cu.user_id
+            INNER JOIN bw_sys_user su ON su.user_id = mc.user_id
+            INNER JOIN bw_sys_user syu ON syu.user_id = cc.teacher_id
+            INNER JOIN bw_courses c ON c.course_id = cc.course_id
+            INNER JOIN bw_mall_profession mp ON mp.profession_id = mc.profession_id
+            LEFT JOIN bw_teach_evaluate te ON te.topic_id = ccl.classplan_live_id AND te.user_id = cu.user_id
+            LEFT JOIN bi_log_student_attend blsa ON blsa.user_id = cu.user_id AND blsa.classplan_live_id = ccl.classplan_live_id
+              and mc.user_id = blsa.class_teacher_id
+            LEFT JOIN tk_mm_user_job mujp ON mujp.job_id = (SELECT mj.id FROM tk_mm_job mj
+              WHERE mj.lesson_id = ccl.classplan_live_id AND mj.is_use = 1 AND mj.stage = 20 LIMIT 1) and mujp.user_id = cu.user_id
+            LEFT JOIN tk_mm_user_job mujc ON mujc.job_id = (SELECT mj.id FROM tk_mm_job mj
+              WHERE mj.lesson_id = ccl.classplan_live_id AND mj.is_use = 1 AND mj.stage = 30 LIMIT 1) and mujc.user_id = cu.user_id
+            LEFT JOIN tk_mm_user_job muja ON muja.job_id = (SELECT mj.id FROM tk_mm_job mj
+              WHERE mj.lesson_id = ccl.classplan_live_id AND mj.is_use = 1 AND mj.stage = 40 LIMIT 1) and muja.user_id = cu.user_id
+        WHERE
+          cu.creation_time > date_sub(CURRENT_TIMESTAMP, interval 1 year)
+             and cu.dr = 0
+             and mc.dr = 0
+             and cuc.dr = 0
+             and cucd.dr = 0
+             and cc.dr = 0
+             and ccl.dr = 0
+             and u.dr = 0
+             and c.dr = 0
+             and mp.dr = 0
+    </select>
+    <!--删除班级学籍评比报表数据-->
+    <delete id="deleteTeachingQualityList" >
+        DELETE  from bi_user_exercise_detail
+    </delete>
+
+    <!-- 插入一条记录 -->
+    <insert id="saveTeachingQualityList" keyProperty="id" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into bi_user_exercise_detail ( user_id, mobile, class_teacher_id, class_teacher_name, teacher_id, teacher_name, profession_id,
+        profession_name, class_id, class_name, course_id,  course_name, classplan_id, classplan_name,classplan_live_id,  classplan_live_name,
+        day_time, preview_submit_status,  preview_correct_num, preview_error_num, classroom_submit_status, classroom_correct_num, classroom_error_num,
+        afterclass_submit_status, afterclass_correct_num, afterclass_error_num, evaluate_good_score, full_dur, watch_dur )
+        values
+        <foreach collection="list" index="index" item="item" separator="," >
+            ( #{item.userId}, #{item.mobile}, #{item.classTeacherId},#{item.classTeacherName}, #{item.teacherId}, #{item.teacherName},
+            #{item.professionId}, #{item.professionName}, #{item.classId}, #{item.className}, #{item.courseId}, #{item.courseName}, #{item.classPlanId},
+            #{item.classPlanName}, #{item.classPlanLiveId}, #{item.classPlanLiveName}, #{item.dayTime}, #{item.previewSubmitStatus}, #{item.previewCorrectNum},
+            #{item.previewErrorNum},#{item.classroomSubmitStatus}, #{item.classroomCorrectNum}, #{item.classroomErrorNum}, #{item.afterClassSubmitStatus},
+            #{item.afterClassCorrectNum}, #{item.afterClassErrorNum}, #{item.evaluateGoodScore}, #{item.fullDur},#{item.watchDur})
+        </foreach>
+    </insert>
+
+    <!--错题统计报表-->
+    <select id="getErrorHistoryList" resultType="com.hq.bi.offline.task.entity.ErrorHistoryReportEntity">
+       SELECT
+            msw.subject_id as subjectId,
+            s.subject_name as subjectName,
+            msw.courseinfo_code as courseCode,
+            ci.name as courseName,
+            msw.charpter_code as chapterCode,
+            c.name as chapterName,
+            msw.section_code as sectionCode,
+            sc.name as sectionName,
+            msw.error_number as errorNumber,
+            msw.done_number as doneNumber,
+            msw.test_time as testTime
+        FROM
+            tk_mm_subject_wronginfo msw
+            INNER JOIN tk_subject s on s.subject_id = msw.subject_id
+            LEFT JOIN tk_course_info ci on ci.code = msw.courseinfo_code
+            LEFT JOIN tk_chapter c ON c.code = msw.charpter_code
+            LEFT JOIN tk_section sc on sc.code = msw.section_code
+    </select>
+    <!--删除错题统计报表数据-->
+    <delete id="deleteErrorHistoryList" >
+        DELETE  from bi_error_history_report
+    </delete>
+    <!-- 插入记录 -->
+    <insert id="saveErrorHistoryList" keyProperty="id" useGeneratedKeys="true" parameterType="com.hq.bi.offline.task.entity.ErrorHistoryReportEntity">
+        insert into bi_error_history_report( subject_id, subject_name, course_code, course_name, chapter_code, chapter_name,
+        section_code, section_name, error_number, done_number, test_time)
+        values
+        <foreach collection="list" index="index" item="item" separator="," >
+            (#{item.subjectId}, #{item.subjectName}, #{item.courseCode}, #{item.courseName}, #{item.chapterCode}, #{item.chapterName},
+            #{item.sectionCode}, #{item.sectionName}, #{item.errorNumber}, #{item.doneNumber}, #{item.testTime})
+        </foreach>
+    </insert>
+
+</mapper>

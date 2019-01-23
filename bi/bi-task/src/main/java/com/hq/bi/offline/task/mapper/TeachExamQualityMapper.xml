@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.offline.task.mapper.TeachExamQualityMapper">
+    <!-- 实体映射 -->
+
+    <!--教学考试质量报表明细获取-->
+    <select id="getTeachExamQualityList" resultType="java.util.Map">
+        select
+                a.user_id AS user_id,
+                a.course_id AS course_id,
+                a.course_name AS course_name,
+                a.teacher_id AS teacher_id,
+                a.teacher_name AS teacher_name,
+                a.course_userplan_creation_time AS course_userplan_creation_time,
+                a.registration_id AS registration_id,
+                a.course_fk AS course_fk,
+                car.registration_create_time AS registration_create_time,
+                car.abandon_id AS abandon_id,
+                car.examination_result_id AS examination_result_id,
+                car.examinationScore AS examinationScore,
+                (select bbct.exam_score_id from bi_course_exam_record_user bbct where bbct.user_id =a.user_id and bbct.course_id =a.course_id order by
+                bbct.submit_time DESC limit 1) AS exam_record_id,
+                (select bbct.exam_score from bi_course_exam_record_user bbct where bbct.user_id =a.user_id and bbct.course_id =a.course_id
+                order by bbct.submit_time DESC limit 1) AS exam_score
+        from (
+            select
+                cu.user_id,
+                u.nick_name as student_name,
+                cc.course_id,
+                c.course_name,
+                cc.teacher_id,
+                su.nick_name as teacher_name,
+                cu.creation_time AS course_userplan_creation_time,
+                (SELECT registration_id FROM bi_course_examination_record car WHERE car.course_id = cc.course_id  AND car.user_plan_id = cu.user_plan_id
+                ORDER BY car.registration_create_time DESC LIMIT 1 ) registration_id,
+                c.course_fk
+            from
+                bw_course_userplan cu
+				INNER JOIN bw_users u on u.user_id=cu.user_id
+                INNER JOIN bw_course_userplan_class cuc on cuc.userplan_id=cu.user_plan_id
+                INNER JOIN bw_course_userplan_class_detail cucd on cucd.userplan_class_id=cuc.userplan_class_id
+                INNER JOIN bw_course_classplan cc on cc.classplan_id=cucd.classplan_id
+                INNER JOIN bw_courses c on cc.course_id=c.course_id
+				INNER JOIN bw_sys_user su on su.user_id = cc.teacher_id
+              where cu.userplan_status = 0
+            )a
+        LEFT JOIN bi_course_examination_record car on a.registration_id=car.registration_id
+
+    </select>
+    <!--插入明细表-->
+    <insert id="saveTeachExamQuality"  keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+            bi_teach_exam_quality
+            (user_id,course_id,course_name,teacher_id,teacher_name,course_userplan_creation_time,registration_id,course_fk,registration_create_time,abandon_id,examination_result_id,examinationScore,exam_record_id,exam_score)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+            (#{item.user_id},#{item.course_id},#{item.course_name},#{item.teacher_id},#{item.teacher_name},#{item.course_userplan_creation_time},#{item.registration_id},#{item.course_fk},#{item.registration_create_time},#{item.abandon_id},#{item.examination_result_id},#{item.examinationScore},#{item.exam_record_id},#{item.exam_score})
+        </foreach>
+    </insert>
+   <!--获取明细表的结果-->
+    <select id="getTeachExamQualityEntity" resultType="java.util.Map">
+        select  bcq.user_id as user_id  from bi_teach_exam_quality bcq limit 1
+    </select>
+    <!--删除明细-->
+    <delete id="deleteAllTeachExamQualityEntity">
+        delete from bi_teach_exam_quality
+    </delete>
+    <!--获取题库考试用户关联表数据-->
+    <select id="getTkExamRecordUserList" resultType="java.util.Map">
+          select er.id as exam_score_id,er.exam_id as exam_id,er.submit_time as submit_time,er.exam_score as exam_score,su.login_name as login_name,su.user_pk as user_id from tk_exam_record er inner join tk_userinfo su on er.user_id=su.id	where er.isdelete=0
+    </select>
+    <!--插入题库考试用户关联表数据-->
+    <insert id="saveTkExamRecordUserList" keyProperty="id" useGeneratedKeys="true">
+      INSERT INTO
+        bi_exam_record_user (exam_score_id,exam_id,submit_time,exam_score,login_name,user_id)
+      VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+          (#{item.exam_score_id},#{item.exam_id},#{item.submit_time},#{item.exam_score},#{item.login_name},#{item.user_id})
+        </foreach>
+    </insert>
+    <!--删除题库考试用户关联表数据-->
+    <delete id="deleteAllTkExamRecordUserEntity">
+       delete from bi_exam_record_user
+    </delete>
+
+    <!--获取蓝鲸课程模考考试成绩关联表数据-->
+    <select id="getBwCourseTkExamRecordUserList" resultType="java.util.Map">
+        select c.course_id,c.course_fk,ei.usedtype,tk.exam_score_id,tk.exam_id,tk.submit_time,tk.exam_score,tk.login_name,tk.user_id  from bw_courses c
+            INNER JOIN  tk_paper p on  p.course_mid = c.course_id
+            INNER JOIN  tk_paper_used pu on pu.paper_id = p.id
+            INNER JOIN  tk_exam_info ei on ei.id=pu.exam_id
+			INNER JOIN  bi_exam_record_user tk on ei.id =tk.exam_id
+			where ei.isdelete=0 and ei.usedtype=4
+
+    </select>
+    <!--插入蓝鲸课程模考考试成绩关联表数据-->
+    <insert id="saveBwCourseTkExamRecordUserList" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+        bi_course_exam_record_user (course_id,course_fk,exam_score_id,exam_id,submit_time,exam_score,login_name,user_id)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+            (#{item.course_id},#{item.course_fk},#{item.exam_score_id},#{item.exam_id},#{item.submit_time},#{item.exam_score},#{item.login_name},#{item.user_id})
+        </foreach>
+    </insert>
+    <!--删除蓝鲸课程模考考试成绩关联表数据-->
+    <delete id="deleteBwCourseAllTkExamRecordUserEntity">
+       delete from bi_course_exam_record_user
+    </delete>
+    <!--获取蓝鲸课程国考成绩情况表数据-->
+    <select id="getBwCourseExaminationRecordList" resultType="java.util.Map">
+        select
+              car.id as registration_id,
+              car.user_plan_id as user_plan_id,
+              car.create_time as registration_create_time,
+              car.course_id as course_id,
+			  caam.id AS abandon_id,
+              er.id AS examination_result_id,
+              er.score AS examinationScore
+	    from bw_course_abnormal_registration  car
+	          LEFT JOIN  bw_course_abnormal_abandon_exam caam ON caam.registration_id = car.id
+              LEFT JOIN  bw_examination_result er ON er.registration_id = car.id
+        where  car.status=2 and caam.dr=0 and caam.status=2 and er.dr=0
+    </select>
+    <!--插入蓝鲸课程国考成绩情况表数据-->
+    <insert id="saveBwCourseExaminationRecordList" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+        bi_course_examination_record (user_plan_id,course_id,registration_create_time,registration_id,examination_result_id,abandon_id,examinationScore)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+            (#{item.user_plan_id},#{item.course_id},#{item.registration_create_time},#{item.registration_id},#{item.examination_result_id},#{item.abandon_id},#{item.examinationScore})
+        </foreach>
+    </insert>
+    <!--删除蓝鲸课程国考成绩情况表数据-->
+    <delete id="deleteBwCourseExaminationRecordEntity">
+       delete from bi_course_examination_record
+    </delete>
+
+
+</mapper>

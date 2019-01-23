@@ -1,0 +1,70 @@
+spring:
+  # 数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://10.0.14.241:3306/hq_bi?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: root
+      password: 123456
+      driverClassName: com.mysql.jdbc.Driver
+      initial-size: 2
+      max-active: 20
+      min-idle: 2
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+  # 安全验证
+  security:
+    user:
+      name: hrc
+      password: hrc
+  # 应用名称
+  application:
+    name: hq-bi-search
+
+# SpringCloud配置
+hrc:
+  port:
+    a: 8761
+    b: 8762
+    c: 8763
+  url:
+    a: 10.0.14.53
+    b: 10.0.14.55
+    c: 10.0.14.58
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${hrc.url.b}:${hrc.port.b}/eureka,http://${spring.security.user.name}:${spring.security.user.password}@${hrc.url.a}:${hrc.port.a}/eureka,http://${spring.security.user.name}:${spring.security.user.password}@${hrc.url.c}:${hrc.port.c}/eureka
+    # 缓存清单每隔30秒跟新一次
+    registry-fetch-interval-seconds: 10
+  instance:
+    hostname: hq-bi-search
+    # 实例使用ip进行访问
+    prefer-ip-address: true
+    # 实例显示id
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+    # 服务续约任务调用间隔时间，默认30秒
+    lease-renewal-interval-in-seconds: 2
+    # 服务失效时间，默认90秒
+    lease-expiration-duration-in-seconds: 5
+    #状态页面和健康指标
+    statusPageUrlPath: ${server.context-path}/swagger-ui.html
+

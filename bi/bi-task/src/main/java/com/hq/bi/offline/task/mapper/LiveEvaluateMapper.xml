@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.offline.task.mapper.LiveEvaluateMapper">
+    <!-- 实体映射 -->
+
+    <!--直播评价list-->
+    <select id="getLiveEvaluateList" resultType="java.util.Map">
+        SELECT
+                count( 1 ) AS evaluate_num,
+                a.create_time,
+                a.topic_id,
+                ROUND(sum( a.score )/count( 1 ),2) AS total_scores,
+                ROUND(sum( a.material_score )/count( 1 ),2) AS material_scores,
+                ROUND(sum( a.content_score )/count( 1 ),2) AS content_scores,
+                ROUND(sum( a.teach_style_score )/count( 1 ),2) AS teachstyle_scores,
+                b.classplan_live_id,
+                b.classplan_live_name,
+                b.teacher_id,
+                b.classplan_id,
+                d.classplan_name,
+                c.user_id,
+                c.username as teacher_name,
+                e.user_num
+        FROM
+                (SELECT * from bw_teach_evaluate WHERE topic_type = 10 ORDER BY create_time desc LIMIT 10000000000) a
+                LEFT JOIN bw_course_classplan_lives b ON a.topic_id = b.classplan_live_id
+                LEFT JOIN bw_sys_user c ON b.teacher_id = c.user_id
+                LEFT JOIN bw_course_classplan d ON b.classplan_id = d.classplan_id
+                LEFT JOIN (
+                    select count(1) as user_num,cc.classplan_id from bw_course_classplan cc
+                    left join bw_course_userplan_class_detail cucd ON cucd.classplan_id = cc.classplan_id
+                    left join bw_course_userplan_class cuc ON cuc.userplan_class_id = cucd.userplan_class_id
+                    left join bw_course_userplan cu ON cuc.userplan_id = cu.user_plan_id
+                    where cc.dr = 0 and cucd.dr = 0 and cuc.dr = 0  and cu.dr = 0
+                    GROUP BY cc.classplan_id
+                ) e on e.classplan_id = b.classplan_id
+        GROUP BY
+                a.topic_id
+    </select>
+    <!--插入明细表-->
+    <insert id="saveLiveEvaluate"  keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO bi_bw_live_evaluate(classplan_id, classplan_name, classplan_live_id, classplan_live_name, create_time, teacher_id, teacher_name,
+                    total_scores,material_scores,content_scores, teachstyle_scores, evaluate_num, user_num)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+            ( #{item.classplan_id},#{item.classplan_name},#{item.classplan_live_id},#{item.classplan_live_name},#{item.create_time}, #{item.teacher_id},
+            #{item.teacher_name}, #{item.total_scores},#{item.material_scores},
+            #{item.content_scores},#{item.teachstyle_scores},#{item.evaluate_num},#{item.user_num})
+        </foreach>
+    </insert>
+
+    <!--删除明细-->
+    <delete id="deleteLiveEvaluate">
+        delete from bi_bw_live_evaluate
+    </delete>
+</mapper>

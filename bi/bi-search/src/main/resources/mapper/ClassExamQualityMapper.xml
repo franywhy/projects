@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.search.mapper.ClassExamQualityMapper">
+
+    <!--班级考试质量评比报表-->
+    <select id="getClassExamQualityList" resultType="com.hq.bi.search.entity.ClassExamQualityEntity">
+        select
+            b.id as id,
+            b.user_id as userId,
+            b.teacher_name as teacherName,
+            b.class_id  as classId,
+            b.class_name as className,
+            b.profession_id professionId,
+            b.profession_name as professionName,
+            b.course_id as courseId,
+            b.course_name as courseName,
+            b.course_userplan_creation_time as courseUserPlanCreationTime,
+            b.registration_id as registrationId,
+            b.registration_create_time as registrationCreateTime,
+            b.abandon_id as abandonId,
+            b.examination_result_id as examinationResultId,
+            b.student_count as studentCount,
+            b.registration_count as registrationCount,
+            b.abandon_count as abandonCount,
+            b.examinationScore as examinationScore,
+            b.examination_pass_rate as examinationPassRate,
+            (CONCAT((ROUND((b.examination_pass_rate*100),0)),'%')) as examinationPassRatePercent,
+            b.examination_avg_score as examinationAvgScore,
+            b.examination_count as examinationCount,
+            b.examination_pass_count as examinationPassCount
+        from
+            (select
+                 a.id as id,
+                 a.user_id as user_id,
+                 a.teacher_name as teacher_name,
+                 a.class_id as class_id,
+                 a.class_name as class_name,
+                 a.profession_id profession_id,
+                 a.profession_name as profession_name,
+                 a.course_id as course_id,
+                 a.course_name as course_name,
+                 a.course_userplan_creation_time as course_userplan_creation_time,
+                 a.registration_id as registration_id,
+                 a.registration_create_time as registration_create_time,
+                 a.abandon_id as abandon_id,
+                 a.examination_result_id as examination_result_id,
+                 a.student_count as student_count,
+                 a.registration_count as registration_count,
+                 a.abandon_count as abandon_count,
+                 a.examinationScore as examinationScore,
+                 (case when (ROUND((a.examination_pass_count/a.registration_count),2)) is null then 0 else (ROUND((a.examination_pass_count/a.registration_count),2)) end) as examination_pass_rate,
+                 (case when a.totalExaminationScore/a.registration_count is null then 0 else a.totalExaminationScore/a.registration_count end ) as examination_avg_score,
+                  a.examination_count as examination_count,
+                  a.examination_pass_count as examination_pass_count
+              from
+                  (select
+                        t.id,
+                        t.user_id ,
+                        t.teacher_name ,
+                        t.class_id,
+                        t.class_name,
+                        t.profession_id,
+                        t.profession_name,
+                        t.course_id,
+                        t.course_name,
+                        t.course_userplan_creation_time,
+                        t.registration_id,
+                        t.registration_create_time,
+                        t.abandon_id,
+                        t.examination_result_id,
+                        t.examinationScore,
+                        count(DISTINCT t.user_id) as student_count,
+                        count(t.registration_id) as registration_count,
+                        count(t.abandon_id) as abandon_count,
+                        count(t.examination_result_id) as examination_count,
+                        sum(case when t.examinationScore > 60 then 1 when t.examinationScore =60 then 1 else 0 end) as examination_pass_count,
+                        sum(t.examinationScore) as totalExaminationScore
+                  from
+                        (select
+                              id,
+                              user_id ,
+                              teacher_name ,
+                              class_id,class_name,
+                              profession_id,profession_name,
+                              course_id,course_name,course_userplan_creation_time,
+                              registration_id,
+                              registration_create_time,
+                              abandon_id,
+                              examination_result_id,
+                              (case when examinationScore is null then 0 else examinationScore end) as examinationScore
+                         from
+                              bi_class_exam_quality
+                          )t
+                   GROUP BY t.class_id,t.course_id)a
+        )b
+        <where>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and b.registration_create_time between #{startTime} and #{endTime}
+            </if>
+            <if test="professionId != null and !&quot;&quot;.equals(professionId)">and b.profession_id = #{professionId}</if>
+            <if test="courseId != null and !&quot;&quot;.equals(courseId)">and b.course_id = #{courseId}</if>
+            <if test="teacherName != null and !&quot;&quot;.equals(teacherName)">and b.teacher_name like CONCAT ('%', #{teacherName},'%')</if>
+            <if test="className != null and !&quot;&quot;.equals(className)">and b.class_name  like CONCAT ('%', #{className},'%')</if>
+        </where>
+    </select>
+</mapper>

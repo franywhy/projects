@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.offline.task.mapper.HomeWorkMapper">
+    <!-- 实体映射 -->
+
+    <!--预习作业统计报表明细获取-->
+    <select id="getHomeWorkStaticList" resultType="java.util.Map">
+        SELECT
+            mj.job_name	as work_name,
+            c.course_id as course_id,
+            c.course_name as course_name,
+            ccl.classplan_live_id as classplan_live_id,
+            ccl.classplan_live_name as classplan_live_name,
+            ccl.day_time as day_time,
+            su.id as user_id,
+            su.name as user_name,
+            su.login_name as mobile,
+            mj.stage as stage_code ,
+            muj.submit_time as submit_time,
+            muj.is_submit as is_submit,
+            muj.right_num as right_num,
+            muj.error_num as error_num,
+            muj.kp_num as kp_num,
+            muj.kp_num_right as kp_num_right
+        FROM
+            tk_mm_job mj
+            INNER JOIN tk_mm_user_job muj ON mj.id = muj.job_id
+            LEFT JOIN bw_courses c ON c.course_id= mj.course_mid
+            LEFT JOIN bw_course_classplan_lives ccl on ccl.classplan_live_id =  mj.lesson_id
+            LEFT JOIN tk_userinfo su ON su.id = muj.user_id
+    </select>
+    <!--插入明细表-->
+    <insert id="saveHomeWorkStaticEntity"  keyProperty="id" useGeneratedKeys="true">
+
+      INSERT INTO bi_homework_report(work_name, course_id, course_name, classplan_live_id, classplan_live_name, user_id, user_name, mobile, stage_code, right_num, error_num, kp_num_right, kp_num, submit_time,is_submit, day_time)
+      VALUES
+        <foreach collection="list" index="index" item="item" separator="," >
+            ( #{item.work_name},#{item.course_id},#{item.course_name},#{item.classplan_live_id},#{item.classplan_live_name}, #{item.user_id},#{item.user_name}, #{item.mobile},#{item.stage_code},
+            #{item.right_num},#{item.error_num},#{item.kp_num_right},#{item.kp_num},#{item.submit_time},#{item.is_submit},#{item.day_time})
+        </foreach>
+    </insert>
+   <!--获取明细表的结果-->
+    <select id="getHomeWorkStaticEntity" resultType="java.util.Map">
+        select  bcq.user_id as user_id  from bi_homework_report bcq limit 1
+    </select>
+    <!--删除明细-->
+    <delete id="deleteAllHomeWorkStaticEntity">
+        delete from bi_homework_report
+    </delete>
+
+</mapper>

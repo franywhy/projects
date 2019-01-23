@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.search.mapper.TeachEvaluateMapper">
+    <select id="queryEvaluate" resultType="com.hq.bi.search.vo.TeachEvaluateVo">
+        select
+           te.id,
+           te.score,
+           te.content,
+           te.material_score as materialScore,
+           te.content_score as contentScore,
+           te.teach_style_score as teachStyleScore,
+           te.create_time as createTime,
+           te.file_key as  fileKey,
+           bu.nick_name as nickName,
+           bu.mobile
+        from bw_teach_evaluate as te
+        left join bw_users as bu
+        on bu.user_id = te.user_id
+        where 1 = 1
+            <if test="startTime != null and startTime != ''">
+                and te.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and te.create_time &lt;= #{endTime}
+            </if>
+            <if test="topicId != null and topicId != ''">
+                and te.topic_id = #{topicId}
+            </if>
+            <if test="topicType != null and topicType != ''">
+                and te.topic_type = #{topicType}
+            </if>
+        order by te.create_time desc
+    </select>
+
+    <!--查询直播评价数据-->
+    <select id="queryLiveEvaluate" resultType="com.hq.bi.search.vo.LiveEvaluateVo">
+        select
+        id,
+        classplan_id as classplanId,
+        classplan_name as classplanName,
+        classplan_live_id as classplanLiveId,
+        classplan_live_id as topicId,
+        classplan_live_name as classplanLiveName,
+        create_time as createTime,
+        teacher_id as teacherId,
+        teacher_name as nickName,
+        teacher_name as teacherName,
+        total_scores as totalScores,
+        material_scores as materialScores,
+        content_scores as contentScores,
+        teachstyle_scores as teachStyleScores,
+        evaluate_num as evaluateNum,
+        user_num as userNum,
+        product_id as productId,
+        create_date as createDate
+        from bi_bw_live_evaluate
+        where 1 = 1
+            <if test="startTime != null and startTime != ''">
+                and create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and create_time &lt;= #{endTime}
+            </if>
+            <if test="courseClassplanLivesId != null and courseClassplanLivesId != ''">
+                and classplan_live_id = #{courseClassplanLivesId}
+            </if>
+        order by create_time desc
+    </select>
+
+    <!--查询录播评价数据-->
+    <select id="queryRecordEvaluate" resultType="com.hq.bi.search.vo.RecordEvaluateVo">
+        select
+        id,
+        course_id as courseId,
+        course_name as courseName,
+        record_id as recordId,
+        record_id as topicId,
+        record_name as recordName,
+        record_name as className,
+        create_time as createTime,
+        teacher_id as teacherId,
+        teacher_name as nickName,
+        teacher_name as teacherName,
+        total_scores as totalScores,
+        material_scores as materialScores,
+        content_scores as contentScores,
+        teachstyle_scores as teachStyleScores,
+        evaluate_num as evaluateNum,
+        user_num as userNum,
+        product_id as productId,
+        create_date as createDate
+        from bi_bw_record_evaluate
+        where 1 = 1
+            <if test="startTime != null and startTime != ''">
+                and create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and create_time &lt;= #{endTime}
+            </if>
+            <if test="recordId != null and recordId != ''">
+                and record_id = #{recordId}
+            </if>
+        order by create_time desc
+    </select>
+</mapper>

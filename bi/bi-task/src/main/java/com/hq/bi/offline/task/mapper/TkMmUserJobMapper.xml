@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.bi.offline.task.mapper.TkMmUserJobMapper" >
+  
+  <select id="queryUserJobByLessonUser" resultType="java.util.Map">
+    SELECT uj.right_num AS rightNum, uj.error_num AS errorNum
+    FROM tk_mm_user_job AS uj
+    INNER JOIN tk_mm_job AS j ON j.id = uj.job_id
+    WHERE j.lesson_id = #{lessonId}
+    AND uj.user_id = #{userId}
+    AND j.stage = '40'
+    AND uj.is_submit = '1' AND uj.is_use = '1' AND uj.is_delete = '0'
+    ORDER BY uj.create_time DESC LIMIT 1;
+  </select>
+
+</mapper>

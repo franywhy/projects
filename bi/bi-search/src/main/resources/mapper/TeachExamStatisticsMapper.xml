@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bi.search.mapper.TeachExamStatisticsMapper">
+
+  <select id="select" resultType="java.util.Map">
+    select topic, profession, course, examination_paper_type, student_name, mobile, paper_score,
+    is_correct, submit_time, exam_score, start_time, submit_status from bi_teach_exam_statistics
+    <where>
+      <if test="profession != null and profession != ''">
+        and profession = #{profession}
+      </if>
+      <if test="course != null and course != ''">
+        and course = #{course}
+      </if>
+      <if test="examinationPaper != null and examinationPaper != ''">
+        and topic = #{examinationPaper}
+      </if>
+      <if test="examinationPaperType != null and examinationPaperType != ''">
+        and examination_paper_type = #{examinationPaperType}
+      </if>
+      <if test="submitStatus != null and submitStatus != ''">
+        and submit_status = #{submitStatus}
+      </if>
+      <if test="startTime != null and startTime != ''">
+        and create_time >= #{startTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        <![CDATA[and create_time <= #{endTime}]]>
+      </if>
+      <if test="examinationPaperName != null and examinationPaperName != ''">
+        and topic like #{examinationPaperName}
+      </if>
+      <if test="studentName != null and studentName != ''">
+        and student_name like #{studentName}
+      </if>
+    </where>
+    order by id desc limit #{page}, #{limit}
+  </select>
+
+  <select id="getTotla" resultType="java.lang.Integer">
+    select count(1) from bi_teach_exam_statistics
+    <where>
+      <if test="profession != null and profession != ''">
+        and profession = #{profession}
+      </if>
+      <if test="course != null and course != ''">
+        and course = #{course}
+      </if>
+      <if test="examinationPaper != null and examinationPaper != ''">
+        and topic = #{examinationPaper}
+      </if>
+      <if test="examinationPaperType != null and examinationPaperType != ''">
+        and examination_paper_type = #{examinationPaperType}
+      </if>
+      <if test="submitStatus != null and submitStatus != ''">
+        and submit_status = #{submitStatus}
+      </if>
+      <if test="startTime != null and startTime != ''">
+        and create_time >= #{startTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        <![CDATA[and create_time <= #{endTime}]]>
+      </if>
+      <if test="examinationPaperName != null and examinationPaperName != ''">
+        and topic like #{examinationPaperName}
+      </if>
+      <if test="studentName != null and studentName != ''">
+        and student_name like #{studentName}
+      </if>
+    </where>
+  </select>
+</mapper>
